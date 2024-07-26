@@ -51,7 +51,7 @@ const Footer = () => {
 
       <div className="flex flex-col md:flex-row gap-10 md:gap-0 md:justify-between text-textLight text-sm items-center pb-[60px] px-4 xl:px-0">
         <p className="order-2 md:order-1">@ 2024 Direct Booking</p>
-        <div className="flex gap-[38px]">
+        <div className="order-1 md:order-2 flex gap-[38px]">
           <p>Privacy and policy</p>
           <p>Terms and conditions</p>
           <div className="flex gap-6 text-black text-2xl">
