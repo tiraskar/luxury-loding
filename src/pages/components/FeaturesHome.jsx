@@ -3,6 +3,7 @@ import Wrapper from "../../components/Wrapper";
 import { LuUsers, LuBath } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { GoDash } from "react-icons/go";
+import { IoImageOutline } from "react-icons/io5";
 
 const FeaturesHome = () => {
   const featuredHomesData = [
@@ -94,6 +95,10 @@ const FeaturesHome = () => {
               </div>
               <div className="">
                 <img src={image} className="w-full h-auto rounded-xl object-contain" />
+                
+              </div>
+              <div className="absolute flex bg-black rounded-full text-white items-center px-2 gap-2 bg-opacity-60 bottom-10 right-10 py-1 text-xs">
+                <IoImageOutline size={16} /> View all photos
               </div>
             </div>
           ))}
