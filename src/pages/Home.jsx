@@ -2,7 +2,11 @@
 const Home = () => {
   return (
     <div>
-      Home
+      hello there
+      <div>
+        <img src="/banner-background.png" alt="" />
+      </div>
+
     </div>
   );
 };

@@ -7,10 +7,12 @@ export default {
   ],
   theme: {
     colors: {
-      cardBackground: "#F5F5EF",
       textLight: "#999999",
+      textDark: "#222222",
       cardBackgroundDark: "#F4F2DE",
       buttonPrimary: "#B69F6F",
+      black: "#000000",
+      white: "#FFFFFF",
       // Add more colors as needed, or use Tailwind's default colors
     },
     extend: {

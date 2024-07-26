@@ -3,11 +3,11 @@ import { Navbar, Footer } from "../components";
 
 const SharedLayout = () => {
   return (
-    <>
+    <div>
       <Navbar />
-      {Outlet}
+      <Outlet />
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -1,35 +1,67 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Wrapper from "./Wrapper";
+import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
+import { useState } from "react";
 
 const Navbar = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
 
-  const renderNavbar = navLinks?.map(navLink => {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const renderNavbar = navLinks?.map(({ href, label }) => {
     return (
-      <Link key={navLink.to} to={navLink.to} className="text-lg no-underline">
-        {navLink.label}
+      <Link
+        key={href}
+        to={href}
+        className={`text-[1rem] text-textDark ${pathname === href ? 'opacity-100' : 'opacity-40'}`}
+      >
+        {label}
       </Link>
     );
   });
+
   return (
-    <div className="text-center text-lg bg-cardBackground">
-      <p className="font-onest font-medium text-2xl">
-        Luxury Lodging
-      </p>
-      <div>
-        {renderNavbar}
+    <Wrapper>
+      <div className="flex flex-row justify-between items-center py-3 md:my-6 font-onest px-4 xl:px-0">
+
+        <Link to='/' className="font-onest text-lg sm:text-xl md:text-[24px] tracking-tight font-medium">
+          Luxury Lodging
+        </Link>
+
+        {!isMobileNavOpen &&
+          <RxHamburgerMenu
+            onClick={() => setIsMobileNavOpen(true)}
+            className="block md:hidden text-xl sm:text-2xl" />}
+
+        {isMobileNavOpen &&
+          <RxCross2
+            onClick={() => setIsMobileNavOpen(false)}
+            className="block md:hidden text-xl sm:text-2xl" />
+        }
+        <ul className="hidden md:flex  space-x-8">
+          {renderNavbar}
+        </ul>
+
+        <div className="hidden md:flex space-x-6 items-center">
+          <select
+            className="bg-white focus:border-none text-[1rem]">
+            <option className="">USD</option>
+          </select>
+
+          <button className="px-5 py-3 rounded-xl text-white bg-black ">Book now</button>
+
+        </div>
       </div>
-      <div>
-        button
-      </div>
-    </div>
+    </Wrapper>
   );
 };
 
 export default Navbar;
 
 const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
-  { label: "Blog", to: "/blog" },
-  { label: "Listing", to: "/listing" },
+  { label: "Home", href: "/" },
+  { label: "Contact", href: "/contact" },
+  { label: "Blog", href: "/blog" },
+  { label: "Listing", href: "/listing" },
 ];
