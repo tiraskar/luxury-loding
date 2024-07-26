@@ -1,12 +1,11 @@
+import ActivitiesAndServices from "./components/ActivitiesAndServices";
+import Banner from "./components/Banner";
 
 const Home = () => {
   return (
-    <div>
-      hello there
-      <div>
-        <img src="/banner-background.png" alt="" />
-      </div>
-
+    <div className="space-y-20 font-onest">
+      <Banner />
+      <ActivitiesAndServices />
     </div>
   );
 };
