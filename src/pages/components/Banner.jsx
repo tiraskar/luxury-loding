@@ -3,7 +3,9 @@ import Wrapper from "../../components/Wrapper";
 const Banner = () => {
   return (
     <Wrapper>
-      <div className="relative font-onest flex justify-center bg-black bg-opacity-40 rounded-xl">
+      <div className="px-2 sm:px-3 lg:px-4 xl:px-0">
+
+        <div className="relative font-onest flex justify-center bg-black bg-opacity-40 rounded-xl ">
         <div className="">
           <img src="/banner-background.png" alt="" />
         </div>
@@ -20,6 +22,7 @@ const Banner = () => {
             <SearchForm />
           </div> */}
         </div>
+      </div>
       </div>
     </Wrapper>
   );
