@@ -14,6 +14,12 @@ const GuideBookBanner = () => {
   return (
     <Wrapper>
       <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-start gap-y-[56px]">
+
+        <p className="flex items-center text-xs text-[#A1A196] gap-1">
+          Home <GoDotFill />
+          <span className="text-black">Blog & Guidebook</span>
+        </p>
+
         <h1 className="text-[35px] font-semibold">Blog & Guidebook</h1>
 
 
@@ -45,7 +51,7 @@ const GuideBookBanner = () => {
                 <span className="text-[#0094FF]">{post.readTime}</span>
               </p>
               <div className="flex flex-row space-x-2 items-center text-[#333333] text-[1rem] font-inter">
-                <Link to="#">Read more </Link>
+                <Link to="/single-blog-guide">Read more </Link>
                 <MdArrowOutward />
               </div>
             </div>

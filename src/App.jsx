@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Blog, Contact, Home, Listing, BlogAndGuideBook } from "./pages";
 import SharedLayout from "./pages/SharedLayout";
+import SingleBlogGuide from "./pages/components/SingleBlogguide";
 
 //routing
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "home/blog-and-guidebook",
         element: <BlogAndGuideBook />
+      },
+      {
+        path: "/single-blog-guide",
+        element: <SingleBlogGuide />
       }
       // add routes under / routing
     ]
