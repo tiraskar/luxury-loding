@@ -10,7 +10,7 @@ const MeetOurTeam = () => {
         <h1 className="text-[35px] font-semibold">Meet our team</h1>
 
         <div
-          className="relative flex flex-col md:flex-row lg:justify-between  bg-cardBackgroundLight rounded-2xl p-5 gap-4 lg:max-h-[457px]"
+          className="relative flex flex-col lg:flex-row lg:justify-between  bg-cardBackgroundLight rounded-2xl p-5 gap-4 lg:max-h-[457px]"
         >
 
           <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px] lg:pl-4">
@@ -24,7 +24,8 @@ const MeetOurTeam = () => {
             </div>
 
           </div>
-          <div className="flex justify-center bg-white max-w-[517px] px-[89px] py-[123px] rounded-2xl">
+          <div
+            className="flex justify-center bg-white lg:max-w-[517px] px-12 py-8 sm:px-16 sm:py-12 md:px-[89px] md:py-[123px] rounded-2xl">
             <img src="/images/drose-logo.png" alt="" className="w-full max-w-[339px]" />
           </div>
         </div>
