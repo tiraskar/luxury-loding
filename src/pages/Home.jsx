@@ -1,3 +1,4 @@
+import Accommodations from "./components/Accommodations";
 import ActivitiesAndServices from "./components/ActivitiesAndServices";
 import Banner from "./components/Banner";
 import FeaturesHome from "./components/FeaturesHome";
@@ -17,6 +18,7 @@ const Home = () => {
       <RentalExperience />
       <ActivitiesAndServices />
       <Testimonial />
+      <Accommodations />
       <QuestionAnswer />
     </div>
   );

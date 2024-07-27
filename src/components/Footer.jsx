@@ -31,7 +31,7 @@ const Footer = () => {
         <div className="flex flex-col space-y-[17px]">
           <h1 className="text-textLight font-inter font-medium">Manual</h1>
           <ul className="space-y-[14px] text-sm">
-            <li>Guidebook</li>
+            <Link to='/home/blog-and-guidebook'>Guidebook</Link>
             <li>Management</li>
           </ul>
         </div>
