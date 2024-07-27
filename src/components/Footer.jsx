@@ -9,7 +9,7 @@ import { LuPhone } from "react-icons/lu";
 const Footer = () => {
   return (
     <Wrapper>
-      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-20 px-4 xl:px-0">
+      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-[150px] px-4 xl:px-0">
         <div className="space-y-16">
           <div>
             <Logo />
