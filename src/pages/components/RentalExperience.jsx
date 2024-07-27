@@ -27,6 +27,7 @@ const RentalExperience = () => {
         <div className="absolute font-medium text-white text-[32px] sm:text-[36px] md:text-[42px] lg:text-[58px] max-w-[370px] sm:max-w-[420px] md:max-w-[580px] lg:max-w-[706px] left-[5vw] top-[10vh] leading-none">
           Ready for the best home rental experience
         </div>
+        <p className="absolute bg-white text-black bottom-12 px-4 py-2 rounded-2xl left-16">Book your stay</p>
       </div>
     </div>
   );
