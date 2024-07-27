@@ -1,7 +1,10 @@
+import ListingList from "./components/ListingList";
 
 const Listing = () => {
   return (
-    <div>Listing</div>
+    <div>
+      <ListingList />
+    </div>
   );
 };
 
