@@ -1,7 +1,7 @@
 import SearchListing from "./components/forms/SearchListing";
 import ListingList from "./components/ListingList";
 
-const Listing = () => {
+const Listings = () => {
   return (
 
     <div className="space-y-[79px]">
@@ -11,4 +11,4 @@ const Listing = () => {
   );
 };
 
-export default Listing;
+export default Listings;

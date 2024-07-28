@@ -5,6 +5,7 @@ import { GrLocation, GrPowerCycle } from "react-icons/gr";
 import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { Wrapper } from "../../components";
+import { Link } from "react-router-dom";
 
 const ListingList = () => {
   const [currentIndex, setCurrentIndex] = useState(Array(listingData.length).fill(0));
@@ -89,7 +90,7 @@ const ListingList = () => {
                 <GrLocation /> <span>{post.location}</span>
               </p>
               <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
-                <h1 className="text-xl font-inter tracking-[-1%]">{post.title}</h1>
+                <Link to='single-listing' className="text-xl font-inter tracking-[-1%]">{post.title}</Link>
                 <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px]">
                   {post.description}
                 </p>

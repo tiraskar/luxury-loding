@@ -1,0 +1,51 @@
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
+
+  const [underlineStyle, setUnderlineStyle] = useState({});
+  const tabsRef = useRef([]);
+
+
+
+  useEffect(() => {
+    const activeIndex = tabs?.indexOf(activeTab);
+    if (tabsRef.current[activeIndex]) {
+      const activeTabElement = tabsRef.current[activeIndex];
+      setUnderlineStyle({
+        width: activeTabElement.offsetWidth,
+        left: activeTabElement.offsetLeft,
+      });
+    }
+  }, [activeTab]);
+
+  return (
+    <div className="">
+      <ul className="flex flex-row  relative justify-between">
+        {tabs?.map((tab, index) => (
+          <li
+            key={tab}
+            className={`py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
+            onClick={() => setActiveTab(tab)}
+            ref={(el) => (tabsRef.current[index] = el)}
+          >
+            {tab}
+          </li>
+        ))}
+      </ul>
+      <div className="relative min-w-full h-px bg-[#E0E0E0]">
+        <div
+          className="absolute h-[2px] bg-[#B69F6F] transition-all"
+          style={underlineStyle}
+        ></div>
+      </div>
+    </div>
+  );
+};
+
+ListingTabs.propTypes = {
+  tabs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  activeTab: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+};
+
+export default ListingTabs;
