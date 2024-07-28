@@ -28,10 +28,10 @@ const SearchListing = () => {
             <input type="text" id="guest" placeholder="Any" className="bg-[#F9F9F9] outline-none font-inter text-[#8A8A8A] text-[1rem]" />
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 h-fit flex items-center justify-center text-[13px] font-medium w-full sm:w-auto max-w-[100px]">
+            <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 h-fit flex items-center justify-center text-[13px] font-medium w-[100px]">
               <RiFilter2Line size={20} />Filters
             </button>
-            <button className="text-white bg-buttonPrimary rounded-xl px-8 py-4 h-fit w-full sm:w-auto max-w-[117px]">Search</button>
+            <button className="text-white bg-buttonPrimary rounded-xl px-8 py-4 h-fit sm:w-auto w-[117px]">Search</button>
           </div>
         </form>
       </div>
