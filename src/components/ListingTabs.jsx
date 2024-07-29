@@ -6,6 +6,13 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
   const tabsRef = useRef([]);
 
 
+  const handleTabClick = (tab) => {
+    if (tab === activeTab) return setActiveTab('');
+    setActiveTab(tab);
+    if (tabsRef.current[tab]) {
+      tabsRef.current[tab].scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const activeIndex = tabs?.indexOf(activeTab);
@@ -25,7 +32,11 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
           <li
             key={tab}
             className={`py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setActiveTab(tab);
+              handleTabClick(tab);
+            }
+            }
             ref={(el) => (tabsRef.current[index] = el)}
           >
             {tab}

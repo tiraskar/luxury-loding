@@ -3,9 +3,9 @@ import { TbSmoking } from "react-icons/tb";
 import { PiDog } from "react-icons/pi";
 const ListingBookingTerms = () => {
   return (
-    <div className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
+    <div id="listing-booking-terms" className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
       <h1 className="text-xl font-semibold">Booking terms</h1>
-      <div className="flex lg:max-w-[652px]">
+      <div className="flex">
         <div className="lg:max-w-[318px] flex  p-3 rounded-2xl space-x-3 ">
           <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
             <LuMusic4 size={22} color="black" />
@@ -20,7 +20,7 @@ const ListingBookingTerms = () => {
           </p>
         </div>
       </div>
-      <div className="flex lg:max-w-[652px]">
+      <div className="flex">
         <div className="lg:max-w-[318px] flex  p-3 rounded-2xl space-x-3 ">
           <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
             <TbSmoking size={22} color="black" />
@@ -36,7 +36,7 @@ const ListingBookingTerms = () => {
           </p>
         </div>
       </div>
-      <div className="flex lg:max-w-[652px]">
+      <div className="flex">
         <div className="lg:max-w-[318px] flex  p-3 rounded-2xl space-x-3 ">
           <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
             <PiDog size={22} color="black" />

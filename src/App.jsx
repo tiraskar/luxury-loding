@@ -4,6 +4,7 @@ import SharedLayout from "./pages/SharedLayout";
 import SingleBlogGuide from "./pages/components/SingleBlogguide";
 import SingleListingView from "./pages/components/SingleListingView";
 import Listings from "./pages/Listings";
+import BookingListing from "./components/BookingListing";
 
 //routing
 const router = createBrowserRouter([
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
       {
         path: "/listing/single-listing",
         element: <SingleListingView />
+      },
+      {
+        path: "booking-listing",
+        element: <BookingListing />
+      },
+      {
+        path: "*",
+        element: <h1>404 Not Found</h1>
       }
       // add routes under / routing
     ]

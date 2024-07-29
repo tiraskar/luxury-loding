@@ -2,7 +2,7 @@ import { TbAirConditioning } from "react-icons/tb";
 
 const ListingDetails = () => {
   return (
-    <div className="tracking-[-1%] space-y-8">
+    <div id="listing-details" className="tracking-[-1%] space-y-8">
       <h1 className="text-xl font-semibold tracking-[-2%]">Details</h1>
       <div className="grid grid-cols-2 gap-3 ">
         <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">

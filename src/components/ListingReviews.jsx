@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrPowerCycle } from "react-icons/gr";
 
@@ -25,15 +26,40 @@ const ListingReviews = () => {
       time: '5 hours ago'
     }
   ];
+  const [value, setValue] = useState('');
+
+  const handleInput = (event) => {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+    setValue(textarea.value);
+  };
 
   return (
-    <div className="tracking-tight space-y-8">
+    <div id="listing-reviews" className="tracking-tight space-y-8">
       <h1 className="text-xl font-semibold tracking-[-2%]">Reviews</h1>
 
       {/* Review form */}
-      <form action="" className="border-[#0085FF] border-[1px] rounded-2xl p-4 shadow shadow-[#0085FF]">
-        <input type="text" className="w-full outline-none" placeholder="Write a review..." />
+      <form
+        action=""
+        className="border-[#0085FF] border-[1px] rounded-2xl p-4 space-y-4"
+        style={{ boxShadow: '-0.5px 1px 6px 1px  rgba(0, 133, 255, 0.4)' }}
+      >
+        <textarea
+          value={value}
+          rows={1}
+          className="w-full outline-none resize-none"
+          placeholder="Write a review..."
+          onInput={handleInput}
+          style={{ overflow: 'hidden' }}
+        />
+        <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
+        <div className="flex justify-end">
+          <button className="px-5 py-3 rounded-xl text-white bg-black ">Send</button>
+        </div>
       </form>
+
+
 
       {/* Review List */}
       <div className="flex flex-col space-y-8">

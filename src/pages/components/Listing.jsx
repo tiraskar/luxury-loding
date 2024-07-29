@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { BookApartment, Wrapper } from "../../components";
 import { FaRegHeart } from "react-icons/fa";
@@ -9,7 +10,6 @@ import ListingDescription from "../../components/ListingDescription";
 import ListingBookingTerms from "../../components/ListingBookingTerms";
 import ListingReviews from "../../components/ListingReviews";
 import ListingAvailability from "../../components/ListingAvailability";
-import { useState } from "react";
 
 const tabs = [
   'Description',
@@ -90,10 +90,27 @@ const Listing = () => {
               setActiveTab={setActiveTab}
             />
             {activeTab === '' ? (
-              Object.values(componentMapping)
+              <div className="space-y-8">
+                {Object.values(componentMapping).map((Component, index, arr) => (<div key={index} className="space-y-10">
+                  {Component}
+                  {index !== arr.length - 1 && (
+                    <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+                  )}
+                </div>
+                ))}
+              </div>
             ) : (
               componentMapping[activeTab]
             )}
+            {/* <ListingDescription />
+            <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+            <ListingDetails />
+            <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+            <ListingBookingTerms />
+            <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+            <ListingReviews />
+            <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+            <ListingAvailability /> */}
           </div>
           <div className="flex justify-end h-fit">
             <BookApartment />
