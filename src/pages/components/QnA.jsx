@@ -14,7 +14,7 @@ const QuestionAnswer = () => {
       <div className="px-2 sm:px-3 md:px-4 xl:px-0">
         <div className="grid  p-2 xs:p-3 sm:p-4 md:p-6 lg:grid-cols-3 lg:p-[42px] font-onest bg-cardBackgroundLight rounded-[1.5rem] tracking-tight">
           <h1 className="font-semibold text-[24px] sm:text-[26px] md:text-3xl  lg:text-[2rem] xl:text-[35px]  lg:max-w-[330px] col-span-1 py-6 md:py-8 lg:py-0">
-            Frequently asked <br /> questions
+            Frequently asked <br className=" hidden lg:block" /> questions
           </h1>
 
           <div className="lg:col-span-2">
