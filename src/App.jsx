@@ -5,6 +5,7 @@ import SingleBlogGuide from "./pages/components/SingleBlogguide";
 import SingleListingView from "./pages/components/SingleListingView";
 import Listings from "./pages/Listings";
 import BookingListing from "./components/BookingListing";
+import BookingConfirmation from "./components/BookingConfirmation";
 
 //routing
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "booking-listing",
         element: <BookingListing />
+      },
+      {
+        path: "booking-confirmation",
+        element: <BookingConfirmation />
       },
       {
         path: "*",
