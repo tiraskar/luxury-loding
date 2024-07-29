@@ -49,8 +49,6 @@ const PaymentMethod = () => {
         </div>
         <div className="flex flex-col text-black text-sm font-normal space-y-3.5">
           <div className="flex gap-x-4">
-          
-
             <div className="flex flex-col gap-y-2 relative">
               <label htmlFor="card-number" className="flex">Card number</label>
               <div className="relative">

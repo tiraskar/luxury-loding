@@ -47,8 +47,8 @@ const BookingConfirmation = () => {
               <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
               <BillingAddress />
             </div>
-            <div className="">
-              <button className="py-3 px-7 bg-black text-white rounded-[14px] ">Confirm and pay</button>
+            <div className="pt-16">
+              <button className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">Confirm and pay</button>
             </div>
           </div>
 

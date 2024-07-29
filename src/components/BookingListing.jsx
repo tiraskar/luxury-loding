@@ -92,7 +92,7 @@ const BookingListing = () => {
             }
           </p>
           <div className="pt-80">
-            <button className="py-3 px-7 bg-black text-white rounded-[14px] ">Agree and continue</button>
+            <button className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">Agree and continue</button>
           </div>
         </div>
 

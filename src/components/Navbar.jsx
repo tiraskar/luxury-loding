@@ -3,6 +3,7 @@ import Wrapper from "./Wrapper";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import Logo from "./Logo";
+import MobileNavbar from "./MobileNavbar";
 
 const Navbar = () => {
   const location = useLocation();
@@ -52,6 +53,9 @@ const Navbar = () => {
 
         </div>
       </div>
+      {isMobileNavOpen && (
+        <MobileNavbar navLinks={navLinks} onClose={setIsMobileNavOpen} pathname={pathname} />
+      )}
     </Wrapper>
   );
 };

@@ -63,7 +63,7 @@ const FeaturesHome = () => {
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto">
       <Wrapper>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-2 sm:px-3 md:px-4 xl:px-0">
           <h1 className="text-[#333333] text-[35px] font-semibold">Our featured homes</h1>
           <button className="px-5 py-3 rounded-xl text-white bg-black">View All</button>
         </div>
