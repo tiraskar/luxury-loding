@@ -68,7 +68,9 @@ const ContactUsForm = () => {
                 <label htmlFor="phone-number" className="flex">Phone number<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
                 <input
                   name="phone-number"
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d*" 
                   placeholder="Enter phone number"
                   className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
               </div>
