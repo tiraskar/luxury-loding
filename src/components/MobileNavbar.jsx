@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 
 const MobileNavbar = ({ navLinks, onClose, pathname }) => {
   return (
-    <div className="fixed md:hidden inset-0 bg-white z-50 flex flex-col items-center py-4">
-      <div className="flex justify-between w-full px-4 mb-10">
+    <div className="fixed md:hidden inset-0 bg-white z-50 flex flex-col items-center py-3">
+      <div className="flex justify-between w-full px-2 mb-10">
         <Logo onClose={onClose} />
         <RxCross2
           onClick={() => onClose(false)}

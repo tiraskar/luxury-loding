@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <Wrapper>
-      <div className="flex flex-row justify-between items-center py-3 md:my-6 font-onest px-4 xl:px-0">
+      <div className="flex flex-row justify-between items-center py-3 md:my-6 font-onest">
 
         <Logo />
 

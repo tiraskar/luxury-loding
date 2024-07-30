@@ -42,7 +42,7 @@ const Testimonial = () => {
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto">
       <Wrapper>
-        <h1 className="text-[#333333] text-[35px] font-semibold">Hear from our happy guests</h1>
+        <h1 className="text-[#333333] text-[26px] md:text-3xl md:text-[35px] font-semibold">Hear from our happy guests</h1>
       </Wrapper>
       <div className="py-16">
         <div
@@ -52,15 +52,15 @@ const Testimonial = () => {
           {featuredHomesData.map(({ quotes, image, profile, name, position }, index) => (
             <div
               key={index}
-              className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
+              className="relative flex-shrink-0 grid md:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
               ref={(el) => (itemRefs.current[index] = el)}
             >
               <div className="">
                 <img src={image} className="w-full h-auto rounded-xl object-contain" />
               </div>
               <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
-                <q className=" text-lg md:text-xl lg:text-2xl tracking-normal lg:pt-12">{quotes}</q>
-                <div className="flex flex-row items-center gap-3">
+                <q className=" text-sm sm:text-xl md:text-lg lg:text-2xl tracking-normal lg:pt-12">{quotes}</q>
+                <div className="flex flex-row items-center gap-3 mt-4 lg:mt-0">
                   <div className="w-[42px] h-[42px] rounded-full">
                     <img src={profile} alt="" className="" />
                   </div>

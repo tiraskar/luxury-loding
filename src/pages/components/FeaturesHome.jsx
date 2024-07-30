@@ -63,12 +63,12 @@ const FeaturesHome = () => {
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto">
       <Wrapper>
-        <div className="flex justify-between items-center px-2 sm:px-3 md:px-4 xl:px-0">
-          <h1 className="text-[#333333] text-[35px] font-semibold">Our featured homes</h1>
-          <button className="px-5 py-3 rounded-xl text-white bg-black">View All</button>
+        <div className="flex sm:justify-between items-center px-2 sm:px-3 md:px-4 xl:px-0">
+          <h1 className="text-[#333333] text-[26px] sm:text-3xl md:text-[35px] font-semibold">Our featured homes</h1>
+          <button className="hidden sm:block px-5 py-3 rounded-xl text-white bg-black">View All</button>
         </div>
       </Wrapper>
-      <div className="py-16">
+      <div className="py-10 sm:py-16">
         <div
           className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
           ref={containerRef}
@@ -76,19 +76,19 @@ const FeaturesHome = () => {
           {featuredHomesData.map(({ image, title, guests, bedrooms, baths }, index) => (
             <div
               key={title}
-              className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
+              className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-2 sm:p-4 md:p-5 gap-4"
               ref={(el) => (itemRefs.current[index] = el)}
             >
               <div className="flex flex-col justify-end space-y-4 sm:min-w-[400px]">
-                <h1 className="text-[28px] font-medium tracking-[-1%]">{title}</h1>
-                <div className="flex space-x-2 text-[#7B6944]">
-                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-sm">
+                <h1 className="text-xl sm:text-2xl md:text-[28px] font-medium tracking-[-1%]">{title}</h1>
+                <div className="flex flex-wrap gap-2 text-[#7B6944]">
+                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
                     <LuUsers size={14} /> {guests} {guests > 1 ? "guests" : "guest"}
                   </div>
-                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-sm">
+                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
                     <TbBed size={14} /> {bedrooms} {bedrooms > 1 ? "bedrooms" : "bedroom"}
                   </div>
-                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-sm">
+                  <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
                     <LuBath size={14} /> {baths} {baths > 1 ? "baths" : "bath"}
                   </div>
                 </div>
@@ -97,7 +97,7 @@ const FeaturesHome = () => {
                 <img src={image} className="w-full h-auto rounded-xl object-contain" />
                 
               </div>
-              <div className="absolute flex bg-black rounded-full text-white items-center px-2 gap-2 bg-opacity-60 bottom-10 right-10 py-1 text-xs">
+              <div className="absolute flex bg-black rounded-full text-white items-center px-2 gap-2 bg-opacity-60 bottom-5 right-5 sm:bottom-10 sm:right-10 py-1 text-xs">
                 <IoImageOutline size={16} /> View all photos
               </div>
             </div>

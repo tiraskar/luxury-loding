@@ -6,13 +6,12 @@ const Accommodations = () => {
   return (
     <div className="tracking-tight font-onest">
       <Wrapper>
-        <div className="px-2 sm:px-3 md:px-4 xl:px-0">
-          <h1 className="text-2xl sm:text-[26px]">Experience comfort and style at our Arizona accommodations</h1>
-          <p className="text-2xl sm:text-[28px] text-[#999999]">Book direct for a memorable stay.</p>
+
+        <h1 className="xxs:text-[22px] sm:text-[26px]">Experience comfort and style at our Arizona accommodations</h1>
+        <p className=" xxs:text-2xl sm:text-[28px] text-[#999999]">Book direct for a memorable stay.</p>
           <div className="flex flex-row space-x-2 items-center text-[#333333] text-[1rem] py-3">
             <Link >Book your stay</Link>
             <MdArrowOutward />
-          </div>
         </div>
       </Wrapper>
       <div className="flex flex-col gap-1 max-w-[1536px] mx-auto justify-center rounded-2xl py-[56px]">

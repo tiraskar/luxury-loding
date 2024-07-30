@@ -5,7 +5,7 @@ const ContactUsForm = () => {
 
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-start gap-y-[56px]">
+      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-start gap-y-[56px]">
 
         <p className="flex items-center text-xs text-[#A1A196] gap-1">
           Home <GoDotFill />
@@ -15,23 +15,23 @@ const ContactUsForm = () => {
         <h1 className="text-[35px] font-semibold">Contact Us</h1>
 
         <div
-          className="relative grid lg:grid-cols-2 lg:justify-between  bg-cardBackgroundLight rounded-2xl p-2 md:p-5 gap-4 lg:min-h-[697px]"
+          className="relative grid lg:grid-cols-2 lg:justify-between  bg-cardBackgroundLight rounded-xl md:rounded-2xl p-2 md:p-5 gap-4 lg:min-h-[697px]"
         >
           <div className="flex flex-col justify-between">
             <div className="flex flex-col gap-y-8 lg:mt-16">
               <div className="flex flex-col gap-y-3 max-w-[389px]">
-                <h1 className="text-[38px]">Say Hello!</h1>
+                <h1 className=" text-3xl xxs:text-[2rem] sm:text-4xl md::text-[38px]">Say Hello!</h1>
                 <p className="text-xs leading-[22px] text-[#8E8E80]">Whether you have questions about our services or need assistance with your property, we’re here to help. Fill out the contact form below, and a member of our team will get back to you.</p>
               </div>
-              <div className="flex flex-col gap-y-8 text-2xl font-inter">
+              <div className="flex flex-col gap-y-8 text-xl sm:text-2xl font-inter">
                 <p>info@directbooking.com</p>
                 <p>(+1) 8111-874-512</p>
               </div>
             </div>
-            <div className="flex flex-col gap-y-6 max-w-[501px]">
-              <h1 className="font-medium font-inter tracking-[-1%] text-[28px]">
+            <div className="flex flex-col gap-y-4 sm:gap-y-6 max-w-[501px]">
+              <h1 className="font-medium font-inter tracking-[-1%] text-2xl sm:text-[28px]">
                 Co-hosting services</h1>
-              <p className="leading-[22px] text-[#8E8E80]">
+              <p className=" text-xs sm:text-[13px] leading-5 sm:leading-[22px] text-[#8E8E80]">
                 Looking for a trustworthy co-host to elevate your
                 vacation rental? We specialize in bespoke,
                 full-service co-hosting, managing everything
@@ -46,9 +46,9 @@ const ContactUsForm = () => {
             </div>
           </div>
           <div className="flex justify-center lg:justify-end ">
-            <form action="" className="bg-white flex-col px-4 py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-[24px] tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] ">
+            <form action="" className="bg-white flex-col px-3 py-6 sm:py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] ">
               <div className="flex flex-col gap-y-2">
-                <label htmlFor="full-name" className="flex ">Full Name
+                <label htmlFor="full-name" className="flex">Full Name
                   <FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
                 <input
                   name="full-name"

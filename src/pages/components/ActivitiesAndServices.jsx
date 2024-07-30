@@ -3,17 +3,17 @@ import Wrapper from "../../components/Wrapper";
 const ActivitiesAndServices = () => {
   return (
     <Wrapper>
-      <div className="flex flex-col px-4 xl:px-0 space-y-[56px]">
-        <h1 className="text-[35px] font-semibold">Activities & Services</h1>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="flex flex-col space-y-[56px]">
+        <h1 className="text-3xl sm:text-[35px] font-semibold">Activities & Services</h1>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {activitesData?.map(({ icon, title, description }) => {
             return (
-              <div key={title} className="flex flex-col bg-cardBackgroundLight rounded-2xl p-5 space-y-8">
+              <div key={title} className="flex flex-col bg-cardBackgroundLight rounded-2xl p-5 space-y-6 sm:space-y-8">
                 <div className="w-[50px] h-[50px] bg-[#E5E5CC] flex justify-center items-center rounded-full">
                   <img src={icon} />
                 </div>
                 <div>
-                  <h1 className="text-[22px]">
+                  <h1 className="text-xl sm:text-[22px]">
                     {title}
                   </h1>
                   <p className="text-sm text-[#8E8E80]">
