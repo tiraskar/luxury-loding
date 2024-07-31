@@ -13,7 +13,7 @@ const GuideBookBanner = () => {
   };
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-start gap-y-[56px]">
+      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-start gap-y-[56px]">
 
         <p className="flex items-center text-xs text-[#A1A196] gap-1">
           Home <GoDotFill />

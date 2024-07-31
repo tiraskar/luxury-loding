@@ -63,7 +63,7 @@ const FeaturesHome = () => {
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto">
       <Wrapper>
-        <div className="flex sm:justify-between items-center px-2 sm:px-3 md:px-4 xl:px-0">
+        <div className="flex sm:justify-between items-center ">
           <h1 className="text-[#333333] text-[26px] sm:text-3xl md:text-[35px] font-semibold">Our featured homes</h1>
           <button className="hidden sm:block px-5 py-3 rounded-xl text-white bg-black">View All</button>
         </div>
@@ -110,6 +110,9 @@ const FeaturesHome = () => {
             <GoDash key={index} onClick={() => handleScroll(index)} size={32} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "text-[#9A9A9A]" : "text-white"}`} />
           ))}
         </div>
+      </div>
+      <div className="flex justify-start items-center pl-4">
+        <button className="block sm:hidden px-5 py-2 rounded-xl text-white bg-black my-4">View All</button>
       </div>
     </div>
   );

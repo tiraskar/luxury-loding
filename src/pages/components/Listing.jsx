@@ -33,8 +33,8 @@ const Listing = () => {
 
   return (
     <Wrapper>
-      <div className="px-2 sm:px-3 md:px-4 xl:px-0 font-inter tracking-[-1%] space-y-[30px]">
-        <div className="flex justify-between">
+      <div className="font-inter tracking-[-1%] space-y-[30px]">
+        <div className="flex flex-wrap gap-y-6 md:gap-y-0 md:justify-between">
           <div className="flex flex-col gap-y-6">
             <h1 className="text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight">Pool, Hot tub, Game Room! Mesa Family Retreat</h1>
             <p className="flex items-center text-xs text-[#A1A196] gap-1">
@@ -82,7 +82,7 @@ const Listing = () => {
         </div>
 
 
-        <div className="grid grid-cols-2">
+        <div className="grid lg:grid-cols-2">
           <div className="h-fit space-y-8">
             <ListingTabs
               tabs={tabs}
@@ -112,7 +112,7 @@ const Listing = () => {
             <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
             <ListingAvailability /> */}
           </div>
-          <div className="flex justify-end h-fit">
+          <div className="flex justify-center lg:justify-end h-fit">
             <BookApartment />
           </div>
         </div>

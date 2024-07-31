@@ -5,7 +5,7 @@ import { RiFilter2Line } from "react-icons/ri";
 const SearchListing = () => {
   return (
     <Wrapper>
-      <div className="px-2 sm:px-3 lg:px-4 xl:px-0 space-y-6">
+      <div className="space-y-6">
         <p className="flex items-center text-xs text-[#A1A196] gap-1">
           Home <GoDotFill />
           <span className="text-black">Listing</span>

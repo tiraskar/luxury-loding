@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import Wrapper from "./Wrapper";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
-import Logo from "./Logo";
+import Logo from "./ui/Logo";
 import MobileNavbar from "./MobileNavbar";
 
 const Navbar = () => {
@@ -25,19 +25,19 @@ const Navbar = () => {
 
   return (
     <Wrapper>
-      <div className="flex flex-row justify-between items-center py-3 md:my-6 font-onest">
+      <div className="flex flex-row justify-between items-center py-3 my-6 font-onest">
 
         <Logo />
 
         {!isMobileNavOpen &&
           <RxHamburgerMenu
             onClick={() => setIsMobileNavOpen(true)}
-            className="block md:hidden text-xl sm:text-2xl" />}
+            className="block md:hidden text-2xl" />}
 
         {isMobileNavOpen &&
           <RxCross2
             onClick={() => setIsMobileNavOpen(false)}
-            className="block md:hidden text-xl sm:text-2xl" />
+          className="block md:hidden text-2xl" />
         }
         <ul className="hidden md:flex  space-x-8">
           {renderNavbar}

@@ -62,7 +62,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <main className="remove-scrollbar">
+    <main className="remove-scrollbar  scroll-smooth">
       <RouterProvider router={router} />
     </main>
   );

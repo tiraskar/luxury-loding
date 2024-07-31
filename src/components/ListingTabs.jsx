@@ -27,7 +27,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
 
   return (
     <div className="">
-      <ul className="flex flex-row  relative justify-between">
+      <ul className="flex flex-wrap  relative justify-between">
         {tabs?.map((tab, index) => (
           <li
             key={tab}

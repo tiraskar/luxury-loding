@@ -66,7 +66,7 @@ const LatestPosts = () => {
 
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-center gap-y-[56px]">
+      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-center gap-y-[56px]">
         <h1 className="text-[35px] font-semibold">Latest Posts</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
           {lastestPosts?.map((post, index) => (

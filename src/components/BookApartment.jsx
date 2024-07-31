@@ -4,7 +4,7 @@ import { LuUser2 } from "react-icons/lu";
 const BookApartment = () => {
   return (
     <div className="font-inter tracking-[-1%]">
-      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl lg:w-[429px]">
+      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl w-full lg:min-w-[429px]">
         <h1 className="font-onest tracking-normal font-medium text-xl">Book apartment</h1>
         <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 

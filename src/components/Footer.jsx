@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from "./Logo";
+import Logo from "./ui/Logo";
 import Wrapper from "./Wrapper";
 import { FaLinkedin } from "react-icons/fa";
 import { FaSquareInstagram, FaYoutube } from "react-icons/fa6";
@@ -9,7 +9,7 @@ import { LuPhone } from "react-icons/lu";
 const Footer = () => {
   return (
     <Wrapper>
-      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-[150px] px-4 xl:px-0">
+      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-[150px] ">
         <div className="space-y-16">
           <div>
             <Logo />
