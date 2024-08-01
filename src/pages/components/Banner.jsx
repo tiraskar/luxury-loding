@@ -25,7 +25,7 @@ const Banner = () => {
 
           <div className="flex flex-col font-onest lg:flex-row lg:justify-between items-center bg-white min-h-[73px] rounded-2xl -mb-[20%] sm:-mb-[5rem] md:-mb-[3rem] lg:-mb-[2rem] shadow-lg max-w-[832px] mx-auto px-4 py-2 md:py-3">
             <form className="flex flex-col md:flex-row lg:items-center lg:gap-4 w-full">
-              <div className="flex">
+              <div className="flex items-center">
                 <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
                   <label htmlFor="location" className="font-semibold">
                     Where to go?
@@ -65,7 +65,7 @@ const Banner = () => {
                   />
                 </div>
                 <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-                  <label htmlFor="guest" className="block mb-1 font-semibold">
+                  <label htmlFor="guest" className="block font-semibold">
                     Guest
                   </label>
                   <input
