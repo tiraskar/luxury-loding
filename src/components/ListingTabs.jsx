@@ -27,7 +27,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
 
   return (
     <div className="">
-      <ul className="flex flex-wrap  relative justify-between">
+      <ul className="flex flex-wrap  relative sm:justify-between">
         {tabs?.map((tab, index) => (
           <li
             key={tab}
@@ -43,7 +43,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
           </li>
         ))}
       </ul>
-      <div className="relative min-w-full h-px bg-[#E0E0E0]">
+      <div className="hidden sm:block relative min-w-full h-px bg-[#E0E0E0]">
         <div
           className="absolute h-[2px] bg-[#B69F6F] transition-all"
           style={underlineStyle}

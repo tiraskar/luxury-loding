@@ -68,7 +68,7 @@ const FeaturesHome = () => {
           <button className="hidden sm:block px-5 py-3 rounded-xl text-white bg-black">View All</button>
         </div>
       </Wrapper>
-      <div className="py-10 sm:py-16">
+      <div className="pt-10 sm:py-16">
         <div
           className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
           ref={containerRef}
@@ -104,14 +104,14 @@ const FeaturesHome = () => {
           ))}
         </div>
       </div>
-      <div className="flex justify-center space-x-2">
+      <div className="hidden sm:flex justify-center space-x-2">
         <div className="bg-[#0000001A] flex rounded-full px-2">
           {featuredHomesData?.map((_, index) => (
             <GoDash key={index} onClick={() => handleScroll(index)} size={32} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "text-[#9A9A9A]" : "text-white"}`} />
           ))}
         </div>
       </div>
-      <div className="flex justify-start items-center pl-4">
+      <div className="flex items-center pl-4">
         <button className="block sm:hidden px-5 py-2 rounded-xl text-white bg-black my-4">View All</button>
       </div>
     </div>

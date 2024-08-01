@@ -15,9 +15,9 @@ const ContactUsForm = () => {
         <h1 className="text-[35px] font-semibold">Contact Us</h1>
 
         <div
-          className="relative grid lg:grid-cols-2 lg:justify-between  bg-cardBackgroundLight rounded-xl md:rounded-2xl p-2 md:p-5 gap-4 lg:min-h-[697px]"
+          className="relative grid lg:grid-cols-2 lg:justify-between  bg-cardBackgroundLight rounded-xl md:rounded-2xl p-2 xs:p-3 sm:p-4 md:p-5 gap-4 lg:min-h-[697px]"
         >
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col space-y-8 justify-between">
             <div className="flex flex-col gap-y-8 mt-8 sm:mt-12 lg:mt-16">
               <div className="flex flex-col gap-y-3 max-w-[389px]">
                 <h1 className=" text-3xl xxs:text-[2rem] sm:text-4xl md:text-[38px]">Say Hello!</h1>

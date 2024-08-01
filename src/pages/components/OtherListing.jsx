@@ -8,8 +8,8 @@ const OtherListing = () => {
 
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-center gap-y-[56px]">
-        <h1 className="text-[35px] font-semibold">Others Listing</h1>
+      <div className="text-[#333333] font-onest tracking-tight px-2 sm:px-3 md:px-4 xl:px-0 flex flex-col justify-center gap-y-7 sm:gap-y-[56px]">
+        <h1 className=" text-3xl sm:text-[35px] font-semibold">Others Listing</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
           {listingData?.map((post, index) => (
             <div key={index} className="flex flex-col gap-7 xl:max-w-[318px]">

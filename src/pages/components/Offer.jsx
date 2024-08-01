@@ -91,7 +91,7 @@ const Offer = () => {
                 <h1 className="text-[26px]">{offer.title}</h1>
                 <p className="text-[1rem] leading-6 text-[#868686] pr-4">{offer.description}</p>
               </div>
-              <div className="flex justify-center md:justify-start">
+              <div className="flex justify-center md:justify-start ">
                 <img src={offer.image} alt={offer.title} className="w-full max-w-[429px]" />
               </div>
             </div>

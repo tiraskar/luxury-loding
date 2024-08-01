@@ -52,13 +52,13 @@ const Listing = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-3">
-          <img src="/images/single-listing-one.png" alt="" className="rounded-xl" />
-          <div className="flex flex-col gap-y-3">
-            <img src="/images/single-listing-two.png" alt="" className="rounded-xl" />
-            <div className="grid grid-cols-2 gap-x-3">
-              <img src="/images/single-listing-three.png" alt="" className="rounded-xl" />
-              <img src="/images/single-listing-four.png" alt="" className="rounded-xl" />
+        <div className="grid grid-cols-2 gap-x-1 md:gap-x-3">
+          <img src="/images/single-listing-one.png" alt="" className="rounded-md sm:rounded-xl" />
+          <div className="flex flex-col gap-y-1.5 md:gap-y-3">
+            <img src="/images/single-listing-two.png" alt="" className="rounded-md sm:rounded-xl" />
+            <div className="grid grid-cols-2 gap-x-1.5 md:gap-x-3">
+              <img src="/images/single-listing-three.png" alt="" className="rounded-md sm:rounded-xl" />
+              <img src="/images/single-listing-four.png" alt="" className="rounded-md sm:rounded-xl" />
             </div>
           </div>
         </div>
@@ -89,19 +89,21 @@ const Listing = () => {
               activeTab={activeTab}
               setActiveTab={setActiveTab}
             />
-            {activeTab === '' ? (
-              <div className="space-y-8">
-                {Object.values(componentMapping).map((Component, index, arr) => (<div key={index} className="space-y-10">
-                  {Component}
-                  {index !== arr.length - 1 && (
-                    <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                  )}
+            <Wrapper>
+              {activeTab === '' ? (
+                <div className="space-y-8">
+                  {Object.values(componentMapping).map((Component, index, arr) => (<div key={index} className="space-y-10">
+                    {Component}
+                    {index !== arr.length - 1 && (
+                      <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+                    )}
+                  </div>
+                  ))}
                 </div>
-                ))}
-              </div>
-            ) : (
-              componentMapping[activeTab]
-            )}
+              ) : (
+                componentMapping[activeTab]
+              )}
+            </Wrapper>
             {/* <ListingDescription />
             <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
             <ListingDetails />

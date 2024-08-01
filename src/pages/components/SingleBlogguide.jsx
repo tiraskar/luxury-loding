@@ -8,15 +8,16 @@ const SingleBlogGuide = () => {
   return (
     <div className="flex flex-col gap-y-[150px]">
       <Wrapper>
-        <div className="px-2 sm:px-3 lg:px-4 xl:px-0 font-inter tracking-[-1%]">
+        <div className=" font-inter tracking-[-1%]">
           <p className="flex items-center text-xs text-[#A1A196] gap-1">
             Home <GoDotFill /> Blog & Guidebook <GoDotFill />
             <span className="text-black">Sedona’s secret Hike</span>
           </p>
           <div className="flex flex-col gap-y-[56px] text-[#222222]">
-            <h1 className=" sm:text-[56px] md:text-[60px] lg:text-[68px] font-onest tracking-tight max-w-[986px] leading-[80px]">
+            <h1 className=" text-[30px] xxs:text-3xl xs:text-[40px] sm:text-[56px] md:text-[60px] lg:text-[68px] font-onest tracking-tight max-w-[986px] leading-10 xxs:leading-[40px] xs:leading-[50px] sm:leading-[60px] md:leading-[70px] lg:leading-[80px]">
               Sedona’s secret Hike: Escape the crowds with this trial
             </h1>
+
             <div className="flex justify-between items-center">
               <div className="flex flex-row items-center gap-3">
                 <div className="w-[42px] h-[42px] rounded-full">
@@ -34,12 +35,12 @@ const SingleBlogGuide = () => {
               </div>
 
             </div>
-            <div>
-              <img src="/images/single-blog-main.png" alt="" className="rounded-2xl" />
+            <div className="relative h-[320px] sm:min-h-[400px] md:min-h-[450px] lg:h-full w-full rounded-2xl overflow-hidden">
+              <img src="/images/single-blog-main.png" alt="" className="object-cover w-full h-full " />
             </div>
             <div className="flex justify-center  text-left">
               <div
-                className="flex flex-col max-w-[874px] gap-y-6 leading-[40px] text-xl"
+                className="flex flex-col max-w-[874px] gap-y-6 sm:leading-10 leading-9 text-lg sm:text-xl"
               >
                 <p>
                   Sedona, Arizona, is renowned for its stunning red rock landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike. This 2.2-mile trail offers a perfect blend of challenge and serenity. With a 300-foot elevation gain, it is considered moderately difficult and is the only hiking trail in the area with a double diamond rating on the trail map. Plus, this trailhead is conveniently located, ensuring stress-free parking and a hassle-free start to your adventure.

@@ -20,15 +20,15 @@ const GuideBookBanner = () => {
           <span className="text-black">Blog & Guidebook</span>
         </p>
 
-        <h1 className="text-[35px] font-semibold">Blog & Guidebook</h1>
+        <h1 className=" text-3xl md:text-[35px] font-semibold">Blog & Guidebook</h1>
 
 
         <div
-          className="relative flex flex-col lg:flex-row  bg-cardBackgroundLight rounded-2xl p-5 gap-4 lg:max-h-[633px]"
+          className="relative flex flex-col lg:flex-row  bg-cardBackgroundLight rounded-2xl p-2 xs:p-4 sm:p-5 gap-4 lg:max-h-[633px]"
         >
 
           <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
-            <div className="flex flex-row items-center gap-3">
+            <div className="flex flex-row items-center gap-3 py-4">
               <div className="w-[42px] h-[42px] rounded-full">
                 <img src='/images/profile-alex.png' alt="" className="" />
               </div>
@@ -39,7 +39,7 @@ const GuideBookBanner = () => {
             </div>
             <div className="flex flex-col gap-7 xl:max-w-[397px]">
               <div className="flex flex-col gap-4">
-                <h1 className="text-[28px] font-medium font-inter tracking-[-1%]">
+                <h1 className=" text-2xl xs:text-[28px] font-medium font-inter tracking-[-1%]">
                   {post.title}
                 </h1>
                 <p className=" text-[#8E8E80] text-xs leading-[22px]">
