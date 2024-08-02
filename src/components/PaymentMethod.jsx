@@ -29,14 +29,14 @@ const PaymentMethod = () => {
     <div className="font-inter text-[#333333] space-y-8">
       <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
       <div className="space-y-10">
-        <div className="flex flex-row justify-between space-x-4">
+        <div className="flex  md:flex-row flex-wrap gap-4">
           {paymentMethodOption.map((option, index) => {
             const isSelected = option.value === selectedPaymentMethod;
             return (
               <div
                 key={index}
                 onClick={() => handleSelect(option.value)}
-                className={`flex items-center space-x-3 w-[207px] h-[66px] rounded-2xl p-3 cursor-pointer tracking-[-1%] delay-50 transition-all ${isSelected ? 'border-[1px] border-[#7B6944] bg-[#F5F5EF]' : 'bg-[#F9F9F9]'
+                className={`flex items-center space-x-3 w-full md:w-[207px] h-[66px] rounded-2xl p-3 cursor-pointer tracking-[-1%] delay-50 transition-all ${isSelected ? 'border-[1px] border-[#7B6944] bg-[#F5F5EF]' : 'bg-[#F9F9F9]'
                   }`}
               >
                 <div className={`p-2.5 rounded-xl bg-white`}>
@@ -48,7 +48,7 @@ const PaymentMethod = () => {
           })}
         </div>
         <div className="flex flex-col text-black text-sm font-normal space-y-3.5">
-          <div className="flex gap-x-4">
+          <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex flex-col gap-y-2 relative">
               <label htmlFor="card-number" className="flex">Card number</label>
               <div className="relative">
@@ -66,23 +66,25 @@ const PaymentMethod = () => {
             </div>
 
 
-            <div className="flex flex-col gap-y-2 max-w-[168px]">
-              <label htmlFor="expiration" className="flex">Expiration</label>
-              <input
-                name="expiration"
-                type="text"
-                placeholder="MM/YY"
-                className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-              />
-            </div>
-            <div className="flex flex-col gap-y-2 max-w-[135px]">
-              <label htmlFor="security-code" className="flex">Security code</label>
-              <input
-                name="security-code"
-                type="text"
-                placeholder="CVC"
-                className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-              />
+            <div className="flex flex-row gap-x-3">
+              <div className="flex flex-col gap-y-2 max-w-[168px]">
+                <label htmlFor="expiration" className="flex">Expiration</label>
+                <input
+                  name="expiration"
+                  type="text"
+                  placeholder="MM/YY"
+                  className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
+                />
+              </div>
+              <div className="flex flex-col gap-y-2 max-w-[135px]">
+                <label htmlFor="security-code" className="flex">Security code</label>
+                <input
+                  name="security-code"
+                  type="text"
+                  placeholder="CVC"
+                  className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
+                />
+              </div>
             </div>
           </div>
           <p className="tracking-[-1%] text-xs leading-6">By providing your card information, you allow AvantStay, Inc. to charge your card for future payments in accordance with their terms.</p>

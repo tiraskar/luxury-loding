@@ -22,7 +22,7 @@ const Popup = ({ isVisible, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 text-[#333333] max-h-[820px]">
+    <div className="fixed inset-0 flex items-center justify-center z-50 text-[#333333] h-auto max-h-[820px]">
 
       <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2 ">
 
@@ -38,7 +38,7 @@ const Popup = ({ isVisible, onClose }) => {
 
         <div className="min-w-full h-px bg-[#E0E0E0]"></div>
 
-        <div className='font-onest space-y-4 py-4 tracking-[-1%] px-4 max-h-[500px] sm:max-h-[650px] overflow-x-scroll'>
+        <div className='font-onest space-y-4 py-4 tracking-[-1%] px-4 lg:max-h-[500px] sm:max-h-[650px] overflow-x-scroll'>
 
           <div className='space-y-3'>
 

@@ -64,7 +64,7 @@ export default Navbar;
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Contact", href: "/contact" },
   { label: "Blog", href: "/blog" },
   { label: "Listing", href: "/listing" },
+  { label: "Contact Us", href: "/contact" },
 ];

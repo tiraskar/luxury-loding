@@ -6,9 +6,14 @@ import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { Wrapper } from "../../components";
 import { Link } from "react-router-dom";
+import { IoListOutline, IoMapOutline } from "react-icons/io5";
+
 import ListingMap from "../../components/ListingMap";
 
 const ListingList = () => {
+
+  const [isMapViewOpen, setIsMapViewOpen] = useState(false);
+
   const [currentIndex, setCurrentIndex] = useState(Array(listingData.length).fill(0));
 
   const handleSlide = (postIndex, direction) => {
@@ -32,7 +37,25 @@ const ListingList = () => {
   return (
     <Wrapper>
       <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-center gap-y-12 sm:gap-y-[56px]">
-        <h1 className=" text-3xl sm:text-[35px] font-semibold">All Listing - ({listingData.length})</h1>
+        <div className="flex flex-wrap justify-between gap-2">
+          <h1 className=" text-3xl sm:text-[35px] font-semibold">All Listing - ({listingData.length})</h1>
+          <div className="flex items-center space-x-[9px]">
+            <div className="flex flex-row text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl text-[13px] font-medium h-fit py-[9px] px-2.5">
+              <p className="opacity-50">Sort by :</p>
+              <select name="" id="" className="bg-white outline-none">
+                <option value="" className="font-semibold text-[13px]">Default</option>
+              </select>
+            </div>
+            <div className="bg-[#F9F9F9] p-0.5 w-[64] h-[34px] rounded-[10px] flex items-center space-x-[7px]">
+              <div onClick={() => setIsMapViewOpen(false)} className={` h-[30px] w-[30px] flex items-center  justify-center ${!isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
+                <IoListOutline className="h-4 w-4" />
+              </div>
+              <div onClick={() => setIsMapViewOpen(true)} className={` h-[30px] w-[30px] flex items-center justify-center ${isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
+                <IoMapOutline className="h-4 w-4" />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
           {listingData?.map((post, postIndex) => (
             <div key={postIndex} className="relative flex flex-col gap-y-4 xl:max-w-[318px]">

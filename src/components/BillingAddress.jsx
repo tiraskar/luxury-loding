@@ -2,9 +2,9 @@
 const BillingAddress = () => {
   return (
 
-    <div className="font-inter text-[#333333]">
+    <div className="font-inter text-[#333333] space-y-8">
       <h1 className="font-medium tracking-tight text-lg">Billing Address</h1>
-      <div className="grid grid-cols-2 gap-4 text-black text-sm font-normal">
+      <div className="grid md:grid-cols-2 gap-4 text-black text-sm font-normal">
         <div className="flex flex-col gap-y-2 ">
           <label htmlFor="first-name" className="flex ">First Name</label>
           <input

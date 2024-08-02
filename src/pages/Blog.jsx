@@ -1,7 +1,10 @@
+import LatestPosts from "./components/LatestPosts";
 
 const Blog = () => {
   return (
-    <div>Blog</div>
+    <div>
+      <LatestPosts />
+    </div>
   )
 }
 
