@@ -1,29 +1,65 @@
-import { useState } from "react";
+import { CardElement } from "@stripe/react-stripe-js";
 
-const PaymentMethod = () => {
-  const paymentMethodOption = [
-    {
-      name: 'Card',
-      image: '/images/card.png',
-      value: 'card', // Add a value for each payment method
-    },
-    {
-      name: 'USA bank account',
-      image: '/images/usa-bank-account.png',
-      value: 'bank-account',
-    },
-    {
-      name: 'Affirm',
-      image: '/images/affirm.png',
-      value: 'affirm',
-    },
-  ];
 
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethodOption[0].value);
+const PaymentMethod = ({
+  paymentMethodOption,
+  selectedPaymentMethod,
+  handleSelect,
+  cardInfo,
+  setCardInfo,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+}) => {
 
-  const handleSelect = (value) => {
-    setSelectedPaymentMethod(value);
+  const handleChange = (name, value) => {
+    setCardInfo((prev) => ({ ...prev, [name]: value }));
   };
+
+  const cardNumberOptions={
+    style:{
+      base: {
+        border: '2px solid #F5F5F5',     
+        padding: '1rem',                
+        paddingLeft: '1rem',           
+        paddingRight: '3rem',            
+        borderRadius: '0.75rem',         
+        width: '100%',                  
+        appearance: 'none',              
+        fontSize: '16px',               
+        color: '#32325d',               
+        '::placeholder': {
+          color: '#aab7c4',        
+        },
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a',
+      },
+    }
+  }
+
+  const cardExpiryOptions={
+    style:{
+      base: {
+        fontSize: '16px', 
+        border: '2px solid #F5F5F5',   
+        padding: '1rem',                
+        paddingLeft: '1.25rem',         
+        paddingRight: '1.25rem',       
+        borderRadius: '0.75rem',  
+        boxSizing: 'border-box',
+        color: '#32325d',
+        '::placeholder': {
+          color: '#aab7c4',
+        },
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a',
+      },
+    }
+  }
 
   return (
     <div className="font-inter text-[#333333] space-y-8">
@@ -52,16 +88,19 @@ const PaymentMethod = () => {
             <div className="flex flex-col gap-y-2 relative">
               <label htmlFor="card-number" className="flex">Card number</label>
               <div className="relative">
-                <input
+                {/* <input
                   id="card-number"
-                  name="card-number"
+                  name="cardNumber"
+                  value={cardInfo.cardNumber}
+                  onChange={(e) => handleChange("cardNumber", e.target.value)}
                   type="text"
                   inputMode="numeric"
                   pattern="\d*"
                   placeholder="0000 0000 0000 0000"
                   className="border-[2px] border-[#F5F5F5] px-4 py-4 pr-12 rounded-xl w-full appearance-none"
-                />
-                <img src="/images/visacard.png" alt="Visa Card" className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6" />
+                /> */}
+                <CardNumberElement options={cardNumberOptions}  />
+                {/* <img src="/images/visacard.png" alt="Visa Card" className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6" /> */}
               </div>
             </div>
 
@@ -69,21 +108,27 @@ const PaymentMethod = () => {
             <div className="flex flex-row gap-x-3">
               <div className="flex flex-col gap-y-2 max-w-[168px]">
                 <label htmlFor="expiration" className="flex">Expiration</label>
-                <input
-                  name="expiration"
+                {/* <input
+                  name="expiry"
+                  value={cardInfo.expiry}
+                  onChange={(e) => handleChange("expiry", e.target.value)}
                   type="text"
                   placeholder="MM/YY"
                   className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-                />
+                /> */}
+                <CardExpiryElement options={cardExpiryOptions} />
               </div>
               <div className="flex flex-col gap-y-2 max-w-[135px]">
                 <label htmlFor="security-code" className="flex">Security code</label>
-                <input
-                  name="security-code"
+                {/* <input
+                  name="cvc"
+                  value={cardInfo.cvc}
+                  onChange={(e) => handleChange("cvc", e.target.value)}
                   type="text"
                   placeholder="CVC"
                   className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-                />
+                /> */}
+                <CardCvcElement options={cardExpiryOptions}/>
               </div>
             </div>
           </div>

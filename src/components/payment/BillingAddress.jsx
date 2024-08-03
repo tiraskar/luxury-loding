@@ -1,5 +1,10 @@
 
-const BillingAddress = () => {
+const BillingAddress = ({ billingAddress, setBillingsAddress }) => {
+
+  const handleChange = (name, value) => {
+    setBillingsAddress((prev) => ({ ...prev, [name]: value }));
+  }
+
   return (
 
     <div className="font-inter text-[#333333] space-y-8">
@@ -8,7 +13,9 @@ const BillingAddress = () => {
         <div className="flex flex-col gap-y-2 ">
           <label htmlFor="first-name" className="flex ">First Name</label>
           <input
-            name="first-name"
+            name="firstName"
+            value={billingAddress.firstName}
+            onChange={(e) => handleChange("firstName", e.target.value)}
             type="text"
             placeholder="Enter first name"
             className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
@@ -17,16 +24,20 @@ const BillingAddress = () => {
         <div className="flex flex-col gap-y-2">
           <label htmlFor="last-name" className="flex ">Last Name</label>
           <input
-            name="last-name"
+            name="lastName"
+            value={billingAddress.lastName}
+            onChange={(e) => handleChange("lastName", e.target.value)}
             type="text"
             placeholder="Enter last name"
             className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
         </div>
 
         <div className="relative flex flex-col gap-y-2">
-          <label htmlFor="email" className="flex">Country or Region</label>
+          <label htmlFor="country" className="flex">Country or Region</label>
           <select
-            name="country-region"
+            name="country"
+            value={billingAddress.country}
+            onChange={(e) => handleChange("country", e.target.value)}
             id="country-region"
             className="block w-full border-2 border-gray-200 px-5 py-4 pr-10 rounded-xl bg-white appearance-none"
           >
@@ -43,6 +54,8 @@ const BillingAddress = () => {
           <label htmlFor="address" className="flex">Address</label>
           <input
             name="address"
+            value={billingAddress.address}
+            onChange={(e) => handleChange("address", e.target.value)}
             type="text"
             placeholder="Enter address"
             className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
