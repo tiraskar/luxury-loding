@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { Blog, BlogAndGuideBook, BookingConfirmation, Contact, Home, Listings, SharedLayout, SingleBlogGuide, SingleListing } from "./pages";
 import BookingListing from "./pages/BookingListing";
 
-//routing
+// Routing
 const router = createBrowserRouter([
   {
     path: "/",
@@ -54,14 +55,13 @@ const router = createBrowserRouter([
   // add more routes for different routing
 ]);
 
-
 function App() {
   return (
-    <main className="remove-scrollbar  scroll-smooth">
+    <main className="remove-scrollbar scroll-smooth">
+      <Toaster />
       <RouterProvider router={router} />
     </main>
   );
 }
-
 
 export default App;
