@@ -1,12 +1,11 @@
-import ContactUsForm from "./components/forms/ContactUsForm";
-import MeetOurTeam from "./components/MeetOurTeam";
+import { ContactUs, TeamMembers } from "../components";
 
 const Contact = () => {
   return (
     <div className="">
-      <ContactUsForm />
+      <ContactUs />
       <div className="py-[78px]"></div>
-      <MeetOurTeam />
+      <TeamMembers />
     </div>
   );
 };

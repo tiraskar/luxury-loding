@@ -1,5 +1,10 @@
+export { default as SharedLayout } from "./SharedLayout";
 export { default as Home } from "./Home";
-export { default as Contact } from "./Contact";
-export { default as Listing } from "./Listings";
 export { default as Blog } from "./Blog";
+export { default as Listings } from "./Listings";
+export { default as Contact } from "./Contact";
+export { default as SingleListing } from "./SingleListing";
 export { default as BlogAndGuideBook } from "./BlogAndGuideBook";
+export { default as SingleBlogGuide } from "./SingleBlogGuide.jsx";
+export { default as BookListing } from "./BookingListing.jsx";
+export { default as BookingConfirmation } from "./BookingConfirmation.jsx";

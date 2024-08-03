@@ -1,6 +1,5 @@
-import GuideBookBanner from "./components/GuideBookBanner";
-import LatestPosts from "./components/LatestPosts";
-import RentalExperience from "./components/RentalExperience";
+import { GuideBookBanner, LatestPosts, RentalExperience } from "../components";
+
 
 const BlogAndGuideBook = () => {
   return (

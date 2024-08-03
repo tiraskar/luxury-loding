@@ -1,25 +1,19 @@
-import Accommodations from "./components/Accommodations";
-import ActivitiesAndServices from "./components/ActivitiesAndServices";
-import Banner from "./components/Banner";
-import FeaturesHome from "./components/FeaturesHome";
-import Offer from "./components/Offer";
-import QuestionAnswer from "./components/QnA";
-import RentalExperience from "./components/RentalExperience";
-import Testimonial from "./components/Testimonial";
-import Welcome from "./components/Welcome";
+import { HomeBanner, Greeting, FeaturedHomes, Offer, RentalExperience, ActivitiesAndServices, Testimonials, AccommodationExperience, Accommodation, QuestionAndAnswers } from "../components"
+
 
 const Home = () => {
   return (
     <div className="space-y-20 font-onest">
-      <Banner />
-      <Welcome />
-      <FeaturesHome />
+      <HomeBanner />
+      <Greeting />
+      <FeaturedHomes />
       <Offer />
       <RentalExperience />
       <ActivitiesAndServices />
-      <Testimonial />
-      <Accommodations />
-      <QuestionAnswer />
+      <Testimonials />
+      <AccommodationExperience />
+      <Accommodation />
+      <QuestionAndAnswers />
     </div>
   );
 };

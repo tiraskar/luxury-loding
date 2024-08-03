@@ -1,5 +1,5 @@
-import SearchListing from "./components/forms/SearchListing";
-import ListingList from "./components/ListingList";
+import ListingList from "../components/listing/ListingList";
+import SearchListing from "../components/listing/FilterableSearchListingForm";
 
 const Listings = () => {
   return (

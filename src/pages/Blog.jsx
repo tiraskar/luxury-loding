@@ -1,9 +1,10 @@
-import LatestPosts from "./components/LatestPosts";
+import { LatestPosts, QuestionAndAnswers } from "../components";
 
 const Blog = () => {
   return (
-    <div>
+    <div className="space-y-20">
       <LatestPosts />
+      <QuestionAndAnswers />
     </div>
   )
 }

@@ -1,11 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Blog, Contact, Home, BlogAndGuideBook } from "./pages";
-import SharedLayout from "./pages/SharedLayout";
-import SingleBlogGuide from "./pages/components/SingleBlogguide";
-import SingleListingView from "./pages/components/SingleListingView";
-import Listings from "./pages/Listings";
-import BookingListing from "./components/BookingListing";
-import BookingConfirmation from "./components/BookingConfirmation";
+import { Blog, BlogAndGuideBook, BookingConfirmation, Contact, Home, Listings, SharedLayout, SingleBlogGuide, SingleListing } from "./pages";
+import BookingListing from "./pages/BookingListing";
 
 //routing
 const router = createBrowserRouter([
@@ -18,35 +13,35 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "listing",
-        element: <Listings />
+        path: "blogs",
+        element: <Blog />
       },
       {
-        path: "blog",
-        element: <Blog />
+        path: "listings",
+        element: <Listings />
       },
       {
         path: "contact",
         element: <Contact />
       },
       {
-        path: "home/blog-and-guidebook",
+        path: "blog/guidebook",
         element: <BlogAndGuideBook />
       },
       {
-        path: "/single-blog-guide",
+        path: "/blog/guidebook/:id",
         element: <SingleBlogGuide />
       },
       {
-        path: "/listing/single-listing",
-        element: <SingleListingView />
+        path: "/listing/:id",
+        element: <SingleListing />
       },
       {
-        path: "booking-listing",
+        path: "listing/:id/booking",
         element: <BookingListing />
       },
       {
-        path: "booking-confirmation",
+        path: "listing/:id/booking-confirm",
         element: <BookingConfirmation />
       },
       {
