@@ -4,7 +4,6 @@ import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
 import { baseUrl } from "../../config/baseurl";
 import axios from "axios";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../ui/ListingLoading";
 import { notifyToastMessage } from "../ui/CustomToast";
 
 const ContactForm = () => {
