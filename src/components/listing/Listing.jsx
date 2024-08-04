@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { GoDotFill } from "react-icons/go";
-
 import { FaRegHeart } from "react-icons/fa";
 import { LuBath, LuShare2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
@@ -12,6 +11,10 @@ import ListingReviews from "./ListingReviews";
 import ListingAvailability from "./ListingAvailability";
 import Wrapper from "../common/Wrapper";
 import BookApartment from "../booking/BookApartment";
+import { useSelector } from "react-redux";
+import { IoImageOutline } from "react-icons/io5";
+import ListingImages from "./ListingImages";
+
 
 const tabs = [
   'Description',
@@ -21,27 +24,47 @@ const tabs = [
   'Availability',
 ];
 
-const componentMapping = {
-  'Description': <ListingDescription />,
-  'Details': <ListingDetails />,
-  'Booking Terms': <ListingBookingTerms />,
-  'Reviews': <ListingReviews />,
-  'Availability': <ListingAvailability />,
-};
-
 const Listing = () => {
 
+  const { listingInfo = {}, loading } = useSelector(state => state.listing);
   const [activeTab, setActiveTab] = useState('');
 
+  const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
+
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  const images = listingInfo?.images || [];
+  const listingAmenities = listingInfo?.amenities || [];
+  const bookingTerms = listingInfo?.terms || {};
+  const listingReviews = listingInfo?.reviews || [];
+
+  const componentMapping = {
+    'Description': <ListingDescription listingInfo={listingInfo} />,
+    'Details': <ListingDetails listingAmenities={listingAmenities} />,
+    'Booking Terms': <ListingBookingTerms bookingTerms={bookingTerms} />,
+    'Reviews': <ListingReviews listingReviews={listingReviews} />,
+    'Availability': <ListingAvailability />,
+  };
+
   return (
+    <div>
+      <div className="absolute top-0 text-black bg-buttonPrimary z-50 h-[500px]">
+        {isViewAllImageOpen &&
+          <ListingImages
+            images={images}
+            setIsviewAllImageOpen={setIsviewAllImageOpen}
+          />}
+      </div>
     <Wrapper>
       <div className="font-inter tracking-[-1%] space-y-[30px]">
-        <div className="flex flex-wrap gap-y-6 md:gap-y-0 md:justify-between">
+          <div className="flex flex-wrap md:flex-nowrap gap-y-6 md:gap-y-0 md:justify-between">
           <div className="flex flex-col gap-y-6">
-            <h1 className="text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight">Pool, Hot tub, Game Room! Mesa Family Retreat</h1>
+              <h1 className="text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight ">{listingInfo?.name}</h1>
             <p className="flex items-center text-xs text-[#A1A196] gap-1">
-              3891 Ranchview Dr. Richardson, California 62639 <GoDotFill className="text-black text-[8px]" />
-              <span className="text-black">25 reviews</span>
+                {listingInfo?.address} <GoDotFill className="text-black text-[8px]" />
+                <span className="text-black"> 25 reviews</span>
             </p>
           </div>
           <div className="flex flex-row gap-x-3">
@@ -54,36 +77,44 @@ const Listing = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-1 md:gap-x-3">
-          <img src="/images/single-listing-one.png" alt="" className="rounded-md sm:rounded-xl" />
+          <div className="relative grid md:grid-cols-2 gap-x-1 md:gap-x-3">
+            <div className="min-h-full rounded-md hidden md:block sm:rounded-xl">
+              {images[0] && <img src={images[0]?.url} alt="Listing Image" className="rounded-md sm:rounded-xl h-full w-full object-fill" />}
+            </div>
           <div className="flex flex-col gap-y-1.5 md:gap-y-3">
-            <img src="/images/single-listing-two.png" alt="" className="rounded-md sm:rounded-xl" />
+              {images[1] && <img src={images[1]?.url} alt="Listing Image" className="rounded-md sm:rounded-xl" />}
             <div className="grid grid-cols-2 gap-x-1.5 md:gap-x-3">
-              <img src="/images/single-listing-three.png" alt="" className="rounded-md sm:rounded-xl" />
-              <img src="/images/single-listing-four.png" alt="" className="rounded-md sm:rounded-xl" />
+                {images[2] && <img src={images[2]?.url} alt="Listing Image" className="rounded-md sm:rounded-xl" />}
+                {images[3] && <img src={images[3]?.url} alt="Listing Image" className="rounded-md sm:rounded-xl" />}
             </div>
           </div>
+            <button onClick={() => setIsviewAllImageOpen(true)} className="flex space-x-2 absolute text-xs bg-black text-white px-4 py-2 rounded-2xl bottom-2 right-2 bg-opacity-60 cursor-pointer">
+              <IoImageOutline className="w-4 h-4 font-onest" /> <span>View all photos</span>
+            </button>
         </div>
 
         <div className="flex space-x-2 text-[#333333]">
-          <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
-            <LuUsers size={14} />
-            {/* {guests} {guests > 1 ? "guests" : "guest"} */}
-            6 guests
-          </div>
-          <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
-            <TbBed size={14} />
-            {/* {bedrooms} {bedrooms > 1 ? "bedrooms" : "bedroom"} */}
-            3 bedrooms
-          </div>
-          <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
-            <LuBath size={14} />
-            {/* {baths} {baths > 1 ? "baths" : "bath"} */}
-            2 baths
-          </div>
-        </div>
+            {listingInfo?.guestsIncluded &&
+              <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
+                <LuUsers size={14} />
+                {listingInfo.guestsIncluded} {listingInfo?.guestsIncluded > 1 ? "guests" : "guest"}
+              </div>
+            }
 
+            {listingInfo?.bedrooms &&
+              <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
+                <TbBed size={14} />
+                {listingInfo.bedrooms} {listingInfo?.bedrooms > 1 ? "bedrooms" : "bedroom"}
+              </div>
+            }
 
+            {listingInfo?.bathrooms &&
+              <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
+                <LuBath size={14} />
+                {listingInfo.bathrooms} {listingInfo?.bathrooms > 1 ? "baths" : "bath"}
+              </div>
+            }
+          </div>
         <div className="grid lg:grid-cols-2">
           <div className="h-fit space-y-8">
             <ListingTabs
@@ -94,12 +125,13 @@ const Listing = () => {
             <Wrapper>
               {activeTab === '' ? (
                 <div className="space-y-8">
-                  {Object.values(componentMapping).map((Component, index, arr) => (<div key={index} className="space-y-10">
-                    {Component}
-                    {index !== arr.length - 1 && (
-                      <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                    )}
-                  </div>
+                    {Object.values(componentMapping)?.map((Component, index, arr) => (
+                      <div key={index} className="space-y-10">
+                        {Component}
+                        {index !== arr.length - 1 && (
+                          <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
+                        )}
+                      </div>
                   ))}
                 </div>
               ) : (
@@ -122,6 +154,7 @@ const Listing = () => {
         </div>
       </div>
     </Wrapper>
+    </div >
   );
 };
 

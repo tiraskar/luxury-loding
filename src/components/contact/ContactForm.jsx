@@ -4,6 +4,8 @@ import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
 import { baseUrl } from "../../config/baseurl";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../ui/ListingLoading";
+import { notifyToastMessage } from "../ui/CustomToast";
 
 const ContactForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -66,32 +68,7 @@ const ContactForm = () => {
           countryCode: "US",
           countryDialCode: `+${getCountryCallingCode("US")}`
         });
-        // toast.success("Data submitted successfully!!!");
-        return toast.custom((t) => (
-          <div
-            className={`${t.visible ? 'animate-enter' : 'animate-leave'
-              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-opacity-5 font-onest`}
-          >
-            <div className="flex-1 w-0 p-4">
-              <div className="flex items-start">
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium  text-[#0094FF]">
-                    Data submitted successfully!!!
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex ">
-              <button
-                onClick={() => toast.dismiss(t.id)}
-                className="w-full rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-[#eb0606] "
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        ), { duration: 2000 });
-
+        return notifyToastMessage("Message sent successfully!");
       }
 
     } catch (error) {

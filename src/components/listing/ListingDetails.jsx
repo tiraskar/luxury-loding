@@ -1,52 +1,38 @@
-import { TbAirConditioning } from "react-icons/tb";
+import PropTypes from "prop-types";
+import { useState } from "react";
 
-const ListingDetails = () => {
+const ListingDetails = ({ listingAmenities }) => {
+
+  const [amenitiesSlice, setAmenitiesSlice] = useState(8)
+
   return (
     <div id="listing-details" className="tracking-[-1%] space-y-8">
       <h1 className="text-xl font-semibold tracking-[-2%]">Details</h1>
       <div className="grid sm:grid-cols-2 gap-3 ">
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
+        {listingAmenities?.slice(0, amenitiesSlice).map((amenities) => {
+          return (
+            <div key={amenities.amenityId} className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
+              <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
+                <p className="text-buttonPrimary font-bold">{amenities.amenityName.charAt(0)}</p>
           </div>
-          <p>Air conditioning</p>
+              {/* <p>Air conditioning</p> */}
+              <p>{amenities.amenityName}</p>
         </div>
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
-          </div>
-          <p>Air conditioning</p>
-        </div>
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
-          </div>
-          <p>Air conditioning</p>
-        </div>
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
-          </div>
-          <p>Air conditioning</p>
-        </div>
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
-          </div>
-          <p>Air conditioning</p>
-        </div>
-        <div className="lg:max-w-[318px] flex flex-row items-center p-3 rounded-2xl bg-[#F9F9F9] space-x-3">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-white">
-            <TbAirConditioning size={22} color="black" />
-          </div>
-          <p>Air conditioning</p>
-        </div>
+
+          );
+        })}
       </div>
-      <button className="font-semibold text-[13px] gap-x-2 py-2 px-[10px] border-[0.6px] border-[#D7DBE8] w-fit rounded-2xl tracking-normal">
-        Show all amenities (25)
-      </button>
+      {listingAmenities.length > 8 && <button
+        onClick={() => { amenitiesSlice == 8 ? setAmenitiesSlice(listingAmenities.length) : setAmenitiesSlice(8); }}
+        className="font-semibold text-[13px] gap-x-2 py-2 px-[10px] border-[0.6px] border-[#D7DBE8] w-fit rounded-2xl tracking-normal">
+        {amenitiesSlice === 8 ? `Show all amenities (${listingAmenities.length})` : "Show less amenities"}
+      </button>}
     </div>
   );
 };
+
+ListingDetails.propTypes = {
+  listingAmenities: PropTypes.array.isRequired
+}
 
 export default ListingDetails;

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import { FaLinkedin } from "react-icons/fa";
 import { FaSquareInstagram, FaYoutube } from "react-icons/fa6";
@@ -7,17 +7,42 @@ import { LuPhone } from "react-icons/lu";
 import Wrapper from "./Wrapper";
 
 const Footer = () => {
+  const { pathname } = useLocation();
+
+  // const footerContent = {
+  //   logo: pathname == "/" ? "Luxury Lodging" : "Direct Booking",
+  //   email: pathname == "/" ? "receipts@luxurylodgingstr.co" : "brindy@bybrindy.com",
+  //   contact: pathname == "/" ? "+1 (813) 295-7602" : "+15204013299"
+  // }
+  const footerContentMapping = {
+    '/': {
+      logo: "Luxury Lodging",
+      email: "receipts@luxurylodgingstr.co",
+      contact: "+1 (813) 295-7602"
+    },
+    '/default': {
+      logo: "Direct Booking",
+      email: "brindy@bybrindy.com",
+      contact: "+15204013299"
+    }
+  };
+
+  const footerContent = footerContentMapping[pathname] || footerContentMapping['/default'];
+
   return (
     <Wrapper>
       <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-[150px] ">
         <div className="space-y-16">
           <div>
-            <Logo />
+            <Logo logoText={`${footerContent.logo}`} />
             <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p>
           </div>
           <div className="flex flex-col font-inter text-sm space-y-4">
-            <p className="flex items-center gap-4"><LuPhone size={20} /> +1 (813) 295-7602</p>
-            <p className="flex  items-center gap-4"><FiMail size={20} /> receipts@luxurylodgingstr.com</p>
+            <p className="flex items-center gap-4"><LuPhone size={20} />
+              {footerContent.contact}</p>
+            <p className="flex  items-center gap-4"><FiMail size={20} /> {
+              footerContent.email
+            }</p>
           </div>
         </div>
         <div className="flex flex-col space-y-[17px]">

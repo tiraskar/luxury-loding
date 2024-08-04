@@ -2,9 +2,20 @@ import { Link } from "react-router-dom";
 import { Wrapper } from "..";
 import { MdArrowOutward } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import { fetchOtherListings } from "../../redux/slices/listingSlice";
 
 
 const OtherListing = () => {
+
+  // const dispatch = useDispatch();
+  // const { otherListings } = useSelector((state) => state.listing);
+
+  // useEffect(() => {
+  //   otherListings.length == 0 && dispatch(fetchOtherListings({ limit: 4 }));
+
+  // }, [dispatch, otherListings])
 
   return (
     <Wrapper>
