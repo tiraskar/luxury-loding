@@ -17,7 +17,7 @@ const ListingDescription = ({ listingInfo }) => {
         </ul>
       </div> */}
       <div className="flex flex-col space-y-1 font-normal text-[13px] leading-6">
-        <p className={`line-clamp-${lineClamp}`}>{listingInfo.description}
+        <p className={`${lineClamp == 5 ? "line-clamp-5" : "line-clamp-0"}`}>{listingInfo.description}
         </p>
         <span
           onClick={() => setIsLineClamp(lineClamp == 0 ? 5 : 0)}
