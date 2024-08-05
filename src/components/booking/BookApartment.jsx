@@ -2,8 +2,9 @@ import { useState } from "react";
 import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const BookApartment = () => {
+const BookApartment = ({ id }) => {
 
   const [isBookingAvailable, setIBookingAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +55,7 @@ const BookApartment = () => {
             <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
           </div>
           <Link
-            to={`/listing/${7}/booking`}
+            to={`/listing/${id}/booking`}
             onClick={() => checkBookingAvailability()}
             className={`flex flex-row items-center justify-center ${isBookingAvailable ? "bg-textDark" : "bg-textDark"} text-white text-sm  py-[14px] rounded-xl`}>
             {!isBookingAvailable ? "Check availability" : "Continue booking"}
@@ -69,5 +70,9 @@ const BookApartment = () => {
     </div>
   );
 };
+
+BookApartment.propTypes = {
+  id: PropTypes.number.isRequired,
+}
 
 export default BookApartment;

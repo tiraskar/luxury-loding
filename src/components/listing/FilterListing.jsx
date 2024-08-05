@@ -161,15 +161,26 @@ Popup.propTypes = {
 };
 
 
-const FilterListing = () => {
+const FilterListing = ({ setIsFilterOpen }) => {
+
   const [isPopupVisible, setIsPopupVisible] = useState(true);
-  const handleClosePopup = () => setIsPopupVisible(false);
+  const handleClosePopup = () => {
+    setIsFilterOpen(false);
+    setIsPopupVisible(false);
+  } 
 
   return (
     <div className="p-4">
-      <Popup isVisible={isPopupVisible} onClose={handleClosePopup} />
+      <Popup
+        isVisible={isPopupVisible}
+        onClose={handleClosePopup}
+      />
     </div>
   );
+};
+
+FilterListing.propTypes = {
+  setIsFilterOpen: PropTypes.func.isRequired,
 };
 
 export default FilterListing;

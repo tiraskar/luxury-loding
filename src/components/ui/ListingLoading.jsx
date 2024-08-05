@@ -18,7 +18,6 @@ const ListingLoading = ({ numbers = 8 }) => {
   return (
     <Wrapper>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
-        {/* Render 8 Placeholder components */}
         {Array.from({ length: numbers }, (_, index) => (
           <LoadingListingPlaceholder key={index} />
         ))}

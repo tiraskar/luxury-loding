@@ -43,7 +43,7 @@ const FilterableSearchListing = () => {
             <button className="text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto w-[117px]">Search</button>
           </div>
         </form>
-        {isFilterOpen && <FilterListing />}
+        {isFilterOpen && <FilterListing setIsFilterOpen={setIsFilterOpen} />}
       </div>
     </Wrapper>
   );

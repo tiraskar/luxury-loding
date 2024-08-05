@@ -1,36 +1,3 @@
-// import PropTypes from "prop-types";
-// import { RxCross2 } from "react-icons/rx";
-
-// const ListingImages = ({ images, setIsviewAllImageOpen }) => {
-
-//   return (
-//     <div className="relative w-full h-full bg-textDark">
-//       <button
-//         onClick={() => setIsviewAllImageOpen(false)}
-//         className="absolute left-2 top-2">
-//         <RxCross2
-//           className=" text-2xl" />
-//       </button>
-//       <div>
-//         {images?.map((image, index) => (
-//           <img
-//             key={index}
-//             src={image.url}
-//             alt="Listing Image"
-//             className="rounded-md sm:rounded-xl  object-cover" />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// ListingImages.propTypes = {
-//   images: PropTypes.array.isRequired,
-//   setIsviewAllImageOpen: PropTypes.func.isRequired,
-// };
-
-// export default ListingImages;
-
 import PropTypes from "prop-types";
 import { RxCross2 } from "react-icons/rx";
 
