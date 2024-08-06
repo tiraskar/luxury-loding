@@ -3,8 +3,14 @@ import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { getCurrentFormattedDate } from "../../helper/date";
+import DatePicker from "react-datepicker";
 
-const BookApartment = ({ id }) => {
+const BookApartment = ({ listingInfo }) => {
+  console.log(listingInfo);
+
+  const [checkInDate, setCheckInDate] = useState(new Date());
+  const [checkOutDate, setCheckOutDate] = useState(getCurrentFormattedDate());
 
   const [isBookingAvailable, setIBookingAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,13 +35,32 @@ const BookApartment = ({ id }) => {
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check in</p>
               </p>
-              <p className="font-semibold pl-6">14.08.2024</p>
+              <div className="font-semibold pl-6">
+                {/* <input type="text"
+                  value={checkInDate}
+                  onChange={(e) => setCheckInDate(e.target.value)}
+                  className="outline-none"
+                  placeholder="YYYY-MM-DD" /> */}
+                <DatePicker
+                  selected={checkInDate}
+                  onChange={(date) => setCheckInDate(date)}
+                  className="outline-none"
+                  dateFormat="YYYY.MM.dd"
+                />
+              </div>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check out</p>
               </p>
-              <p className="font-semibold pl-6">14.08.2024</p>
+              <div className="font-semibold pl-6">
+                <DatePicker
+                  selected={checkOutDate}
+                  onChange={(date) => setCheckOutDate(date)}
+                  className="outline-none"
+                  dateFormat="YYYY.MM.dd"
+                />
+              </div>
             </div>
           </div>
 
@@ -43,7 +68,7 @@ const BookApartment = ({ id }) => {
             <p className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} /> <p>Guests</p>
             </p>
-            <p className="font-semibold pl-6">3 Guests</p>
+            <p className="font-semibold pl-6">{listingInfo.guestsIncluded >= 1 ? listingInfo.guestsIncluded : 0} {listingInfo.guestsIncluded > 1 ? "guests" : "guest"}</p>
           </div>
         </div>
 
@@ -51,11 +76,11 @@ const BookApartment = ({ id }) => {
 
         <div className="grid grid-cols-2">
           <div className="flex items-center">
-            <p className="text-[#333333] font-bold text-2xl">$220</p>
-            <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
+            <p className="text-[#333333] font-bold text-2xl">${listingInfo.price}</p>
+            <p className="text-[#8E8E80] text-sm ">&nbsp;/ {listingInfo.propertyType}</p>
           </div>
           <Link
-            to={`/listing/${id}/booking`}
+            to={`/listing/${listingInfo.id}/booking`}
             onClick={() => checkBookingAvailability()}
             className={`flex flex-row items-center justify-center ${isBookingAvailable ? "bg-textDark" : "bg-textDark"} text-white text-sm  py-[14px] rounded-xl`}>
             {!isBookingAvailable ? "Check availability" : "Continue booking"}
@@ -72,7 +97,7 @@ const BookApartment = ({ id }) => {
 };
 
 BookApartment.propTypes = {
-  id: PropTypes.number.isRequired,
+  listingInfo: PropTypes.object.isRequired,
 }
 
 export default BookApartment;
