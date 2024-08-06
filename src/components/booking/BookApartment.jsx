@@ -3,14 +3,13 @@ import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { getCurrentFormattedDate } from "../../helper/date";
 import DatePicker from "react-datepicker";
 
 const BookApartment = ({ listingInfo }) => {
   console.log(listingInfo);
 
   const [checkInDate, setCheckInDate] = useState(new Date());
-  const [checkOutDate, setCheckOutDate] = useState(getCurrentFormattedDate());
+  const [checkOutDate, setCheckOutDate] = useState(new Date());
 
   const [isBookingAvailable, setIBookingAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +76,7 @@ const BookApartment = ({ listingInfo }) => {
         <div className="grid grid-cols-2">
           <div className="flex items-center">
             <p className="text-[#333333] font-bold text-2xl">${listingInfo.price}</p>
-            <p className="text-[#8E8E80] text-sm ">&nbsp;/ {listingInfo.propertyType}</p>
+            <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
           </div>
           <Link
             to={`/listing/${listingInfo.id}/booking`}

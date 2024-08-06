@@ -83,7 +83,7 @@ const ContactForm = () => {
         onSubmit={handleFormSubmit}
         className="bg-white flex-col px-3 py-6 sm:py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] ">
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="full-name" className="flex">Full Name
+          <label  className="flex">Full Name
             <FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
           <input
             name="fullname"
@@ -95,7 +95,7 @@ const ContactForm = () => {
             className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="email" className="flex">Your email<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
+          <label  className="flex">Your email<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
           <input
             name="email"
             type="email"
@@ -106,7 +106,7 @@ const ContactForm = () => {
             className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="phone-number" className="flex">Phone number<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
+          <label  className="flex">Phone number<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
           <div className="flex flex-row w-full border-2 border-[#F5F5F5] rounded-xl bg-white focus-within:outline">
             <select
               name="phone-code"

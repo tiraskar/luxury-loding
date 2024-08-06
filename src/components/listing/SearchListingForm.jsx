@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchAvailableListing } from "../../redux/slices/listingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { searchListing } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
+import { formateDate } from "../../helper/date";
+import LoadingSpinner from "../ui/LoadingSpinner";
+
 
 
 const SearchListingForm = () => {
 
   const dispatch = useDispatch();
-
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
+  const { loading, minDate } = useSelector(state => state.listing)
 
   const [formValues, setFormValues] = useState({
     location: '',
@@ -17,6 +18,8 @@ const SearchListingForm = () => {
     checkOut: '',
     guests: '',
   });
+
+  // const [isSearchable, setIsSearchable] = useState(false)
 
   const handleInputChange = (name, value) => {
     setFormValues((prev) => ({
@@ -27,10 +30,11 @@ const SearchListingForm = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    dispatch(fetchAvailableListing({
+
+    dispatch(searchListing({
       location: formValues.location,
-      checkIn: checkInDate,
-      checkOut: checkOutDate,
+      checkIn: formateDate(formValues.checkIn),
+      checkOut: formateDate(formValues.checkOut),
       guests: parseInt(formValues.guests),
     }));
   }
@@ -40,7 +44,7 @@ const SearchListingForm = () => {
       <form className="flex flex-col md:flex-row lg:items-center lg:gap-4 w-full">
         <div className="flex items-center">
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label htmlFor="location" className="font-semibold">
+            <label className="font-semibold">
               Where to go?
             </label>
             <input
@@ -53,23 +57,16 @@ const SearchListingForm = () => {
           </div>
           <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block my-4"></div>
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label htmlFor="check-in" className="font-semibold">
+            <label className="font-semibold">
               Check in
             </label>
-            {/* <input
-              type="text"
-              id="check-in"
-              value={formValues.checkIn}
-              onChange={(e) => handleInputChange('checkIn', e.target.value)}
-              placeholder="MM.DD.YYYY"
-              className="outline-none rounded-md py-1 w-full"
-            /> */}
             <DatePicker
-              selected={checkInDate}
-              onChange={(date) => setCheckInDate(date)}
+              selected={formValues.checkIn}
+              onChange={(date) => handleInputChange('checkIn', date)}
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="MM.DD.YYYY"
+              minDate={minDate}
             />
           </div>
         </div>
@@ -77,27 +74,20 @@ const SearchListingForm = () => {
         <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block  my-4"></div>
         <div className="grid grid-cols-2 sm:flex sm:flex-row">
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label htmlFor="check-out" className="font-semibold">
+            <label className="font-semibold">
               Check Out
             </label>
-            {/* <input
-              type="text"
-              id="check-out"
-              value={formValues.checkOut}
-              onChange={(e) => handleInputChange('checkOut', e.target.value)}
-              placeholder="MM.DD.YYYY"
-              className="outline-none rounded-md py-1 w-full"
-            /> */}
             <DatePicker
-              selected={checkOutDate}
-              onChange={(date) => setCheckOutDate(date)}
+              selected={formValues.checkOut}
+              onChange={(date) => handleInputChange('checkOut', date)}
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
+              minDate={minDate}
             />
           </div>
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label htmlFor="guest" className="block font-semibold">
+            <label className="block font-semibold">
               Guest
             </label>
             <input
@@ -121,8 +111,10 @@ const SearchListingForm = () => {
         </button>
       </form>
 
-      <button className=" hidden md:block text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 h-fit  lg:mt-0 lg:w-auto w-full">
-        Search
+      <button
+        onClick={(e) => handleSearch(e)}
+        className=" hidden md:block text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 h-fit  lg:mt-0 lg:w-auto w-full">
+        {loading ? <LoadingSpinner /> : "Search"}
       </button>
     </div>
   );
