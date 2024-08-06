@@ -3,10 +3,17 @@ import { Wrapper } from "..";
 import { RiFilter2Line } from "react-icons/ri";
 import { useState } from "react";
 import FilterListing from "./FilterListing";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAvailableListing } from "../../redux/slices/listingSlice";
+import DatePicker from "react-datepicker";
 
 const FilterableSearchListing = () => {
+
+  const dispatch = useDispatch();
+
+  const { searchLoading } = useSelector(state => state.listing)
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  // const inputCss = "bg-[#F9F9F9] outline-none font-inter text-[#8A8A8A] text-[1rem]"
 
   const [formValues, setFormValues] = useState({
     location: '',
@@ -15,11 +22,33 @@ const FilterableSearchListing = () => {
     guests: '',
   });
 
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+
+  const formateDate = (value) => {
+    // Remove all characters except numbers and dashes
+    const cleanValue = value.replace(/[^\d-]/g, '');
+
+    return cleanValue;
+  }
+
   const handleInputChange = (name, value) => {
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    if (name === 'guests') {
+      const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50); // Constrain between 0 and 50
+      setFormValues(prev => ({ ...prev, [name]: numericValue }));
+    } else if (name === 'checkIn' || name === 'checkOut') {
+      setFormValues(prev => ({ ...prev, [name]: formateDate(value) }));
+    }
+    else {
+      setFormValues(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(fetchAvailableListing(formValues));
   }
 
   return (
@@ -46,32 +75,52 @@ const FilterableSearchListing = () => {
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
             <label className="text-sm font-semibold" htmlFor="check-in">Check in</label>
-            <input
+            {/* <input
               id="check-in"
               type="text"
               value={formValues.checkIn}
               onChange={(e) => handleInputChange('checkIn', e.target.value)}
-              placeholder="MM.DD.YYYY"
+              placeholder="YYYY-MM-DD"
+              className="search-input"
+            /> */}
+            <DatePicker
+              selected={checkInDate}
+              onChange={(date) => setCheckInDate(date)}
+              dateFormat="dd.MM.YYYY"
+              placeholderText="DD.MM.YYYY"
+              backgroundColor="transparent"
               className="search-input"
             />
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
             <label className="text-sm font-semibold" htmlFor="check-out">Check out</label>
-            <input
+            {/* <input
               id="check-out"
               type="text"
               value={formValues.checkOut}
               onChange={(e) => handleInputChange('checkOut', e.target.value)}
-              placeholder="MM.DD.YYYY"
-              className="search-input" />
+              placeholder="YYYY-MM-DD"
+              className="search-input" /> */}
+            <DatePicker
+              selected={checkOutDate}
+              onChange={(date) => setCheckOutDate(date)}
+              dateFormat="dd.MM.YYYY"
+              placeholderText="DD.MM.YYYY"
+              className="search-input"
+            />
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
             <label className="text-sm font-semibold" htmlFor="guest">Guest</label>
             <input
-              type="text"
+              type="number"
               id="guests"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              max={50}
+              min={0}
+              step={1}
               value={formValues.guests}
               onChange={(e) => handleInputChange('guests', e.target.value)}
               placeholder="Any"
@@ -87,7 +136,21 @@ const FilterableSearchListing = () => {
               <RiFilter2Line size={20} />Filters
 
             </button>
-            <button className="text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto w-[117px]">Search</button>
+            <button
+              onClick={(e) => handleSearch(e)}
+              className="flex flex-row space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto w-[117px]">
+              {!searchLoading && "Search"} {searchLoading && <div className="w-6 h-6 relative">
+                <button className="absolute inset-0 w-full h-full border-4 border-dotted  border-white border-opacity-100 rounded-full animate-spin"></button>
+              </div>}
+
+            </button>
+
+            {/* <div className="w-6 h-6 border-4 border-t-4 border-buttonPrimary border-opacity-50 border-t-transparent rounded-full animate-spin">
+
+            </div> */}
+
+
+
           </div>
         </form>
         {isFilterOpen && <FilterListing setIsFilterOpen={setIsFilterOpen} />}

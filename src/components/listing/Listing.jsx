@@ -150,7 +150,7 @@ const Listing = () => {
           </div>
           <div className="flex justify-center lg:justify-end h-fit">
               {listingInfo.id && <BookApartment
-                id={listingInfo.id}
+                listingInfo={listingInfo}
               />}
           </div>
         </div>
