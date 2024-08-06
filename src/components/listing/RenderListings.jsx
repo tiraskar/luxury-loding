@@ -150,7 +150,7 @@ const RenderListings = ({ listingList }) => {
             <div className="flex items-center">
               <p className="text-[#333333] font-bold text-xl">${post.price}</p>
               <p className="text-[#8E8E80] text-sm tracking-tight">
-                &nbsp;/ {post.propertyType}
+                &nbsp;/ per night
               </p>
             </div>
           </div>

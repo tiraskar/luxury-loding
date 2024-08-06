@@ -6,12 +6,14 @@ import FilterListing from "./FilterListing";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAvailableListing } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
+import { formateDate } from "../../helper/date";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const FilterableSearchListing = () => {
 
   const dispatch = useDispatch();
 
-  const { searchLoading } = useSelector(state => state.listing)
+  const { loading, minDate } = useSelector(state => state.listing)
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -22,22 +24,12 @@ const FilterableSearchListing = () => {
     guests: '',
   });
 
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
-
-  const formateDate = (value) => {
-    // Remove all characters except numbers and dashes
-    const cleanValue = value.replace(/[^\d-]/g, '');
-
-    return cleanValue;
-  }
 
   const handleInputChange = (name, value) => {
     if (name === 'guests') {
-      const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50); // Constrain between 0 and 50
+      // Constrain between 0 and 50
+      const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
       setFormValues(prev => ({ ...prev, [name]: numericValue }));
-    } else if (name === 'checkIn' || name === 'checkOut') {
-      setFormValues(prev => ({ ...prev, [name]: formateDate(value) }));
     }
     else {
       setFormValues(prev => ({ ...prev, [name]: value }));
@@ -48,8 +40,14 @@ const FilterableSearchListing = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    dispatch(fetchAvailableListing(formValues));
+    dispatch(fetchAvailableListing({
+      location: formValues.location,
+      checkIn: formateDate(formValues.checkIn),
+      checkOut: formateDate(formValues.checkOut),
+      guests: parseInt(formValues.guests),
+    }));
   }
+
 
   return (
     <Wrapper>
@@ -63,9 +61,8 @@ const FilterableSearchListing = () => {
           className=" grid grid-cols-2  sm:flex flex-wrap justify-between items-center gap-3 bg-[#F9F9F9] p-4 rounded-2xl font-onest tracking-[-1%] ">
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
-            <label className="text-sm font-semibold" htmlFor="location">Where to go?</label>
+            <label className="text-sm font-semibold" >Where to go?</label>
             <input
-              id="location"
               type="text"
               value={formValues.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
@@ -74,45 +71,32 @@ const FilterableSearchListing = () => {
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
-            <label className="text-sm font-semibold" htmlFor="check-in">Check in</label>
-            {/* <input
-              id="check-in"
-              type="text"
-              value={formValues.checkIn}
-              onChange={(e) => handleInputChange('checkIn', e.target.value)}
-              placeholder="YYYY-MM-DD"
-              className="search-input"
-            /> */}
+            <label className="text-sm font-semibold" >Check in</label>
             <DatePicker
-              selected={checkInDate}
-              onChange={(date) => setCheckInDate(date)}
+              selected={formValues.checkIn}
+              onChange={(date) => handleInputChange('checkIn', date)}
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
               backgroundColor="transparent"
+              minDate={minDate}
               className="search-input"
             />
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
-            <label className="text-sm font-semibold" htmlFor="check-out">Check out</label>
-            {/* <input
-              id="check-out"
-              type="text"
-              value={formValues.checkOut}
-              onChange={(e) => handleInputChange('checkOut', e.target.value)}
-              placeholder="YYYY-MM-DD"
-              className="search-input" /> */}
+            <label className="text-sm font-semibold" >Check out</label>
             <DatePicker
-              selected={checkOutDate}
-              onChange={(date) => setCheckOutDate(date)}
+              selected={formValues.checkOut}
+              onChange={(date) => handleInputChange('checkOut', date)}
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
+              minDate={minDate}
               className="search-input"
             />
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
-            <label className="text-sm font-semibold" htmlFor="guest">Guest</label>
+            <label className="text-sm font-semibold" >Guest</label>
             <input
               type="number"
               id="guests"
@@ -138,19 +122,10 @@ const FilterableSearchListing = () => {
             </button>
             <button
               onClick={(e) => handleSearch(e)}
-              className="flex flex-row space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto w-[117px]">
-              {!searchLoading && "Search"} {searchLoading && <div className="w-6 h-6 relative">
-                <button className="absolute inset-0 w-full h-full border-4 border-dotted  border-white border-opacity-100 rounded-full animate-spin"></button>
-              </div>}
+              className="flex flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto min-w-[117px]">
+              {!loading && "Search"} {loading && <LoadingSpinner />}
 
             </button>
-
-            {/* <div className="w-6 h-6 border-4 border-t-4 border-buttonPrimary border-opacity-50 border-t-transparent rounded-full animate-spin">
-
-            </div> */}
-
-
-
           </div>
         </form>
         {isFilterOpen && <FilterListing setIsFilterOpen={setIsFilterOpen} />}

@@ -8,6 +8,8 @@ const ListingViewOptions = ({ setIsMapViewOpen, isMapViewOpen }) => {
         <p className="opacity-50">Sort by :</p>
         <select name="" id="" className="bg-white outline-none">
           <option value="" className="font-semibold text-[13px]">Default</option>
+          <option value="" className="font-semibold text-[13px]">Price Low</option>
+          <option value="" className="font-semibold text-[13px]">Price High</option>
         </select>
       </div>
       <div className="bg-[#F9F9F9] p-0.5 w-[64] h-[34px] rounded-[10px] flex items-center space-x-[7px]">

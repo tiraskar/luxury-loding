@@ -87,7 +87,7 @@ const Popup = ({ isVisible, onClose }) => {
             </svg>
             <div className='flex justify-between'>
               <div className='flex flex-row items-center rounded-xl'>
-                <label htmlFor="min-amount" className="mr-2">Min</label>
+                <label  className="mr-2">Min</label>
                 <div className='flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3'>
                   <input
                     name="min-amount"
@@ -104,7 +104,7 @@ const Popup = ({ isVisible, onClose }) => {
               </div>
 
               <div className='flex flex-row items-center rounded-xl'>
-                <label htmlFor="max-amount" className="mr-2">Min</label>
+                <label className="mr-2">Min</label>
                 <div className='flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3'>
                   <input
                     name="max-amount"

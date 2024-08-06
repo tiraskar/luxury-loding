@@ -11,12 +11,15 @@ const Listings = () => {
   useEffect(() => {
     listingTotalCount == 0 && dispatch(fetchListingTotalCount());
     listingList.length == 0 && dispatch(fetchListingList());
-  }, [dispatch, listingList, listingTotalCount]);
+  }, []);
 
   return (
 
     <div className="space-y-[79px]">
-      <FilterableSearchListing />
+      <div className="space-y-8">
+        <FilterableSearchListing />
+        <div className="min-w-full h-px bg-[#E0E0E0]"></div>
+      </div>
       <ListingList />
     </div>
   );

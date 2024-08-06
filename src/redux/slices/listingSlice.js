@@ -4,7 +4,7 @@ import { baseUrl } from "../../config/baseurl";
 
 // Thunks
 export const syncListing = createAsyncThunk(
-  'listing/syncListing',
+  'listing/sync',
   async () => {
     try {
       const { data } = await axios.get(`${baseUrl}/listing/synclisting`);
@@ -16,7 +16,7 @@ export const syncListing = createAsyncThunk(
 );
 
 export const fetchListingList = createAsyncThunk(
-  'listing/getListingsList',
+  'listing/list',
   async (listing, { getState }) => {
     try {
       const { listingLimit, listingPage } = getState().listing;
@@ -29,7 +29,7 @@ export const fetchListingList = createAsyncThunk(
 );
 
 export const fetchListingInfo = createAsyncThunk(
-  'listing/getListingInfo',
+  'listing/getInfo',
   async (listingId) => {
     try {
       const { data } = await axios.get(`${baseUrl}/listing/getlistinginfo/${listingId}`);
@@ -42,14 +42,14 @@ export const fetchListingInfo = createAsyncThunk(
 );
 
 export const fetchAvailableListing = createAsyncThunk(
-  'listing/availableListing',
+  'listing/searchAvailable',
   async (listing) => {
     try {
       const query = new URLSearchParams({
         location: listing.location,
         checkIn: listing.checkIn,
         checkOut: listing.checkOut,
-        guests: listing.guests
+        guests: listing.guests || ""
       }).toString();
 
       const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
@@ -61,7 +61,7 @@ export const fetchAvailableListing = createAsyncThunk(
 );
 
 export const loadMoreListing = createAsyncThunk(
-  'listing/loadMoreListing',
+  'listing/loadMore',
   async (listing, { getState }) => {
     try {
       const { listingLimit, listingPage } = getState().listing;
@@ -74,7 +74,7 @@ export const loadMoreListing = createAsyncThunk(
 );
 
 export const fetchOtherListings = createAsyncThunk(
-  'listing/otherListing',
+  'listing/other',
   async (listing) => {
     try {
       const { data } = await axios.get(`${baseUrl}/listing?limit=${listing.limit}`);
@@ -86,7 +86,7 @@ export const fetchOtherListings = createAsyncThunk(
 );
 
 export const fetchListingTotalCount = createAsyncThunk(
-  'listing/listingCount',
+  'listing/count',
   async () => {
     try {
       const { data } = await axios.get(`${baseUrl}/listing/count`);
@@ -97,22 +97,44 @@ export const fetchListingTotalCount = createAsyncThunk(
   }
 );
 
+export const searchListing = createAsyncThunk(
+  'listing/search',
+  async (listing,) => {
+    try {
+      const query = new URLSearchParams({
+        location: listing.location,
+        checkIn: listing.checkIn,
+        checkOut: listing.checkOut,
+        guests: listing.guests || ""
+      }).toString();
+
+      const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
+      return data;
+    } catch (error) {
+      return Promise.reject(error.message);
+    }
+  }
+)
+
 // Slice
 const listingSlice = createSlice({
   name: 'listing',
   initialState: {
+    loading: false,
+    error: null,
     listingList: [],
     listingInfo: {},
     availableListing: [],
-    error: null,
     mapView: false,
     listingLimit: 8,
     listingPage: 1,
     otherListings: [],
-    loading: false,
-    fetchListingLoading: false,
-    loadMoreLoading: false,
-    listingTotalCount: 0
+    listingTotalCount: 0,
+    searchedListingList: [],
+    isFetchListing: false,
+    isFetchedAvailableListing: false,
+    isLoadMoreListing: false,
+    minDate: new Date(),
   },
   reducers: {
     // Any synchronous actions can be added here
@@ -138,15 +160,18 @@ const listingSlice = createSlice({
     // Fetch Listing List
     builder
       .addCase(fetchListingList.pending, (state) => {
-        state.fetchListingLoading = true;
+        state.loading = true;
+        state.isFetchListing = true;
         state.error = null;
       })
       .addCase(fetchListingList.fulfilled, (state, action) => {
-        state.fetchListingLoading = false;
+        state.loading = false;
+        state.isFetchListing = false;
         state.listingList = action.payload;
       })
       .addCase(fetchListingList.rejected, (state, action) => {
-        state.fetchListingLoading = false;
+        state.loading = false;
+        state.isFetchListing = false;
         state.error = action.error.message;
       });
 
@@ -173,7 +198,7 @@ const listingSlice = createSlice({
       })
       .addCase(fetchAvailableListing.fulfilled, (state, action) => {
         state.loading = false;
-        state.availableListing = action.payload;
+        state.listingList = action.payload;
       })
       .addCase(fetchAvailableListing.rejected, (state, action) => {
         state.loading = false;
@@ -183,16 +208,16 @@ const listingSlice = createSlice({
     //load more listing
     builder
       .addCase(loadMoreListing.pending, (state) => {
-        state.loadMoreLoading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(loadMoreListing.fulfilled, (state, action) => {
-        state.loadMoreLoading = false;
+        state.loading = false;
         state.listingList = [...state.listingList, ...action.payload];
         state.listingPage++;
       })
       .addCase(loadMoreListing.rejected, (state, action) => {
-        state.loadMoreLoading = false;
+        state.loading = false;
         state.error = action.error.message;
       });
 
@@ -222,6 +247,21 @@ const listingSlice = createSlice({
         state.listingCount = action.payload.count;
       })
       .addCase(fetchListingTotalCount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //search listings 
+    builder
+      .addCase(searchListing.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchListing.fulfilled, (state, action) => {
+        state.loading = false;
+        state.searchedListingList = action.payload;
+      })
+      .addCase(searchListing.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
