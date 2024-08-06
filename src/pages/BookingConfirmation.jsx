@@ -3,37 +3,18 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
 import { Wrapper } from "../components";
-import BillingAddress from "../components/payment/BillingAddress";
 import PaymentMethod from "../components/payment/PaymentMethod";
 import PersonalInfoForm from "../components/payment/PersonalInfoForm";
-import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { useEffect, useState } from "react";
 import { baseUrl } from "../config/baseurl";
 import toast from "react-hot-toast";
-import axios from "axios";
+import LoaderScreen from "../components/ui/LoaderScreen";
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_51OsSKpGurTGjjGfhdLcO3WBZDR1UkYvvDWBUFFRnqQU2pSAThq4xfLVHLz11h94g2i4jONlHecSXhcxwkbJNz4a300y43aO1nM');
 
 const BookingConfirmation = () => {
-
-  const paymentMethodOption = [
-    {
-      name: 'Card',
-      image: '/images/card.png',
-      value: 'card', // Add a value for each payment method
-    },
-    {
-      name: 'USA bank account',
-      image: '/images/usa-bank-account.png',
-      value: 'bank-account',
-    },
-    {
-      name: 'Affirm',
-      image: '/images/affirm.png',
-      value: 'affirm',
-    },
-  ];
-
-  const stripe = useStripe();
-  const elements = useElements();
 
   const [personalInfo, setPersonalInfo] = useState({
     firstName: '',
@@ -45,101 +26,21 @@ const BookingConfirmation = () => {
   const [billingAddress, setBillingsAddress] = useState({
     firstName: '',
     lastName: '',
-    country: 'usa',
-    address: '',
+    line1: '',
+    line2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: 'us',
   });
 
-  const [cardInfo, setCardInfo] = useState({
-    cardNumber: '',
-    expiry: '',
-    cvc: '',
-  });
 
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethodOption[0].value);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
-
-  const handleSelect = (value) => {
-    setSelectedPaymentMethod(value);
-  };
-
-  const handleSubmit = async () => {
-
-    if (!stripe || !elements || !clientSecret) {
-      return;
-    }
-
-    //save the personal info
-    const response = await fetch(`${baseUrl}/payment/createcustomer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstName: personalInfo.firstName,
-        lastName: personalInfo.lastName,
-        email: personalInfo.email,
-        phone: personalInfo.phone,
-      }),
-    });
-
-    if (response.status !== 201) {
-      throw new Error('Failed to create customer');
-    }
-
-    const { customerId } = await response.json();
-
-    // Confirm the PaymentIntent with the token
-    const { paymentIntent, error: intentError } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardNumberElement),
-        billing_details: {
-          name: `${billingAddress.firstName} ${billingAddress.lastName}`,
-          address: {
-            line1: billingAddress.address
-          },
-        },
-      },
-    });
-
-    if (intentError) {
-      console.error('Payment confirm error');
-      console.error(intentError);
-      toast.error("Payment Failed!!!", { duration: 2000 });
-      return;
-    }
-    // Save the payment info
-    await savePaymentInfo(customerId, paymentIntent);
-
-    console.log('Payment successful!', paymentIntent);
-    toast.success("Payment successful!!!", { duration: 2000 });
-  };
-
-  const savePaymentInfo = async (customerId, paymentIntent) => {
-
-    const requestObj = {
-      guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
-      guestEmail: personalInfo.email,
-      guestPhone: personalInfo.phone,
-      listingId: 169541,
-      checkInDate: "2024-08-04",
-      checkOutDate: "2024-08-05",
-      guests: 2,
-      paymentIntentId: paymentIntent.id,
-      customerId,
-      paymentMethod: "card",
-      amount: "27000",
-      currency: "usd",
-      paymentStatus: paymentIntent.status
-    };
-    const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, requestObj);
-    if (response.status !== 201) {
-      console.error(`Failed to save payment info`);
-      toast.error("Failed to save payment info!!!", { duration: 2000 });
-    }
-    return response.data;
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const createPaymentIntent = async () => {
+    setIsLoading(true);
     const response = await fetch(`${baseUrl}/payment/createpaymentintent`, {
       method: 'POST',
       headers: {
@@ -156,12 +57,14 @@ const BookingConfirmation = () => {
     });
 
     if (response.status !== 201) {
+      setIsLoading(false);
       console.error(`Failed to create payment intent`);
       toast.error("Something went wrong!!!", { duration: 2000 });
     }
 
     const { clientSecret } = await response.json();
     setClientSecret(clientSecret);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -170,6 +73,7 @@ const BookingConfirmation = () => {
 
   return (
     <div className="flex flex-wrap md:grid md:grid-cols-9 min-h-screen">
+      {isLoading && <LoaderScreen />}
       <div className="col-span-5 font-inter tracking-[-1%]">
         <Wrapper>
           <div className=" flex flex-col mx-auto  max-w-[652px]">
@@ -215,28 +119,25 @@ const BookingConfirmation = () => {
                   setPersonalInfo={setPersonalInfo}
                 />
                 <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-                <PaymentMethod
-                  paymentMethodOption={paymentMethodOption}
-                  selectedPaymentMethod={selectedPaymentMethod}
-                  handleSelect={handleSelect}
-                  cardInfo={cardInfo}
-                  setCardInfo={setCardInfo}
-                  CardNumberElement={CardNumberElement}
-                  CardExpiryElement={CardExpiryElement}
-                  CardCvcElement={CardCvcElement}
-                />
-                <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-                <BillingAddress
-                  billingAddress={billingAddress}
-                  setBillingsAddress={setBillingsAddress}
-                />
+                {
+                  clientSecret && (
+                    <Elements stripe={stripePromise} options={{ clientSecret }}>
+                      <PaymentMethod
+                        billingAddress={billingAddress}
+                        setBillingsAddress={setBillingsAddress}
+                        selectedPaymentMethod={selectedPaymentMethod}
+                        clientSecret={clientSecret}
+                        personalInfo={personalInfo}
+                        setSelectedPaymentMethod={setSelectedPaymentMethod}
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                      />
+                    </Elements>
+                  )
+                }
+
               </div>
-              <div className="hidden md:block pt-10 pb-10">
-                <button
-                  className="py-3 px-7 bg-[#333333] text-white rounded-[14px] "
-                  onClick={() => handleSubmit()}
-                >Confirm and pay</button>
-              </div>
+
             </div>
           </div>
         </Wrapper>

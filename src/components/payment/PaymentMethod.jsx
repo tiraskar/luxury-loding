@@ -1,141 +1,157 @@
-import { CardElement } from "@stripe/react-stripe-js";
-
+import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { baseUrl } from "../../config/baseurl";
+import { useEffect } from "react";
+import BillingAddress from "./BillingAddress";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const PaymentMethod = ({
-  paymentMethodOption,
+  billingAddress,
+  setBillingsAddress,
+  clientSecret,
+  personalInfo,
   selectedPaymentMethod,
-  handleSelect,
-  cardInfo,
-  setCardInfo,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement,
+  setSelectedPaymentMethod,
+  isLoading,
+  setIsLoading,
 }) => {
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const handleChange = (name, value) => {
-    setCardInfo((prev) => ({ ...prev, [name]: value }));
+  const handlePaymentElementChange = (event) => {
+    setSelectedPaymentMethod(event.value.type);
   };
 
-  const cardNumberOptions={
-    style:{
-      base: {
-        border: '2px solid #F5F5F5',     
-        padding: '1rem',                
-        paddingLeft: '1rem',           
-        paddingRight: '3rem',            
-        borderRadius: '0.75rem',         
-        width: '100%',                  
-        appearance: 'none',              
-        fontSize: '16px',               
-        color: '#32325d',               
-        '::placeholder': {
-          color: '#aab7c4',        
-        },
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a',
-      },
+  useEffect(() => {
+    if (elements) {
+      const paymentElement = elements.getElement(PaymentElement);
+      if (paymentElement) {
+        paymentElement.on('change', handlePaymentElementChange);
+      }
     }
-  }
+  }, [elements]);
 
-  const cardExpiryOptions={
-    style:{
-      base: {
-        fontSize: '16px', 
-        border: '2px solid #F5F5F5',   
-        padding: '1rem',                
-        paddingLeft: '1.25rem',         
-        paddingRight: '1.25rem',       
-        borderRadius: '0.75rem',  
-        boxSizing: 'border-box',
-        color: '#32325d',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a',
-      },
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    if (!stripe || !elements || !clientSecret) {
+      setIsLoading(false);
+      return;
     }
-  }
+
+    if (!elements.getElement(PaymentElement)) {
+      setIsLoading(false);
+      toast.error('Please select a payment method');
+      return;
+    }
+
+    //save the personal info
+    const response = await fetch(`${baseUrl}/payment/createcustomer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: personalInfo.firstName,
+        lastName: personalInfo.lastName,
+        email: personalInfo.email,
+        phone: personalInfo.phone,
+      }),
+    });
+
+    if (response.status !== 201) {
+      setIsLoading(false);
+      throw new Error('Failed to create customer');
+    }
+
+    const { customerId } = await response.json();
+
+    let result;
+    try {
+      result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `http://localhost:5173/success`,
+          shipping: {
+            name: `${billingAddress.firstName} ${billingAddress.lastName}`,
+            address: {
+              line1: billingAddress.line1,
+              line2: billingAddress.line2,
+              city: billingAddress.city,
+              state: billingAddress.state,
+              postal_code: billingAddress.postalCode,
+              country: billingAddress.country,
+            }
+          }
+        },
+      });
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("Payment failed!!!", { duration: 2000 });
+      console.error(error.message);
+      return;
+    }
+
+    if (result.error) {
+      setIsLoading(false);
+      toast.error("Payment failed!!!", { duration: 2000 });
+      console.error(result.error.message);
+      return;
+    }
+
+    // Save the payment info
+    await savePaymentInfo(customerId);
+    setIsLoading(false);
+    console.log('Payment successful!');
+    toast.success("Payment successful!!!", { duration: 2000 });
+  };
+
+  const savePaymentInfo = async (customerId) => {
+
+    const requestObj = {
+      guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
+      guestEmail: personalInfo.email,
+      guestPhone: personalInfo.phone,
+      listingId: 169541,
+      checkInDate: "2024-08-04",
+      checkOutDate: "2024-08-05",
+      guests: 2,
+      paymentIntentId: "paymentIntent.id",
+      customerId,
+      paymentMethod: "card",
+      amount: "27000",
+      currency: "usd",
+      paymentStatus: "paymentIntent.status"
+    };
+    const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, requestObj);
+    if (response.status !== 201) {
+      console.error(`Failed to save payment info`);
+      toast.error("Failed to save payment info!!!", { duration: 2000 });
+    }
+    return response.data;
+  };
 
   return (
+    <>
     <div className="font-inter text-[#333333] space-y-8">
       <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
       <div className="space-y-10">
-        <div className="flex  md:flex-row flex-wrap gap-4">
-          {paymentMethodOption.map((option, index) => {
-            const isSelected = option.value === selectedPaymentMethod;
-            return (
-              <div
-                key={index}
-                onClick={() => handleSelect(option.value)}
-                className={`flex items-center space-x-3 w-full md:w-[207px] h-[66px] rounded-2xl p-3 cursor-pointer tracking-[-1%] delay-50 transition-all ${isSelected ? 'border-[1px] border-[#7B6944] bg-[#F5F5EF]' : 'bg-[#F9F9F9]'
-                  }`}
-              >
-                <div className={`p-2.5 rounded-xl bg-white`}>
-                  <img src={option.image} alt={option.name} className="w-[22px] h-auto" />
-                </div>
-                <p className="text-sm">{option.name}</p>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex flex-col text-black text-sm font-normal space-y-3.5">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex flex-col gap-y-2 relative">
-              <label htmlFor="card-number" className="flex">Card number</label>
-              <div className="relative">
-                {/* <input
-                  id="card-number"
-                  name="cardNumber"
-                  value={cardInfo.cardNumber}
-                  onChange={(e) => handleChange("cardNumber", e.target.value)}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d*"
-                  placeholder="0000 0000 0000 0000"
-                  className="border-[2px] border-[#F5F5F5] px-4 py-4 pr-12 rounded-xl w-full appearance-none"
-                /> */}
-                <CardNumberElement options={cardNumberOptions}  />
-                {/* <img src="/images/visacard.png" alt="Visa Card" className="absolute right-3 top-1/2 transform -translate-y-1/2 h-6" /> */}
-              </div>
-            </div>
-
-
-            <div className="flex flex-row gap-x-3">
-              <div className="flex flex-col gap-y-2 max-w-[168px]">
-                <label htmlFor="expiration" className="flex">Expiration</label>
-                {/* <input
-                  name="expiry"
-                  value={cardInfo.expiry}
-                  onChange={(e) => handleChange("expiry", e.target.value)}
-                  type="text"
-                  placeholder="MM/YY"
-                  className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-                /> */}
-                <CardExpiryElement options={cardExpiryOptions} />
-              </div>
-              <div className="flex flex-col gap-y-2 max-w-[135px]">
-                <label htmlFor="security-code" className="flex">Security code</label>
-                {/* <input
-                  name="cvc"
-                  value={cardInfo.cvc}
-                  onChange={(e) => handleChange("cvc", e.target.value)}
-                  type="text"
-                  placeholder="CVC"
-                  className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
-                /> */}
-                <CardCvcElement options={cardExpiryOptions}/>
-              </div>
-            </div>
-          </div>
-          <p className="tracking-[-1%] text-xs leading-6">By providing your card information, you allow AvantStay, Inc. to charge your card for future payments in accordance with their terms.</p>
+          <PaymentElement onChange={handlePaymentElementChange} />
         </div>
       </div>
-    </div>
+      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      <BillingAddress
+        billingAddress={billingAddress}
+        setBillingsAddress={setBillingsAddress}
+      />
+      <div className="hidden md:block pt-10 pb-10">
+        <button
+          className="py-3 px-7 bg-[#333333] text-white rounded-[14px] "
+          onClick={() => handleSubmit()}
+        >Confirm and pay</button>
+      </div>
+    </>
   );
 };
 

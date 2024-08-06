@@ -10,6 +10,7 @@ import {
   SharedLayout,
   SingleBlogGuide,
   SingleListing,
+  Success
 } from "./pages";
 import BookingListing from "./pages/BookingListing";
 import { Provider } from "react-redux";
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "listing/:id/booking-confirm",
         element: <BookingConfirmation />,
+      },
+      {
+        path: "/success",
+        element: <Success />
       },
       {
         path: "*",
