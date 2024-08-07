@@ -12,6 +12,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Elements stripe={stripePromise}>
       <App />
-    </Elements>,
-  </React.StrictMode>,
+    </Elements>
+  </React.StrictMode>
 )

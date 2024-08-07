@@ -63,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 Not Found</h1>,
+        element: <h1>404 Not Found</h1>
       },
       // add routes under / routing
     ],
