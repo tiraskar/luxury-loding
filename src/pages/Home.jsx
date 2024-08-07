@@ -4,15 +4,17 @@ import RenderListings from "../components/listing/RenderListings";
 
 
 const Home = () => {
-  const { searchedListingList, loading } = useSelector(state => state.listing);
-  console.log('searched listing', searchedListingList);
-
+  const { searchedListingList, isSearchListing } = useSelector(state => state.listing);
   return (
     <div className="space-y-20 font-onest">
       <HomeBanner />
       <Wrapper>
-        {loading && <ListingLoading numbers={4} />}
-        {searchedListingList.length > 0 && <RenderListings listingList={searchedListingList} />}
+        {isSearchListing && <ListingLoading numbers={8} />}
+        {searchedListingList.length > 0 &&
+          <RenderListings
+            listingList={searchedListingList}
+          />}
+
       </Wrapper>
       <Greeting />
       <FeaturedHomes />

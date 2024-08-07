@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Navbar, Footer } from "../components";
+import { Navbar, Footer, Wrapper } from "../components";
 import { useEffect, useState } from "react";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 
@@ -27,16 +27,18 @@ const SharedLayout = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="relative">
       <Navbar />
       <Outlet />
       <Footer />
+      <Wrapper>
       <div
         className={`fixed bottom-0 right-0 p-4 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={scrollToTop}
       >
         <BsFillArrowUpCircleFill color="#B69F6F" className="text-3xl cursor-pointer" />
       </div>
+      </Wrapper>
     </div>
   );
 };

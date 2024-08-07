@@ -4,12 +4,14 @@ import { LuUser2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
+import { useDispatch, useSelector } from "react-redux";
+import { setCheckBookingParams } from "../../redux/slices/bookingSlice";
 
 const BookApartment = ({ listingInfo }) => {
-  console.log(listingInfo);
 
-  const [checkInDate, setCheckInDate] = useState(new Date());
-  const [checkOutDate, setCheckOutDate] = useState(new Date());
+  const dispatch = useDispatch();
+
+  const { checkBookingParams } = useSelector(state => state.booking)
 
   const [isBookingAvailable, setIBookingAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,42 +24,47 @@ const BookApartment = ({ listingInfo }) => {
     }, 2000);
   };
 
+  const handleDateChange = (name, value) => {
+    dispatch(setCheckBookingParams({ name, value }));
+  };
+
+  const minDate = new Date()
+
   return (
     <div className="font-inter tracking-[-1%]">
-      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl w-full lg:min-w-[429px]">
-        <h1 className="font-onest tracking-normal font-medium text-xl">Book apartment</h1>
+      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl w-[429px] lg:min-h-[404px]">
+        <h1 className="font-onest tracking-normal font-medium text-xl">Book {listingInfo.propertyType}</h1>
         <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 
         <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-[10px]">
+          <div className="grid xs:grid-cols-2 gap-[10px]">
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
-                <CiCalendar size={18} /> <p>Check in</p>
+                <CiCalendar size={18} /> <p className="text-sm">Check in</p>
               </p>
               <div className="font-semibold pl-6">
-                {/* <input type="text"
-                  value={checkInDate}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                  className="outline-none"
-                  placeholder="YYYY-MM-DD" /> */}
                 <DatePicker
-                  selected={checkInDate}
-                  onChange={(date) => setCheckInDate(date)}
-                  className="outline-none"
-                  dateFormat="YYYY.MM.dd"
+                  selected={checkBookingParams.checkIn}
+                  onChange={(date) => handleDateChange('checkIn', date)}
+                  className="outline-none max-w-[117px]  text-[1rem]"
+                  dateFormat="dd.MM.YYYY"
+                  minDate={minDate}
+                  placeholderText="DD.MM.YYYY"
                 />
               </div>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
-                <CiCalendar size={18} /> <p>Check out</p>
+                <CiCalendar size={18} /> <p className="text-sm">Check out</p>
               </p>
               <div className="font-semibold pl-6">
                 <DatePicker
-                  selected={checkOutDate}
-                  onChange={(date) => setCheckOutDate(date)}
-                  className="outline-none"
-                  dateFormat="YYYY.MM.dd"
+                  selected={checkBookingParams.checkOut}
+                  onChange={(date) => handleDateChange('checkOut', date)}
+                  className="outline-none max-w-[117px] text-[1rem]"
+                  dateFormat="dd.MM.YYYY"
+                  minDate={checkBookingParams.checkIn ? checkBookingParams.checkIn : minDate}
+                  placeholderText="DD.MM.YYYY"
                 />
               </div>
             </div>
