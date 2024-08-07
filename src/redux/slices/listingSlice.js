@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
+import { formateDate } from "../../helper/date";
 
 // Thunks
 export const syncListing = createAsyncThunk(
@@ -19,8 +20,8 @@ export const fetchListingList = createAsyncThunk(
   'listing/list',
   async (listing, { getState }) => {
     try {
-      const { listingLimit, listingPage } = getState().listing;
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage}`);
+      const { listingLimit, listingPage, listingOrder } = getState().listing;
+      const { data } = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage}&priceOrder=${listingOrder}`);
       return data;
     } catch (error) {
       return Promise.reject(error.message);
@@ -43,15 +44,16 @@ export const fetchListingInfo = createAsyncThunk(
 
 export const fetchAvailableListing = createAsyncThunk(
   'listing/searchAvailable',
-  async (listing) => {
+  async (listing, { getState }) => {
     try {
+      const { listingOrder, searchListingParams } = getState().listing
       const query = new URLSearchParams({
-        location: listing.location,
-        checkIn: listing.checkIn,
-        checkOut: listing.checkOut,
-        guests: listing.guests || ""
+        location: searchListingParams.location,
+        checkIn: formateDate(searchListingParams.checkIn),
+        checkOut: formateDate(searchListingParams.checkOut),
+        guests: searchListingParams.guests || "",
+        priceOrder: listingOrder || ""
       }).toString();
-
       const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
       return data;
     } catch (error) {
@@ -64,8 +66,8 @@ export const loadMoreListing = createAsyncThunk(
   'listing/loadMore',
   async (listing, { getState }) => {
     try {
-      const { listingLimit, listingPage } = getState().listing;
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage + 1}`);
+      const { listingLimit, listingPage, listingOrder } = getState().listing;
+      const { data } = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage + 1}&priceOrder=${listingOrder}`);
       return data;
     } catch (error) {
       return Promise.reject(error.message);
@@ -99,13 +101,15 @@ export const fetchListingTotalCount = createAsyncThunk(
 
 export const searchListing = createAsyncThunk(
   'listing/search',
-  async (listing,) => {
+  async (listing, { getState }) => {
     try {
+      const { searchListingParams } = getState().listing
       const query = new URLSearchParams({
-        location: listing.location,
-        checkIn: listing.checkIn,
-        checkOut: listing.checkOut,
-        guests: listing.guests || ""
+        location: searchListingParams.location,
+        checkIn: searchListingParams.checkIn,
+        checkOut: searchListingParams.checkOut,
+        guests: searchListingParams.guests || "",
+        priceOrder: ""
       }).toString();
 
       const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
@@ -120,24 +124,75 @@ export const searchListing = createAsyncThunk(
 const listingSlice = createSlice({
   name: 'listing',
   initialState: {
+
+    //boolean 
     loading: false,
-    error: null,
-    listingList: [],
-    listingInfo: {},
-    availableListing: [],
+    isSyncListing: false,
+    isFetchListing: false,
+    isFetchListingInfo: false,
+    isFetchOtherListings: false,
+    isFetchListingTotalCount: false,
+    isFetchAvailableListing: false,
+    isLoadMoreListing: false,
+    isSearchListing: false,
     mapView: false,
+    isSearchedListing: false,
+
+    //error
+    error: null,
+
+    //array
+    listingList: [],
+    otherListings: [],
+    availableListing: [],
+    searchedListingList: [],
+
+    //object
+    listingInfo: {},
+
+    //state values
     listingLimit: 8,
     listingPage: 1,
-    otherListings: [],
     listingTotalCount: 0,
-    searchedListingList: [],
-    isFetchListing: false,
-    isFetchedAvailableListing: false,
-    isLoadMoreListing: false,
-    minDate: new Date(),
+    // minDate: new Date(),
+    listingOrder: '',
+
+    //form
+    searchListingParams: {
+      location: '',
+      checkIn: '',
+      checkOut: '',
+      guests: '',
+    },
   },
+
   reducers: {
-    // Any synchronous actions can be added here
+    toggleMapView: (state) => {
+      state.mapView = !state.mapView;
+    },
+    setListingOrder: (state, action) => {
+      state.listingPage = 1;
+      state.listingLimit = 8;
+      state.listingOrder = action.payload;
+    },
+
+    setSearchListingParams: (state, action) => {
+      const { name, value } = action.payload;
+
+      if (name === 'guests') {
+        //guest value should be 50 or below 50
+        const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
+        state.searchListingParams[name] = numericValue;
+
+      } else if (name === 'checkIn' && value > state.searchListingParams.checkOut) {
+
+        state.searchListingParams.checkIn = value;
+        state.searchListingParams.checkOut = '';
+
+      } else {
+        state.searchListingParams[name] = value;
+      }
+    }
   },
 
   extraReducers: (builder) => {
@@ -145,32 +200,30 @@ const listingSlice = createSlice({
     // Sync Listing
     builder
       .addCase(syncListing.pending, (state) => {
-        state.loading = true;
+        state.isSyncListing = true;
         state.error = null;
       })
       .addCase(syncListing.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isSyncListing = false;
         state.listingList = action.payload;
       })
       .addCase(syncListing.rejected, (state, action) => {
-        state.loading = false;
+        state.isSyncListing = false;
         state.error = action.error.message;
       });
 
     // Fetch Listing List
     builder
       .addCase(fetchListingList.pending, (state) => {
-        state.loading = true;
+        state.isSearchedListing = false;
         state.isFetchListing = true;
         state.error = null;
       })
       .addCase(fetchListingList.fulfilled, (state, action) => {
-        state.loading = false;
         state.isFetchListing = false;
         state.listingList = action.payload;
       })
       .addCase(fetchListingList.rejected, (state, action) => {
-        state.loading = false;
         state.isFetchListing = false;
         state.error = action.error.message;
       });
@@ -178,94 +231,106 @@ const listingSlice = createSlice({
     // Fetch Listing Info
     builder
       .addCase(fetchListingInfo.pending, (state) => {
-        state.loading = true;
+        state.isFetchListingInfo = true;
         state.error = null;
       })
       .addCase(fetchListingInfo.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isFetchListingInfo = false;
         state.listingInfo = action.payload;
       })
       .addCase(fetchListingInfo.rejected, (state, action) => {
-        state.loading = false;
+        state.isFetchListingInfo = false;
         state.error = action.error.message;
       });
 
     // Fetch Available Listing
     builder
       .addCase(fetchAvailableListing.pending, (state) => {
-        state.loading = true;
+        state.availableListing = [];
+        state.isSearchedListing = true;
+        state.isFetchAvailableListing = true;
         state.error = null;
       })
       .addCase(fetchAvailableListing.fulfilled, (state, action) => {
-        state.loading = false;
-        state.listingList = action.payload;
+        state.isFetchAvailableListing = false;
+        state.availableListing = action.payload;
       })
       .addCase(fetchAvailableListing.rejected, (state, action) => {
-        state.loading = false;
+        state.isSearchedListing = false;
+        state.isFetchAvailableListing = false;
         state.error = action.error.message;
       });
 
     //load more listing
     builder
       .addCase(loadMoreListing.pending, (state) => {
-        state.loading = true;
+        state.isLoadMoreListing = true;
         state.error = null;
       })
       .addCase(loadMoreListing.fulfilled, (state, action) => {
-        state.loading = false;
-        state.listingList = [...state.listingList, ...action.payload];
+        state.isLoadMoreListing = false;
+        if (state.isSearchedListing) {
+          state.listingList = [...state.searchedListingList, ...action.payload];
+        } else {
+          state.listingList = [...state.listingList, ...action.payload];
+        }
+
         state.listingPage++;
       })
       .addCase(loadMoreListing.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoadMoreListing = false;
         state.error = action.error.message;
       });
 
     // Other Listing
     builder
       .addCase(fetchOtherListings.pending, (state) => {
-        state.loading = true;
+        state.isFetchOtherListings = true;
         state.error = null;
       })
       .addCase(fetchOtherListings.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isFetchOtherListings = false;
         state.otherListings = action.payload;
       })
       .addCase(fetchOtherListings.rejected, (state, action) => {
-        state.loading = false;
+        state.isFetchOtherListings = false;
         state.error = action.error.message;
       });
 
     // Listing Count
     builder
       .addCase(fetchListingTotalCount.pending, (state) => {
-        state.loading = true;
+        state.isFetchListingTotalCount = true;
         state.error = null;
       })
       .addCase(fetchListingTotalCount.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isFetchListingTotalCount = false;
         state.listingCount = action.payload.count;
       })
       .addCase(fetchListingTotalCount.rejected, (state, action) => {
-        state.loading = false;
+        state.isFetchListingTotalCount = false;
         state.error = action.error.message;
       });
 
     //search listings 
     builder
       .addCase(searchListing.pending, (state) => {
-        state.loading = true;
+        state.searchedListingList = [];
+        state.isSearchedListing = true;
+        state.isSearchListing = true;
         state.error = null;
       })
       .addCase(searchListing.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isSearchListing = false;
         state.searchedListingList = action.payload;
       })
       .addCase(searchListing.rejected, (state, action) => {
-        state.loading = false;
+        state.isSearchedListing = false;
+        state.isSearchListing = false;
         state.error = action.error.message;
       });
   }
 });
 
+export const { setListingOrder, setSearchListingParams } = listingSlice.actions;
 export default listingSlice.reducer;

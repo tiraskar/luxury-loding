@@ -4,48 +4,41 @@ import { RiFilter2Line } from "react-icons/ri";
 import { useState } from "react";
 import FilterListing from "./FilterListing";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAvailableListing } from "../../redux/slices/listingSlice";
+import { fetchAvailableListing, fetchListingList, setSearchListingParams } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
-import { formateDate } from "../../helper/date";
+// import { formateDate } from "../../helper/date";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { notifyToastMessage } from "../ui/CustomToast";
 
 const FilterableSearchListing = () => {
 
   const dispatch = useDispatch();
 
-  const { loading, minDate } = useSelector(state => state.listing)
+  const { isFetchAvailableListing, searchListingParams } = useSelector(state => state.listing)
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const [formValues, setFormValues] = useState({
-    location: '',
-    checkIn: '',
-    checkOut: '',
-    guests: '',
-  });
+  const minDate = new Date(Date.now())
 
 
   const handleInputChange = (name, value) => {
-    if (name === 'guests') {
-      // Constrain between 0 and 50
-      const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
-      setFormValues(prev => ({ ...prev, [name]: numericValue }));
-    }
-    else {
-      setFormValues(prev => ({ ...prev, [name]: value }));
-    }
+    dispatch(setSearchListingParams({ name, value }));
+
   };
-
-
 
   const handleSearch = (e) => {
     e.preventDefault();
-    dispatch(fetchAvailableListing({
-      location: formValues.location,
-      checkIn: formateDate(formValues.checkIn),
-      checkOut: formateDate(formValues.checkOut),
-      guests: parseInt(formValues.guests),
-    }));
+
+    if ((searchListingParams.checkIn && !searchListingParams.checkOut) || (searchListingParams.checkOut && !searchListingParams.checkIn)) {
+      return notifyToastMessage("Provide check-in and check-out date.");
+    }
+
+    if (searchListingParams.location || searchListingParams.checkIn || searchListingParams.checkOut || searchListingParams.guests) {
+      return dispatch(fetchAvailableListing());
+    }
+
+    dispatch(fetchListingList());
+
   }
 
 
@@ -64,7 +57,7 @@ const FilterableSearchListing = () => {
             <label className="text-sm font-semibold" >Where to go?</label>
             <input
               type="text"
-              value={formValues.location}
+              value={searchListingParams.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
               placeholder="Anywhere"
               className="search-input" />
@@ -73,25 +66,25 @@ const FilterableSearchListing = () => {
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
             <label className="text-sm font-semibold" >Check in</label>
             <DatePicker
-              selected={formValues.checkIn}
+              selected={searchListingParams.checkIn}
               onChange={(date) => handleInputChange('checkIn', date)}
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
               backgroundColor="transparent"
               minDate={minDate}
-              className="search-input"
+              className="search-input max-w-[117px]"
             />
           </div>
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">
             <label className="text-sm font-semibold" >Check out</label>
             <DatePicker
-              selected={formValues.checkOut}
+              selected={searchListingParams.checkOut}
               onChange={(date) => handleInputChange('checkOut', date)}
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
-              minDate={minDate}
-              className="search-input"
+              minDate={searchListingParams.checkIn ? searchListingParams.checkIn : minDate}
+              className="search-input max-w-[117px]"
             />
           </div>
 
@@ -105,10 +98,10 @@ const FilterableSearchListing = () => {
               max={50}
               min={0}
               step={1}
-              value={formValues.guests}
+              value={searchListingParams.guests}
               onChange={(e) => handleInputChange('guests', e.target.value)}
               placeholder="Any"
-              className="search-input"
+              className="search-input max-w-[117px]"
             />
           </div>
 
@@ -123,7 +116,7 @@ const FilterableSearchListing = () => {
             <button
               onClick={(e) => handleSearch(e)}
               className="flex flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4 h-fit sm:w-auto min-w-[117px]">
-              {!loading && "Search"} {loading && <LoadingSpinner />}
+              {!isFetchAvailableListing && "Search"} {isFetchAvailableListing && <LoadingSpinner />}
 
             </button>
           </div>

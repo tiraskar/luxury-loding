@@ -14,20 +14,20 @@ const RenderListings = ({ listingList }) => {
     Array(listingList?.length).fill(0)
   );
 
-  const handleSlide = (postIndex, direction) => {
-    const imagesCount = listingList[postIndex].images.length;
+  const handleSlide = (listingIndex, direction) => {
+    const imagesCount = listingList[listingIndex].images.length;
     setCurrentIndex((prev) => {
       const newIndex = [...prev];
-      newIndex[postIndex] =
-        (newIndex[postIndex] + direction + imagesCount) % imagesCount;
+      newIndex[listingIndex] =
+        (newIndex[listingIndex] + direction + imagesCount) % imagesCount;
       return newIndex;
     });
   };
 
-  const setSlide = (postIndex, index) => {
+  const setSlide = (listingIndex, index) => {
     setCurrentIndex((prev) => {
       const newIndex = [...prev];
-      newIndex[postIndex] = index;
+      newIndex[listingIndex] = index;
       return newIndex;
     });
   };
@@ -41,19 +41,19 @@ const RenderListings = ({ listingList }) => {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
-      {listingList?.map((post, postIndex) => {
+      {listingList?.map((listing, listingIndex) => {
         return (
           <div
-            key={postIndex}
+            key={listingIndex}
             className="relative flex flex-col gap-y-4 xl:max-w-[318px]"
           >
             <div className="relative flex overflow-hidden">
-              {post?.images?.map((data, index) => {
+              {listing?.images?.map((data, index) => {
                 return (
                   <div
                     key={index}
                     className={`snap-start flex-shrink-0 w-full transition-transform duration-300
-                 ${index === currentIndex[postIndex] ? "block" : "hidden"
+                 ${index === currentIndex[listingIndex] ? "block" : "hidden"
                       }`}
                   >
                     <img
@@ -65,27 +65,27 @@ const RenderListings = ({ listingList }) => {
                 );
               })}
 
-              {post?.images?.length > 1 && (
+              {listing?.images?.length > 1 && (
                 <div className="absolute inset-0 flex justify-between items-center">
                   <div
                     className="absolute left-3 top-[50%] transform -translate-y-1/2 text-black h-6 w-6 bg-white bg-opacity-60 items-center flex justify-center rounded-full cursor-pointer"
-                    onClick={() => handleSlide(postIndex, -1)}
+                    onClick={() => handleSlide(listingIndex, -1)}
                   >
                     <IoIosArrowBack size={14} />
                   </div>
                   <div
                     className="absolute right-3 top-[50%] transform -translate-y-1/2 text-black h-6 w-6 bg-white bg-opacity-60 items-center flex justify-center rounded-full cursor-pointer"
-                    onClick={() => handleSlide(postIndex, 1)}
+                    onClick={() => handleSlide(listingIndex, 1)}
                   >
                     <IoIosArrowForward size={14} />
                   </div>
                   <div className="absolute bottom-2 flex justify-center w-full">
-                    {post?.images?.map((_, index) => (
+                    {listing?.images?.map((_, index) => (
                       <GoDotFill
                         key={index}
                         size={14}
-                        onClick={() => setSlide(postIndex, index)}
-                        className={`cursor-pointer text-white mx-px ${index === currentIndex[postIndex]
+                        onClick={() => setSlide(listingIndex, index)}
+                        className={`cursor-pointer text-white mx-px ${index === currentIndex[listingIndex]
                           ? "opacity-100"
                           : "opacity-60"
                           }`}
@@ -95,60 +95,49 @@ const RenderListings = ({ listingList }) => {
                 </div>
               )}
             </div>
-            {/* <div>
-          <img
-            className="object-cover w-full rounded-md"
-            src={post.images[0].url}
-            alt=""
-          />
-        </div> */}
-            {post.featured && (
+            {listing.featured && (
               <p className="absolute tracking-[-1%] bg-white px-3 py-1.5 rounded-lg top-5 left-5 md:top-2 mg:left-2">
                 Featured
               </p>
             )}
 
             <p className="flex items-baseline space-x-1 text-xs text-[#0094FF]">
-              <GrLocation /> <span>{post.address}</span>
+              <GrLocation /> <span>{listing.address}</span>
             </p>
 
             <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
               <Link
-                to={`/listings/${post.id}`}
+                to={`/listings/${listing.id}`}
                 className="text-xl font-inter tracking-[-1%]"
               >
-                {post.name}
+                {listing.name}
               </Link>
               <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px]">
-                {post.description}
+                {listing.description}
               </p>
             </div>
 
-            <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]">
-              {post?.guestsIncluded && (
-                <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-                  <LuUsers size={14} /> {post.guestsIncluded}{" "}
-                  {post.guestsIncluded > 1 ? "guests" : "guest"}
-                </div>
-              )}
+            <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]  text-[13px]">
 
-              {post?.bedroom && (
-                <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-                  <TbBed size={14} /> {post.bedroom}{" "}
-                  {post.bedroom > 1 ? "bedrooms" : "bedroom"}
-                </div>
-              )}
+              <div className="flex gap-1 items-center">
+                <LuUsers size={14} /> {listing.guestsIncluded}
+                {listing.guestsIncluded > 1 ? " guests" : " guest"}
+              </div>
 
-              {post?.bath && (
-                <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-                  <LuBath size={14} /> {post.bath}{" "}
-                  {post.bath > 1 ? "baths" : "bath"}
+              <div className="flex gap-1 items-center">
+                <TbBed size={14} /> {listing.bedroomsNumber}
+                {listing.bedroomsNumber > 1 ? " bedrooms" : " bedroom"}
                 </div>
-              )}
+
+
+              <div className="flex gap-1 items-center">
+                <LuBath size={14} /> {listing.bathroomsNumber}
+                {listing.bathroomsNumber > 1 ? " baths" : " bath"}
+              </div>
             </div>
 
             <div className="flex items-center">
-              <p className="text-[#333333] font-bold text-xl">${post.price}</p>
+              <p className="text-[#333333] font-bold text-xl">${listing.price}</p>
               <p className="text-[#8E8E80] text-sm tracking-tight">
                 &nbsp;/ per night
               </p>

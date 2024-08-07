@@ -9,6 +9,7 @@ const Listings = () => {
   const { listingList, listingTotalCount } = useSelector(state => state.listing);
 
   useEffect(() => {
+    // dispatch(syncListing());
     listingTotalCount == 0 && dispatch(fetchListingTotalCount());
     listingList.length == 0 && dispatch(fetchListingList());
   }, []);

@@ -93,27 +93,23 @@ const Listing = () => {
             </button>
         </div>
 
-        <div className="flex space-x-2 text-[#333333]">
-            {listingInfo?.guestsIncluded &&
+          <div className="flex space-x-2 text-[#333333]">
+
               <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
                 <LuUsers size={14} />
                 {listingInfo.guestsIncluded} {listingInfo?.guestsIncluded > 1 ? "guests" : "guest"}
-              </div>
-            }
+            </div>
 
-            {listingInfo?.bedrooms &&
               <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
                 <TbBed size={14} />
-                {listingInfo.bedrooms} {listingInfo?.bedrooms > 1 ? "bedrooms" : "bedroom"}
-              </div>
-            }
+              {listingInfo.bedroomsNumber} {listingInfo?.bedroomsNumber > 1 ? "bedrooms" : "bedroom"}
+            </div>
 
-            {listingInfo?.bathrooms &&
               <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
                 <LuBath size={14} />
-                {listingInfo.bathrooms} {listingInfo?.bathrooms > 1 ? "baths" : "bath"}
+              {listingInfo.bathroomsNumber} {listingInfo?.bathroomsNumber > 1 ? "baths" : "bath"}
               </div>
-            }
+
           </div>
         <div className="grid lg:grid-cols-2">
           <div className="h-fit space-y-8">
@@ -148,7 +144,7 @@ const Listing = () => {
             <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
             <ListingAvailability /> */}
           </div>
-          <div className="flex justify-center lg:justify-end h-fit">
+            <div className="flex justify-center lg:justify-end h-fit">
               {listingInfo.id && <BookApartment
                 listingInfo={listingInfo}
               />}

@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchListing } from "../../redux/slices/listingSlice";
+import { searchListing, setSearchListingParams } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
-import { formateDate } from "../../helper/date";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 
@@ -10,33 +8,17 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 const SearchListingForm = () => {
 
   const dispatch = useDispatch();
-  const { loading, minDate } = useSelector(state => state.listing)
+  const { isSearchListing, searchListingParams } = useSelector(state => state.listing)
 
-  const [formValues, setFormValues] = useState({
-    location: '',
-    checkIn: '',
-    checkOut: '',
-    guests: '',
-  });
-
-  // const [isSearchable, setIsSearchable] = useState(false)
+  const minDate = new Date(Date.now())
 
   const handleInputChange = (name, value) => {
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    dispatch(setSearchListingParams({ name, value }));
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-
-    dispatch(searchListing({
-      location: formValues.location,
-      checkIn: formateDate(formValues.checkIn),
-      checkOut: formateDate(formValues.checkOut),
-      guests: parseInt(formValues.guests),
-    }));
+    dispatch(searchListing());
   }
 
   return (
@@ -50,7 +32,7 @@ const SearchListingForm = () => {
             <input
               type="text"
               placeholder="Anywhere"
-              value={formValues.location}
+              value={searchListingParams.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
               className="outline-none rounded-md py-1 w-full"
             />
@@ -61,7 +43,7 @@ const SearchListingForm = () => {
               Check in
             </label>
             <DatePicker
-              selected={formValues.checkIn}
+              selected={searchListingParams.checkIn}
               onChange={(date) => handleInputChange('checkIn', date)}
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
@@ -78,12 +60,12 @@ const SearchListingForm = () => {
               Check Out
             </label>
             <DatePicker
-              selected={formValues.checkOut}
+              selected={searchListingParams.checkOut}
               onChange={(date) => handleInputChange('checkOut', date)}
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
-              minDate={minDate}
+              minDate={searchListingParams.checkIn ? searchListingParams.checkIn : minDate}
             />
           </div>
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
@@ -97,7 +79,7 @@ const SearchListingForm = () => {
               pattern="\d*"
               max={50}
               min={0}
-              value={formValues.guests}
+              value={searchListingParams.guests}
               onChange={(e) => handleInputChange('guests', e.target.value)}
               placeholder="Any"
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
@@ -106,15 +88,15 @@ const SearchListingForm = () => {
         </div>
         <button
           onClick={(e) => handleSearch(e)}
-          className="block md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-2 h-fit lg:mt-0 lg:w-auto w-full">
+          className="flex md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-2 h-fit lg:mt-0 lg:w-auto w-full  justify-center items-center">
           Search
         </button>
       </form>
 
       <button
         onClick={(e) => handleSearch(e)}
-        className=" hidden md:block text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 h-fit  lg:mt-0 lg:w-auto w-full">
-        {loading ? <LoadingSpinner /> : "Search"}
+        className=" hidden md:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 h-fit  lg:mt-0 lg:w-auto w-full justify-center items-center">
+        {isSearchListing ? <LoadingSpinner /> : "Search"}
       </button>
     </div>
   );
