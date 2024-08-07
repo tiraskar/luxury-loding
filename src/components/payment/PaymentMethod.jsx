@@ -14,6 +14,7 @@ const PaymentMethod = ({
   setSelectedPaymentMethod,
   isLoading,
   setIsLoading,
+  paymentIntentId
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -67,6 +68,9 @@ const PaymentMethod = ({
 
     const { customerId } = await response.json();
 
+    // Save the payment info in the server
+    await savePaymentInfo(customerId);
+
     let result;
     try {
       result = await stripe.confirmPayment({
@@ -100,8 +104,6 @@ const PaymentMethod = ({
       return;
     }
 
-    // Save the payment info
-    await savePaymentInfo(customerId);
     setIsLoading(false);
     console.log('Payment successful!');
     toast.success("Payment successful!!!", { duration: 2000 });
@@ -117,12 +119,12 @@ const PaymentMethod = ({
       checkInDate: "2024-08-04",
       checkOutDate: "2024-08-05",
       guests: 2,
-      paymentIntentId: "paymentIntent.id",
+      paymentIntentId: paymentIntentId,
       customerId,
-      paymentMethod: "card",
+      paymentMethod: selectedPaymentMethod,
       amount: "27000",
       currency: "usd",
-      paymentStatus: "paymentIntent.status"
+      paymentStatus: "initiated"
     };
     const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, requestObj);
     if (response.status !== 201) {

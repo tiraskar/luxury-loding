@@ -37,6 +37,7 @@ const BookingConfirmation = () => {
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
+  const [paymentIntentId, setPaymentIntentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const createPaymentIntent = async () => {
@@ -62,8 +63,9 @@ const BookingConfirmation = () => {
       toast.error("Something went wrong!!!", { duration: 2000 });
     }
 
-    const { clientSecret } = await response.json();
+    const { clientSecret, paymentIntentId } = await response.json();
     setClientSecret(clientSecret);
+    setPaymentIntentId(paymentIntentId);
     setIsLoading(false);
   };
 
@@ -127,6 +129,7 @@ const BookingConfirmation = () => {
                         setBillingsAddress={setBillingsAddress}
                         selectedPaymentMethod={selectedPaymentMethod}
                         clientSecret={clientSecret}
+                        paymentIntentId={paymentIntentId}
                         personalInfo={personalInfo}
                         setSelectedPaymentMethod={setSelectedPaymentMethod}
                         isLoading={isLoading}
