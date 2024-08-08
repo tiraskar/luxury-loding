@@ -61,9 +61,11 @@ const bookingSlice = createSlice({
         state.isListingBookingAvailable = false;
       }
 
-      if (name === 'checkIn' && value > state.checkBookingParams.checkOut) {
+      if (name === 'checkIn' && value >= state.checkBookingParams.checkOut) {
+        let minDateCheckOut = new Date(value);
+        minDateCheckOut.setDate(value.getDate() + 1);
         state.checkBookingParams.checkIn = value;
-        state.checkBookingParams.checkOut = '';
+        state.checkBookingParams.checkOut = minDateCheckOut;
 
       } else {
         state.checkBookingParams[name] = value;
