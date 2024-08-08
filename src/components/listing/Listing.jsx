@@ -61,7 +61,7 @@ const Listing = () => {
       <div className="font-inter tracking-[-1%] space-y-[30px]">
           <div className="flex flex-wrap md:flex-nowrap gap-y-6 md:gap-y-0 md:justify-between">
           <div className="flex flex-col gap-y-6">
-              <h1 className="text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight ">{listingInfo?.name}</h1>
+              <h1 className=" text-3xl lg:text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight ">{listingInfo?.name}</h1>
             <p className="flex items-center text-xs text-[#A1A196] gap-1">
                 {listingInfo?.address} <GoDotFill className="text-black text-[8px]" />
                 <span className="text-black"> 25 reviews</span>
