@@ -38,7 +38,6 @@ const RenderListings = ({ listingList }) => {
     }
   }, [listingList]);
 
-
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
       {listingList?.map((listing, listingIndex) => {

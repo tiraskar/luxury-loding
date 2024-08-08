@@ -2,54 +2,56 @@ import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
-// import Wrapper from "./Wrapper";
-
-const bookingData = {
-  id: 1,
-  image: '/images/listing-one.png',
-  location: "Arizona, United States of America",
-  title: "Cozy Cabin Retreat in Sedona's Red Rocks",
-  description: "Enjoy a tranquil escape in Sedona's red rock country, offering breathtaking views and serene hiking trails.",
-  guest: 3,
-  bedroom: 2,
-  bath: 2,
-  rate: 200,
-  duration: "per night",
-  featured: false
-};
+import { useSelector } from "react-redux";
+import DatePicker from "react-datepicker";
 
 const Booking = () => {
+
+  const { listingInfo } = useSelector(state => state.listing);
+  const { checkBookingParams } = useSelector(state => state.booking);
+
+  const images = listingInfo?.images || [];
+
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col lg:flex-row gap-4">
         <div>
-          <img src={bookingData.image} alt="" className="w-full lg:max-w-[207px] rounded-xl" />
+          <img src={images[0]?.url} alt="" className="w-full lg:h-[145px] lg:w-[207px] rounded-xl" />
         </div>
         <div className="flex flex-col space-y-5">
-          <p className="flex flex-row items-center text-[#0094FF] space-x-1.5"><GrLocation />{bookingData.location}</p>
-          <h1>{bookingData.title}</h1>
-          <div className="flex gap-x-3 text-[#8E8E80] items-center font-inter ">
-            <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-              <LuUsers size={14} /> {bookingData.guest} {bookingData.guest > 1 ? 'guests' : 'guest'}
-            </div>
-            <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-              <TbBed size={14} /> {bookingData.bedroom} {bookingData.bedroom > 1 ? 'bedrooms' : 'bedroom'}
-
-            </div>
-            <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-              <LuBath size={14} /> {bookingData.bath} {bookingData.bath > 1 ? 'baths' : 'bath'}
-            </div>
+          <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs"><GrLocation />
+            <p>{listingInfo.address}</p>
           </div>
-          <div className="flex items-center">
-            <p className="text-[#333333] font-bold text-xl">${bookingData.rate}</p>
-            <p className="text-[#8E8E80] text-sm tracking-tight">&nbsp;/ {bookingData.duration}</p>
+
+          <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px]">
+            {listingInfo.name}
+          </h1>
+
+          <div className="flex flex-col space-y-3">
+            <div className="flex gap-x-3 text-[#8E8E80] items-center font-inter ">
+              <div className="flex gap-1 items-center rounded-2xl text-[13px]">
+                <LuUsers size={14} /> {listingInfo.guestsIncluded} {listingInfo.guestsIncluded > 1 ? 'guests' : 'guest'}
+              </div>
+
+              <div className="flex gap-1 items-center rounded-2xl text-[13px]">
+                <TbBed size={14} /> {listingInfo.bedroomsNumber} {listingInfo.bedroomsNumber > 1 ? 'bedrooms' : 'bedroom'}
+
+              </div>
+              <div className="flex gap-1 items-center rounded-2xl text-[13px]">
+                <LuBath size={14} /> {listingInfo.bathroomsNumber} {listingInfo.bathroomsNumber > 1 ? 'baths' : 'bath'}
+              </div>
+            </div>
+            <div className="flex items-center">
+              <p className="text-[#333333] font-bold text-xl">${listingInfo.price}</p>
+              <p className="text-[#8E8E80] text-sm tracking-tight">&nbsp;/ per night</p>
+            </div>
           </div>
         </div>
       </div>
       <div className="min-w-full h-px bg-[#E0E0E0] my-8 px-4 "></div>
       <div className="max-w-[396px]">
-        <h1 className="font-onest tracking-normal font-medium text-xl pb-6">Book apartment</h1>
+        <h1 className="font-onest tracking-normal font-medium text-xl pb-6">{listingInfo.propertyType}</h1>
         <div className="space-y-2 ">
 
           <div className="grid grid-cols-2 gap-[10px]">
@@ -57,13 +59,30 @@ const Booking = () => {
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check in</p>
               </p>
-              <p className="font-semibold pl-6">14.08.2024</p>
+              <p className="font-semibold pl-6">
+                <DatePicker
+                  selected={checkBookingParams.checkOut}
+                  readOnly
+                  dateFormat="dd.MM.YYYY"
+                  placeholderText="DD.MM.YYYY"
+                  className="outline-none max-w-[117px] bg-white"
+                />
+                {/* {checkBookingParams?.checkIn} */}
+              </p>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check out</p>
               </p>
-              <p className="font-semibold pl-6">14.08.2024</p>
+              <p className="font-semibold pl-6">
+                <DatePicker
+                  selected={checkBookingParams.checkOut}
+                  readOnly
+                  dateFormat="dd.MM.YYYY"
+                  placeholderText="DD.MM.YYYY"
+                  className="outline-none max-w-[117px] bg-white"
+                />
+              </p>
             </div>
           </div>
 

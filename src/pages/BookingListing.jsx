@@ -3,10 +3,41 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { PiDog } from "react-icons/pi";
 import { TbSmoking } from "react-icons/tb";
 import { LuMusic4 } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Booking, Wrapper } from "../components";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchListingInfo } from "../redux/slices/listingSlice";
+import { calculateBookingPrice } from "../redux/slices/bookingSlice";
 
 const BookingListing = () => {
+  const [searchParams] = useSearchParams();
+
+  // Extract values from search params
+
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    let isMounted = true;
+
+    if (isMounted) {
+      const checkIn = searchParams.get('checkIn') || '';
+      const checkOut = searchParams.get('checkOut') || '';
+      const guests = searchParams.get('guests') || '';
+
+      dispatch(fetchListingInfo(id));
+      dispatch(calculateBookingPrice(
+        { listingId: Number(id), checkIn, checkOut, guests: Number(guests) }
+      ));
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [id])
+
   return (
     <div className="flex flex-wrap md:grid md:grid-cols-9 min-h-screen">
       <div className="col-span-5 font-inter tracking-[-1%]">
@@ -131,7 +162,7 @@ const BookingListing = () => {
             <Booking />
           </div>
           <div className="block md:hidden pt-10 pb-10 md:pt-64">
-            <Link to={`/listing/${7}/booking-confirm`} className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
+            <Link to={`/listing/${id}/booking-confirm`} className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
               Agree and continue
             </Link>
           </div>
