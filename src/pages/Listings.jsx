@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FilterableSearchListing, ListingList } from "../components";
 import { useEffect } from "react";
-import { fetchListingList, fetchListingTotalCount } from "../redux/slices/listingSlice";
+import { fetchListingList, fetchListingTotalCount, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 
 const Listings = () => {
 
@@ -12,6 +12,7 @@ const Listings = () => {
     // dispatch(syncListing());
     listingTotalCount == 0 && dispatch(fetchListingTotalCount());
     listingList.length == 0 && dispatch(fetchListingList());
+    dispatch(setSearchListingParamsToInitialState());
   }, []);
 
   return (
