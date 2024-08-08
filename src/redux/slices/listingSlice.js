@@ -120,6 +120,20 @@ export const searchListing = createAsyncThunk(
   }
 )
 
+export const fetchFeaturedListing = createAsyncThunk(
+  'listing/featured',
+  async () => {
+    try {
+      const { data } = await axios.get(`${baseUrl}/listing?limit=${6}&page=1`);
+      return data;
+    } catch (error) {
+      return Promise.reject(error.message);
+    }
+  }
+);
+
+
+
 // Slice
 const listingSlice = createSlice({
   name: 'listing',
@@ -137,6 +151,7 @@ const listingSlice = createSlice({
     isSearchListing: false,
     mapView: false,
     isSearchedListing: false,
+    isListingAvailableForBooking: false,
 
     //error
     error: null,
@@ -146,6 +161,7 @@ const listingSlice = createSlice({
     otherListings: [],
     availableListing: [],
     searchedListingList: [],
+    featuredListings: [],
 
     //object
     listingInfo: {},
@@ -327,6 +343,21 @@ const listingSlice = createSlice({
       .addCase(searchListing.rejected, (state, action) => {
         state.isSearchedListing = false;
         state.isSearchListing = false;
+        state.error = action.error.message;
+      });
+
+    //featured listings
+    builder
+      .addCase(fetchFeaturedListing.pending, (state) => {
+        state.loading = true;
+        state.featuredListings = [];
+        state.error = null;
+      })
+      .addCase(fetchFeaturedListing.fulfilled, (state, action) => {
+        state.loading = false;
+        state.featuredListings = action.payload;
+      })
+      .addCase(fetchFeaturedListing.rejected, (state, action) => {
         state.error = action.error.message;
       });
   }
