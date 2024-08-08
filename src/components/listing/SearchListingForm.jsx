@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchListing, setSearchListingParams } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { notifyToastMessage } from "../ui/CustomToast";
 
 
 
@@ -10,7 +11,9 @@ const SearchListingForm = () => {
   const dispatch = useDispatch();
   const { isSearchListing, searchListingParams } = useSelector(state => state.listing)
 
-  const minDate = new Date(Date.now())
+  const minDateCheckIn = new Date(Date.now());
+
+  const minDateCheckOut = searchListingParams.checkIn !== "" ? new Date(searchListingParams.checkIn).setDate(searchListingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
   const handleInputChange = (name, value) => {
     dispatch(setSearchListingParams({ name, value }));
@@ -18,6 +21,9 @@ const SearchListingForm = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    if ((searchListingParams.checkIn && !searchListingParams.checkOut) || (searchListingParams.checkOut && !searchListingParams.checkIn)) {
+      return notifyToastMessage("Provide check-in and check-out date.");
+    }
     dispatch(searchListing());
   }
 
@@ -48,7 +54,7 @@ const SearchListingForm = () => {
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="MM.DD.YYYY"
-              minDate={minDate}
+              minDate={minDateCheckIn}
             />
           </div>
         </div>
@@ -65,7 +71,7 @@ const SearchListingForm = () => {
               className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
-              minDate={searchListingParams.checkIn ? searchListingParams.checkIn : minDate}
+              minDate={minDateCheckOut}
             />
           </div>
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">

@@ -18,8 +18,9 @@ const FilterableSearchListing = () => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const minDate = new Date(Date.now())
+  const minDateCheckIn = new Date(Date.now());
 
+  const minDateCheckOut = searchListingParams.checkIn !== "" ? new Date(searchListingParams.checkIn).setDate(searchListingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
   const handleInputChange = (name, value) => {
     dispatch(setSearchListingParams({ name, value }));
@@ -71,7 +72,7 @@ const FilterableSearchListing = () => {
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
               backgroundColor="transparent"
-              minDate={minDate}
+              minDate={minDateCheckIn}
               className="search-input max-w-[117px]"
             />
           </div>
@@ -83,7 +84,7 @@ const FilterableSearchListing = () => {
               onChange={(date) => handleInputChange('checkOut', date)}
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
-              minDate={searchListingParams.checkIn ? searchListingParams.checkIn : minDate}
+              minDate={minDateCheckOut}
               className="search-input max-w-[117px]"
             />
           </div>
