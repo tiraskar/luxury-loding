@@ -106,8 +106,8 @@ export const searchListing = createAsyncThunk(
       const { searchListingParams } = getState().listing
       const query = new URLSearchParams({
         location: searchListingParams.location,
-        checkIn: searchListingParams.checkIn,
-        checkOut: searchListingParams.checkOut,
+        checkIn: formateDate(searchListingParams.checkIn),
+        checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
         priceOrder: ""
       }).toString();
@@ -192,6 +192,15 @@ const listingSlice = createSlice({
       state.listingOrder = action.payload;
     },
 
+    setSearchListingParamsToInitialState: (state) => {
+      state.searchListingParams.checkIn = '';
+      state.searchListingParams.checkOut = '';
+      state.searchListingParams.guests = '';
+      state.searchListingParams.location = '';
+      state.listingPage = 1;
+      state.listingOrder = '';
+    },
+
     setSearchListingParams: (state, action) => {
       const { name, value } = action.payload;
 
@@ -200,10 +209,11 @@ const listingSlice = createSlice({
         const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
         state.searchListingParams[name] = numericValue;
 
-      } else if (name === 'checkIn' && value > state.searchListingParams.checkOut) {
-
+      } else if (name === 'checkIn' && value >= state.searchListingParams.checkOut) {
+        let minDateCheckOut = new Date(value);
+        minDateCheckOut.setDate(value.getDate() + 1);
         state.searchListingParams.checkIn = value;
-        state.searchListingParams.checkOut = '';
+        state.searchListingParams.checkOut = minDateCheckOut;
 
       } else {
         state.searchListingParams[name] = value;
@@ -363,5 +373,5 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState } = listingSlice.actions;
 export default listingSlice.reducer;
