@@ -150,6 +150,18 @@ export const fetchListingReviews = createAsyncThunk(
   }
 )
 
+export const fetchCountryList = createAsyncThunk(
+  'listing/country',
+  async () => {
+    try {
+      const { data } = await axios.get(`${baseUrl}/listing/getcountries`);
+      return data;
+    } catch (error) {
+      return Promise.reject(error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -181,6 +193,7 @@ const listingSlice = createSlice({
     searchedListingList: [],
     featuredListings: [], 
     listingReviews: [],
+    countryList: [],
 
     //object
     listingInfo: {},
@@ -405,6 +418,20 @@ const listingSlice = createSlice({
         state.isReviewLoading = false;
         state.error = action.error.message;
       });
+
+    builder
+      .addCase(fetchCountryList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCountryList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.countryList = action.payload;
+      })
+      .addCase(fetchCountryList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
   }
 });
 
