@@ -3,6 +3,7 @@ import { FilterableSearchListing, Listing, OtherListing } from "../components";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchListingInfo, fetchListingReviews } from "../redux/slices/listingSlice";
+import { setCheckBookingParamsToInitialState } from "../redux/slices/bookingSlice";
 
 
 const SingleListing = () => {
@@ -13,6 +14,7 @@ const SingleListing = () => {
   useEffect(() => {
     dispatch(fetchListingInfo(id));
     dispatch(fetchListingReviews(id))
+    setCheckBookingParamsToInitialState()
   }, [id])
 
   return (
