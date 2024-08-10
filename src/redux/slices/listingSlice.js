@@ -132,6 +132,23 @@ export const fetchFeaturedListing = createAsyncThunk(
   }
 );
 
+export const fetchListingReviews = createAsyncThunk(
+  'listing/reviews',
+  async (listingId) => {
+    try {
+      const query = new URLSearchParams({
+        listingId: listingId,
+        type: 'guest-to-host'
+      });
+
+      const { data } = await axios.get(`${baseUrl}/listing/getreviews?${query}`);
+      return data;
+
+    } catch (error) {
+      return Promise.reject(error.message);
+    }
+  }
+)
 
 
 // Slice
@@ -152,6 +169,7 @@ const listingSlice = createSlice({
     mapView: false,
     isSearchedListing: false,
     isListingAvailableForBooking: false,
+    isReviewLoading: false, 
 
     //error
     error: null,
@@ -161,7 +179,8 @@ const listingSlice = createSlice({
     otherListings: [],
     availableListing: [],
     searchedListingList: [],
-    featuredListings: [],
+    featuredListings: [], 
+    listingReviews: [],
 
     //object
     listingInfo: {},
@@ -259,6 +278,7 @@ const listingSlice = createSlice({
       .addCase(fetchListingInfo.pending, (state) => {
         state.isFetchListingInfo = true;
         state.error = null;
+        state.listingReviews = []
       })
       .addCase(fetchListingInfo.fulfilled, (state, action) => {
         state.isFetchListingInfo = false;
@@ -370,8 +390,24 @@ const listingSlice = createSlice({
       .addCase(fetchFeaturedListing.rejected, (state, action) => {
         state.error = action.error.message;
       });
+
+    //fetch listing reviews 
+    builder
+      .addCase(fetchListingReviews.pending, (state) => {
+        state.isReviewLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchListingReviews.fulfilled, (state, action) => {
+        state.isReviewLoading = false;
+        state.listingReviews = action.payload;
+      })
+      .addCase(fetchListingReviews.rejected, (state, action) => {
+        state.isReviewLoading = false;
+        state.error = action.error.message;
+      });
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, } = listingSlice.actions;
+
 export default listingSlice.reducer;
