@@ -21,13 +21,17 @@ const BookApartment = ({ listingInfo }) => {
     dispatch(setCheckBookingParams({ name, value }));
   };
 
-  const minDate = new Date();
+  const minDateCheckIn = new Date();
+
+
+  const minDateCheckOut = checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
+
+
 
   useEffect(() => {
     handleInputChange('guests', listingInfo.guestsIncluded);
     handleInputChange('listingId', listingInfo.id);
-    handleInputChange('checkIn', minDate);
-    handleInputChange('checkOut', minDate);
+    handleInputChange('checkIn', minDateCheckIn);
   }, [listingInfo]);
 
   const handleSubmit = () => {
@@ -43,6 +47,9 @@ const BookApartment = ({ listingInfo }) => {
     checkOut: formateDate(checkBookingParams.checkOut),
     guests: checkBookingParams.guests
   })
+
+  console.log('checkout', checkBookingParams.checkOut);
+  // checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
   return (
     <div className="font-inter tracking-[-1%]">
@@ -68,7 +75,7 @@ const BookApartment = ({ listingInfo }) => {
                   onChange={(date) => handleInputChange('checkIn', date)}
                   className="outline-none max-w-[117px]  text-[1rem]"
                   dateFormat="dd.MM.YYYY"
-                  minDate={minDate}
+                  minDate={minDateCheckIn}
                   placeholderText="DD.MM.YYYY"
                 />
               </div>
@@ -83,7 +90,7 @@ const BookApartment = ({ listingInfo }) => {
                   onChange={(date) => handleInputChange('checkOut', date)}
                   className="outline-none max-w-[117px] text-[1rem]"
                   dateFormat="dd.MM.YYYY"
-                  minDate={checkBookingParams.checkIn ? checkBookingParams.checkIn : minDate}
+                  minDate={minDateCheckOut}
                   placeholderText="DD.MM.YYYY"
                 />
               </div>
