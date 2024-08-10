@@ -3,19 +3,23 @@ import { searchListing, setSearchListingParams } from "../../redux/slices/listin
 import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { notifyToastMessage } from "../ui/CustomToast";
+import { useState } from "react";
 
 
 
 const SearchListingForm = () => {
-
+  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))
   const dispatch = useDispatch();
   const { isSearchListing, searchListingParams } = useSelector(state => state.listing)
 
   const minDateCheckIn = new Date(Date.now());
 
-  const minDateCheckOut = searchListingParams.checkIn !== "" ? new Date(searchListingParams.checkIn).setDate(searchListingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
   const handleInputChange = (name, value) => {
+    if (name == 'checkIn') {
+      const checkInDate = new Date(value);
+      setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
+    }
     dispatch(setSearchListingParams({ name, value }));
   };
 

@@ -62,7 +62,7 @@ const bookingSlice = createSlice({
       }
 
       if (name === 'checkIn' && value >= state.checkBookingParams.checkOut) {
-        let minDateCheckOut = new Date(value);
+        const minDateCheckOut = new Date(value);
         minDateCheckOut.setDate(value.getDate() + 1);
         state.checkBookingParams.checkIn = value;
         state.checkBookingParams.checkOut = minDateCheckOut;

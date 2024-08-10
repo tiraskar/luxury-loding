@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FilterableSearchListing, Listing, OtherListing } from "../components";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchListingInfo } from "../redux/slices/listingSlice";
+import { fetchListingInfo, fetchListingReviews } from "../redux/slices/listingSlice";
 
 
 const SingleListing = () => {
@@ -12,6 +12,7 @@ const SingleListing = () => {
 
   useEffect(() => {
     dispatch(fetchListingInfo(id));
+    dispatch(fetchListingReviews(id))
   }, [id])
 
   return (

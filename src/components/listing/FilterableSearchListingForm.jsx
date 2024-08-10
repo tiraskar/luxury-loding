@@ -12,6 +12,8 @@ import { notifyToastMessage } from "../ui/CustomToast";
 
 const FilterableSearchListing = () => {
 
+  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))
+
   const dispatch = useDispatch();
 
   const { isFetchAvailableListing, searchListingParams } = useSelector(state => state.listing)
@@ -20,12 +22,17 @@ const FilterableSearchListing = () => {
 
   const minDateCheckIn = new Date(Date.now());
 
-  const minDateCheckOut = searchListingParams.checkIn !== "" ? new Date(searchListingParams.checkIn).setDate(searchListingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
-
   const handleInputChange = (name, value) => {
+    if (name == "checkIn") {
+      const checkInDate = new Date(value);
+      setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
+    }
     dispatch(setSearchListingParams({ name, value }));
 
   };
+
+  console.log('min date checkout', minDateCheckOut);
+
 
   const handleSearch = (e) => {
     e.preventDefault();

@@ -26,7 +26,7 @@ const tabs = [
 
 const Listing = () => {
 
-  const { listingInfo = {}, loading } = useSelector(state => state.listing);
+  const { listingInfo = {}, loading, listingReviews } = useSelector(state => state.listing);
   const [activeTab, setActiveTab] = useState('');
 
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
@@ -38,7 +38,7 @@ const Listing = () => {
   const images = listingInfo?.images || [];
   const listingAmenities = listingInfo?.amenities || [];
   const bookingTerms = listingInfo?.terms || {};
-  const listingReviews = listingInfo?.reviews || [];
+  // const listingReviews = listingInfo?.reviews || [];
 
   const componentMapping = {
     'Description': <ListingDescription listingInfo={listingInfo} />,
@@ -64,7 +64,7 @@ const Listing = () => {
               <h1 className=" text-3xl lg:text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight ">{listingInfo?.name}</h1>
             <p className="flex items-center text-xs text-[#A1A196] gap-1">
                 {listingInfo?.address} <GoDotFill className="text-black text-[8px]" />
-                <span className="text-black"> 25 reviews</span>
+                <span className="text-black"> {listingReviews.length} reviews</span>
             </p>
           </div>
           <div className="flex flex-row gap-x-3">
