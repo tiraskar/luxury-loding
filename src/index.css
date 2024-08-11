@@ -10,10 +10,14 @@
     border-radius: 0px;
   }
 }
+
 @layer components {
-  .search-input {
+.search-input {
     @apply bg-[#F9F9F9] outline-none font-inter text-[#8A8A8A] text-[1rem];
   }
+.default-input {
+  @apply border-[1px] border-[#D3D3D3] outline-none px-5 py-4 rounded-xl focus:border-[1px] focus:border-[#7B6944] bg-white;
+}
 }
 @keyframes spin {
   0% {
