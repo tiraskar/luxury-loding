@@ -92,7 +92,7 @@ const ContactForm = () => {
             value={formValues.fullname}
             onChange={(e) => handleInputChange('fullname', e.target.value)}
             required
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
+            className="default-input" />
         </div>
         <div className="flex flex-col gap-y-2">
           <label  className="flex">Your email<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
@@ -103,7 +103,7 @@ const ContactForm = () => {
             value={formValues.email}
             required
             onChange={(e) => handleInputChange('email', e.target.value)}
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
+            className="default-input" />
         </div>
         <div className="flex flex-col gap-y-2">
           <label  className="flex">Phone number<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
@@ -136,13 +136,13 @@ const ContactForm = () => {
         </div>
         <div className="py-1">
           <textarea
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl w-full"
             name="description"
             rows={6}
             placeholder="How can we help you?"
             value={formValues.description}
             required
             onChange={(e) => handleInputChange('description', e.target.value)}
+            className="default-input w-full"
           />
         </div>
         <button
