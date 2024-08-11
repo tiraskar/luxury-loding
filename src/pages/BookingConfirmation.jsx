@@ -11,29 +11,16 @@ import { baseUrl } from "../config/baseurl";
 import toast from "react-hot-toast";
 import LoaderScreen from "../components/ui/LoaderScreen";
 import { loadStripe } from '@stripe/stripe-js';
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCountryList } from "../redux/slices/listingSlice";
+import { appearance } from "../lib/stripe";
+// import { createPaymentIntent } from "../redux/slices/paymentSlice.js";
 const stripePromise = loadStripe('pk_test_51OsSKpGurTGjjGfhdLcO3WBZDR1UkYvvDWBUFFRnqQU2pSAThq4xfLVHLz11h94g2i4jONlHecSXhcxwkbJNz4a300y43aO1nM');
+
 
 const BookingConfirmation = () => {
 
-  const [personalInfo, setPersonalInfo] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-  });
-  
-  const [billingAddress, setBillingsAddress] = useState({
-    firstName: '',
-    lastName: '',
-    line1: '',
-    line2: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    country: 'us',
-  });
-
+  const dispatch = useDispatch();
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
@@ -71,12 +58,14 @@ const BookingConfirmation = () => {
 
   useEffect(() => {
     createPaymentIntent();
-  }, [])
+    // dispatch(createPaymentIntent());
+    dispatch(fetchCountryList());
+  }, [dispatch])
 
   return (
-    <div className="flex flex-wrap md:grid md:grid-cols-9 min-h-screen">
+    <div className=" lg:grid lg:grid-cols-9">
       {isLoading && <LoaderScreen />}
-      <div className="col-span-5 font-inter tracking-[-1%]">
+      <div className="md:col-span-5 font-inter tracking-[-1%]">
         <Wrapper>
           <div className=" flex flex-col mx-auto  max-w-[652px]">
             <div className="flex flex-col justify-start lg:-ml-4">
@@ -116,21 +105,14 @@ const BookingConfirmation = () => {
               <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 
               <div className="flex flex-col gap-y-10">
-                <PersonalInfoForm
-                  personalInfo={personalInfo}
-                  setPersonalInfo={setPersonalInfo}
-                />
+                <PersonalInfoForm />
                 <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-                {
-                  clientSecret && (
-                    <Elements stripe={stripePromise} options={{ clientSecret }}>
-                      <PaymentMethod
-                        billingAddress={billingAddress}
-                        setBillingsAddress={setBillingsAddress}
+                {clientSecret && (
+                  <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
+                    <PaymentMethod
                         selectedPaymentMethod={selectedPaymentMethod}
                         clientSecret={clientSecret}
-                        paymentIntentId={paymentIntentId}
-                        personalInfo={personalInfo}
+                      paymentIntentId={paymentIntentId}
                         setSelectedPaymentMethod={setSelectedPaymentMethod}
                         isLoading={isLoading}
                         setIsLoading={setIsLoading}
@@ -138,22 +120,20 @@ const BookingConfirmation = () => {
                     </Elements>
                   )
                 }
-
               </div>
-
             </div>
           </div>
         </Wrapper>
       </div>
-      <div className="col-span-4 bg-[#F9F9F9] w-full ">
+      <div className="lg:col-span-4 bg-[#F9F9F9] w-full lg:-mt-10">
         <Wrapper>
-          <div className="flex mx-auto max-w-[541px] py-20">
+          <div className="flex flex-col lg:mx-auto max-w-[541px] py-20">
             <Booking />
-          </div>
-          <div className="block md:hidden pt-10 pb-10 md:pt-64">
+            <div className="block lg:hidden pt-10 pb-10 lg:pt-64">
             <button className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
               Confirm and Pay
             </button>
+          </div>
           </div>
         </Wrapper>
       </div>

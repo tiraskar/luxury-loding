@@ -3,43 +3,44 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { PiDog } from "react-icons/pi";
 import { TbSmoking } from "react-icons/tb";
 import { LuMusic4 } from "react-icons/lu";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Booking, Wrapper } from "../components";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchListingInfo } from "../redux/slices/listingSlice";
-import { calculateBookingPrice } from "../redux/slices/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { checkListingBookingAvailability } from "../redux/slices/bookingSlice";
+import LoaderScreen from "../components/ui/LoaderScreen";
+import AlertDialog from "../components/ui/AlertDialog";
+
 
 const BookingListing = () => {
-  const [searchParams] = useSearchParams();
-
-  // Extract values from search params
-
 
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const { loading } = useSelector(state => state.booking)
 
-    let isMounted = true;
+  const checkListingAvailableBeforeBooking = () => {
+    const bookingAvailable = dispatch(checkListingBookingAvailability({
+      listingId: Number(id),
+    }));
 
-    if (isMounted) {
-      const checkIn = searchParams.get('checkIn') || '';
-      const checkOut = searchParams.get('checkOut') || '';
-      const guests = searchParams.get('guests') || '';
-
-      dispatch(fetchListingInfo(id));
-      dispatch(calculateBookingPrice(
-        { listingId: Number(id), checkIn, checkOut, guests: Number(guests) }
-      ));
+    if (bookingAvailable) {
+      navigate(`/listing/${id}/booking-confirm`);
+    } else {
+      return <AlertDialog
+        warningMessage="Sorry, this listing is not available for booking now."
+        message="This listing has been booked now. Please check for other date or try fro other listings."
+        isCancel={false}
+        submitText="Close"
+        onCancel={() => navigate(`/listings/${id}`)}
+      />
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [id])
+  }
+
 
   return (
     <div className="flex flex-wrap md:grid md:grid-cols-9 min-h-screen">
+      {loading && <LoaderScreen />}
       <div className="col-span-5 font-inter tracking-[-1%]">
         <Wrapper>
           <div className=" flex flex-col mx-auto  max-w-[652px]">
@@ -143,13 +144,15 @@ const BookingListing = () => {
                   pay the total amount shown, which includes service fees.{" "}
                   <Link to="/contact" className="underline">
                     Contact us
-                  </Link>{" "}
+                  </Link>
                   if you have any questions!
                 </p>
                 <div className="hidden md:block md:pt-64">
-                  <Link to={`/listing/${7}/booking-confirm`} className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
+                  <button
+                    onClick={() => checkListingAvailableBeforeBooking()}
+                    className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
                     Agree and continue
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

@@ -4,6 +4,10 @@ import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
 import { formateDate } from "../../helper/date";
 
+export const bookingCheckIn = localStorage.getItem('checkIn');
+export const bookingCheckOut = localStorage.getItem('checkOut');
+export const bookingGuest = localStorage.getItem('guests');
+
 export const checkListingBookingAvailability = createAsyncThunk(
   'listing/booking/availability',
   async (listing, { getState }) => {
@@ -28,13 +32,20 @@ export const calculateBookingPrice = createAsyncThunk(
   'booking/price-calculate',
   async (booking) => {
     try {
-      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, booking);
+      const bookingData = {
+        checkIn: formateDate(new Date(bookingCheckIn)),
+        checkOut: formateDate(new Date(bookingCheckOut)),
+        guests: Number(bookingGuest),
+        listingId: booking.listingId
+      };
+
+      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, { ...bookingData });
       return data;
     } catch (error) {
       return Promise.reject(error.message);
     }
   }
-)
+);
 
 const bookingSlice = createSlice({
 
@@ -49,8 +60,36 @@ const bookingSlice = createSlice({
     checkBookingParams: {
       checkIn: '',
       checkOut: '',
-      listingId: ''
-    }
+      listingId: '',
+      guests: '',
+    },
+
+    //   paymentType: 'card',
+
+    //   //personalInfo
+    //   personalInfo: {
+    //     firstName: '',
+    //     lastName: '',
+    //     email: '',
+    //     phone: '',
+    //   },
+
+    //   //paymentInfo
+    //   paymentInfo: {
+
+    //   },
+
+    //   //
+    //   billingInfo: {
+    //     firstName: '',
+    //     lastName: '',
+    //     line1: '',
+    //     line2: '',
+    //     city: '',
+    //     state: '',
+    //     postalCode: '',
+    //     country: 'US'
+    //   }
   },
 
   reducers: {
@@ -66,15 +105,28 @@ const bookingSlice = createSlice({
         minDateCheckOut.setDate(value.getDate() + 1);
         state.checkBookingParams.checkIn = value;
         state.checkBookingParams.checkOut = minDateCheckOut;
-
+        localStorage.setItem('checkIn', value);
+        localStorage.setItem('checkOut', minDateCheckOut);
       } else {
         state.checkBookingParams[name] = value;
+        localStorage.setItem(name, value);
       }
+    },
+
+    setCheckBookingParamsToInitialState: (state) => {
+      state.checkBookingParams = {
+        checkIn: '',
+        checkOut: '',
+        listingId: '',
+        guests: '',
+      };
     },
 
     toggleBookingNotAvailableAlertDialog: (state) => {
       state.bookingNotAvailableAlertDialog = false;
-    }
+    },
+
+
   },
 
   extraReducers: (builder) => {
@@ -110,9 +162,12 @@ const bookingSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       });
-
   }
 });
 
-export const { setCheckBookingParams, toggleBookingNotAvailableAlertDialog } = bookingSlice.actions;
+export const
+  { setCheckBookingParams,
+    toggleBookingNotAvailableAlertDialog,
+    setCheckBookingParamsToInitialState,
+  } = bookingSlice.actions;
 export default bookingSlice.reducer;

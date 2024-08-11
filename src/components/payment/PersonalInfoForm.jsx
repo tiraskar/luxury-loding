@@ -1,9 +1,22 @@
-const PersonalInfoForm = ({ personalInfo, setPersonalInfo }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
+import { createPaymentIntent } from "../../redux/slices/paymentSlice.js";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+const PersonalInfoForm = () => {
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const { personalInfo } = useSelector(state => state.payment);
 
   const handleChange = (name, value) => {
-    setPersonalInfo((prev) => ({ ...prev, [name]: value }));
+    const inputTitle = 'personalInfo';
+    dispatch(handlePaymentInput({ inputTitle, name, value }))
   }
-
+  useEffect(() => {
+    dispatch(createPaymentIntent(id));
+  }, [dispatch])
   return (
     <div className="font-inter text-[#333333] space-y-8">
       <h1 className="font-medium tracking-tight text-lg">Personal Info</h1>
@@ -17,7 +30,8 @@ const PersonalInfoForm = ({ personalInfo, setPersonalInfo }) => {
             onChange={(e) => handleChange("firstName", e.target.value)}
             type="text"
             placeholder="Enter first name"
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl"
+            required
+            className="default-input"
           />
         </div>
 
@@ -29,7 +43,8 @@ const PersonalInfoForm = ({ personalInfo, setPersonalInfo }) => {
             onChange={(e) => handleChange("lastName", e.target.value)}
             type="text"
             placeholder="Enter last name"
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
+            required
+            className="default-input" />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -40,7 +55,8 @@ const PersonalInfoForm = ({ personalInfo, setPersonalInfo }) => {
             onChange={(e) => handleChange("email", e.target.value)}
             type="email"
             placeholder="Enter email"
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
+            required
+            className="default-input" />
         </div>
         <div className="flex flex-col gap-y-2">
           <label htmlFor="phone-number" className="flex">Phone number</label>
@@ -50,7 +66,8 @@ const PersonalInfoForm = ({ personalInfo, setPersonalInfo }) => {
             onChange={(e) => handleChange("phone", e.target.value)}
             type="number"
             placeholder="Enter phone number"
-            className="border-[2px] border-[#F5F5F5] px-5 py-4 rounded-xl" />
+            required
+            className="default-input" />
         </div>
 
       </div>

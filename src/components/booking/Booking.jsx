@@ -2,22 +2,52 @@ import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchListingInfo } from "../../redux/slices/listingSlice";
+import { calculateBookingPrice } from "../../redux/slices/bookingSlice";
 
 const Booking = () => {
 
   const { listingInfo } = useSelector(state => state.listing);
-  const { checkBookingParams } = useSelector(state => state.booking);
+  const { bookingPrice } = useSelector(state => state.booking);
 
   const images = listingInfo?.images || [];
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const guestNumber = localStorage?.getItem('guests');
+  const bookingCheckIn = localStorage?.getItem('checkIn');
+  const bookingCheckOut = localStorage?.getItem('checkOut');
+
+  useEffect(() => {
+
+    if (id && bookingCheckIn && bookingCheckOut && guestNumber) {
+
+      dispatch(fetchListingInfo(id));
+      dispatch(calculateBookingPrice({
+        listingId: Number(id),
+      }));
+    }
+  }, [id]);
+
+  if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
+    navigate(`/listings/${id}`);
+    return null;
+  }
+
+
 
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col lg:flex-row gap-4">
-        <div>
-          <img src={images[0]?.url} alt="" className="w-full lg:h-[145px] lg:w-[207px] rounded-xl" />
+        <div className="lg:max-h-[145px] lg:max-w-[207px]">
+          <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div className="flex flex-col space-y-5">
           <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs"><GrLocation />
@@ -51,7 +81,7 @@ const Booking = () => {
       </div>
       <div className="min-w-full h-px bg-[#E0E0E0] my-8 px-4 "></div>
       <div className="max-w-[396px]">
-        <h1 className="font-onest tracking-normal font-medium text-xl pb-6">{listingInfo.propertyType}</h1>
+        <h1 className="font-onest tracking-normal font-medium text-xl pb-6">Book {listingInfo.propertyType}</h1>
         <div className="space-y-2 ">
 
           <div className="grid grid-cols-2 gap-[10px]">
@@ -61,7 +91,7 @@ const Booking = () => {
               </p>
               <p className="font-semibold pl-6">
                 <DatePicker
-                  selected={checkBookingParams.checkOut}
+                  selected={bookingCheckIn}
                   readOnly
                   dateFormat="dd.MM.YYYY"
                   placeholderText="DD.MM.YYYY"
@@ -76,7 +106,7 @@ const Booking = () => {
               </p>
               <p className="font-semibold pl-6">
                 <DatePicker
-                  selected={checkBookingParams.checkOut}
+                  selected={bookingCheckOut}
                   readOnly
                   dateFormat="dd.MM.YYYY"
                   placeholderText="DD.MM.YYYY"
@@ -90,27 +120,63 @@ const Booking = () => {
             <p className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} /> <p>Guests</p>
             </p>
-            <p className="font-semibold pl-6">3 Guests</p>
+            <p className="font-semibold pl-6">{guestNumber}{guestNumber.guests > 1 ? "Guests" : "guest"}</p>
           </div>
 
         </div>
         <div className="flex flex-col space-y-6 my-10">
-          {extraCharge.map(({ title, charge }, index) => {
+          {bookingPrice?.components?.price?.map(({ title, total }, index) => {
             return (
               <div key={index} className="flex items-center">
                 <p className="pr-4">{title}</p>
                 <div className="flex-grow flex space-x-2 items-center">
                   <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
                 </div>
-                <p className="pl-4">${charge}</p>
+                <p className="pl-4">${total}</p>
               </div>
             );
           })}
+          {bookingPrice?.components?.fee?.map(({ title, total }, index) => {
+            return (
+              <div key={index} className="flex items-center">
+                <p className="pr-4">{title}</p>
+                <div className="flex-grow flex space-x-2 items-center">
+                  <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
+                </div>
+                <p className="pl-4">${total}</p>
+              </div>
+            );
+          })
+          }
+          {bookingPrice?.components?.tax?.map(({ title, total }, index) => {
+            return (
+              <div key={index} className="flex items-center">
+                <p className="pr-4">{title}</p>
+                <div className="flex-grow flex space-x-2 items-center">
+                  <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
+                </div>
+                <p className="pl-4">${total}</p>
+              </div>
+            );
+          })
+          }
+          {bookingPrice?.components?.discount?.map(({ title, total }, index) => {
+            return (
+              <div key={index} className="flex items-center">
+                <p className="pr-4">{title}</p>
+                <div className="flex-grow flex space-x-2 items-center">
+                  <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
+                </div>
+                <p className="pl-4">${total}</p>
+              </div>
+            );
+          })
+          }
         </div>
 
         <div className="flex justify-between">
           <p className="text sm font-[#8E8E80]">Total</p>
-          <p className="text-2xl font-bold text-[#333333]">$220.00</p>
+          <p className="text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
         </div>
         <p className="text-[#666666] mt-10">Any question? Call us <span className="text-black">(877) 640-8777</span></p>
       </div>
@@ -119,18 +185,3 @@ const Booking = () => {
 };
 
 export default Booking;
-
-const extraCharge = [
-  {
-    title: "Rent",
-    charge: 20,
-  },
-  {
-    title: "Cleaning fee",
-    charge: 35,
-  },
-  {
-    title: "Taxes",
-    charge: 25,
-  }
-];
