@@ -47,7 +47,7 @@ const PaymentMethod = () => {
       result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `http://localhost:5173/success`,
+          return_url: `https://luxury-loding.vercel.app/success`,
           shipping: {
             name: `${billingInfo.firstName} ${billingInfo.lastName}`,
             address: {

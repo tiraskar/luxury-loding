@@ -1,2 +1,2 @@
 
-export const baseUrl = "http://localhost:5001";
+export const baseUrl = "https://luxury-lodging-api-7e4ee.ondigitalocean.app";

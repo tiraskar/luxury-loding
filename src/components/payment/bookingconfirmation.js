@@ -11,7 +11,7 @@ import { fetchCountryList } from "../redux/slices/listingSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { createCustomer, createPaymentIntent, fetchStripPromiseKey, savePaymentInfo } from "../redux/slices/paymentSlice";
 import BillingAddress from "../components/payment/BillingAddress";
-import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { Elements, useElements, useStripe } from "@stripe/react-stripe-js";
 import { stripePromise } from "../lib/stripe";
 import toast from "react-hot-toast";
 
