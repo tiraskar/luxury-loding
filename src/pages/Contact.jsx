@@ -2,9 +2,8 @@ import { ContactUs, TeamMembers } from "../components";
 
 const Contact = () => {
   return (
-    <div className="">
+    <div className="space-y-[150px]">
       <ContactUs />
-      <div className="py-[78px]"></div>
       <TeamMembers />
     </div>
   );

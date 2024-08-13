@@ -1,6 +1,6 @@
 const ContactInfo = () => {
   return (
-    <div className="flex flex-col space-y-8 justify-between">
+    <div className="flex flex-col space-y-8 justify-between max-h-[617px]">
       <div className="flex flex-col gap-y-8 mt-8 sm:mt-12 lg:mt-16">
         <div className="flex flex-col gap-y-3 max-w-[389px]">
           <h1 className=" text-3xl xxs:text-[2rem] sm:text-4xl md:text-[38px]">Say Hello!</h1>

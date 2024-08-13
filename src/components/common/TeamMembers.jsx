@@ -4,7 +4,7 @@ const TeamMembers = () => {
 
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-start gap-y-[56px]">
+      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-start gap-y-[56px] ">
 
         <h1 className="text-[35px] font-semibold">Meet our team</h1>
 

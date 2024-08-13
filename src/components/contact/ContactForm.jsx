@@ -12,7 +12,7 @@ import AlertDialog from "../ui/AlertDialog";
 const schema = yup.object({
   fullName: yup.string().required('Full name is required'),
   email: yup.string().email('Invalid email format').required('Email is required'),
-  phoneNumber: yup.number().required(),
+  phoneNumber: yup.number().required('Phone number is required'),
   description: yup.string().min(10, 'Description must be at least 10 characters').required('Description is required'),
   countryCode: yup.string().required().default('us'),
   countryDialCode: yup.string().required()
@@ -92,7 +92,7 @@ const ContactForm = () => {
       />}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white flex-col px-3 py-6 sm:py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] "
+        className="bg-white flex-col p-4 sm:p-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] "
       >
         <div className="flex flex-col gap-y-2">
           <label className="flex">
@@ -103,7 +103,7 @@ const ContactForm = () => {
             {...register("fullName")}
             type="text"
             placeholder="Enter full name"
-            className={`default-input ${errors.fullName ? 'border-[#FF0000]' : ''}`}
+            className={`default-input  ${errors.fullName ? 'border-[#FF0000]' : ''}`}
           />
 
         </div>
@@ -116,7 +116,7 @@ const ContactForm = () => {
             {...register("email")}
             type="email"
             placeholder="Enter email"
-            className={`default-input ${errors.email ? 'border-[#FF0000]' : ''}`}
+            className={`default-input  ${errors.email ? 'border-[#FF0000]' : ''}`}
           />
 
         </div>
@@ -125,7 +125,7 @@ const ContactForm = () => {
             Phone number
             <FaAsterisk color="#DE2424" size={8} className="mt-1" />
           </label>
-          <div className="flex flex-row w-full border-[1px]  border-[#D3D3D3] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px]">
+          <div className={`flex flex-row w-full border-[1px]  border-[#D3D3D3] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px] ${errors.phoneNumber ? 'border-[#FF0000]' : ''}`}>
             <select
               {...register("countryCode")}
               onChange={(e) => handleCountryChange(e)}
@@ -143,23 +143,23 @@ const ContactForm = () => {
               inputMode="numeric"
               pattern="\d*"
               placeholder="Enter phone number"
-              className={`pl-2 pr-5 py-4 w-full outline-none rounded-xl ${errors.phoneNumber ? 'border-[#FF0000]' : ''}`}
+              className={`pl-2 pr-5 py-4 w-full outline-none rounded-xl `}
             />
 
           </div>
         </div>
-        <div className="py-1">
+        <div className="flex flex-col py-1">
           <textarea
             {...register("description")}
             rows={6}
             placeholder="How can we help you?"
             className={`default-input w-full ${errors.description ? 'border-[#FF0000]' : ''}`}
           />
-
+          <span className="text-[#FF0000] font-xs">{errors?.description?.message}</span>
         </div>
         <button
           type="submit"
-          className="flex justify-center items-center text-white bg-black w-full text-center py-5 font-inter font-semibold text-[1rem] rounded-[1rem]"
+          className="flex justify-center items-center text-white bg-black w-full text-center px-8 py-[19px] font-inter font-semibold text-[1rem] rounded-[1rem]"
           disabled={isLoading}
         >
           {isLoading ? `Submitting` : "Submit"} {isLoading && <p className="animate-bounce">&nbsp;...</p>}
