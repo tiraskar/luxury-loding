@@ -4,6 +4,7 @@ import {
   Blog,
   BlogAndGuideBook,
   BookingConfirmation,
+  BookingPayment,
   Contact,
   Home,
   Listings,
@@ -15,6 +16,7 @@ import {
 import BookingListing from "./pages/BookingListing";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+
 // Routing
 const router = createBrowserRouter([
   {
@@ -50,12 +52,23 @@ const router = createBrowserRouter([
         element: <SingleListing />,
       },
       {
-        path: "listing/:id/booking",
-        element: <BookingListing />,
-      },
-      {
-        path: "listing/:id/booking-confirm",
-        element: <BookingConfirmation />,
+        path: "/listing/:id/booking",
+        element: <BookingPayment />,
+        children: [
+          {
+            path: "",
+            element: <BookingListing />,
+          },
+          {
+            path: "payment",
+            element: <BookingConfirmation />,
+          },
+          {
+            path: "success",
+            element: <Success />
+          },
+        ]
+
       },
       {
         path: "/success",

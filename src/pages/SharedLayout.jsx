@@ -2,8 +2,10 @@ import { Outlet } from "react-router-dom";
 import { Navbar, Footer, Wrapper } from "../components";
 import { useEffect, useState } from "react";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
+import useScrollToTop from "../hooks/scrollTop";
 
 const SharedLayout = () => {
+  useScrollToTop()
   const [isVisible, setIsVisible] = useState(false);
 
   // Handle scroll event

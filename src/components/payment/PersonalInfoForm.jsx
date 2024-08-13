@@ -1,11 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
-import { createPaymentIntent } from "../../redux/slices/paymentSlice.js";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+
 const PersonalInfoForm = () => {
 
-  const { id } = useParams();
   const dispatch = useDispatch();
 
   const { personalInfo } = useSelector(state => state.payment);
@@ -14,9 +11,7 @@ const PersonalInfoForm = () => {
     const inputTitle = 'personalInfo';
     dispatch(handlePaymentInput({ inputTitle, name, value }))
   }
-  useEffect(() => {
-    dispatch(createPaymentIntent(id));
-  }, [dispatch])
+
   return (
     <div className="font-inter text-[#333333] space-y-8">
       <h1 className="font-medium tracking-tight text-lg">Personal Info</h1>

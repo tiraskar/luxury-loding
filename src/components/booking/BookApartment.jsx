@@ -48,7 +48,7 @@ const BookApartment = ({ listingInfo }) => {
     guests: checkBookingParams.guests
   })
 
-  console.log('checkout', checkBookingParams.checkOut);
+
   // checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
   return (

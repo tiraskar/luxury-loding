@@ -4,81 +4,101 @@ import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
 import { formateDate } from "../../helper/date";
 
+
+const bookingCheckIn = localStorage.getItem('checkIn');
+const bookingCheckOut = localStorage.getItem('checkOut');
+const bookingGuest = localStorage.getItem('guests');
+
+export const fetchStripPromiseKey = createAsyncThunk(
+  'stripe/key', async () => {
+    try {
+      const { data } = await axios.get(`${baseUrl}/payment/stripepublishablekey`);
+      return data;
+    } catch (error) {
+      return Promise.reject(error.message);
+    }
+  }
+);
+
 export const createPaymentIntent = createAsyncThunk(
   'payment/intent',
-  async (listingId, { getState }) => {
+  async (listing, { rejectWithValue }) => {
 
-    const bookingCheckIn = localStorage.getItem('checkIn');
-    const bookingCheckOut = localStorage.getItem('checkOut');
-    const bookingGuest = localStorage.getItem('guests');
 
     try {
       const paymentIndentData = {
-        listingId: listingId,
+        listingId: listing.id,
         checkIn: formateDate(new Date(bookingCheckIn)),
         checkOut: formateDate(new Date(bookingCheckOut)),
         guests: Number(bookingGuest),
-        amount: '200',
+        amount: Math.round(Number(listing.amount) * 100),
         currency: 'usd'
       };
-      const { data } = await axios.post(`${baseUrl}/payment/createpaymentintent`,
+      const response = await axios.post(`${baseUrl}/payment/createpaymentintent`,
         { ...paymentIndentData }, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      return data;
+      return response.data;
     } catch (error) {
-      throw error.message;
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 
 export const createCustomer = createAsyncThunk(
-  'payment/customer', async (customer) => {
+
+  'payment/customer', async (payment, { getState, rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${baseUrl}/payment/createcustomer`, {
-        firstName: customer.firstName,
-        lastName: customer.lastName,
-        email: customer.email,
-        phone: customer.phone,
+      const { personalInfo } = getState().payment;
+
+      const response = await axios.post(`${baseUrl}/payment/createcustomer`, {
+        firstName: personalInfo.firstName,
+        lastName: personalInfo.lastName,
+        email: personalInfo.email,
+        phone: personalInfo.phone,
       });
-      return data;
+      return response.data;
+
     } catch (error) {
-      throw error.message;
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const savePaymentInfo = createAsyncThunk(
-  'payment/savePayment', async (paymentInfo) => {
+  'payment/savePayment', async (customerId, { getState, rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${baseUrl}/payment/savepayment`, {
-        customerId: paymentInfo.customerId,
-        paymentMethodId: paymentInfo.paymentMethodId,
-        billingInfo: paymentInfo.billingInfo
-      });
-      return data;
-    } catch (error) {
-      throw error.message;
-    }
-  });
+      const { personalInfo, paymentType, paymentIntentId
+      } = getState().payment;
+      const { listingInfo } = getState().listing;
+      const { bookingPrice } = getState().booking;
 
-
-export const confirmPayment = createAsyncThunk(
-  'payment/confirm', async (paymentIntent) => {
-    try {
-      const { data } = await axios.post(`${baseUrl}/payment/confirm`, {
-        clientSecret: paymentIntent.clientSecret,
+      const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, {
+        customerId: customerId,
+        guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
+        guestEmail: personalInfo.email,
+        guestPhone: personalInfo.phone,
+        listingId: listingInfo.id,
+        checkInDate: formateDate(new Date(bookingCheckIn)),
+        checkOutDate: formateDate(new Date(bookingCheckOut)),
+        guests: Number(bookingGuest),
+        paymentIntentId: paymentIntentId,
+        paymentMethod: paymentType,
+        amount: (Number(bookingPrice.totalPrice) * 100),
+        currency: "usd",
+        paymentStatus: "initiated",
       });
-      return data;
+
+      return response.data;
+
     } catch (error) {
-      throw error.message;
+      return rejectWithValue(error.response?.data || error.message);
     }
-  }
-);
+});
 
 
 const paymentSlice = createSlice({
@@ -87,8 +107,12 @@ const paymentSlice = createSlice({
     loading: false,
     error: null,
     clientSecret: "",
-
+    paymentIntentId: "",
+    stripPUblishAbleKey: '',
+    isFetchingStripKey: false,
+    confirmPayment: false,
     paymentType: 'card',
+    customerId: '',
 
     //personalInfo
     personalInfo: {
@@ -120,8 +144,6 @@ const paymentSlice = createSlice({
 
       const { inputTitle, name, value } = action.payload;
 
-      console.log(inputTitle, name, value);
-
       if (inputTitle == 'personalInfo') {
         state.personalInfo[name] = value;
       }
@@ -139,6 +161,28 @@ const paymentSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+
+    //fetch strip loading key
+
+    builder
+      .addCase(fetchStripPromiseKey.pending, (state) => {
+        state.loading = true;
+        state.isFetchingStripKey = true;
+        state.error = null;
+      })
+      .addCase(fetchStripPromiseKey.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isFetchingStripKey = false;
+        state.stripPUblishAbleKey = action.payload.publishableKey;
+      })
+      .addCase(fetchStripPromiseKey.rejected, (state, action) => {
+        state.loading = false;
+        state.isFetchingStripKey = false;
+        state.error = action.error.message;
+      });
+
+
+    //create payment intent
     builder
       .addCase(createPaymentIntent.pending, (state) => {
         state.loading = true;
@@ -146,13 +190,47 @@ const paymentSlice = createSlice({
       })
       .addCase(createPaymentIntent.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('payment intent', action.payload);
-        state.clientSecret = action.payload;
+        state.clientSecret = action.payload.clientSecret;
+        state.paymentIntentId = action.payload.paymentIntentId;
       })
       .addCase(createPaymentIntent.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //create customer
+    builder
+      .addCase(createCustomer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.customerId = '';
+        state.confirmPayment = false;
+      })
+      .addCase(createCustomer.fulfilled, (state, action) => {
+        const { customerId } = action.payload;
+        state.loading = false;
+        state.customerId = customerId;
+      })
+      .addCase(createCustomer.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
+
+    //save payment info
+    builder
+      .addCase(savePaymentInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(savePaymentInfo.fulfilled, (state) => {
+        state.loading = false;
+        state.confirmPayment = true;
+      })
+      .addCase(savePaymentInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
   }
 });
 

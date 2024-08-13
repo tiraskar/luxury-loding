@@ -2,12 +2,12 @@ import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { fetchListingInfo } from "../../redux/slices/listingSlice";
-import { calculateBookingPrice } from "../../redux/slices/bookingSlice";
+// import { useNavigate, useParams } from "react-router-dom";
+// import { useEffect } from "react";
+// import { fetchListingInfo } from "../../redux/slices/listingSlice";
+// import { calculateBookingPrice } from "../../redux/slices/bookingSlice";
 
 const Booking = () => {
 
@@ -16,32 +16,31 @@ const Booking = () => {
 
   const images = listingInfo?.images || [];
 
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const { id } = useParams();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (id && bookingCheckIn && bookingCheckOut && guestNumber) {
+  //   if (id) {
+  //     dispatch(fetchListingInfo(id));
 
-      dispatch(fetchListingInfo(id));
-      dispatch(calculateBookingPrice({
-        listingId: Number(id),
-      }));
-    }
-  }, [id]);
+  //     if (bookingCheckIn && bookingCheckOut && guestNumber) {
+  //       dispatch(calculateBookingPrice({
+  //         listingId: Number(id),
+  //       }));
+  //     }
+  //   }
+  // }, []);
 
-  if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
-    navigate(`/listings/${id}`);
-    return null;
-  }
-
-
-
+  // if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
+  //   navigate(`/listings/${id}`);
+  //   return null;
+  // }
 
   return (
     <div className="space-y-8">

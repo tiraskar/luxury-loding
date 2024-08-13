@@ -4,10 +4,9 @@ import { PiDog } from "react-icons/pi";
 import { TbSmoking } from "react-icons/tb";
 import { LuMusic4 } from "react-icons/lu";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Booking, Wrapper } from "../components";
-import { useDispatch, useSelector } from "react-redux";
+import { Wrapper } from "../components";
+import { useDispatch } from "react-redux";
 import { checkListingBookingAvailability } from "../redux/slices/bookingSlice";
-import LoaderScreen from "../components/ui/LoaderScreen";
 import AlertDialog from "../components/ui/AlertDialog";
 
 
@@ -17,15 +16,13 @@ const BookingListing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading } = useSelector(state => state.booking)
-
   const checkListingAvailableBeforeBooking = () => {
     const bookingAvailable = dispatch(checkListingBookingAvailability({
       listingId: Number(id),
     }));
 
     if (bookingAvailable) {
-      navigate(`/listing/${id}/booking-confirm`);
+      navigate(`/listing/${id}/booking/payment`);
     } else {
       return <AlertDialog
         warningMessage="Sorry, this listing is not available for booking now."
@@ -39,13 +36,10 @@ const BookingListing = () => {
 
 
   return (
-    <div className="flex flex-wrap md:grid md:grid-cols-9 min-h-screen">
-      {loading && <LoaderScreen />}
       <div className="col-span-5 font-inter tracking-[-1%]">
         <Wrapper>
           <div className=" flex flex-col mx-auto  max-w-[652px]">
-            <div className="flex flex-col justify-start lg:-ml-4">
-
+          <div className="flex flex-col justify-start lg:-ml-4">
               <div className="space-y-16">
                 <p className="flex items-center text-xs text-[#A1A196] gap-1">
                   Home <GoDotFill /> Listing <GoDotFill className="text-black" />
@@ -54,7 +48,7 @@ const BookingListing = () => {
 
                 <div className="flex flex-col sm:flex-row justify-between  xl:min-w-[652px] gap-4">
                   <div className="flex items-center ">
-                    <MdKeyboardArrowLeft size={24} />
+                  <MdKeyboardArrowLeft size={24} onClick={() => navigate(-1)} className="cursor-pointer" />
                     <h1 className="text-xl font-onest tracking-tight font-semibold">
                       Things to remember
                     </h1>
@@ -158,21 +152,9 @@ const BookingListing = () => {
             </div>
           </div>
         </Wrapper>
-      </div>
-      <div className="col-span-4 bg-[#F9F9F9] w-full ">
-        <Wrapper>
-          <div className="flex mx-auto max-w-[541px] py-20">
-            <Booking />
-          </div>
-          <div className="block md:hidden pt-10 pb-10 md:pt-64">
-            <Link to={`/listing/${id}/booking-confirm`} className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
-              Agree and continue
-            </Link>
-          </div>
-        </Wrapper>
-      </div>
-
     </div>
+
+    // </div>
   );
 };
 

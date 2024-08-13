@@ -9,3 +9,4 @@ export { default as SingleBlogGuide } from "./SingleBlogGuide.jsx";
 export { default as BookListing } from "./BookingListing.jsx";
 export { default as BookingConfirmation } from "./BookingConfirmation.jsx";
 export { default as Success } from "./Success.jsx";
+export { default as BookingPayment } from "./BookingPayment.jsx";

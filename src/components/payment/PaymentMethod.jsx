@@ -3,24 +3,23 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { baseUrl } from "../../config/baseurl";
 import { useEffect } from "react";
 import BillingAddress from "./BillingAddress";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { createCustomer, handlePaymentType, savePaymentInfo } from "../../redux/slices/paymentSlice";
+import PersonalInfoForm from "./PersonalInfoForm";
 
-const PaymentMethod = ({
-  clientSecret,
-  selectedPaymentMethod,
-  setSelectedPaymentMethod,
-  setIsLoading,
-  paymentIntentId,
-}) => {
+const PaymentMethod = () => {
   const stripe = useStripe();
   const elements = useElements();
 
+  const dispatch = useDispatch();
+
+  const { billingInfo, personalInfo, customerId, clientSecret, confirmPayment, paymentType } = useSelector(state => state.payment);
+
   const handlePaymentElementChange = (event) => {
-    setSelectedPaymentMethod(event.value.type);
+    dispatch(handlePaymentType(event.value.type));
   };
 
   useEffect(() => {
@@ -32,43 +31,16 @@ const PaymentMethod = ({
     }
   }, [elements]);
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
+  const paymentConfirmation = async () => {
 
     if (!stripe || !elements || !clientSecret) {
-      setIsLoading(false);
       return;
     }
 
     if (!elements.getElement(PaymentElement)) {
-      setIsLoading(false);
       toast.error("Please select a payment method");
       return;
     }
-
-    //save the personal info
-    const response = await fetch(`${baseUrl}/payment/createcustomer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName: personalInfo.firstName,
-        lastName: personalInfo.lastName,
-        email: personalInfo.email,
-        phone: personalInfo.phone,
-      }),
-    });
-
-    if (response.status !== 201) {
-      setIsLoading(false);
-      throw new Error("Failed to create customer");
-    }
-
-    const { customerId } = await response.json();
-
-    // Save the payment info in the server
-    await savePaymentInfo(customerId);
 
     let result;
     try {
@@ -77,66 +49,77 @@ const PaymentMethod = ({
         confirmParams: {
           return_url: `http://localhost:5173/success`,
           shipping: {
-            name: `${billingAddress.firstName} ${billingAddress.lastName}`,
+            name: `${billingInfo.firstName} ${billingInfo.lastName}`,
             address: {
-              line1: billingAddress.line1,
-              line2: billingAddress.line2,
-              city: billingAddress.city,
-              state: billingAddress.state,
-              postal_code: billingAddress.postalCode,
-              country: billingAddress.country,
+              line1: billingInfo.line1,
+              line2: billingInfo.line2,
+              city: billingInfo.city,
+              state: billingInfo.state,
+              postal_code: billingInfo.postalCode,
+              country: billingInfo.country,
             },
           },
         },
       });
     } catch (error) {
-      setIsLoading(false);
       toast.error("Payment failed!!!", { duration: 2000 });
-      console.error(error.message);
       return;
     }
 
     if (result.error) {
-      setIsLoading(false);
       toast.error("Payment failed!!!", { duration: 2000 });
-      console.error(result.error.message);
       return;
     }
 
-    setIsLoading(false);
     console.log("Payment successful!");
     toast.success("Payment successful!!!", { duration: 2000 });
   };
 
-  const savePaymentInfo = async (customerId) => {
-    const requestObj = {
-      guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
-      guestEmail: personalInfo.email,
-      guestPhone: personalInfo.phone,
-      listingId: 169541,
-      checkInDate: "2024-08-04",
-      checkOutDate: "2024-08-05",
-      guests: 2,
-      paymentIntentId: paymentIntentId,
-      customerId,
-      paymentMethod: selectedPaymentMethod,
-      amount: "27000",
-      currency: "usd",
-      paymentStatus: "initiated",
-    };
-    const response = await axios.post(
-      `${baseUrl}/payment/savepaymentinfo`,
-      requestObj
-    );
-    if (response.status !== 201) {
-      console.error(`Failed to save payment info`);
-      toast.error("Failed to save payment info!!!", { duration: 2000 });
+  useEffect(() => {
+    if (confirmPayment) {
+      paymentConfirmation();
     }
-    return response.data;
+  }, [confirmPayment]);
+
+  useEffect(() => {
+    if (customerId !== "") {
+      dispatch(savePaymentInfo(customerId));
+    }
+  }, [customerId]);
+
+
+  const handleSubmitPayment = async () => {
+    toast.dismiss();
+    if (!stripe || !elements || !clientSecret) {
+      toast.error("Payment has not been loaded. Please refresh the page.", {
+        duration: 2000
+      });
+    }
+    if (!personalInfo.firstName) return toast.error("Please provide first name.");
+    if (!personalInfo.lastName) return toast.error("Please provide last name.");
+    if (!personalInfo.email) return toast.error("Please provide email.");
+    if (!personalInfo.phone) return toast.error("Please provide phone number.");
+
+    if (!paymentType) {
+      return toast.error("Please select a payment method.");
+    }
+
+    if (!billingInfo.firstName) return toast.error("Please provide billing first name.");
+    if (!billingInfo.lastName) return toast.error("Please provide billing last name.");
+    if (!billingInfo.city) return toast.error("Please provide city.");
+    if (!billingInfo.state) return toast.error("Please provide state.");
+    if (!billingInfo.line1) return toast.error("Please provide billing address.");
+    if (!billingInfo.postalCode) return toast.error("Please provide postal code.");
+
+    dispatch(createCustomer());
+
   };
 
+
   return (
-    <>
+    <div className="space-y-10">
+      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      <PersonalInfoForm />
       <div className="font-inter text-[#333333] space-y-8">
         <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
         <div className='flex flex-col space-y-2'>
@@ -151,15 +134,15 @@ const PaymentMethod = ({
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <BillingAddress />
 
-      <div className="hidden md:block pt-10 pb-10">
+      <div className="absolute bottom-0 md:relative pt-20 md:pb-10">
         <button
           className="py-3 px-7 bg-[#333333] text-white rounded-[14px] "
-          onClick={() => handleSubmit()}
+          onClick={() => handleSubmitPayment()}
         >
           Confirm and pay
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

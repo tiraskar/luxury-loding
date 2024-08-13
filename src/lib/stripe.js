@@ -1,9 +1,11 @@
+import { loadStripe } from "@stripe/stripe-js";
+
+export const stripePromise = loadStripe('pk_test_51OsSKpGurTGjjGfhdLcO3WBZDR1UkYvvDWBUFFRnqQU2pSAThq4xfLVHLz11h94g2i4jONlHecSXhcxwkbJNz4a300y43aO1nM');
+
 export const appearance = {
   theme: 'flat',
   variables: {
-    // fontFamily: `'Onest', 'sans-serif'`,
     fontLineHeight: '2',
-    // padding: "0px, 0px, 32px, 0px",
     accessibleColorOnColorPrimary: '#222222',
     outline: 'none',
   },
@@ -51,7 +53,7 @@ export const appearance = {
     '.Label': {
       fontWeight: '400',
       fontSize: '14px',
-      paddingBottom: '8px'
+      paddingBottom: '8px',
     }
   }
 };

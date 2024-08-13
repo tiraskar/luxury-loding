@@ -31,7 +31,6 @@ const FilterableSearchListing = () => {
 
   };
 
-  console.log('min date checkout', minDateCheckOut);
 
 
   const handleSearch = (e) => {
@@ -58,7 +57,7 @@ const FilterableSearchListing = () => {
           <span className="text-black">Listing</span>
         </p>
 
-        <form onSubmit={() => console.log('listing form submitted')}
+        <form
           className=" grid grid-cols-2  sm:flex flex-wrap justify-between items-center gap-3 bg-[#F9F9F9] p-4 rounded-2xl font-onest tracking-[-1%] ">
 
           <div className="flex flex-col w-full sm:max-w-[150px] md:max-w-[153px] text-sm gap-2">

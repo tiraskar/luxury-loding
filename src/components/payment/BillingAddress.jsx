@@ -1,15 +1,10 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
-// import { useEffect, useState } from "react";
 
 const BillingAddress = () => {
-  // const [countryOptions, setCountryOptions] = useState();
   const { billingInfo } = useSelector(state => state.payment);
   const { countryList } = useSelector(state => state.listing);
-
-  console.log('country lsit', countryList);
-
 
   const dispatch = useDispatch()
 
@@ -17,16 +12,6 @@ const BillingAddress = () => {
     const inputTitle = 'billingInfo';
     dispatch(handlePaymentInput({ inputTitle, name, value }))
   }
-
-  // useEffect(() => {
-  //   const countryListArray = Object.entries(countryList).map(([code, name]) => ({
-  //     code,
-  //     name
-  //   }));
-  //   console.log('country list array', countryListArray);
-
-  //   setCountryOptions(countryListArray);
-  // }, [countryList])
 
   return (
 
@@ -41,6 +26,7 @@ const BillingAddress = () => {
             onChange={(e) => handleChange("firstName", e.target.value)}
             type="text"
             placeholder="Enter first name"
+            required
             className="default-input" />
         </div>
 
@@ -62,6 +48,7 @@ const BillingAddress = () => {
             onChange={(e) => handleChange("country", e.target.value)}
             id="country-region"
             className="block w-full default-input pr-10 appearance-none"
+            required
           >
             {countryList?.map((data) => {
               return (
@@ -86,7 +73,9 @@ const BillingAddress = () => {
             onChange={(e) => handleChange("city", e.target.value)}
             type="text"
             placeholder="Enter city"
-            className="default-input" />
+            className="default-input"
+            required
+          />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -97,7 +86,9 @@ const BillingAddress = () => {
             onChange={(e) => handleChange("state", e.target.value)}
             type="text"
             placeholder="Enter state"
-            className="default-input" />
+            className="default-input"
+            required
+          />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -108,7 +99,9 @@ const BillingAddress = () => {
             onChange={(e) => handleChange("line1", e.target.value)}
             type="text"
             placeholder="Enter primary address line"
-            className="default-input" />
+            className="default-input"
+            required
+          />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -128,9 +121,11 @@ const BillingAddress = () => {
             name="postalCode"
             value={billingInfo.postalCode}
             onChange={(e) => handleChange("postalCode", e.target.value)}
-            type="text"
+            type="number"
             placeholder="Enter postal code"
-            className="default-input" />
+            className="default-input"
+            required
+          />
         </div>
       </div>
     </div>
