@@ -1,20 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaAsterisk } from "react-icons/fa";
 import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
 import { baseUrl } from "../../config/baseurl";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { notifyToastMessage } from "../ui/CustomToast";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import AlertDialog from "../ui/AlertDialog";
+
+const schema = yup.object({
+  fullName: yup.string().required('Full name is required'),
+  email: yup.string().email('Invalid email format').required('Email is required'),
+  phoneNumber: yup.number().required(),
+  description: yup.string().min(10, 'Description must be at least 10 characters').required('Description is required'),
+  countryCode: yup.string().required().default('us'),
+  countryDialCode: yup.string().required()
+}).required();
+
 
 const ContactForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [formValues, setFormValues] = useState({
-    fullname: '',
-    email: '',
-    phoneNumber: '',
-    description: '',
-    countryCode: "US",
-    countryDialCode: `+${getCountryCallingCode("US")}`
+  const [successMessage, setSuccessMessage] = useState(false);
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
   });
 
   const countries = getCountries();
@@ -24,50 +34,36 @@ const ContactForm = () => {
     name: country
   }));
 
-  const handleInputChange = (name, value) => {
-    setFormValues(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
   const handleCountryChange = (e) => {
     const selectedCountryCode = e.target.value;
     const selectedDialCode = options.find(option => option.code === selectedCountryCode)?.dialCode || '';
 
-    setFormValues(prev => ({
-      ...prev,
-      countryCode: selectedCountryCode,
-      countryDialCode: selectedDialCode,
-      phoneNumber: prev.phoneNumber.startsWith(prev.countryDialCode)
-        ? prev.phoneNumber.replace(prev.countryDialCode, selectedDialCode)
-        : prev.phoneNumber
-    }));
+    setValue('countryCode', selectedCountryCode);
+    setValue('countryDialCode', selectedDialCode);
   };
 
-  const handleFormSubmit = async (e) => {
+  const onSubmit = async (data) => {
 
-    e.preventDefault();
     setIsLoading(true);
-    const fullPhoneNumber = `${formValues.countryDialCode} ${formValues.phoneNumber}`;
+    const fullPhoneNumber = `${data.countryDialCode} ${data.phoneNumber}`;
     try {
       const response = await axios.post(`${baseUrl}/contact`, {
-        fullname: formValues.fullname,
-        email: formValues.email,
-        description: formValues.description,
+        fullname: data.fullName,
+        email: data.email,
+        description: data.description,
         phoneNumber: fullPhoneNumber
       });
 
       if (response.status === 200) {
-        setFormValues({
-          fullname: '',
-          email: '',
-          phoneNumber: '',
-          description: '',
-          countryCode: "US",
-          countryDialCode: `+${getCountryCallingCode("US")}`
-        });
-        return notifyToastMessage("Message sent successfully!");
+
+        setValue('fullName', '');
+        setValue('email', '');
+        setValue('phoneNumber', '');
+        setValue('description', '');
+        setValue('countryCode', 'US');
+        setValue('countryDialCode', `+${getCountryCallingCode("US")}`);
+
+        setSuccessMessage(true)
       }
 
     } catch (error) {
@@ -77,42 +73,62 @@ const ContactForm = () => {
     }
   };
 
+  useEffect(() => {
+    setValue('countryCode', 'US');
+  }, []);
+
+  const handleCloseAlert = () => {
+    setSuccessMessage(false);
+  }
+
   return (
     <div className="flex justify-center lg:justify-end">
+      {successMessage && <AlertDialog
+        onSubmit={handleCloseAlert}
+        submitText="Close"
+        warningMessage=''
+        message={`We’ve received your message. Thank you for reaching out to us! Our team will get back to you soon.`}
+        success={true}
+      />}
       <form
-        onSubmit={handleFormSubmit}
-        className="bg-white flex-col px-3 py-6 sm:py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] ">
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white flex-col px-3 py-6 sm:py-8 sm:px-8 font-inter text-sm text-black space-y-2 rounded-2xl sm:rounded-3xl tracking-normal min-w-full lg:min-w-[450px] xl:min-w-[495px] "
+      >
         <div className="flex flex-col gap-y-2">
-          <label  className="flex">Full Name
-            <FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
+          <label className="flex">
+            Full Name
+            <FaAsterisk color="#DE2424" size={8} className="mt-1" />
+          </label>
           <input
-            name="fullname"
+            {...register("fullName")}
             type="text"
             placeholder="Enter full name"
-            value={formValues.fullname}
-            onChange={(e) => handleInputChange('fullname', e.target.value)}
-            required
-            className="default-input" />
+            className={`default-input ${errors.fullName ? 'border-[#FF0000]' : ''}`}
+          />
+
         </div>
         <div className="flex flex-col gap-y-2">
-          <label  className="flex">Your email<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
+          <label className="flex">
+            Your email
+            <FaAsterisk color="#DE2424" size={8} className="mt-1" />
+          </label>
           <input
-            name="email"
+            {...register("email")}
             type="email"
             placeholder="Enter email"
-            value={formValues.email}
-            required
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            className="default-input" />
+            className={`default-input ${errors.email ? 'border-[#FF0000]' : ''}`}
+          />
+
         </div>
         <div className="flex flex-col gap-y-2">
-          <label  className="flex">Phone number<FaAsterisk color="#DE2424" size={8} className="mt-1" /></label>
-          <div className="flex flex-row w-full border-2 border-[#F5F5F5] rounded-xl bg-white focus-within:outline">
+          <label className="flex">
+            Phone number
+            <FaAsterisk color="#DE2424" size={8} className="mt-1" />
+          </label>
+          <div className="flex flex-row w-full border-[1px]  border-[#D3D3D3] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px]">
             <select
-              name="phone-code"
-              id="phone-code"
-              value={formValues.countryCode}
-              onChange={handleCountryChange}
+              {...register("countryCode")}
+              onChange={(e) => handleCountryChange(e)}
               className="bg-white outline-none pl-5 pr-2 appearance-none border-r-2 border-[#F5F5F5] rounded-l-xl"
             >
               {options.map(({ code, dialCode }) => (
@@ -122,34 +138,31 @@ const ContactForm = () => {
               ))}
             </select>
             <input
-              name="phone-number"
+              {...register("phoneNumber")}
               type="text"
               inputMode="numeric"
               pattern="\d*"
               placeholder="Enter phone number"
-              value={formValues.phoneNumber}
-              required
-              onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-              className="pl-2 pr-5 py-4 w-full outline-none rounded-xl"
+              className={`pl-2 pr-5 py-4 w-full outline-none rounded-xl ${errors.phoneNumber ? 'border-[#FF0000]' : ''}`}
             />
+
           </div>
         </div>
         <div className="py-1">
           <textarea
-            name="description"
+            {...register("description")}
             rows={6}
             placeholder="How can we help you?"
-            value={formValues.description}
-            required
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            className="default-input w-full"
+            className={`default-input w-full ${errors.description ? 'border-[#FF0000]' : ''}`}
           />
+
         </div>
         <button
           type="submit"
           className="flex justify-center items-center text-white bg-black w-full text-center py-5 font-inter font-semibold text-[1rem] rounded-[1rem]"
+          disabled={isLoading}
         >
-          {isLoading ? `Submitting` : "Submit"} {isLoading && <p className="animate-bounce">...</p>}
+          {isLoading ? `Submitting` : "Submit"} {isLoading && <p className="animate-bounce">&nbsp;...</p>}
         </button>
         <div className="flex justify-center">
           <p className="text-xs text-[#A1A196] mt-4 text-center leading-6 max-w-[335px]">

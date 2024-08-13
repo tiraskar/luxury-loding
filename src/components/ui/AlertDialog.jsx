@@ -1,7 +1,9 @@
 
 import PropTypes from "prop-types";
+import { CiWarning } from "react-icons/ci";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
-const AlertDialog = ({ onCancel, onSubmit, cancelText = 'Cancel', submitText = "Ok", warningMessage, message, isCancel }) => {
+const AlertDialog = ({ onCancel, onSubmit, cancelText = 'Cancel', submitText = "Ok", warningMessage, message, isCancel, success = false }) => {
 
   return (
     <div className="relative z-40" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -16,9 +18,13 @@ const AlertDialog = ({ onCancel, onSubmit, cancelText = 'Cancel', submitText = "
               <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
 
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                  {/* <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                  </svg>
+                  </svg> */}
+                  {success ? <IoIosInformationCircleOutline className="w-6 h-6" /> :
+                    <CiWarning className="w-6 h-6" />
+                  }
+
 
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
@@ -62,6 +68,7 @@ AlertDialog.propTypes = {
   warningMessage: PropTypes.string,
   message: PropTypes.string.isRequired,
   isCancel: PropTypes.bool,
+  success: PropTypes.bool,
 };
 
 export default AlertDialog;
