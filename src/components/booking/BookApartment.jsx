@@ -111,8 +111,8 @@ const BookApartment = ({ listingInfo }) => {
                 step={1}
                 value={checkBookingParams.guests}
                 onChange={(e) => {
-                  if (e.target.value > listingInfo.guestsIncluded) {
-                    handleInputChange('guests', listingInfo.guestsIncluded);
+                  if (e.target.value > 50) {
+                    handleInputChange('guests', 50);
                   } else {
                     handleInputChange('guests', e.target.value);
                   }
