@@ -59,8 +59,9 @@ const BookApartment = ({ listingInfo }) => {
 
         {bookingNotAvailableAlertDialog && <AlertDialog
           onSubmit={handleCloseAlert}
-          warningMessage='Date not available for booking'
-          message={`Booking not available between check in : ${formateDate(checkBookingParams.checkIn)} and ${formateDate(checkBookingParams.checkOut)} checkout. Check for other dates. Thank you`}
+          warningMessage='Dates Unavailable for Booking'
+          message={`The dates you've selected, from ${formateDate(checkBookingParams.checkIn)} to ${formateDate(checkBookingParams.checkOut)}, are not available for booking at this time. 
+          We invite you to choose alternative dates. Thank you for your understanding.`}
         />}
 
         <div className="space-y-2">
