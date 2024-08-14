@@ -34,12 +34,12 @@ const SearchListingForm = () => {
   return (
     <div
       style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
-      className="flex flex-col font-onest lg:flex-row lg:justify-between items-center bg-white lg:h-[73px] rounded-2xl -mb-[20%] sm:-mb-[5rem] md:-mb-[3rem] lg:-mb-[2rem] shadow-lg max-w-[832px] mx-auto px-4 py-2 md:py-3">
+      className="flex flex-col font-onest lg:flex-row lg:justify-between items-center bg-white rounded-[24px]  shadow-lg max-w-[832px] mx-auto md:pr-4 md:pl-1 h-[72px] ">
       
-      <form className="flex flex-col md:flex-row lg:items-center lg:gap-4 w-full">
-        <div className="flex items-center">
-          <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label className="font-semibold">
+      <form className="flex flex-col md:flex-row  lg:gap-4 w-full ">
+        <div className="flex items-center overflow-hidden pt-3">
+          <div className="flex flex-col lg:mb-0 text-sm text-start h-[69px] mx-7 my-3 space-y-1 w-[97.3px]">
+            <label className="font-semibold h-[18px]">
               Where to go?
             </label>
             <input
@@ -47,42 +47,57 @@ const SearchListingForm = () => {
               placeholder="Anywhere"
               value={searchListingParams.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
-              className="outline-none rounded-md py-1 w-full"
+              className="outline-none rounded-md font-inter py-1 w-full text-[1rem] tracking-[-0.16px font-inter]"
             />
           </div>
-          <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block my-4"></div>
-          <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label className="font-semibold">
+          <div className="h-10 w-px mx-4 bg-textDark bg-opacity-10 hidden lg:block "></div>
+          <div className="flex flex-col lg:mb-0 text-sm text-start h-[69px] mx-7 my-3 space-y-1 w-[97.3px]">
+            <label className="font-semibold h-[18px]">
               Check in
             </label>
             <DatePicker
               selected={searchListingParams.checkIn}
               onChange={(date) => handleInputChange('checkIn', date)}
-              className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="MM.DD.YYYY"
               minDate={minDateCheckIn}
+              className="outline-none rounded-md  py-1  text-[1rem] tracking-[-0.16px] font-inter w-[101px]"
+            />
+          </div>
+
+          <div className="h-10 w-px mx-4 bg-textDark bg-opacity-10 hidden lg:block "></div>
+          <div className="flex flex-col lg:mb-0 text-sm text-start h-[69px] mx-7 my-3 space-y-1 w-[97.3px]">
+            <label className="font-semibold h-[18px]">
+              Check out
+            </label>
+            <DatePicker
+              selected={searchListingParams.checkOut}
+              onChange={(date) => handleInputChange('checkOut', date)}
+              dateFormat="dd.MM.YYYY"
+              placeholderText="MM.DD.YYYY"
+              minDate={minDateCheckOut}
+              className="outline-none rounded-md  py-1  text-[1rem] tracking-[-0.16px] font-inter w-[101px]"
             />
           </div>
         </div>
 
-        <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block  my-4"></div>
+        {/* <div className="h-10 w-px mx-4 bg-textDark bg-opacity-10 hidden lg:block my-4"></div>
         <div className="grid grid-cols-2 sm:flex sm:flex-row">
-          <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label className="font-semibold">
+          <div className="flex flex-col lg:mb-0 lg:max-w-[153px] text-sm text-start h-[69px] px-7 py-3 space-y-1  w-[97.3px]">
+            <label className="font-semibold h-[18px]">
               Check Out
             </label>
             <DatePicker
               selected={searchListingParams.checkOut}
               onChange={(date) => handleInputChange('checkOut', date)}
-              className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
               dateFormat="dd.MM.YYYY"
               placeholderText="DD.MM.YYYY"
               minDate={minDateCheckOut}
+              className="outline-none rounded-md  py-1  text-[1rem] tracking-[-0.16px] font-inter w-[101px] "
             />
           </div>
-          <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
-            <label className="block font-semibold">
+          <div className="flex flex-col lg:mb-0 lg:max-w-[153px] text-sm text-start h-[69px] px-7 py-3 space-y-1">
+            <label className="block font-semibold h-[18px]">
               Guest
             </label>
             <input
@@ -95,20 +110,37 @@ const SearchListingForm = () => {
               value={searchListingParams.guests}
               onChange={(e) => handleInputChange('guests', e.target.value)}
               placeholder="Any"
-              className="outline-none rounded-md py-1 w-full box-border overflow-hidden"
+              className="outline-none rounded-md font-inter py-1 w-full text-[1rem] tracking-[-0.16px font-inter]"
             />
           </div>
+        </div> */}
+        <div className="flex flex-col lg:mb-0 text-sm text-start h-[69px] mx-7 my-3 space-y-1 w-[97.3px] pt-3">
+          <label className="font-semibold h-[18px]">
+            Guests
+          </label>
+          <input
+            id="guest"
+            type="number"
+            inputMode="numeric"
+            pattern="\d*"
+            max={50}
+            min={0}
+            value={searchListingParams.guests}
+            onChange={(e) => handleInputChange('guests', e.target.value)}
+            placeholder="Any"
+            className="outline-none rounded-md font-inter py-1 w-full text-[1rem] tracking-[-0.16px font-inter]"
+          />
         </div>
         <button
           onClick={(e) => handleSearch(e)}
-          className="flex md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-4 h-fit lg:mt-0 lg:w-auto w-full  justify-center items-center">
-          Search
+          className="flex md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-4 h-fit lg:mt-0 lg:w-auto w-full  justify-center items-center mr-4">
+          {isSearchListing ? <LoadingSpinner /> : "Search"}
         </button>
       </form>
 
       <button
         onClick={(e) => handleSearch(e)}
-        className=" hidden md:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 h-fit  lg:mt-0 lg:w-auto w-full justify-center items-center">
+        className=" hidden md:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 lg:w-auto w-full justify-center items-center h-[43px]">
         {isSearchListing ? <LoadingSpinner /> : "Search"}
       </button>
     </div>

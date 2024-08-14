@@ -18,13 +18,13 @@ export const syncListing = createAsyncThunk(
 
 export const fetchListingList = createAsyncThunk(
   'listing/list',
-  async (listing, { getState }) => {
+  async (listing, { getState, rejectWithValue }) => {
     try {
       const { listingLimit, listingPage, listingOrder } = getState().listing;
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage}&priceOrder=${listingOrder}`);
-      return data;
+      const response = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage}&priceOrder=${listingOrder}`);
+      return response.data;
     } catch (error) {
-      return Promise.reject(error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -47,14 +47,23 @@ export const fetchAvailableListing = createAsyncThunk(
   async (listing, { getState }) => {
     try {
       const { listingOrder, searchListingParams } = getState().listing
-      const query = new URLSearchParams({
+
+      const searchData = {
         location: searchListingParams.location,
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
-        priceOrder: listingOrder || ""
-      }).toString();
-      const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
+        priceOrder: listingOrder || "",
+        bedrooms: searchListingParams.bedrooms || "",
+        roomType: searchListingParams.roomType || "",
+        minPrice: searchListingParams.minPrice || "",
+        maxPrice: searchListingParams.maxPrice || "",
+        amenities: searchListingParams.amenities || ""
+      };
+      const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
+        ...searchData
+      });
+
       return data;
     } catch (error) {
       return Promise.reject(error.message);
@@ -89,12 +98,12 @@ export const fetchOtherListings = createAsyncThunk(
 
 export const fetchListingTotalCount = createAsyncThunk(
   'listing/count',
-  async () => {
+  async (listing, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${baseUrl}/listing/count`);
       return data;
     } catch (error) {
-      return Promise.reject(error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -103,16 +112,24 @@ export const searchListing = createAsyncThunk(
   'listing/search',
   async (listing, { getState }) => {
     try {
-      const { searchListingParams } = getState().listing
-      const query = new URLSearchParams({
+      const { listingOrder, searchListingParams } = getState().listing;
+
+      const searchData = {
         location: searchListingParams.location,
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
-        priceOrder: ""
-      }).toString();
+        priceOrder: listingOrder || "",
+        bedrooms: searchListingParams.bedrooms || "",
+        roomType: searchListingParams.roomType || "",
+        minPrice: searchListingParams.minPrice || "",
+        maxPrice: searchListingParams.maxPrice || "",
+        amenities: searchListingParams.amenities || ""
+      };
+      const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
+        ...searchData
+      });
 
-      const { data } = await axios.get(`${baseUrl}/listing/getavailablelistings?${query}`);
       return data;
     } catch (error) {
       return Promise.reject(error.message);
@@ -283,7 +300,7 @@ const listingSlice = createSlice({
       })
       .addCase(fetchListingList.rejected, (state, action) => {
         state.isFetchListing = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
 
     // Fetch Listing Info
@@ -368,7 +385,7 @@ const listingSlice = createSlice({
       })
       .addCase(fetchListingTotalCount.rejected, (state, action) => {
         state.isFetchListingTotalCount = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
 
     //search listings 
