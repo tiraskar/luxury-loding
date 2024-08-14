@@ -17,7 +17,7 @@ const Footer = () => {
   const footerContentMapping = {
     '/': {
       logo: "Luxury Lodging",
-      email: "receipts@luxurylodgingstr.co",
+      email: "receipts@luxurylodgingstr.com",
       contact: "+1 (813) 295-7602"
     },
     '/default': {
@@ -38,11 +38,11 @@ const Footer = () => {
             <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p>
           </div>
           <div className="flex flex-col font-inter text-sm space-y-4">
-            <p className="flex items-center gap-4"><LuPhone size={20} />
-              {footerContent.contact}</p>
-            <p className="flex  items-center gap-4"><FiMail size={20} /> {
+            <a href={`tel:${footerContent.contact}`} className="flex items-center gap-4"><LuPhone size={20} />
+              {footerContent.contact}</a>
+            <a href={`mailto:${footerContent.email}`} className="flex  items-center gap-4"><FiMail size={20} /> {
               footerContent.email
-            }</p>
+            }</a>
           </div>
         </div>
         <div className="flex flex-col space-y-[17px]">
