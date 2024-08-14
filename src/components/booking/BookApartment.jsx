@@ -159,7 +159,8 @@ const BookApartment = ({ listingInfo }) => {
 
       </div>
       <div className="flex justify-center text-center py-4">
-        <p className="text-[#666666]">Any question? Call us <span className="text-black">(877) 640-8777</span></p>
+        <p className="text-[#666666]">Any question? Call us <a href="tel:+8776408777" className="text-black cursor-pointer">(877) 640-8777</a>
+        </p>
       </div>
     </div>
   );
