@@ -32,7 +32,10 @@ const SearchListingForm = () => {
   }
 
   return (
-    <div className="flex flex-col font-onest lg:flex-row lg:justify-between items-center bg-white lg:h-[73px] rounded-2xl -mb-[20%] sm:-mb-[5rem] md:-mb-[3rem] lg:-mb-[2rem] shadow-lg max-w-[832px] mx-auto px-4 py-2 md:py-3">
+    <div
+      style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
+      className="flex flex-col font-onest lg:flex-row lg:justify-between items-center bg-white lg:h-[73px] rounded-2xl -mb-[20%] sm:-mb-[5rem] md:-mb-[3rem] lg:-mb-[2rem] shadow-lg max-w-[832px] mx-auto px-4 py-2 md:py-3">
+      
       <form className="flex flex-col md:flex-row lg:items-center lg:gap-4 w-full">
         <div className="flex items-center">
           <div className="flex flex-col mb-4 lg:mb-0 lg:max-w-[153px] text-sm text-start pl-7">
@@ -98,7 +101,7 @@ const SearchListingForm = () => {
         </div>
         <button
           onClick={(e) => handleSearch(e)}
-          className="flex md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-2 h-fit lg:mt-0 lg:w-auto w-full  justify-center items-center">
+          className="flex md:hidden text-white bg-buttonPrimary rounded-xl px-8 py-4 h-fit lg:mt-0 lg:w-auto w-full  justify-center items-center">
           Search
         </button>
       </form>
