@@ -119,7 +119,7 @@ const Booking = () => {
             <p className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} /> <p>Guests</p>
             </p>
-            <p className="font-semibold pl-6">{guestNumber}{guestNumber.guests > 1 ? "Guests" : "guest"}</p>
+            <p className="font-semibold pl-6">{guestNumber}&nbsp;{guestNumber > 1 ? "Guests" : "Guest"}</p>
           </div>
 
         </div>
@@ -177,7 +177,8 @@ const Booking = () => {
           <p className="text sm font-[#8E8E80]">Total</p>
           <p className="text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
         </div>
-        <p className="text-[#666666] mt-10">Any question? Call us <span className="text-black">(877) 640-8777</span></p>
+        <p className="text-[#666666] mt-10">Any question? Call us
+          <a href="tel:+8776408777" className="text-black cursor-pointer">(877) 640-8777</a></p>
       </div>
     </div>
   );
