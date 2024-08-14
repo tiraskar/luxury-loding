@@ -16,7 +16,7 @@ const Navbar = () => {
       <Link
         key={href}
         to={href}
-        className={`text-[1rem] text-textDark ${pathname === href ? 'opacity-100' : 'opacity-40'}`}
+        className={`text-[#222]  text-base font-onest leading-normal ${pathname === href ? 'opacity-100 font-medium' : 'font-normal opacity-40'}`}
       >
         {label}
       </Link>
@@ -24,10 +24,9 @@ const Navbar = () => {
   });
 
   return (
-    <div className="pb-10">
+    <div className="py-6 space-y-6 ">
       <Wrapper>
-        <div className="flex flex-row justify-between items-center py-6 font-onest">
-
+        <div className="flex flex-row justify-between items-center  font-onest h-[38px]">
           <Logo />
 
           {!isMobileNavOpen &&
@@ -44,13 +43,15 @@ const Navbar = () => {
             {renderNavbar}
           </ul>
 
-          <div className="hidden md:flex space-x-6 items-center">
+          <div className="hidden md:inline-flex items-center gap-[24px]">
             <select
               className="bg-white focus:border-none text-[1rem]">
               <option className="">USD</option>
             </select>
 
-            <button className="px-5 py-3 rounded-xl text-white bg-black ">Book now</button>
+            <button className="flex p-[14px_20px] justify-center items-center gap-[10px] rounded-xl bg-[#222]">
+              <span className="flex items-center text-[#FFF] font-onest text-[14px] font-normal leading-normal h-[10px]">Book now</span>
+            </button>
 
           </div>
         </div>
