@@ -5,6 +5,10 @@ import { FaSquareInstagram, FaYoutube } from "react-icons/fa6";
 import { FiMail } from "react-icons/fi";
 import { LuPhone } from "react-icons/lu";
 import Wrapper from "./Wrapper";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { emailSubscription, } from "../../redux/slices/contactSlice";
+import { useEffect } from "react";
 
 const Footer = () => {
   const { pathname } = useLocation();
@@ -60,16 +64,7 @@ const Footer = () => {
             <li>Management</li>
           </ul>
         </div>
-        <div className="flex flex-col space-y-[14px]">
-          <h1 className="text-textLight font-inter font-medium">Subscribe</h1>
-          <p className="text-xs">Enter your email to get notified our updates!</p>
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="">
-              <input type="text" className="border-none bg-cardBackgroundLight p-2 rounded-xl" />
-            </div>
-            <button className="px-5 py-2 rounded-xl text-white bg-black h-fit">Send</button>
-          </div>
-        </div>
+        <EmailSubscription />
       </div>
 
       <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
@@ -91,3 +86,43 @@ const Footer = () => {
 };
 
 export default Footer;
+
+const EmailSubscription = () => {
+
+  const { isEmailSent } = useSelector(state => state.contact);
+
+  const dispatch = useDispatch();
+
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      email: ''
+    }
+  });
+
+
+  const onSubmit = (data) => {
+    dispatch(emailSubscription(data.email));
+  };
+
+  useEffect(() => {
+    isEmailSent && setValue('email', '');
+  }, [isEmailSent]);
+
+
+  return (
+    <div className="flex flex-col space-y-[14px]">
+      <h1 className="text-textLight font-inter font-medium">Subscribe</h1>
+      <p className="text-xs">Enter your email to get notified about our updates!</p>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap gap-4 items-center">
+        <div className="">
+          <input
+            {...register('email', { required: 'Email is required' })}
+            type="email"
+            className="default-input bg-cardBackgroundLight p-2"
+          />
+        </div>
+        <button type="submit" className="px-5 py-2 rounded-xl text-white bg-black h-fit">Send</button>
+      </form>
+    </div>
+  );
+};
