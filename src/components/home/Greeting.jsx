@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Wrapper from "../common/Wrapper";
 import { MdArrowOutward } from "react-icons/md";
+import CustomImage from "../ui/CustomImage";
 
 const Greeting = () => {
   return (
@@ -17,7 +18,7 @@ const Greeting = () => {
             <div className="font-normal">Luxurious retreats designed for groups
 
               <div className="">
-                <img src="/images/inclined.png" className=" absolute right-0 top-[50%] hidden lg:block h-[88px] w-[140px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
+                <CustomImage src={`images/inclined.png`} className=" absolute right-0 top-[50%] hidden lg:block h-[88px] w-[140px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
               </div>
             </div>
           </h1>

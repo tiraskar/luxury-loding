@@ -1,15 +1,21 @@
 import Wrapper from "../common/Wrapper";
 import SearchListingForm from "../listing/SearchListingForm";
+import CustomImage from "../ui/CustomImage";
 
 const BannerImage = () => {
   return (
     <div
       className="relative h-[320px] sm:min-h-[400px] md:min-h-[450px] lg:h-full w-full overflow-hidden">
-      <img
-        src="/banner-background.png"
+      <CustomImage
+        src={`banner-background.png`}
         alt="Banner Background"
         className=" w-full h-full rounded-2xl"
       />
+      {/* <img
+        src={`${import.meta.env?.BASE_URL}banner-background.png`}
+        alt="Banner Background"
+        className=" w-full h-full rounded-2xl"
+      /> */}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { GoDotFill } from "react-icons/go";
 import { FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaSquareInstagram } from "react-icons/fa6";
 import { RentalExperience, Wrapper } from "../components";
+import CustomImage from "../components/ui/CustomImage";
 
 
 const SingleBlogGuide = () => {
@@ -21,7 +22,7 @@ const SingleBlogGuide = () => {
             <div className="flex justify-between items-center">
               <div className="flex flex-row items-center gap-3">
                 <div className="w-[42px] h-[42px] rounded-full">
-                  <img src='/images/profile-alex.png' alt="" className="" />
+                  <CustomImage src='images/profile-alex.png' alt="" className="" />
                 </div>
                 <div className="flex flex-col tracking-tight font-inter ">
                   <h1 className="font-medium text-[1rem]">Alex Brown</h1>
@@ -36,7 +37,7 @@ const SingleBlogGuide = () => {
 
             </div>
             <div className="relative h-[320px] sm:min-h-[400px] md:min-h-[450px] lg:h-full w-full rounded-2xl overflow-hidden">
-              <img src="/images/single-blog-main.png" alt="" className="object-cover w-full h-full " />
+              <CustomImage src="images/single-blog-main.png" alt="" className="object-cover w-full h-full " />
             </div>
             <div className="flex justify-center  text-left">
               <div
@@ -57,7 +58,7 @@ const SingleBlogGuide = () => {
                   <strong>Overview:</strong> A well-balanced challenge with winding ridge trails and stunning views of Cathedral Rock. Traverse over large boulders and loose rock. Take a break and sprawl out on one of the many red slick-rocks.
                 </p>
                 <div>
-                  <img src="/images/single-guide-book-one.png" alt="" />
+                  <CustomImage src="images/single-guide-book-one.png" alt="" />
                 </div>
                 <p>
                   <strong>Extended adventure:</strong>
@@ -71,7 +72,7 @@ const SingleBlogGuide = () => {
                   Remember to bring water, sun protection, and suitable hiking gear. As the Scorpion Trail is rugged, wear sturdy shoes. A headlamp or flashlight is vital for early morning or late afternoon excursions.
                 </p>
                 <div>
-                  <img src="/images/single-guide-book-two.png" alt="" />
+                  <CustomImage src="images/single-guide-book-two.png" alt="" />
                 </div>
                 <p>
                   <strong>  Bringing furry friends:</strong> The Pyramid-Scorpion Loop Hike is dog friendly, offering an ideal, crowd free opportunity to hike with your four-legged companion. Ensure that your pup is in good shape for the challenging terrain and bring extra water

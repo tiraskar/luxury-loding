@@ -1,5 +1,6 @@
 import Wrapper from "../common/Wrapper";
 import PropTypes from "prop-types";
+import CustomImage from "../ui/CustomImage";
 
 const SingleOffer = ({ offer, index }) => {
   return (
@@ -15,7 +16,7 @@ const SingleOffer = ({ offer, index }) => {
         <p className="text-[1rem] leading-6 text-[#868686] pr-4">{offer.description}</p>
       </div>
       <div className="flex justify-center md:justify-start ">
-        <img src={offer.image} alt={offer.title} className="w-full max-w-[429px]" />
+        <CustomImage src={offer.image} alt={offer.title} className="w-full max-w-[429px]" />
       </div>
     </div>
   );
@@ -59,17 +60,17 @@ SingleOffer.propTypes = {
 
 const offerData = [
   {
-    image: '/images/local-offer.png',
+    image: 'images/local-offer.png',
     title: 'Local',
     description: `We love connecting guests with our local community. Enjoy local artwork, coffee, and a thoughtfully curated guidebook`,
   },
   {
-    image: '/images/offer-inclusive.png',
+    image: 'images/offer-inclusive.png',
     title: 'All inclusive',
     description: `Our homes are furnished with all the comforts of home. You’ll find a fully equipped kitchen, bed linens, towels, TV, free wifi and more!`,
   },
   {
-    image: '/images/private-offer.png',
+    image: 'images/private-offer.png',
     title: 'Private',
     description: `The best thing about booking a holiday home is the space and flexibility. Enjoy our entire home with family and friends`,
   },

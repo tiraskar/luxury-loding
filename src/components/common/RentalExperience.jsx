@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import CustomImage from "../ui/CustomImage";
 
 const RentalExperience = () => {
   return (
     <div className="flex justify-center relative tracking-tight">
       <div className="relative bg-black bg-opacity-40 2xl:rounded-2xl min-h-[400px]">
-        <img
-          src="/images/rental-experience.png"
+        <CustomImage
+          src={`images/rental-experience.png`}
           alt=""
           className="w-full h-full max-w-[1536px] 2xl:rounded-2xl object-cover"
         />

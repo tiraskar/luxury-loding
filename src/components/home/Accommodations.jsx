@@ -1,3 +1,4 @@
+import CustomImage from "../ui/CustomImage";
 
 
 const Accommodations = () => {
@@ -6,7 +7,10 @@ const Accommodations = () => {
 
       <div className="flex flex-col gap-1 max-w-[1536px] mx-auto justify-center rounded-2xl py-[56px]">
         <div className="relative">
-          <img src="/images/accommodation-one.png" alt="" className="min-h-52" />
+          <CustomImage
+            src="images/accommodation-one.png"
+            alt=""
+            className="min-h-52" />
           <div className="font-onest absolute flex flex-col bg-cardBackgroundDark bottom-4 sm:bottom-8 right-4 md:right-8 gap-y-2 md:gap-y-10 p-4  sm:p-5 rounded-2xl max-w-[280px] md:max-w-[338px] ">
             <h1 className="text-lg sm:text-2xl leading-6 md:leading-9 tracking-tight sm:max-w-[148px]">
               Best price guarantee
@@ -19,7 +23,9 @@ const Accommodations = () => {
 
         <div className="relative grid md:grid-cols-2 gap-1">
           <div className="relative">
-            <img src="/images/accommodation-two.png" alt="" />
+            <CustomImage
+              src="images/accommodation-two.png"
+              alt="" />
 
             <div className="font-onest absolute flex flex-col bg-cardBackgroundDark bottom-4 sm:bottom-8 max-w-[280px] right-6 sm:max-w-full sm:right-8 gap-y-2 sm:gap-y-4 lg:gap-y-10 p-4 sm:p-5 rounded-2xl">
               <h1 className="sm:text-lg lg:text-2xl lg:leading-9 tracking-tight max-w-[256px]">
@@ -32,7 +38,10 @@ const Accommodations = () => {
           </div>
 
           <div className="relative">
-            <img src="/images/accommodation-three.png" alt="" />
+            <CustomImage
+              src="images/accommodation-three.png"
+              alt=""
+            />
             <div className="font-onest absolute flex flex-col bg-cardBackgroundDark bottom-4 sm:bottom-8 max-w-[280px] right-6 sm:max-w-full sm:right-8 gap-y-2 sm:gap-y-4 lg:gap-y-10 p-4 sm:p-5 rounded-2xl">
               <h1 className="sm:text-lg lg:text-2xl lg:leading-9 tracking-tight max-w-[156px]">
                 Personalized service

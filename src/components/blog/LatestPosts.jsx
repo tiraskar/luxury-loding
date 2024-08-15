@@ -3,6 +3,7 @@ import Wrapper from "../common/Wrapper";
 import { MdArrowOutward } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { GrPowerCycle } from "react-icons/gr";
+import CustomImage from "../ui/CustomImage";
 
 
 
@@ -19,7 +20,7 @@ const LatestPosts = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
           {lastestPosts?.map((post, index) => (
             <div key={index} className="flex flex-col gap-7 xl:max-w-[318px]">
-              <img src={post.image} alt={post.title} className="rounded-2xl" />
+              <CustomImage src={post.image} alt={post.title} className="rounded-2xl" />
               <p className="flex items-center text-xs text-[#A1A196] gap-2">
                 Posted: {post.date} <GoDotFill />
                 <span className="text-[#0094FF]">{post.readTime}</span>
@@ -55,56 +56,56 @@ export default LatestPosts;
 
 const lastestPosts = [
   {
-    image: "/images/latest-post-one.png",
+    image: "images/latest-post-one.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 12, 2024",
     readTime: "5 mins read"
   },
   {
-    image: "/images/latest-post-two.png",
+    image: "images/latest-post-two.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 14, 2024",
     readTime: "7 mins read"
   },
   {
-    image: "/images/latest-post-three.png",
+    image: "images/latest-post-three.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 16, 2024",
     readTime: "9 mins read"
   },
   {
-    image: "/images/latest-post-four.png",
+    image: "images/latest-post-four.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 18, 2024",
     readTime: "11 mins read"
   },
   {
-    image: "/images/latest-post-five.png",
+    image: "images/latest-post-five.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 20, 2024",
     readTime: "13 mins read"
   },
   {
-    image: "/images/latest-post-six.png",
+    image: "images/latest-post-six.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 22, 2024",
     readTime: "15 mins read"
   },
   {
-    image: "/images/latest-post-seven.png",
+    image: "images/latest-post-seven.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 24, 2024",
     readTime: "17 mins read"
   },
   {
-    image: "/images/latest-post-eight.png",
+    image: "images/latest-post-eight.png",
     title: "The perfect day in old town Scotsdale: Where to explore, eat and drink",
     description: `Sedona, Arizona, is renowned for its stunning red rock also landscapes and enchanting hiking trails. While many flock to the popular routes, we invite you to discover a hidden gem, the Pyramid-Scorpion Loop Hike.`,
     date: "July 26, 2024",

@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import Wrapper from "./Wrapper";
 import { GoDash } from "react-icons/go";
+import CustomImage from "../ui/CustomImage";
 
 const Testimonial = () => {
 
@@ -21,7 +22,9 @@ const Testimonial = () => {
       ref={(el) => (itemRefs.current[index] = el)}
     >
       <div className="">
-        <img src={image} className="w-full h-auto rounded-xl object-contain" />
+        <CustomImage
+          src={image}
+          className="w-full h-auto rounded-xl object-contain" />
       </div>
 
       <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
@@ -29,7 +32,10 @@ const Testimonial = () => {
 
         <div className="flex flex-row items-center gap-3 mt-4 lg:mt-0">
           <div className="w-[42px] h-[42px] rounded-full">
-            <img src={profile} alt="" className="" />
+            <CustomImage
+              src={profile}
+              alt=""
+              className="" />
           </div>
 
           <div className="flex flex-col tracking-tight font-inter ">
@@ -76,23 +82,23 @@ export default Testimonial;
 const featuredHomesData = [
   {
     quotes: `Brindy and team are absolutely wonderful hosts. The place was nothing short of immaculate and beautifully decorated. They were very responsive and knowledgeable on the area when I asked for some recommendations.`,
-    image: "/images/happy-guest-one.png",
-    profile: '/images/profile-alex.png',
+    image: "images/happy-guest-one.png",
+    profile: 'images/profile-alex.png',
     name: 'Alex Brown',
     position: 'Host & Property Manager',
 
   },
   {
     quotes: `I absolutely adore Brindy and team. The place was nothing short of immaculate and beautifully decorated. They were very responsive and knowledgeable on the area when I asked for some recommendations.`,
-    image: "/images/happy-guest-one.png",
-    profile: '/images/profile-alex.png',
+    image: "images/happy-guest-one.png",
+    profile: 'images/profile-alex.png',
     name: 'Emmy Smith',
     position: 'Frontend Designer',
   },
   {
     quotes: `I absolutely adore Brindy and team. The place was nothing short of immaculate and beautifully decorated. They were very responsive and knowledgeable on the area when I asked for some recommendations.`,
-    image: "/images/happy-guest-one.png",
-    profile: '/images/profile-alex.png',
+    image: "images/happy-guest-one.png",
+    profile: 'images/profile-alex.png',
     name: 'John Doe',
     position: 'Doctor',
   },

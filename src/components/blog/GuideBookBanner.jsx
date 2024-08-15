@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { MdArrowOutward } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import Wrapper from "../common/Wrapper";
+import CustomImage from "../ui/CustomImage";
 
 const GuideBookBanner = () => {
 
@@ -31,7 +32,9 @@ const GuideBookBanner = () => {
           <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
             <div className="flex flex-row items-center gap-3 py-4">
               <div className="w-[42px] h-[42px] rounded-full">
-                <img src='/images/profile-alex.png' alt="" className="" />
+                <CustomImage
+                  src='images/profile-alex.png'
+                  alt="" className="" />
               </div>
               <div className="flex flex-col tracking-tight font-inter ">
                 <h1 className="font-medium text-[1rem]">Alex Brown</h1>
@@ -60,7 +63,10 @@ const GuideBookBanner = () => {
           </div>
 
           <div className="">
-            <img src='/images/guide-book-banner.png' className="w-full max-w-[857px] h-full max-h-[597px] rounded-xl object-contain" />
+            <CustomImage
+              src='images/guide-book-banner.png'
+              className="w-full max-w-[857px] h-full max-h-[597px] rounded-xl object-contain"
+            />
           </div>
         </div>
       </div>
