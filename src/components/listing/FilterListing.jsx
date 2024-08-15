@@ -1,36 +1,34 @@
-import { useState } from 'react';
+
 import PropTypes from 'prop-types';
-import { TbBeachOff } from "react-icons/tb";
+// import { TbBeachOff } from "react-icons/tb";
+import { useDispatch, useSelector } from 'react-redux';
+import { setAmenitiesListingParams, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen } from '../../redux/slices/listingSlice';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
-const Popup = ({ isVisible, onClose }) => {
+const Popup = () => {
 
-  const searchValues = {
-    minAmount: 20,
-    maxAmount: 50
-  };
+  const dispatch = useDispatch();
 
-  const [filterSearchValues, setFilterSearchValues] = useState(searchValues);
-
-
-  if (!isVisible) return null;
+  const { searchListingParams, amenitiesList, isFetchingAmenities } = useSelector(state => state.listing)
 
   const handleSearchInputChange = (name, value) => {
-
-    setFilterSearchValues((prev) => (
-      { ...prev, [name]: value })
-    );
+    dispatch(setSearchListingParams({ name, value }))
   };
 
-  return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 text-[#333333] h-auto max-h-[820px]">
+  const handleAmenitiesChange = (id) => {
+    dispatch(setAmenitiesListingParams(id));
+  }
 
-      <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2 ">
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 bg-fixed  flex items-center justify-center z-50 text-[#333333] transition-all delay-500 ease-in-out">
+
+      <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2  lg:w-[430px] h-[820px]">
 
         <div className='flex justify-between items-center px-4 py-2'>
           <h2 className="text-[18px] font-medium font-inter tracking-[-2%]">Filters</h2>
           <button
             className="text-3xl font-normal opacity-50"
-            onClick={onClose}
+            onClick={() => dispatch(toggleFilterOpen())}
           >
             &times;
           </button>
@@ -38,23 +36,41 @@ const Popup = ({ isVisible, onClose }) => {
 
         <div className="min-w-full h-px bg-[#E0E0E0]"></div>
 
-        <div className='font-onest space-y-4 py-4 tracking-[-1%] px-4 lg:max-h-[500px] sm:max-h-[650px] overflow-x-scroll'>
+        <div className='font-onest space-y-4 py-4 tracking-[-1%] px-4 lg:max-h-[700px] sm:max-h-[550px] overflow-x-scroll'>
 
           <div className='space-y-3'>
 
             <h3 className="font-inter tracking-[-2%] font-medium text-[1rem]">Size</h3>
             <div className='flex flex-col space-y-2 '>
               <div className='p-5 space-y-2 bg-[#F9F9F9] rounded-2xl'>
-                <h1 className='font-semibold'>Bedrooms</h1>
-                <p className='font-inter text-[#8A8A8A]'>4 bedrooms</p>
+                <h1 className='font-semibold '>Bedrooms</h1>
+                <input
+                  type='number'
+                  value={searchListingParams.bedrooms}
+                  onChange={(e) => handleSearchInputChange('bedrooms', e.target.value)}
+                  placeholder='4 bedrooms'
+                  className='font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none' />
               </div>
               <div className='p-5 space-y-2 bg-[#F9F9F9] rounded-2xl'>
                 <h1 className='font-semibold'>Rooms</h1>
-                <p className='font-inter text-[#8A8A8A]'>3 rooms</p>
+                <input
+                  type='number'
+                  value={searchListingParams.rooms}
+                  onChange={(e) => handleSearchInputChange('rooms', e.target.value)}
+                  placeholder='3 rooms'
+                  className='font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none' />
               </div>
               <div className='p-5 space-y-2 bg-[#F9F9F9] rounded-2xl'>
                 <h1 className='font-semibold'>Room Type</h1>
-                <p className='font-inter text-[#8A8A8A]'>Room Type</p>
+                <select
+                  value={searchListingParams.roomType}
+                  onChange={(e) => handleSearchInputChange('roomType', e.target.value)}
+                  className='font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none w-full'>
+                  <option value="">Room type</option>
+                  <option value="entire_home">Entire home</option>
+                  <option value="shared_room">Shared room</option>
+                  <option value="private_room">Private room</option>
+                </select>
               </div>
             </div>
           </div>
@@ -95,8 +111,8 @@ const Popup = ({ isVisible, onClose }) => {
                     inputMode="numeric"
                     pattern="\d*"
                     placeholder=""
-                    value={filterSearchValues.minAmount}
-                    onChange={(e) => handleSearchInputChange('minAmount', e.target.value)}
+                    value={searchListingParams.minPrice}
+                    onChange={(e) => handleSearchInputChange('minPrice', e.target.value)}
                     className="outline-none w-8 rounded-xl py-1"
                   />
                   <span>$</span>
@@ -104,7 +120,7 @@ const Popup = ({ isVisible, onClose }) => {
               </div>
 
               <div className='flex flex-row items-center rounded-xl'>
-                <label className="mr-2">Min</label>
+                <label className="mr-2">Max</label>
                 <div className='flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3'>
                   <input
                     name="max-amount"
@@ -112,8 +128,8 @@ const Popup = ({ isVisible, onClose }) => {
                     inputMode="numeric"
                     pattern="\d*"
                     placeholder=""
-                    value={filterSearchValues.maxAmount}
-                    onChange={(e) => handleSearchInputChange('maxAmount', e.target.value)}
+                    value={searchListingParams.maxPrice}
+                    onChange={(e) => handleSearchInputChange('maxPrice', e.target.value)}
                     className="outline-none w-10 rounded-xl py-1"
                   />
                   <span>$</span>
@@ -127,10 +143,26 @@ const Popup = ({ isVisible, onClose }) => {
             <p className="">Amenities</p>
             <div className='space-y-4'>
               <h5 className='font-inter text-[#8A8A8A] text-[13px]'>Entertainment & Games</h5>
-              <div className='p-5 bg-[#F9F9F9] rounded-2xl flex items-center space-x-3'>
-                {/* <div className='border-[2px] h-[22px] w-[22px] rounded-lg z-20 flex justify-center items-center'>
-                  <input type="checkbox" className='w-[20px] h-[20px] z-10 overflow-hidden p-1 bg-black' />
-                </div> */}
+              {isFetchingAmenities ? <LoadingSpinner /> : amenitiesList?.map(({ name, id }) => {
+                return (
+                  <div key={id} className='p-5 bg-[#F9F9F9] rounded-2xl flex items-center space-x-3'>
+                    <input
+                      checked={searchListingParams.amenities.includes(id)}
+                      onClick={() => handleAmenitiesChange(id)}
+                      type="checkbox"
+                      className="w-[22px] h-[22px]"
+                    />
+                    <div className='flex items-center space-x-2'>
+                      <div className='bg-white w-[42px] h-[42px] flex justify-center items-center rounded-2xl font-semibold'>
+                        {/* <TbBeachOff size={22} /> */} {name.charAt(0)}
+                      </div>
+                      <p className='font-inter text-[#8A8A8A]'>{name}</p>
+                    </div>
+                  </div>
+                );
+              })
+              }
+              {/* <div className='p-5 bg-[#F9F9F9] rounded-2xl flex items-center space-x-3'>
                 <input type="checkbox" className="w-[22px] h-[22px] bg-buttonPrimary" />
                 <div className='flex items-center'>
                   <div className='bg-white w-[42px] h-[42px] flex justify-center items-center rounded-2xl'>
@@ -138,7 +170,7 @@ const Popup = ({ isVisible, onClose }) => {
                   </div>
                   <p className='font-inter text-[#8A8A8A]'>Private Pool</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -146,8 +178,15 @@ const Popup = ({ isVisible, onClose }) => {
         <div className='flex justify-between items-center px-2 py-2 font-inter'>
           <p className="text-sm font-medium font-inter tracking-[-2%]">25 listing to show</p>
           <div className='flex space-x-2 '>
-            <button className='px-4 py-2 border-[#D7DBE8] border-[0.6px] rounded-[10px]'>Reset</button>
-            <button className='px-4 py-2 bg-[#333333] text-white rounded-[10px]'>Apply filters</button>
+            <button
+              onClick={() => dispatch(setSearchListingParamsToInitialState())}
+              className='px-4 py-2 border-[#D7DBE8] border-[0.6px] rounded-[10px]'>Reset</button>
+            <button
+              onClick={() => {
+                dispatch(toggleApplyFilter());
+                dispatch(toggleFilterOpen());
+              }}
+              className='px-4 py-2 bg-[#333333] text-white rounded-[10px]'>Apply filters</button>
           </div>
         </div>
       </div>
@@ -161,26 +200,14 @@ Popup.propTypes = {
 };
 
 
-const FilterListing = ({ setIsFilterOpen }) => {
-
-  const [isPopupVisible, setIsPopupVisible] = useState(true);
-  const handleClosePopup = () => {
-    setIsFilterOpen(false);
-    setIsPopupVisible(false);
-  } 
+const FilterListing = () => {
 
   return (
-    <div className="p-4">
+    <div className="">
       <Popup
-        isVisible={isPopupVisible}
-        onClose={handleClosePopup}
       />
     </div>
   );
-};
-
-FilterListing.propTypes = {
-  setIsFilterOpen: PropTypes.func.isRequired,
 };
 
 export default FilterListing;

@@ -46,7 +46,7 @@ export const fetchAvailableListing = createAsyncThunk(
   'listing/searchAvailable',
   async (listing, { getState }) => {
     try {
-      const { listingOrder, searchListingParams } = getState().listing
+      const { listingOrder, searchListingParams, isFilterApply } = getState().listing
 
       const searchData = {
         location: searchListingParams.location,
@@ -54,11 +54,11 @@ export const fetchAvailableListing = createAsyncThunk(
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
         priceOrder: listingOrder || "",
-        bedrooms: searchListingParams.bedrooms || "",
-        roomType: searchListingParams.roomType || "",
-        minPrice: searchListingParams.minPrice || "",
-        maxPrice: searchListingParams.maxPrice || "",
-        amenities: searchListingParams.amenities || ""
+        bedrooms: isFilterApply ? (searchListingParams.bedrooms) : "",
+        roomType: isFilterApply ? (searchListingParams.roomType) : "",
+        minPrice: isFilterApply ? (searchListingParams.minPrice) : "",
+        maxPrice: isFilterApply ? searchListingParams.maxPrice : "",
+        amenities: isFilterApply ? (searchListingParams.amenities.length > 1 ? searchListingParams.amenities : "") : ""
       };
       const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
         ...searchData
@@ -112,19 +112,19 @@ export const searchListing = createAsyncThunk(
   'listing/search',
   async (listing, { getState }) => {
     try {
-      const { listingOrder, searchListingParams } = getState().listing;
+      const { searchListingParams } = getState().listing;
 
       const searchData = {
         location: searchListingParams.location,
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
-        priceOrder: listingOrder || "",
-        bedrooms: searchListingParams.bedrooms || "",
-        roomType: searchListingParams.roomType || "",
-        minPrice: searchListingParams.minPrice || "",
-        maxPrice: searchListingParams.maxPrice || "",
-        amenities: searchListingParams.amenities || ""
+        priceOrder: "",
+        bedrooms: "",
+        roomType: "",
+        minPrice: "",
+        maxPrice: "",
+        amenities: ""
       };
       const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
         ...searchData
@@ -179,6 +179,17 @@ export const fetchCountryList = createAsyncThunk(
   }
 )
 
+export const fetchAmenitiesList = createAsyncThunk(
+  'listing/amenities', async (listing, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${baseUrl}/listing/amenities`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -199,7 +210,9 @@ const listingSlice = createSlice({
     isSearchedListing: false,
     isListingAvailableForBooking: false,
     isReviewLoading: false, 
-
+    isFilterApply: false,
+    isFetchingAmenities: false,
+    isFilterOpen: false,
     //error
     error: null,
 
@@ -211,6 +224,7 @@ const listingSlice = createSlice({
     featuredListings: [], 
     listingReviews: [],
     countryList: [],
+    amenitiesList: [],
 
     //object
     listingInfo: {},
@@ -228,7 +242,14 @@ const listingSlice = createSlice({
       checkIn: '',
       checkOut: '',
       guests: '',
+      bedrooms: '',
+      roomType: '',
+      minPrice: 50,
+      maxPrice: 550,
+      amenities: [],
+      rooms: ''
     },
+
   },
 
   reducers: {
@@ -248,24 +269,50 @@ const listingSlice = createSlice({
       state.searchListingParams.location = '';
       state.listingPage = 1;
       state.listingOrder = '';
+      state.searchListingParams.minPrice = 50;
+      state.searchListingParams.maxPrice = 550;
+      state.searchListingParams.amenities = [];
+      state.searchListingParams.bedrooms = '';
+      state.searchListingParams.roomType = '';
+      state.searchListingParams.rooms = '';
+      state.isFilterApply = false;
+
+    },
+
+    toggleApplyFilter: (state) => {
+      state.isFilterApply = true;
+    },
+
+    toggleFilterOpen: (state) => {
+      state.isFilterOpen = !state.isFilterOpen;
     },
 
     setSearchListingParams: (state, action) => {
       const { name, value } = action.payload;
+      console.log(name, value);
 
       if (name === 'guests') {
         //guest value should be 50 or below 50
         const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
         state.searchListingParams[name] = numericValue;
-
       } else if (name === 'checkIn' && value >= state.searchListingParams.checkOut) {
         let minDateCheckOut = new Date(value);
         minDateCheckOut.setDate(value.getDate() + 1);
         state.searchListingParams.checkIn = value;
         state.searchListingParams.checkOut = minDateCheckOut;
-
       } else {
         state.searchListingParams[name] = value;
+      }
+    },
+
+    setAmenitiesListingParams: (state, action) => {
+      const item = action.payload;
+      const isItemPresent = state.searchListingParams.amenities.includes(item);
+
+      if (isItemPresent) {
+        state.searchListingParams.amenities = state.searchListingParams.amenities.filter(a => a !== item);
+      } else {
+        state.searchListingParams.amenities = [...state.searchListingParams.amenities, item];
       }
     }
   },
@@ -448,10 +495,24 @@ const listingSlice = createSlice({
       .addCase(fetchCountryList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      });
+    //fetch amenities list 
+    builder
+      .addCase(fetchAmenitiesList.pending, (state) => {
+        state.isFetchingAmenities = false;
+        state.error = null;
       })
+      .addCase(fetchAmenitiesList.fulfilled, (state, action) => {
+        state.isFetchingAmenities = false;
+        state.amenitiesList = action.payload;
+      })
+      .addCase(fetchAmenitiesList.rejected, (state, action) => {
+        state.isFetchingAmenities = false;
+        state.error = action.payload;
+      });
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams } = listingSlice.actions;
 
 export default listingSlice.reducer;

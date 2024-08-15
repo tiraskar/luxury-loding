@@ -4,7 +4,7 @@ import { RiFilter2Line } from "react-icons/ri";
 import { useState } from "react";
 import FilterListing from "./FilterListing";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAvailableListing, fetchListingList, setSearchListingParams } from "../../redux/slices/listingSlice";
+import { fetchAvailableListing, fetchListingList, setSearchListingParams, toggleFilterOpen } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
 // import { formateDate } from "../../helper/date";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -12,13 +12,13 @@ import { notifyToastMessage } from "../ui/CustomToast";
 
 const FilterableSearchListing = () => {
 
-  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))
+  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const dispatch = useDispatch();
 
-  const { isFetchAvailableListing, searchListingParams } = useSelector(state => state.listing)
+  const { isFetchAvailableListing, searchListingParams, searchFilter, isFilterOpen } = useSelector(state => state.listing);
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const minDateCheckIn = new Date(Date.now());
 
@@ -40,7 +40,7 @@ const FilterableSearchListing = () => {
       return notifyToastMessage("Provide check-in and check-out date.");
     }
 
-    if (searchListingParams.location || searchListingParams.checkIn || searchListingParams.checkOut || searchListingParams.guests) {
+    if (searchListingParams.location || searchListingParams.checkIn || searchListingParams.checkOut || searchListingParams.guests || !searchFilter) {
       return dispatch(fetchAvailableListing());
     }
 
@@ -114,7 +114,7 @@ const FilterableSearchListing = () => {
 
           <div className="flex flex-row gap-2 w-full sm:w-auto">
             <button type="button"
-              onClick={() => setIsFilterOpen(true)}
+              onClick={() => dispatch(toggleFilterOpen())}
               className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-3 sm:py-4 h-fit flex items-center justify-center text-[13px] font-medium w-[100px]">
 
               <RiFilter2Line size={20} />Filters
@@ -128,7 +128,7 @@ const FilterableSearchListing = () => {
             </button>
           </div>
         </form>
-        {isFilterOpen && <FilterListing setIsFilterOpen={setIsFilterOpen} />}
+        {isFilterOpen && <FilterListing />}
       </div>
     </Wrapper>
   );
