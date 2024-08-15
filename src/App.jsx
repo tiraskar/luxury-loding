@@ -81,8 +81,11 @@ const router = createBrowserRouter([
       // add routes under / routing
     ],
   },
-  // add more routes for different routing
-]);
+],
+  {
+    basename: '/',
+  }
+);
 
 function App() {
   return (
