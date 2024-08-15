@@ -7,6 +7,7 @@ import { fetchListingInfo } from "../redux/slices/listingSlice";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { createPaymentIntent, fetchStripPromiseKey } from "../redux/slices/paymentSlice";
 import { calculateBookingPrice } from "../redux/slices/bookingSlice";
+import { formateDate } from "../helper/date";
 
 const BookingPayment = () => {
 
@@ -40,6 +41,9 @@ const BookingPayment = () => {
       if (bookingCheckIn && bookingCheckOut && guestNumber) {
         dispatch(calculateBookingPrice({
           listingId: Number(id),
+          checkIn: formateDate(new Date(bookingCheckIn)),
+          checkOut: formateDate(new Date(bookingCheckOut)),
+          guests: Number(guestNumber),
         }));
       }
     }

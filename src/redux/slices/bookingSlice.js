@@ -32,14 +32,7 @@ export const calculateBookingPrice = createAsyncThunk(
   'booking/price-calculate',
   async (booking) => {
     try {
-      const bookingData = {
-        checkIn: formateDate(new Date(bookingCheckIn)),
-        checkOut: formateDate(new Date(bookingCheckOut)),
-        guests: Number(bookingGuest),
-        listingId: booking.listingId
-      };
-
-      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, { ...bookingData });
+      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, { ...booking });
       return data;
     } catch (error) {
       return Promise.reject(error.message);
