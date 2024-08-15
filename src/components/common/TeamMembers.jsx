@@ -1,3 +1,4 @@
+import CustomImage from "../ui/CustomImage";
 import Wrapper from "./Wrapper";
 
 const TeamMembers = () => {
@@ -25,7 +26,7 @@ const TeamMembers = () => {
           </div>
           <div
             className="flex justify-center bg-white lg:max-w-[517px] px-12 py-8 sm:px-16 sm:py-12 md:px-[89px] md:py-[123px] rounded-2xl">
-            <img src="/images/drose-logo.png" alt="" className="w-full max-w-[339px]" />
+            <CustomImage src="images/drose-logo.png" alt="" className="w-full max-w-[339px]" />
           </div>
         </div>
       </div>
