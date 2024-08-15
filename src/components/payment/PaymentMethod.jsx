@@ -42,12 +42,13 @@ const PaymentMethod = () => {
       return;
     }
 
+    const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
     let result;
     try {
       result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://luxury-loding.vercel.app/success`,
+          return_url: `${baseUrl}success`,
           shipping: {
             name: `${billingInfo.firstName} ${billingInfo.lastName}`,
             address: {
