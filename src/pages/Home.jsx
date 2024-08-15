@@ -18,13 +18,14 @@ import { useEffect } from "react";
 import { setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 
 const Home = () => {
-  const disptach = useDispatch();
+
+  const dispatch = useDispatch();
 
   const { searchedListingList, isSearchListing, isSearchedListing } =
     useSelector((state) => state.listing);
 
   useEffect(() => {
-    disptach(setSearchListingParamsToInitialState());
+    dispatch(setSearchListingParamsToInitialState());
   }, []);
 
   return (
