@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ListingLoading, Wrapper } from "../../components";
 
-import ListingMap from "./ListingMap";
+// import ListingMap from "./ListingMap";
 import ListingViewOptions from "./ListingViewOptions";
 import { useSelector } from "react-redux";
 import RenderListings from "./RenderListings";
@@ -65,7 +65,7 @@ const ListingList = () => {
             // )
           }
         </div>
-        <ListingMap />
+        {/* <ListingMap /> */}
       </div>
     </Wrapper>
   );
