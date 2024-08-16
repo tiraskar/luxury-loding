@@ -52,9 +52,9 @@ const Footer = () => {
         <div className="flex flex-col space-y-[17px]">
           <h1 className="text-textLight font-inter font-medium">Main</h1>
           <ul className="flex flex-col space-y-[14px] text-sm">
-            <Link to='/about'>About Us</Link>
+            <Link to='#'>About Us</Link>
             <Link to='/'>Home</Link>
-            <Link to='/listing'>Listing</Link>
+            <Link to='/listings'>Listing</Link>
           </ul>
         </div>
         <div className="flex flex-col space-y-[17px]">
