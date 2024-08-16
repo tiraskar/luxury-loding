@@ -5,7 +5,7 @@ const Accommodations = () => {
   return (
     <div className="tracking-tight font-onest">
 
-      <div className="flex flex-col gap-1 max-w-[1536px] mx-auto justify-center rounded-2xl py-[56px]">
+      <div className="flex flex-col gap-1 max-w-[1536px] mx-auto justify-center rounded-2xl">
         <div className="relative">
           <CustomImage
             src="images/accommodation-one.png"
