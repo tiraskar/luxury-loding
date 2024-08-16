@@ -18,7 +18,6 @@ import { useEffect } from "react";
 import { setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 
 const Home = () => {
-
   const dispatch = useDispatch();
 
   const { searchedListingList, isHomePageSearch, isSearchedListing } =
@@ -29,9 +28,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="space-y-20 font-onest pt-[5px]">
-      <div className="">
-        <div className="space-y-20">
+    <div className=" space-y-[9.375rem] font-onest pt-[5px]">
+      <div className="space-y-[10.5625rem]">
+        <div className="">
           <HomeBanner />
           <Wrapper>
             <h1 className="text-4xl pb-10 font-semibold text-[#333333]">
@@ -55,17 +54,19 @@ const Home = () => {
               )}
           </Wrapper>
         </div>
-        <div className="pt-[127px]">
+        <div className="space-y-[10.1875rem]">
           <Greeting />
+          <FeaturedHomes />
         </div>
       </div>
-      <FeaturedHomes />
       <Offer />
       <RentalExperience />
-      <ActivitiesAndServices />
+      <ActivitiesAndServices /> 
       <Testimonials />
-      <AccommodationExperience />
-      <Accommodation />
+      <div className="space-y-[3.5rem]"> 
+        <AccommodationExperience />
+        <Accommodation />
+      </div>
       <QuestionAndAnswers />
     </div>
   );
