@@ -2,8 +2,9 @@
 import PropTypes from 'prop-types';
 // import { TbBeachOff } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
-import { setAmenitiesListingParams, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen } from '../../redux/slices/listingSlice';
+import { fetchAmenitiesList, setAmenitiesListingParams, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen } from '../../redux/slices/listingSlice';
 import LoadingSpinner from '../ui/LoadingSpinner';
+import { useEffect } from 'react';
 
 const Popup = () => {
 
@@ -18,6 +19,10 @@ const Popup = () => {
   const handleAmenitiesChange = (id) => {
     dispatch(setAmenitiesListingParams(id));
   }
+
+  useEffect(() => {
+    dispatch(fetchAmenitiesList());
+  }, [])
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 bg-fixed  flex items-center justify-center z-50 text-[#333333] transition-all delay-500 ease-in-out">
