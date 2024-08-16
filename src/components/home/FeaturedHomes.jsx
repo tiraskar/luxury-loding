@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { LuUsers, LuBath } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
-import { GoDash } from "react-icons/go";
+// import { GoDash } from "react-icons/go";
 import { IoImageOutline } from "react-icons/io5";
 import Wrapper from "../common/Wrapper";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFeaturedListing } from "../../redux/slices/listingSlice";
+import { fetchFeaturedListing, toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
 import { Link } from "react-router-dom";
 import ListingImages from "../listing/ListingImages";
 
@@ -53,8 +53,8 @@ const FeaturedHomes = () => {
           images={images}
           setIsviewAllImageOpen={setIsviewAllImageOpen}
         />}
-      <div className="flex flex-col justify-end space-y-4 sm:min-w-[400px]">
-        <Link to={`/listings/${id}`} className="text-xl sm:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
+      <div className="flex flex-col justify-end space-y-10 sm:min-w-[400px]">
+        <Link onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))} to={`/listings/${id}`} className="text-xl sm:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
         <div className="flex flex-wrap gap-2 text-[#7B6944]">
           <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
             <LuUsers size={14} /> {guestsIncluded} {guestsIncluded > 1 ? "guests" : "guest"}
@@ -67,8 +67,8 @@ const FeaturedHomes = () => {
           </div>
         </div>
       </div>
-      <div className="">
-        <img src={images[0].url} className="w-full h-full rounded-xl object-contain" />
+      <div className="xl:w-[813px] xl:h-[598px]">
+        <img src={images[0].url} className="w-full h-full  rounded-xl object-fill" />
 
       </div>
       <div
@@ -84,29 +84,35 @@ const FeaturedHomes = () => {
   }, []);
 
   return (
-    <div className="tracking-tight items-center max-w-[1720px] mx-auto">
+    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-[56px]">
       <Heading />
-      <div className="pt-10 sm:py-16">
+      <div className="space-y-6">
         <div
           className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
           ref={containerRef}
         >
           {renderFeaturedHomes}
         </div>
-      </div>
 
-      <div className="hidden sm:flex justify-center space-x-2">
-        <div className="bg-[#0000001A] flex rounded-full px-2">
-          {featuredListings?.map((_, index) => (
-            <GoDash key={index} onClick={() => handleScroll(index)} size={32} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "text-[#9A9A9A]" : "text-white"}`} />
-          ))}
+        <div className="hidden sm:flex justify-center space-x-2 ">
+          <div className="bg-[#0000001A] flex rounded-full px-4 h-6 justify-center items-center">
+            {featuredListings?.map((_, index) => (
+
+              <div key={index} onClick={() => handleScroll(index)} className="cursor-pointer">{
+                index == activeIndex ? <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="17" height="2" viewBox="0 0 17 2" fill="none">
+                  <path d="M1 1H16" stroke="#9A9A9A" strokeWidth="2" strokeLinecap="round" />
+                </svg> : <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2" fill="none">
+                  <path d="M1 1H9" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              }</div>
+              // <GoDash key={index} size={32} onClick={() => handleScroll(index)} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "w-8 text-[#9A9A9A]" : "text-white w-5"}`} />
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center pl-4">
+          <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
         </div>
       </div>
-
-      <div className="flex items-center pl-4">
-        <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
-      </div>
-
     </div>
   );
 };
