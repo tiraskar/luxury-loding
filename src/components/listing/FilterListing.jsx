@@ -179,7 +179,11 @@ const Popup = () => {
           <p className="text-sm font-medium font-inter tracking-[-2%]">25 listing to show</p>
           <div className='flex space-x-2 '>
             <button
-              onClick={() => dispatch(setSearchListingParamsToInitialState())}
+              onClick={() => {
+                dispatch(setSearchListingParamsToInitialState());
+                dispatch(toggleFilterOpen());
+              }
+              } 
               className='px-4 py-2 border-[#D7DBE8] border-[0.6px] rounded-[10px]'>Reset</button>
             <button
               onClick={() => {

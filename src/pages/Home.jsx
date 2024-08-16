@@ -21,7 +21,7 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
-  const { searchedListingList, isSearchListing, isSearchedListing } =
+  const { searchedListingList, isHomePageSearch, isSearchedListing } =
     useSelector((state) => state.listing);
 
   useEffect(() => {
@@ -37,13 +37,13 @@ const Home = () => {
             <h1 className="text-4xl pb-10 font-semibold text-[#333333]">
               {searchedListingList.length > 0 && "Search Results"}
             </h1>
-            {isSearchListing && <ListingLoading numbers={8} />}
+            {isHomePageSearch && <ListingLoading numbers={8} />}
             {searchedListingList.length > 0 && (
               <RenderListings listingList={searchedListingList} />
             )}
             {searchedListingList.length == 0 &&
               isSearchedListing &&
-              !isSearchListing && (
+              !isHomePageSearch && (
                 <div>
                   <h1 className="text-3xl font-semibold text-[#333333]">
                     No listings found.
