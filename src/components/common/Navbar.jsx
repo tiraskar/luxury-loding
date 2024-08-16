@@ -49,9 +49,9 @@ const Navbar = () => {
               <option className="">USD</option>
             </select>
 
-            <button className="flex p-[14px_20px] justify-center items-center gap-[10px] rounded-xl bg-[#222]">
+            <Link to='/listings' className="flex p-[14px_20px] justify-center items-center gap-[10px] rounded-xl bg-[#222]">
               <span className="flex items-center text-[#FFF] font-onest text-[14px] font-normal leading-normal h-[10px]">Book now</span>
-            </button>
+            </Link>
 
           </div>
         </div>
