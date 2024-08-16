@@ -77,6 +77,7 @@ const BookApartment = ({ listingInfo }) => {
                   className="outline-none max-w-[117px]  text-[1rem]"
                   dateFormat="dd.MM.YYYY"
                   minDate={minDateCheckIn}
+                  disabled={loading}
                   placeholderText="DD.MM.YYYY"
                 />
               </div>
@@ -92,6 +93,7 @@ const BookApartment = ({ listingInfo }) => {
                   className="outline-none max-w-[117px] text-[1rem]"
                   dateFormat="dd.MM.YYYY"
                   minDate={minDateCheckOut}
+                  disabled={loading}
                   placeholderText="DD.MM.YYYY"
                 />
               </div>
@@ -111,6 +113,7 @@ const BookApartment = ({ listingInfo }) => {
                 min={0}
                 step={1}
                 value={checkBookingParams.guests}
+                disabled={loading}
                 onChange={(e) => {
                   if (e.target.value > 50) {
                     handleInputChange('guests', 50);
