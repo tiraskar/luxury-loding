@@ -9,6 +9,7 @@ const ListingReviews = () => {
   const { listingReviews, isReviewLoading } = useSelector(state => state.listing);
 
   const [value, setValue] = useState('');
+  const [lastSliceIndex, setListSliceIndex] = useState(3)
 
   const handleInput = (event) => {
     const textarea = event.target;
@@ -16,6 +17,11 @@ const ListingReviews = () => {
     textarea.style.height = `${textarea.scrollHeight}px`;
     setValue(textarea.value);
   };
+
+  const handleLoadReviews = () => {
+    setListSliceIndex(prevState => prevState + 3);
+  };
+
 
   return (
     <div id="listing-reviews" className="tracking-tight space-y-8">
@@ -46,7 +52,7 @@ const ListingReviews = () => {
       {isReviewLoading && <p>Loading ...</p>}
       {/* Review List */}
       <div className="flex flex-col space-y-8">
-        {listingReviews.map((review, index) => {
+        {listingReviews?.slice(0, lastSliceIndex).map((review, index) => {
           const reviewFirstText = review.reviewerName ? review.reviewerName.charAt(0) : '' || review.guestName ? review.guestName.charAt(0) : '';
           const reviewTime = getRelativeDateOrTime(review?.insertedOn);
           return (
@@ -69,19 +75,21 @@ const ListingReviews = () => {
                 </div>
                 <p className="opacity-50">{reviewTime}</p>
               </div>
-              {index < listingReviews.length - 1 && (
+              {index < lastSliceIndex - 1 && (
                 <div className="h-px bg-textDark opacity-20"></div>
               )}
             </div>
           );
         })}
-        {listingReviews.length === 0 ?
+        {!isReviewLoading && listingReviews.length === 0 ?
           <p className="text-center text-[14px]">No reviews yet.</p>
-          :
-          <button className="flex flex-row justify-center items-center tracking-normal font-inter text-[13px] gap-x-2 py-2 px-[10px] border-[0.6px] border-[#D7DBE8] w-fit rounded-2xl">
+          : lastSliceIndex < listingReviews.length && <button
+            onClick={() => handleLoadReviews()}
+            className="flex flex-row justify-center items-center tracking-normal font-inter text-[13px] gap-x-2 py-2 px-[10px] border-[0.6px] border-[#D7DBE8] w-fit rounded-2xl">
             Load more
             <GrPowerCycle size={18} />
           </button>
+
         }
       </div>
 
