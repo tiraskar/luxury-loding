@@ -55,7 +55,7 @@ const Home = () => {
               )}
           </Wrapper>
         </div>
-        <div className="pt-[169px]">
+        <div className="pt-[127px]">
           <Greeting />
         </div>
       </div>
