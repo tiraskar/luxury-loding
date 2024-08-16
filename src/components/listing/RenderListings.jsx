@@ -6,10 +6,12 @@ import { GrLocation } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
+import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
+import { useDispatch } from "react-redux";
 
 
 const RenderListings = ({ listingList }) => {
-
+  const dispatch = useDispatch()
   const [currentIndex, setCurrentIndex] = useState(
     Array(listingList?.length).fill(0)
   );
@@ -107,6 +109,7 @@ const RenderListings = ({ listingList }) => {
             <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
               <Link
                 to={`/listings/${listing.id}`}
+                onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
                 className="text-xl font-inter tracking-[-1%]"
               >
                 {listing.name}

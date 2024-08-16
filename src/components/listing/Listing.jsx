@@ -14,6 +14,7 @@ import BookApartment from "../booking/BookApartment";
 import { useSelector } from "react-redux";
 import { IoImageOutline } from "react-icons/io5";
 import ListingImages from "./ListingImages";
+import ListingList from "./ListingList";
 
 
 const tabs = [
@@ -26,7 +27,7 @@ const tabs = [
 
 const Listing = () => {
 
-  const { listingInfo = {}, loading, listingReviews } = useSelector(state => state.listing);
+  const { listingInfo = {}, loading, listingReviews, isSearchOnSingleListing } = useSelector(state => state.listing);
   const [activeTab, setActiveTab] = useState('');
 
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
@@ -50,6 +51,7 @@ const Listing = () => {
 
   return (
     <div>
+      {isSearchOnSingleListing && <ListingList />}
       <div className="absolute top-0 text-black bg-buttonPrimary z-50 h-[500px]">
         {isViewAllImageOpen &&
           <ListingImages

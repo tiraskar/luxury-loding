@@ -205,7 +205,7 @@ const listingSlice = createSlice({
     isFetchListingTotalCount: false,
     isFetchAvailableListing: false,
     isLoadMoreListing: false,
-    isSearchListing: false,
+    isHomePageSearch: false,
     mapView: false,
     isSearchedListing: false,
     isListingAvailableForBooking: false,
@@ -213,6 +213,7 @@ const listingSlice = createSlice({
     isFilterApply: false,
     isFetchingAmenities: false,
     isFilterOpen: false,
+    isSearchOnSingleListing: false,
     //error
     error: null,
 
@@ -260,6 +261,12 @@ const listingSlice = createSlice({
       state.listingPage = 1;
       state.listingLimit = 8;
       state.listingOrder = action.payload;
+    },
+
+    toggleIsSearchedOnSingleListing: (state, action) => {
+      if (state.isSearchedListing) {
+        state.isSearchOnSingleListing = action.payload;
+      }
     },
 
     setSearchListingParamsToInitialState: (state) => {
@@ -372,6 +379,7 @@ const listingSlice = createSlice({
         state.availableListing = [];
         state.isSearchedListing = true;
         state.isFetchAvailableListing = true;
+        state.isSearchOnSingleListing = true;
         state.error = null;
       })
       .addCase(fetchAvailableListing.fulfilled, (state, action) => {
@@ -380,6 +388,7 @@ const listingSlice = createSlice({
       })
       .addCase(fetchAvailableListing.rejected, (state, action) => {
         state.isSearchedListing = false;
+        state.isSearchOnSingleListing = false;
         state.isFetchAvailableListing = false;
         state.error = action.error.message;
       });
@@ -440,16 +449,16 @@ const listingSlice = createSlice({
       .addCase(searchListing.pending, (state) => {
         state.searchedListingList = [];
         state.isSearchedListing = true;
-        state.isSearchListing = true;
+        state.isHomePageSearch = true;
         state.error = null;
       })
       .addCase(searchListing.fulfilled, (state, action) => {
-        state.isSearchListing = false;
+        state.isHomePageSearch = false;
         state.searchedListingList = action.payload;
       })
       .addCase(searchListing.rejected, (state, action) => {
         state.isSearchedListing = false;
-        state.isSearchListing = false;
+        state.isHomePageSearch = false;
         state.error = action.error.message;
       });
 
@@ -513,6 +522,6 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing } = listingSlice.actions;
 
 export default listingSlice.reducer;
