@@ -153,7 +153,7 @@ const BookApartment = ({ listingInfo }) => {
           {!isListingBookingAvailable &&
             <button
               onClick={() => handleSubmit()}
-
+              disabled={loading}
               className={`flex flex-row items-center justify-center text-white bg-textDark text-sm  py-[14px] rounded-xl`}>
               {!isListingBookingAvailable && !loading ? "Check availability" : `Checking`} &nbsp;&nbsp;
               {loading && <LoadingSpinner />}
