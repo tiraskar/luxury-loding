@@ -6,17 +6,17 @@ const SingleOffer = ({ offer, index }) => {
   return (
     <div className="space-y-6">
       <div className="flex flex-row gap-1 items-center">
-        <span className="bg-black text-white px-3 py-2 rounded-xl text-[22px]">
+        <span className="bg-black text-white flex items-center justify-center rounded-xl text-[22px] w-[46px] h-[46px]">
           {index + 1 < 10 ? `0${index + 1}` : index + 1}
         </span>
         <div className="w-full h-px bg-[#E0E0E0]"></div>
       </div>
-      <div>
-        <h1 className="text-[26px]">{offer.title}</h1>
+      <div className="space-y-3">
+        <h1 className="text-[26px] h-[33px]">{offer.title}</h1>
         <p className="text-[1rem] leading-6 text-[#868686] pr-4">{offer.description}</p>
       </div>
-      <div className="flex justify-center md:justify-start ">
-        <CustomImage src={offer.image} alt={offer.title} className="w-full max-w-[429px]" />
+      <div className="flex justify-center sm:justify-start ">
+        <CustomImage src={offer.image} alt={offer.title} className="w-full max-h-[450px] max-w-[429px] rounded-[1rem]" />
       </div>
     </div>
   );
@@ -30,7 +30,7 @@ const Offer = () => {
     <Wrapper>
       <div className="tracking-tight space-y-[56px] px-2 sm:px-3 md:px-4 xl:px-0">
 
-        <div className="font-semibold text-[1.75rem] sm:text-[2rem]">
+        <div className="font-semibold text-[1.75rem] sm:text-[2rem] space-y-[2px]">
           <h1 >What we offer</h1>
           <h2 className="text-textLight">The perfect place to stay</h2>
         </div>
