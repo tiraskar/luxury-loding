@@ -15,7 +15,8 @@ const Heading = () => {
     <Wrapper>
       <div className="flex sm:justify-between items-center ">
         <h1 className="text-[#333333] text-[26px] sm:text-3xl md:text-[35px] font-semibold">Our featured homes</h1>
-        <button className="hidden sm:block px-5 py-3 rounded-xl text-white bg-black">View All</button>
+        <Link to="/listings"
+          className="hidden sm:block h-[38px] px-5 py-[7px] rounded-xl text-white bg-black">View All</Link>
       </div>
     </Wrapper>
   );
@@ -103,7 +104,7 @@ const FeaturedHomes = () => {
       </div>
 
       <div className="flex items-center pl-4">
-        <button className="block sm:hidden px-5 py-2 rounded-xl text-white bg-black my-4">View All</button>
+        <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
       </div>
 
     </div>
