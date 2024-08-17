@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { LuUsers, LuBath } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
-// import { GoDash } from "react-icons/go";
 import { IoImageOutline } from "react-icons/io5";
 import Wrapper from "../common/Wrapper";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +30,7 @@ const FeaturedHomes = () => {
   const dispatch = useDispatch();
   const { featuredListings } = useSelector(state => state.listing)
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(featuredListings.length > 1 ? (featuredListings?.length % 2) : 0);
   const containerRef = useRef(null);
   const itemRefs = useRef([]);
 
@@ -105,7 +104,6 @@ const FeaturedHomes = () => {
                   <path d="M1 1H9" stroke="white" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               }</div>
-              // <GoDash key={index} size={32} onClick={() => handleScroll(index)} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "w-8 text-[#9A9A9A]" : "text-white w-5"}`} />
             ))}
           </div>
         </div>

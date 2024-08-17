@@ -141,7 +141,7 @@ export const fetchFeaturedListing = createAsyncThunk(
   'listing/featured',
   async () => {
     try {
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${6}&page=1`);
+      const { data } = await axios.get(`${baseUrl}/listing?limit=${5}&page=1`);
       return data;
     } catch (error) {
       return Promise.reject(error.message);
