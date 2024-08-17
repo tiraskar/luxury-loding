@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { IoImageOutline } from "react-icons/io5";
 import ListingImages from "./ListingImages";
 import ListingList from "./ListingList";
+import toast from "react-hot-toast";
 
 
 const tabs = [
@@ -49,6 +50,14 @@ const Listing = () => {
     'Availability': <ListingAvailability />,
   };
 
+  const listingUrl = window.location.href;
+  const handleCopyUrl = () => {
+    toast.dismiss();
+    navigator.clipboard.writeText(listingUrl).then(() => {
+      toast.success("URL copied to clipboard!");
+    });
+  }
+
   return (
     <div>
       {isSearchOnSingleListing && <ListingList />}
@@ -69,12 +78,14 @@ const Listing = () => {
                 <span className="text-black"> {listingReviews.length} reviews</span>
             </p>
           </div>
-          <div className="flex flex-row gap-x-3">
-            <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 h-fit flex items-center justify-center text-[13px] font-medium w-[100px] gap-x-2">
-              <FaRegHeart size={20} /> Save
+            <div className="flex flex-row gap-x-3 h-fit">
+              <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2  h-[43px]">
+                <FaRegHeart size={20} /> <span>Save</span>
             </button>
-            <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 h-fit flex items-center justify-center text-[13px] font-medium w-[100px] gap-x-2">
-              <LuShare2 size={20} /> Share
+              <button
+                onClick={() => handleCopyUrl()}
+                className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4  flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2 h-[43px]">
+                <LuShare2 size={20} /> <span>Share</span>
             </button>
           </div>
         </div>
