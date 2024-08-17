@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Wrapper } from "..";
-import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 const QuestionAnswer = () => {
   const [expandedIndex, setExpandedIndex] = useState(0);
@@ -25,7 +25,9 @@ const QuestionAnswer = () => {
                   <h1 className="text-[1rem] md:text-lg lg:text-xl xl:text-[22px] col-span-11 py-4">{qa.question}</h1>
 
                   <p className="flex justify-end col-span-1 cursor-pointer ">
-                    {expandedIndex === index ? <MdOutlineKeyboardArrowUp size={24} /> : <MdOutlineKeyboardArrowDown size={24} />}
+                    <MdOutlineKeyboardArrowUp size={24}
+                      className={`${expandedIndex === index ? 'rotate-120' : 'rotate-180 '} transition-all delay-100`}
+                    />
                   </p>
 
                 </div>
