@@ -10,10 +10,10 @@ import { useForm } from "react-hook-form";
 import AlertDialog from "../ui/AlertDialog";
 
 const schema = yup.object({
-  fullName: yup.string().required('Full name is required'),
-  email: yup.string().email('Invalid email format').required('Email is required'),
-  phoneNumber: yup.number().required('Phone number is required'),
-  description: yup.string().min(10, 'Description must be at least 10 characters').required('Description is required'),
+  fullName: yup.string().required(),
+  email: yup.string().email().required(),
+  phoneNumber: yup.number().required(),
+  description: yup.string().min(10, 'Description must be at least 10 characters').required(''),
   countryCode: yup.string().required().default('us'),
   countryDialCode: yup.string().required()
 }).required();
