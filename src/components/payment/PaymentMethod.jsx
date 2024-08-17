@@ -3,22 +3,62 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BillingAddress from "./BillingAddress";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { createCustomer, handlePaymentType, savePaymentInfo } from "../../redux/slices/paymentSlice";
 import PersonalInfoForm from "./PersonalInfoForm";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  personalInfo: yup.object({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    email: yup.string().email().required(),
+    phone: yup.number().required(),
+    countryCode: yup.string().required().default('us'),
+    countryDialCode: yup.string().required()
+  }),
+  billingInfo: yup.object({
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    state: yup.string().required(),
+    city: yup.string().required(),
+    line1: yup.string().required(),
+    postalCode: yup.string().required(),
+    country: yup.string().required().default('US')
+  })
+})
 
 const PaymentMethod = () => {
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    defaultValues: {
+      personalInfo: {
+        countryCode: 'US',
+        countryDialCode: '+1'
+      },
+      billingInfo: {
+        country: 'US'
+      }
+    },
+    resolver: yupResolver(schema)
+  });
+
+  const [isPaymentElementComplete, setIsPaymentElementComplete] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
 
+
   const dispatch = useDispatch();
 
-  const { billingInfo, personalInfo, customerId, clientSecret, confirmPayment, paymentType } = useSelector(state => state.payment);
+  const { billingInfo, customerId, clientSecret, confirmPayment, paymentType } = useSelector(state => state.payment);
+
 
   const handlePaymentElementChange = (event) => {
+    setIsPaymentElementComplete(event.complete);
     dispatch(handlePaymentType(event.value.type));
   };
 
@@ -71,8 +111,6 @@ const PaymentMethod = () => {
       toast.error("Payment failed!!!", { duration: 2000 });
       return;
     }
-
-    console.log("Payment successful!");
     toast.success("Payment successful!!!", { duration: 2000 });
   };
 
@@ -89,42 +127,36 @@ const PaymentMethod = () => {
   }, [customerId]);
 
 
-  const handleSubmitPayment = async () => {
-    toast.dismiss();
+  const onSubmit = async () => {
+
+    if (!isPaymentElementComplete) {
+      const paymentElement = document.getElementById('payment');
+      if (paymentElement) {
+        paymentElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
     if (!stripe || !elements || !clientSecret) {
       toast.error("Payment has not been loaded. Please refresh the page.", {
         duration: 2000
       });
     }
-    if (!personalInfo.firstName) return toast.error("Please provide first name.");
-    if (!personalInfo.lastName) return toast.error("Please provide last name.");
-    if (!personalInfo.email) return toast.error("Please provide email.");
-    if (!personalInfo.phone) return toast.error("Please provide phone number.");
-
     if (!paymentType) {
       return toast.error("Please select a payment method.");
     }
 
-    if (!billingInfo.firstName) return toast.error("Please provide billing first name.");
-    if (!billingInfo.lastName) return toast.error("Please provide billing last name.");
-    if (!billingInfo.city) return toast.error("Please provide city.");
-    if (!billingInfo.state) return toast.error("Please provide state.");
-    if (!billingInfo.line1) return toast.error("Please provide billing address.");
-    if (!billingInfo.postalCode) return toast.error("Please provide postal code.");
-
     dispatch(createCustomer());
-
   };
 
-
   return (
-    <div className="space-y-10">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <PersonalInfoForm />
+      <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
       <div className="font-inter text-[#333333] space-y-8">
         <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
         <div className='flex flex-col space-y-2'>
-          <PaymentElement onChange={handlePaymentElementChange} />
+          <PaymentElement onChange={handlePaymentElementChange} id="payment" />
           <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
             By providing your card information, you allow AvantStay, Inc. to
             charge your card for future payments in accordance with their terms.
@@ -133,17 +165,17 @@ const PaymentMethod = () => {
       </div>
 
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <BillingAddress />
+      <BillingAddress register={register} errors={errors} />
 
       <div className="absolute bottom-0 md:relative pt-20 md:pb-10">
         <button
+          type="submit"
           className="py-3 px-7 bg-[#333333] text-white rounded-[14px] "
-          onClick={() => handleSubmitPayment()}
         >
           Confirm and pay
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

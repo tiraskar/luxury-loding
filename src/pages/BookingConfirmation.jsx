@@ -70,7 +70,6 @@ const BookingConfirmation = () => {
                 <PaymentMethod />
               </Elements>
             )}
-            {/* </div> */}
           </div>
         </div>
       </Wrapper>

@@ -1,8 +1,9 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
+import PropTypes from "prop-types";
 
-const BillingAddress = () => {
+const BillingAddress = ({ register, errors }) => {
   const { billingInfo } = useSelector(state => state.payment);
   const { countryList } = useSelector(state => state.listing);
 
@@ -22,33 +23,34 @@ const BillingAddress = () => {
           <label htmlFor="first-name" className="flex ">First name</label>
           <input
             name="firstName"
+            {...register("billingInfo.firstName")}
             value={billingInfo.firstName}
             onChange={(e) => handleChange("firstName", e.target.value)}
             type="text"
             placeholder="Enter first name"
-            required
-            className="default-input" />
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.firstName ? 'border-[#FF0000]' : ''}`} />
         </div>
 
         <div className="flex flex-col gap-y-2">
           <label htmlFor="last-name" className="flex ">Last name</label>
           <input
             name="lastName"
+            {...register("billingInfo.lastName")}
             value={billingInfo.lastName}
             onChange={(e) => handleChange("lastName", e.target.value)}
             type="text"
             placeholder="Enter last name"
-            className="default-input" />
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.lastName ? 'border-[#FF0000]' : ''}`} />
         </div>
         <div className="relative flex flex-col gap-y-2">
           <label htmlFor="country" className="flex">Country or Region</label>
           <select
             name="country"
+            {...register("billingInfo.country")}
             value={billingInfo.country}
             onChange={(e) => handleChange("country", e.target.value)}
             id="country-region"
             className="block w-full default-input pr-10 appearance-none"
-            required
           >
             {countryList?.map((data) => {
               return (
@@ -66,41 +68,43 @@ const BillingAddress = () => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="city" className="flex">City</label>
-          <input
-            name="city"
-            value={billingInfo.city}
-            onChange={(e) => handleChange("city", e.target.value)}
-            type="text"
-            placeholder="Enter city"
-            className="default-input"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col gap-y-2">
           <label htmlFor="state" className="flex">State</label>
           <input
             name="state"
+            {...register("billingInfo.state")}
             value={billingInfo.state}
             onChange={(e) => handleChange("state", e.target.value)}
             type="text"
             placeholder="Enter state"
-            className="default-input"
-            required
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.state ? 'border-[#FF0000]' : ''}`}
           />
         </div>
+
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="city" className="flex">City</label>
+          <input
+            name="city"
+            {...register("billingInfo.city")}
+            value={billingInfo.city}
+            onChange={(e) => handleChange("city", e.target.value)}
+            type="text"
+            placeholder="Enter city"
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.city ? 'border-[#FF0000]' : ''}`}
+          />
+        </div>
+
 
         <div className="flex flex-col gap-y-2">
           <label htmlFor="line1" className="flex">Line1</label>
           <input
             name="line1"
+            {...register("billingInfo.line1")}
             value={billingInfo.line1}
             onChange={(e) => handleChange("line1", e.target.value)}
             type="text"
             placeholder="Enter primary address line"
-            className="default-input"
-            required
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.line1 ? 'border-[#FF0000]' : ''}`}
+            // required
           />
         </div>
 
@@ -108,6 +112,7 @@ const BillingAddress = () => {
           <label htmlFor="line2" className="flex">Line2</label>
           <input
             name="line2"
+            {...register("billingInfo.line2")}
             value={billingInfo.line2}
             onChange={(e) => handleChange("line2", e.target.value)}
             type="text"
@@ -119,12 +124,12 @@ const BillingAddress = () => {
           <label htmlFor="postalCode" className="flex">Postal code</label>
           <input
             name="postalCode"
+            {...register("billingInfo.postalCode")}
             value={billingInfo.postalCode}
             onChange={(e) => handleChange("postalCode", e.target.value)}
             type="number"
             placeholder="Enter postal code"
-            className="default-input"
-            required
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.postalCode ? 'border-[#FF0000]' : ''}`}
           />
         </div>
       </div>
@@ -133,3 +138,8 @@ const BillingAddress = () => {
 };
 
 export default BillingAddress;
+
+BillingAddress.propTypes = {
+  register: PropTypes.func,
+  errors: PropTypes.object,
+};

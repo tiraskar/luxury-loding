@@ -81,7 +81,7 @@ export const savePaymentInfo = createAsyncThunk(
         customerId: customerId,
         guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
         guestEmail: personalInfo.email,
-        guestPhone: personalInfo.phone,
+        guestPhone: `${personalInfo.countryDialCode} ${personalInfo.phone}`,
         listingId: listingInfo.id,
         checkInDate: formateDate(new Date(bookingCheckIn)),
         checkOutDate: formateDate(new Date(bookingCheckOut)),
@@ -120,6 +120,8 @@ const paymentSlice = createSlice({
       lastName: '',
       email: '',
       phone: '',
+      countryCode: 'us',
+      countryDialCode: '+1'
     },
 
     //paymentInfo
@@ -143,6 +145,7 @@ const paymentSlice = createSlice({
     handlePaymentInput: (state, action) => {
 
       const { inputTitle, name, value } = action.payload;
+      console.log('dial code', action.payload);
 
       if (inputTitle == 'personalInfo') {
         state.personalInfo[name] = value;

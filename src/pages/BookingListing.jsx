@@ -16,7 +16,7 @@ const BookingListing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const checkListingAvailableBeforeBooking = () => {
+  const handleAgreeAndContinue = () => {
     const bookingAvailable = dispatch(checkListingBookingAvailability({
       listingId: Number(id),
     }));
@@ -143,7 +143,7 @@ const BookingListing = () => {
                 </p>
                 <div className="hidden md:block md:pt-64">
                   <button
-                    onClick={() => checkListingAvailableBeforeBooking()}
+                  onClick={() => handleAgreeAndContinue()}
                     className="py-3 px-7 bg-[#333333] text-white rounded-[14px] ">
                     Agree and continue
                   </button>
