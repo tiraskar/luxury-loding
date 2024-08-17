@@ -33,8 +33,8 @@ const Home = () => {
         <div className="">
           <HomeBanner />
           <Wrapper>
-            <h1 className="text-4xl pb-10 font-semibold text-[#333333]">
-              {searchedListingList.length > 0 && "Search Results"}
+            <h1 className="text-4xl pt-20 pb-10 font-semibold text-[#333333]">
+              {searchedListingList.length > 0 && `Available listings (${searchedListingList.length})`}
             </h1>
             {isHomePageSearch && <ListingLoading numbers={8} />}
             {searchedListingList.length > 0 && (
