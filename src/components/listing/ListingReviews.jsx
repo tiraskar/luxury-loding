@@ -1,22 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrPowerCycle } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getRelativeDateOrTime } from "../../helper/date";
+import { saveListingReview } from "../../redux/slices/listingSlice";
+import { useForm } from "react-hook-form";
 
 const ListingReviews = () => {
 
   const { listingReviews, isReviewLoading } = useSelector(state => state.listing);
 
-  const [value, setValue] = useState('');
   const [lastSliceIndex, setListSliceIndex] = useState(3)
 
-  const handleInput = (event) => {
-    const textarea = event.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-    setValue(textarea.value);
-  };
 
   const handleLoadReviews = () => {
     setListSliceIndex(prevState => prevState + 3);
@@ -28,25 +23,7 @@ const ListingReviews = () => {
       <h1 className="text-xl font-semibold tracking-[-2%]">Reviews</h1>
 
       {/* Review form */}
-      <form
-        action=""
-        className="border-[#0085FF] border-[1px] rounded-2xl p-4 space-y-4"
-        style={{ boxShadow: '-0.5px 1px 6px 1px  rgba(0, 133, 255, 0.4)' }}
-      >
-        <textarea
-          value={value}
-          rows={1}
-          className="w-full outline-none resize-none"
-          placeholder="Write a review..."
-          onInput={handleInput}
-          style={{ overflow: 'hidden' }}
-        />
-        <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
-        <div className="flex justify-end">
-          <button className="px-5 py-3 rounded-xl text-white bg-black ">Send</button>
-        </div>
-      </form>
-
+      <ReviewForm />
 
 
       {isReviewLoading && <p>Loading ...</p>}
@@ -100,3 +77,74 @@ const ListingReviews = () => {
 };
 
 export default ListingReviews;
+
+
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+  review: yup.string().min(10, 'Review must be at least 10 characters')
+}).required();
+
+
+
+const ReviewForm = () => {
+  const { isReviewSent, isReviewSaving } = useSelector(state => state.listing);
+
+  const dispatch = useDispatch();
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    defaultValues: {
+      review: ''
+    },
+    resolver: yupResolver(schema)
+  });
+
+
+  const onSubmit = (data) => {
+    dispatch(saveListingReview(data.review));
+  };
+
+
+  const handleInput = (event) => {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+
+  useEffect(() => {
+    if (isReviewSent) {
+      setValue('review', '');
+    }
+  }, [isReviewSent]);
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={`${errors.review ? "border-[#FF0000]" : "border-[#0085FF] "} border-[1px] rounded-2xl p-4 space-y-4`}
+      style={{
+        boxShadow: `${!errors.review && '-0.5px 1px 6px 1px  rgba(0, 133, 255, 0.4)'}`
+      }}
+    >
+      <textarea
+        {...register('review')}
+        rows={1}
+        // onInput={handleInput}
+        className="w-full outline-none resize-none"
+        placeholder="Write a review..."
+        style={{ overflow: 'hidden' }}
+      />
+      <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={isReviewSaving}
+          className="px-5 py-3 rounded-xl text-white bg-black ">
+          {isReviewSaving ? "Sending" : "Send"}
+        </button>
+      </div>
+    </form>
+
+  );
+};

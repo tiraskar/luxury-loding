@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
 import { formateDate } from "../../helper/date";
+import toast from "react-hot-toast";
 
 // Thunks
 export const syncListing = createAsyncThunk(
@@ -158,7 +159,7 @@ export const fetchListingReviews = createAsyncThunk(
         type: 'guest-to-host'
       });
 
-      const { data } = await axios.get(`${baseUrl}/listing/getreviews?${query}`);
+      const { data } = await axios.get(`${baseUrl}/review/getreviews?${query}`);
       return data;
 
     } catch (error) {
@@ -190,6 +191,21 @@ export const fetchAmenitiesList = createAsyncThunk(
   }
 )
 
+export const saveListingReview = createAsyncThunk(
+  'listing/review/save', async (review, { getState, rejectWithValue }) => {
+    try {
+      const { listingInfo } = getState().listing;
+      const response = await axios.post(`${baseUrl}/review`, {
+        listingId: listingInfo.id,
+        review: review
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -214,6 +230,8 @@ const listingSlice = createSlice({
     isFetchingAmenities: false,
     isFilterOpen: false,
     isSearchOnSingleListing: false,
+    isReviewSaving: false,
+    isReviewSent: false,
     //error
     error: null,
 
@@ -519,6 +537,23 @@ const listingSlice = createSlice({
         state.isFetchingAmenities = false;
         state.error = action.payload;
       });
+
+    //save listing reviw 
+
+    builder
+      .addCase(saveListingReview.pending, (state) => {
+        state.isReviewSaving = true;
+        state.error = null;
+      })
+      .addCase(saveListingReview.fulfilled, (state) => {
+        state.isReviewSaving = false;
+        state.isReviewSent = true;
+        toast.success("Review sent successfully. Thank you");
+      })
+      .addCase(saveListingReview.rejected, (state, action) => {
+        state.isReviewSaving = false;
+        state.error = action.payload;
+      })
   }
 });
 
