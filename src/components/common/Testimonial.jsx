@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import Wrapper from "./Wrapper";
-import { GoDash } from "react-icons/go";
 import CustomImage from "../ui/CustomImage";
 
 const Testimonial = () => {
@@ -15,7 +14,7 @@ const Testimonial = () => {
   };
 
 
-  const renderTestimonial = featuredHomesData?.map(({ quotes, image, profile, name, position }, index) => (
+  const renderTestimonial = testimonialData?.map(({ quotes, image, profile, name, position }, index) => (
     <div
       key={index}
       className="relative flex-shrink-0 grid md:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
@@ -50,28 +49,33 @@ const Testimonial = () => {
 
 
   return (
-    <div className="tracking-tight items-center max-w-[1720px] mx-auto">
+    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-[3.5rem]">
       <Wrapper>
         <h1 className="text-[#333333] text-[26px] md:text-3xl md:text-[35px] font-semibold">Hear from our happy guests</h1>
       </Wrapper>
 
-      <div className="py-16">
+      <div className="space-y-6">
         <div
           className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
           ref={containerRef}
         >
           {renderTestimonial}
         </div>
-      </div>
-
-      {/*  scrollbar */}
-      <div className="flex justify-center space-x-2">
-        <div className="bg-[#0000001A] flex rounded-full px-2">
-          {featuredHomesData?.map((_, index) => (
-            <GoDash key={index} onClick={() => handleScroll(index)} size={32} className={`cursor-pointer flex items-center justify-center ${activeIndex === index ? "text-[#9A9A9A]" : "text-white"}`} />
-          ))}
+        <div className="hidden sm:flex justify-center space-x-2 ">
+          <div className="bg-[#0000001A] flex rounded-full px-4 h-6 justify-center items-center">
+            {testimonialData?.map((_, index) => (
+              <div key={index} onClick={() => handleScroll(index)} className="cursor-pointer">{
+                index == activeIndex ? <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="17" height="2" viewBox="0 0 17 2" fill="none">
+                  <path d="M1 1H16" stroke="#9A9A9A" strokeWidth="2" strokeLinecap="round" />
+                </svg> : <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2" fill="none">
+                  <path d="M1 1H9" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              }</div>
+            ))}
+          </div>
         </div>
       </div>
+
     </div>
   );
 };
@@ -79,7 +83,7 @@ const Testimonial = () => {
 export default Testimonial;
 
 
-const featuredHomesData = [
+const testimonialData = [
   {
     quotes: `Brindy and team are absolutely wonderful hosts. The place was nothing short of immaculate and beautifully decorated. They were very responsive and knowledgeable on the area when I asked for some recommendations.`,
     image: "images/happy-guest-one.png",
