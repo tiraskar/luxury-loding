@@ -5,13 +5,14 @@ import {
 } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import BillingAddress from "./BillingAddress";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { createCustomer, handlePaymentType, savePaymentInfo } from "../../redux/slices/paymentSlice";
 import PersonalInfoForm from "./PersonalInfoForm";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import LoaderScreen from "../ui/LoaderScreen";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -46,7 +47,7 @@ const PaymentMethod = () => {
     },
     resolver: yupResolver(schema)
   });
-
+  const [isPaymentConfirmationLoading, setIsPaymentConfirmationLoading] = useState(false)
   const [isPaymentElementComplete, setIsPaymentElementComplete] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
@@ -72,7 +73,7 @@ const PaymentMethod = () => {
   }, [elements]);
 
   const paymentConfirmation = async () => {
-
+    setIsPaymentConfirmationLoading(true)
     if (!stripe || !elements || !clientSecret) {
       return;
     }
@@ -105,6 +106,8 @@ const PaymentMethod = () => {
     } catch (error) {
       toast.error("Payment failed!!!", { duration: 2000 });
       return;
+    } finally {
+      setIsPaymentConfirmationLoading(false)
     }
 
     if (result.error) {
@@ -151,6 +154,7 @@ const PaymentMethod = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+      {isPaymentConfirmationLoading && <LoaderScreen />}
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
       <div className="font-inter text-[#333333] space-y-8">

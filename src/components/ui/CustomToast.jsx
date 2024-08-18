@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const CustomToast = ({ message, onClose }) => {
   return (
