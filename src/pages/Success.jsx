@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle, FaSpinner } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { baseUrl } from '../config/baseurl';
@@ -112,7 +112,7 @@ const Success = () => {
         <div className="flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center">
                 {renderStatus()}
-                <p className="text-gray-600 mb-6">Payment Intent: {paymentIntent}</p>
+                {/* <p className="text-gray-600 mb-6">Payment Intent: {paymentIntent}</p> */}
             </div>
         </div>
     );
