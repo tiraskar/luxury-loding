@@ -75,6 +75,7 @@ const ContactForm = () => {
 
   useEffect(() => {
     setValue('countryCode', 'US');
+    setValue('countryDialCode', `+${getCountryCallingCode("US")}`);
   }, []);
 
   const handleCloseAlert = () => {
