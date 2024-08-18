@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 import {
   Blog,
   BlogAndGuideBook,
@@ -16,6 +15,8 @@ import {
 import BookingListing from "./pages/BookingListing";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Routing
 const router = createBrowserRouter([
@@ -83,14 +84,14 @@ const router = createBrowserRouter([
   },
 ],
   {
-    basename: '/',
+    basename: '',
   }
 );
 
 function App() {
   return (
     <main className="remove-scrollbar scroll-smooth">
-      <Toaster />
+      <ToastContainer />
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
