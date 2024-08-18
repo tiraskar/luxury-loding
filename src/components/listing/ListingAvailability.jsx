@@ -1,21 +1,14 @@
-import axios from "axios";
 import Calendar from "react-calendar";
-import { baseUrl } from "../../config/baseurl";
 import { useEffect, useState } from "react";
 import { formateDate } from "../../helper/date";
-
+import { useSelector } from "react-redux";
 const ListingAvailability = () => {
-  const [availabilityData, setAvailabilityData] = useState([]);
-  const [currentStartDate, setCurrentStartDate] = useState(new Date());
+
+  const { listingAvailableCalender, isCalenderLoading } = useSelector(state => state.listing);
+
   const [nextStartDate, setNextStartDate] = useState(new Date());
 
-  const fetchData = async () => {
-    const response = await axios.get(`${baseUrl}/listing/getcalendar/169542?startDate=2024-08-01`);
-    setAvailabilityData(response.data);
-  };
-
   useEffect(() => {
-    fetchData();
     const date = futureDate();
     setNextStartDate(date);
   }, [])
@@ -28,8 +21,7 @@ const ListingAvailability = () => {
 
   const isDateAvailable = (date) => {
     const formattedDate = formateDate(date);
-    console.log(formattedDate);
-    const availability = availabilityData.find(
+    const availability = listingAvailableCalender.find(
       (item) => item.date === formattedDate
     );
     if (availability && availability.isAvailable === 1) return true;
@@ -38,34 +30,46 @@ const ListingAvailability = () => {
   };
 
   const tileDisabled = ({ date }) => {
-    console.log(date);
     return !isDateAvailable(date);
   };
 
   return (
     <div id="listing-availability" className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
       <h1 className="text-xl font-semibold">Availability</h1>
+      {isCalenderLoading && <p className="py-10">Loading <span className=" animate-bounce">...</span></p>}
       <div className="flex space-x-3 border-black shadow-md px-[2px] rounded-2xl overflow-hidden font-inter text-textDark text-sm">
 
-        {availabilityData.length > 0 && (
+        {listingAvailableCalender.length > 0 && (
           <>
             <Calendar
               defaultView="month"
               maxDetail="month"
               minDate={new Date()}
               tileDisabled={tileDisabled}
-              className={''}
+              className={'font-inter text-[15px] font-medium capitalize'}
+              next2Label={null}
+              prev2Label={null}
+              calendarType="hebrew"
+              goToRangeStartOnSelect={false}
+              showNeighboringCentury={false}
+              showNeighboringDecade={false}
             />
             <Calendar
               defaultView="month"
               maxDetail="month"
-              minDate={futureDate()}
+              minDate={new Date()}
               activeStartDate={nextStartDate}
               onActiveStartDateChange={({ activeStartDate }) =>
                 setNextStartDate(activeStartDate)
               }
               tileDisabled={tileDisabled}
-              className={''}
+              className={['font-inter text-[15px] font-medium capitalize']}
+              next2Label={null}
+              prev2Label={null}
+              calendarType="hebrew"
+              goToRangeStartOnSelect={false}
+              showNeighboringCentury={false}
+              showNeighboringDecade={false}
             />
           </>
         )}
