@@ -53,7 +53,7 @@ const SearchListingForm = () => {
       style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
       className="flex flex-col font-onest items-center bg-white rounded-3xl  shadow-lg ">
 
-      <form action="" className=" grid grid-cols-2 md:flex md:flex-wrap md:flex-grow-0 md:justify-around items-center space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px] mr-4">
+      <form action="" className=" grid grid-cols-2  md:flex md:flex-wrap md:flex-grow-0 md:justify-around items-center space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px] mr-4">
 
         <div className="justify-start w-[153.25px] h-[69px] flex flex-col gap-y-2 px-7 py-3">
           <SearchInputLabel
@@ -123,14 +123,14 @@ const SearchListingForm = () => {
 
         <button
           onClick={(e) => handleSearch(e)}
-          className="hidden md:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-auto justify-center items-center h-[43px]">
+          className="hidden lg:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-auto justify-center items-center h-[43px]">
           {isHomePageLoading ? <LoadingSpinner /> : "Search"}
         </button>
 
       </form>
       <button
         onClick={(e) => handleSearch(e)}
-        className="block lg:hidden text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-full justify-center items-center h-[43px]">
+        className="block lg:hidden  text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-full justify-center items-center h-[43px]">
         {isHomePageLoading ? <LoadingSpinner /> : "Search"}
       </button>
 
