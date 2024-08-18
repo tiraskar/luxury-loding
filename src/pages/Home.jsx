@@ -20,7 +20,7 @@ import { setSearchListingParamsToInitialState } from "../redux/slices/listingSli
 const Home = () => {
   const dispatch = useDispatch();
 
-  const { searchedListingList, isHomePageSearch, isSearchedListing } =
+  const { searchedListingList, isHomePageSearch, isHomePageLoading } =
     useSelector((state) => state.listing);
 
   useEffect(() => {
@@ -32,17 +32,11 @@ const Home = () => {
       <div className="space-y-[10.5625rem]">
         <div className="">
           <HomeBanner />
+          {isHomePageSearch && 
           <Wrapper>
-            <h1 className="text-4xl pt-20 pb-10 font-semibold text-[#333333]">
-              {searchedListingList.length > 0 && `Available listings (${searchedListingList.length})`}
-            </h1>
-            {isHomePageSearch && <ListingLoading numbers={8} />}
-            {searchedListingList.length > 0 && (
-              <RenderListings listingList={searchedListingList} />
-            )}
-            {searchedListingList.length == 0 &&
-              isSearchedListing &&
-              !isHomePageSearch && (
+              {isHomePageLoading && <ListingLoading numbers={8} />}
+              {searchedListingList.length == 0 &&
+                isHomePageSearch ? (
                 <div>
                   <h1 className="text-3xl font-semibold text-[#333333]">
                     No listings found.
@@ -51,8 +45,18 @@ const Home = () => {
                     Please refine your search criteria and try again.
                   </p>
                 </div>
-              )}
+              ) :
+                <div>
+                  <h1 className="text-4xl pt-20 pb-10 font-semibold text-[#333333]">
+                    {searchedListingList.length > 0 && `Available listings (${searchedListingList.length})`}
+                  </h1>
+                  {searchedListingList.length > 0 && (
+                    <RenderListings listingList={searchedListingList} />
+                  )}
+                </div>
+              }
           </Wrapper>
+          }
         </div>
         <div className="space-y-[10.1875rem]">
           <Greeting />
