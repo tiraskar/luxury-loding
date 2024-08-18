@@ -103,23 +103,11 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
               `}
           />
         </div>
-        {/* <div className="flex flex-col gap-y-2">
-          <label htmlFor="phone-number" className="flex">Phone number</label>
-          <input
-            name="phone"
-            {...register('personalInfo.phone')}
-            value={personalInfo.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
-            type="number"
-            placeholder="Enter phone number"
-            required
-            className="default-input" />
-        </div> */}
 
         <div className="flex flex-col gap-y-2">
           <label className="flex">Phone number</label>
           <div
-            className={`flex flex-row w-full border-[1px]  border-[#D3D3D3] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px] 
+            className={`flex flex-row w-full border-[1px]  border-[#F5F5F5] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px] h-[42px]
             ${errors.personalInfo && errors?.personalInfo.phone
                 ? "border-[#FF0000]"
                 : ""
@@ -145,7 +133,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
               inputMode="numeric"
               pattern="\d*"
               placeholder="Enter phone number"
-              className={`pl-2 pr-5 py-4 w-full outline-none rounded-xl `}
+              className={`pl-2 pr-5 py-[13px] w-full outline-none rounded-xl `}
             />
           </div>
         </div>

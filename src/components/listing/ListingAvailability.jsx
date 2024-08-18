@@ -40,7 +40,8 @@ const ListingAvailability = () => {
       <div className="flex space-x-3 border-black shadow-md px-[2px] rounded-2xl overflow-hidden font-inter text-textDark text-sm">
 
         {listingAvailableCalender.length > 0 && (
-          <>
+          <div className="grid grid-cols-2 ">
+            <div className="">
             <Calendar
               defaultView="month"
               maxDetail="month"
@@ -54,6 +55,9 @@ const ListingAvailability = () => {
               showNeighboringCentury={false}
               showNeighboringDecade={false}
             />
+            </div>
+            <div className="">
+
             <Calendar
               defaultView="month"
               maxDetail="month"
@@ -71,7 +75,8 @@ const ListingAvailability = () => {
               showNeighboringCentury={false}
               showNeighboringDecade={false}
             />
-          </>
+            </div>
+          </div>
         )}
 
       </div>

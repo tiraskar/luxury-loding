@@ -29,15 +29,15 @@ const BookingConfirmation = () => {
     <div className="lg:col-span-5 font-inter tracking-[-1%]">
       {loading && <LoaderScreen />}
       <Wrapper>
-        <div className=" flex flex-col mx-auto  lg:max-w-[652px]">
-          <div className="flex flex-col justify-start ">
-            <div className="space-y-16">
-              <p className="flex items-center text-xs text-[#A1A196] gap-1">
-                Home <GoDotFill /> Listing <GoDotFill className="text-black" />
+        <div className=" flex flex-col mx-auto lg:max-w-[652px]">
+          <div className="flex flex-col justify-start lg:ml-[-1%] xl:ml-[-3%] ">
+            <div className="space-y-[59px]">
+              <p className="flex items-center text-sm font-medium text-[#A1A196] gap-1">
+                Home <GoDotFill className="h-2" /> Listings <GoDotFill className="h-2 text-black" />
                 <span className="text-black">Booking</span>
               </p>
 
-              <div className="flex flex-col lg:flex-row justify-between  xl:min-w-[652px] gap-4 pb-7">
+              <div className="flex flex-col lg:flex-row justify-between  xl:min-w-[652px] gap-4 pb-[27px]">
                 <div className="flex items-center ">
                   <MdKeyboardArrowLeft size={24} onClick={() => navigate(-1)} />
                   <h1 className="text-xl font-onest tracking-tight font-semibold">
@@ -46,17 +46,17 @@ const BookingConfirmation = () => {
                 </div>
                 <div className="flex  items-center gap-4 ">
                   <div className="flex items-center space-x-2">
-                    <div className="flex justify-center items-center w-6 h-6 text-xs bg-[#4AC72B] text-white rounded-full">
+                    <div className="flex justify-center items-center w-6 h-6  bg-[#4AC72B] text-white rounded-full">
                       <TiTick className="text-white" />
                     </div>
-                    <h1>Remember</h1>
+                    <h1 className="text-[13px] h-[1rem]">Remember</h1>
                   </div>
-                  <div className="w-full h-px bg-textDark px-4 "></div>
+                  <div className="w-full h-px bg-textDark px-8 "></div>
                   <div className="flex items-center space-x-2 ">
                     <p className="flex justify-center items-center w-6 h-6 text-xs bg-black text-white rounded-full">
                       2
                     </p>
-                    <h1>Payment</h1>
+                    <h1 className="text-[13px] h-[1rem]">Payment</h1>
                   </div>
                 </div>
               </div>

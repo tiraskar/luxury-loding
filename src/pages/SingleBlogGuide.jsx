@@ -7,26 +7,29 @@ import CustomImage from "../components/ui/CustomImage";
 
 const SingleBlogGuide = () => {
   return (
-    <div className="flex flex-col gap-y-[150px]">
+    <div className="flex flex-col gap-y-[150px] pt-8">
       <Wrapper>
-        <div className=" font-inter tracking-[-1%]">
-          <p className="flex items-center text-xs text-[#A1A196] gap-1">
-            Blog <GoDotFill /> Blog & Guidebook <GoDotFill />
-            <span className="text-black">Sedona’s secret Hike</span>
-          </p>
-          <div className="flex flex-col gap-y-[56px] text-[#222222]">
-            <h1 className=" text-[30px] xxs:text-3xl xs:text-[40px] sm:text-[56px] md:text-[60px] lg:text-[68px] font-onest tracking-tight max-w-[986px] leading-10 xxs:leading-[40px] xs:leading-[50px] sm:leading-[60px] md:leading-[70px] lg:leading-[80px]">
+        <div className=" font-inter  space-y-[56px]">
+          <div className="space-y-10">
+            <p className="flex items-center text-sm text-[#A1A196] gap-1 font-medium h-[17px]">
+              Home <GoDotFill className="h-2" /> Blog & Guidebook
+              <span className="text-black font-medium flex flex-row items-center"> <GoDotFill className="h-2" /> Sedona’s secret Hike</span>
+            </p>
+            <h1 className=" text-[30px] xxs:text-3xl xs:text-[40px] sm:text-[56px] md:text-[60px] lg:text-[68px] font-onest tracking-[-1.36px] max-w-[986px] leading-10 xxs:leading-[40px] xs:leading-[50px] sm:leading-[60px] md:leading-[70px] lg:leading-[78px] h-[126px]">
               Sedona’s secret Hike: Escape the crowds with this trial
             </h1>
 
+          </div>
+          <div className="flex flex-col gap-y-[56px] text-[#222222]">
             <div className="flex justify-between items-center">
               <div className="flex flex-row items-center gap-3">
                 <div className="w-[42px] h-[42px] rounded-full">
                   <CustomImage src='images/profile-alex.png' alt="" className="" />
                 </div>
                 <div className="flex flex-col tracking-tight font-inter ">
-                  <h1 className="font-medium text-[1rem]">Alex Brown</h1>
-                  <p className="text-[13px] text-[#A1A196]">Product designer | Infulancer</p>
+                  <h1 className="font-medium text-[1rem] tracking-[-0.16px]">Alex Brown</h1>
+                  <p className="flex items-center gap-x-2 text-[13px] text-[#A1A196] tracking-[-0.13px]">Posted: July12, 2024 <GoDotFill />
+                    <span className="text-[#0094FF]">5 min read</span> </p>
                 </div>
               </div>
               <div className="flex gap-4 text-black text-2xl">

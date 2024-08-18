@@ -161,20 +161,20 @@ const PaymentMethod = () => {
         <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
         <div className='flex flex-col space-y-2'>
           <PaymentElement onChange={handlePaymentElementChange} id="payment" />
-          <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
+          {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
             By providing your card information, you allow AvantStay, Inc. to
             charge your card for future payments in accordance with their terms.
-          </p>
+          </p>}
         </div>
       </div>
 
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <BillingAddress register={register} errors={errors} />
 
-      <div className="absolute bottom-0 md:relative pt-20 md:pb-10">
+      <div className="absolute bottom-0 lg:relative lg:pt-10 lg:pb-10">
         <button
           type="submit"
-          className="py-3 px-7 bg-[#333333] text-white rounded-[14px] "
+          className="flex  items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"
         >
           Confirm and pay
         </button>

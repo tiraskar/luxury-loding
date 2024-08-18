@@ -102,7 +102,7 @@ const RenderListings = ({ listingList }) => {
               </p>
             )}
 
-            <p className="flex items-baseline space-x-1 text-xs text-[#0094FF]">
+            <p className="flex items-baseline space-x-1 text-xs text-[#0094FF] h-[15px]">
               <GrLocation /> <span>{listing.address}</span>
             </p>
 
@@ -110,11 +110,11 @@ const RenderListings = ({ listingList }) => {
               <Link
                 to={`/listings/${listing.id}`}
                 onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
-                className="text-xl font-inter tracking-[-1%]"
+                className="text-[18px] font-inter tracking-[-1%] leading-6" 
               >
                 {listing.name}
               </Link>
-              <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px]">
+              <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px] h-[40px]">
                 {listing.description}
               </p>
             </div>
@@ -139,8 +139,8 @@ const RenderListings = ({ listingList }) => {
             </div>
 
             <div className="flex items-center">
-              <p className="text-[#333333] font-bold text-xl">${listing.price}</p>
-              <p className="text-[#8E8E80] text-sm tracking-tight">
+              <p className="text-[#333333] font-bold text-xl h-7">${listing.price}</p>
+              <p className="text-[#8E8E80] text-sm tracking-tight h-[17px]">
                 &nbsp;/ per night
               </p>
             </div>

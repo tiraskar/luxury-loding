@@ -1,7 +1,7 @@
 const ContactInfo = () => {
   return (
     <div className="flex flex-col space-y-8 justify-between max-h-[617px]">
-      <div className="flex flex-col gap-y-8 mt-8 sm:mt-12 lg:mt-16">
+      <div className="flex flex-col gap-y-8 mt-8 sm:mt-12 lg:mt-12">
         <div className="flex flex-col gap-y-3 max-w-[389px]">
           <h1 className=" text-3xl xxs:text-[2rem] sm:text-4xl md:text-[38px]">Say Hello!</h1>
           <p className="text-xs leading-[22px] text-[#8E8E80]">Whether you have questions about our services or need assistance with your property, we’re here to help. Fill out the contact form below, and a member of our team will get back to you.</p>

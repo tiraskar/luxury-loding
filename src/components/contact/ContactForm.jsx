@@ -97,14 +97,14 @@ const ContactForm = () => {
       >
         <div className="flex flex-col gap-y-2">
           <label className="flex">
-            Full Name
+            Full name
             <FaAsterisk color="#DE2424" size={8} className="mt-1" />
           </label>
           <input
             {...register("fullName")}
             type="text"
             placeholder="Enter full name"
-            className={`default-input  ${errors.fullName ? 'border-[#FF0000]' : ''}`}
+            className={`contact-input  h-[52px] ${errors.fullName ? 'border-[#FF0000]' : ''}`}
           />
 
         </div>
@@ -117,7 +117,7 @@ const ContactForm = () => {
             {...register("email")}
             type="email"
             placeholder="Enter email"
-            className={`default-input  ${errors.email ? 'border-[#FF0000]' : ''}`}
+            className={`contact-input  h-[52px]  ${errors.email ? 'border-[#FF0000]' : ''}`}
           />
 
         </div>
@@ -126,11 +126,11 @@ const ContactForm = () => {
             Phone number
             <FaAsterisk color="#DE2424" size={8} className="mt-1" />
           </label>
-          <div className={`flex flex-row w-full border-[1px]  border-[#D3D3D3] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px] ${errors.phoneNumber ? 'border-[#FF0000]' : ''}`}>
+          <div className={`flex flex-row w-full border-[2px]   border-[#F5F5F5] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[2px] ${errors.phoneNumber ? 'border-[#FF0000]' : ''}`}>
             <select
               {...register("countryCode")}
               onChange={(e) => handleCountryChange(e)}
-              className="bg-white outline-none pl-5 pr-2 appearance-none border-r-2 border-[#F5F5F5] rounded-l-xl"
+              className="bg-white outline-none pl-5 pr-2 appearance-none border-r-2 border-[#F5F5F5] rounded-l-xl  h-[52px]"
             >
               {options.map(({ code, dialCode }) => (
                 <option key={code} value={code}>
@@ -144,7 +144,7 @@ const ContactForm = () => {
               inputMode="numeric"
               pattern="\d*"
               placeholder="Enter phone number"
-              className={`pl-2 pr-5 py-4 w-full outline-none rounded-xl `}
+              className={`pl-2 pr-5 py-[17px] w-full outline-none rounded-xl `}
             />
 
           </div>
@@ -154,7 +154,7 @@ const ContactForm = () => {
             {...register("description")}
             rows={6}
             placeholder="How can we help you?"
-            className={`default-input w-full ${errors.description ? 'border-[#FF0000]' : ''}`}
+            className={`contact-input w-full ${errors.description ? 'border-[#FF0000]' : ''}`}
           />
           <span className="text-[#FF0000] font-xs">{errors?.description?.message}</span>
         </div>

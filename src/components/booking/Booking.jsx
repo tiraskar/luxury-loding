@@ -4,10 +4,6 @@ import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { useEffect } from "react";
-// import { fetchListingInfo } from "../../redux/slices/listingSlice";
-// import { calculateBookingPrice } from "../../redux/slices/bookingSlice";
 
 const Booking = () => {
 
@@ -16,41 +12,19 @@ const Booking = () => {
 
   const images = listingInfo?.images || [];
 
-  // const { id } = useParams();
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
-  // useEffect(() => {
-
-  //   if (id) {
-  //     dispatch(fetchListingInfo(id));
-
-  //     if (bookingCheckIn && bookingCheckOut && guestNumber) {
-  //       dispatch(calculateBookingPrice({
-  //         listingId: Number(id),
-  //       }));
-  //     }
-  //   }
-  // }, []);
-
-  // if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
-  //   navigate(`/listings/${id}`);
-  //   return null;
-  // }
-
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:max-h-[145px] lg:max-w-[207px]">
+    <div className="space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="lg:max-h-[145px] sm:max-w-[350px] lg:max-w-[207px]">
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div className="flex flex-col space-y-5">
           <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs"><GrLocation />
-            <p>{listingInfo.address}</p>
+            <p className="h-[15px]">{listingInfo.address}</p>
           </div>
 
           <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px]">

@@ -18,25 +18,26 @@ const GuideBookBanner = () => {
     <Wrapper>
       <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-start gap-y-[56px]">
 
-        <p className="flex items-center text-xs text-[#A1A196] gap-1">
-          Blog <GoDotFill />
-          <span className="text-black">Blog & Guidebook</span>
+        <div className="space-y-10 flex flex-col">
+          <p className="flex items-center text-sm text-[#A1A196] gap-1">
+            <span>Home</span>
+            <span className="text-black font-medium flex items-center gap-1"> <GoDotFill className="h-2" /> Blog & Guidebook</span>
         </p>
-
-        <h1 className=" text-3xl md:text-[35px] font-semibold">Blog & Guidebook</h1>
+          <h1 className=" text-3xl xxs:text-4xl xs:text-[40px] sm:text-[46px] md:text-[50px] lg:text-[58px] font-semibold">Blog & Guidebook</h1>
+        </div>
 
         <div
-          className="relative flex flex-col lg:flex-row  bg-cardBackgroundLight rounded-2xl p-2 xs:p-4 sm:p-5 gap-4 lg:max-h-[633px]"
+          className="relative flex flex-col lg:flex-row  bg-cardBackgroundLight rounded-3xl  xs:p-4 sm:pr-[18px] sm:pl-6 gap-4 lg:max-h-[633px] max-w-[1320px]"
         >
 
-          <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
-            <div className="flex flex-row items-center gap-3 py-4">
+          <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px] py-2">
+            <div className="flex flex-row items-center gap-3 ">
               <div className="w-[42px] h-[42px] rounded-full">
                 <CustomImage
                   src='images/profile-alex.png'
                   alt="" className="" />
               </div>
-              <div className="flex flex-col tracking-tight font-inter ">
+              <div className="flex flex-col tracking-[-0.16px] font-inter space-y-0.5">
                 <h1 className="font-medium text-[1rem]">Alex Brown</h1>
                 <p className="text-[13px] text-[#A1A196]">Product designer | Influncer</p>
               </div>

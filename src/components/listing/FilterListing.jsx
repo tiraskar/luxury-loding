@@ -256,7 +256,7 @@ const Popup = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-[#333333] transition-all delay-500 ease-in-out">
-      <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2 lg:w-[430px] max-h-[620px] h-auto overflow-y-auto sm:max-w-[95%] sm:max-h-[90%]">
+      <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2 lg:w-[430px] max-h-[820px] h-auto overflow-y-auto sm:max-w-[95%] sm:max-h-[90%]">
         <div className="flex justify-between items-center px-4 py-2">
           <h2 className="text-[18px] font-medium font-inter tracking-[-2%]">Filters</h2>
           <button

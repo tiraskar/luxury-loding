@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
-import { RxCross2 } from "react-icons/rx";
+// import { RxCross2 } from "react-icons/rx";
 import PropTypes from "prop-types";
 
 const MobileNavbar = ({ navLinks, onClose, pathname }) => {
@@ -8,10 +8,10 @@ const MobileNavbar = ({ navLinks, onClose, pathname }) => {
     <div className="fixed transition-all delay-1000 md:hidden inset-0 bg-white z-50 flex flex-col items-center py-6 my-3 w-1/2">
       <div className="flex justify-between w-full px-2 mb-10">
         <Logo onClose={onClose} />
-        <RxCross2
+        {/* <RxCross2
           onClick={() => onClose(false)}
           className="text-xl sm:text-2xl"
-        />
+        /> */}
       </div>
 
       <ul className="flex flex-col justify-start text-start  items-center space-y-4 transition-all delay-100">
@@ -33,9 +33,9 @@ const MobileNavbar = ({ navLinks, onClose, pathname }) => {
         <select className="bg-white  rounded-md p-2 text-[1rem]">
           <option>USD</option>
         </select>
-        <button className="px-5 py-3 rounded-xl text-white bg-black">
-          Book now
-        </button>
+        <Link to='/listings' onClick={() => onClose(false)} className="flex p-[14px_20px] justify-center items-center gap-[10px] rounded-xl bg-[#222]">
+          <span className="flex items-center text-[#FFF] font-onest text-[14px] font-normal leading-normal h-[10px]">Book now</span>
+        </Link>
       </div>
     </div>
   );

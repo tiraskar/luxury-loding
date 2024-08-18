@@ -23,7 +23,7 @@ const Testimonial = () => {
       <div className="">
         <CustomImage
           src={image}
-          className="w-full h-auto rounded-xl object-contain" />
+          className="w-full h-auto max-h-[514px] rounded-xl object-contain" />
       </div>
 
       <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
