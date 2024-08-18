@@ -573,7 +573,7 @@ const listingSlice = createSlice({
       .addCase(saveListingReview.fulfilled, (state) => {
         state.isReviewSaving = false;
         state.isReviewSent = true;
-        toast.success("Review sent successfully. Thank you");
+        toast.success("Your review has been submitted successfully. Thank you for your feedback.");
       })
       .addCase(saveListingReview.rejected, (state, action) => {
         state.isReviewSaving = false;
