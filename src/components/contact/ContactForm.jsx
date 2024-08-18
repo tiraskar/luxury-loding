@@ -3,7 +3,7 @@ import { FaAsterisk } from "react-icons/fa";
 import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
 import { baseUrl } from "../../config/baseurl";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
