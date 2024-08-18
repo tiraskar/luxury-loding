@@ -49,10 +49,10 @@ const Listing = () => {
     'Availability': <ListingAvailability />,
   };
 
-  const listingUrl = window.location.href;
+  const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
   const handleCopyUrl = () => {
     toast.dismiss();
-    navigator.clipboard.writeText(listingUrl).then(() => {
+    navigator.clipboard.writeText(`${baseUrl}listings/${listingInfo.id}`).then(() => {
       toast.success("URL copied to clipboard!");
     });
   }
