@@ -53,7 +53,7 @@ const SearchListingForm = () => {
       style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
       className="flex flex-col font-onest items-center bg-white rounded-3xl  shadow-lg ">
 
-      <form action="" className=" grid grid-cols-2  md:flex md:flex-wrap md:flex-grow-0 md:justify-around items-center space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px] mr-4">
+      <form action="" className=" grid grid-cols-2  md:flex md:flex-wrap md:flex-grow-0 items-center space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px]">
 
         <div className="justify-start w-[153.25px] h-[69px] flex flex-col gap-y-2 px-7 py-3">
           <SearchInputLabel
