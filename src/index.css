@@ -15,8 +15,11 @@
 .search-input {
     @apply bg-[#F9F9F9] outline-none font-inter text-[#8A8A8A] text-[1rem];
   }
+.contact-input {
+  @apply border-[2px] border-[#F5F5F5] outline-none px-5 py-[17px] rounded-xl focus:border-[2px] focus:border-[#7B6944] bg-white;
+}
 .default-input {
-  @apply border-[1px] border-[#D3D3D3] outline-none px-5 py-[15px] rounded-xl focus:border-[1px] focus:border-[#7B6944] bg-white;
+  @apply border-[1px] border-[#F5F5F5] outline-none px-5 py-[13px] rounded-xl focus:border-[1px] focus:border-[#7B6944] bg-white h-[42px];
 }
 }
 @keyframes spin {
