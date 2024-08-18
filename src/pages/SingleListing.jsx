@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { FilterableSearchListing, Listing, OtherListing } from "../components";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchListingInfo, fetchListingReviews } from "../redux/slices/listingSlice";
+import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 import { setCheckBookingParamsToInitialState } from "../redux/slices/bookingSlice";
+import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 
 
 const SingleListing = () => {
@@ -11,10 +12,18 @@ const SingleListing = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const startDate = getCurrentMonthStartDate()
+
   useEffect(() => {
     dispatch(fetchListingInfo(id));
-    dispatch(fetchListingReviews(id))
-    setCheckBookingParamsToInitialState()
+    dispatch(fetchListingReviews(id));
+    dispatch(fetchListingAvailabilityCalender({
+      id,
+      startDate: formateDate(startDate)
+    }));
+    dispatch(fetchOtherListings({ limit: 4 }));
+    dispatch(setCheckBookingParamsToInitialState());
+    dispatch(setSearchListingParamsToInitialState());
   }, [id])
 
   return (
