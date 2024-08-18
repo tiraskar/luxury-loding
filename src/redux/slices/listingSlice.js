@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
 import { formateDate } from "../../helper/date";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 // Thunks
 export const syncListing = createAsyncThunk(
@@ -87,12 +87,12 @@ export const loadMoreListing = createAsyncThunk(
 
 export const fetchOtherListings = createAsyncThunk(
   'listing/other',
-  async (listing) => {
+  async (listing, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${listing.limit}`);
-      return data;
+      const response = await axios.get(`${baseUrl}/listing?limit=${listing.limit}&page=1&priceOrder=`);
+      return response.data;
     } catch (error) {
-      return Promise.reject(error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -206,6 +206,17 @@ export const saveListingReview = createAsyncThunk(
   }
 )
 
+export const fetchListingAvailabilityCalender = createAsyncThunk(
+  'listing/available-date', async (listing, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${baseUrl}/listing/getcalendar/${listing.id}?startDate=${listing.startDate}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -232,6 +243,8 @@ const listingSlice = createSlice({
     isSearchOnSingleListing: false,
     isReviewSaving: false,
     isReviewSent: false,
+    isCalenderLoading: false,
+    isHomePageLoading: false,
     //error
     error: null,
 
@@ -244,6 +257,7 @@ const listingSlice = createSlice({
     listingReviews: [],
     countryList: [],
     amenitiesList: [],
+    listingAvailableCalender: [],
 
     //object
     listingInfo: {},
@@ -282,9 +296,7 @@ const listingSlice = createSlice({
     },
 
     toggleIsSearchedOnSingleListing: (state, action) => {
-      if (state.isSearchedListing) {
-        state.isSearchOnSingleListing = action.payload;
-      }
+      state.isSearchOnSingleListing = action.payload;
     },
 
     setSearchListingParamsToInitialState: (state) => {
@@ -301,7 +313,13 @@ const listingSlice = createSlice({
       state.searchListingParams.roomType = '';
       state.searchListingParams.rooms = '';
       state.isFilterApply = false;
+      state.isHomePageSearch = false;
 
+    },
+
+    setArraysToInitialStateInPageChnage: (state) => {
+      state.availableListing = [];
+      state.listingList = [];
     },
 
     toggleApplyFilter: (state) => {
@@ -365,6 +383,9 @@ const listingSlice = createSlice({
         state.isSearchedListing = false;
         state.isFetchListing = true;
         state.error = null;
+        state.isHomePageSearch = false;
+        state.availableListing = [];
+        state.searchedListingList = [];
       })
       .addCase(fetchListingList.fulfilled, (state, action) => {
         state.isFetchListing = false;
@@ -399,6 +420,10 @@ const listingSlice = createSlice({
         state.isFetchAvailableListing = true;
         state.isSearchOnSingleListing = true;
         state.error = null;
+        state.searchedListingList = [];
+        state.isHomePageSearch = false;
+        state.listingList = [];
+        state.searchedListingList = [];
       })
       .addCase(fetchAvailableListing.fulfilled, (state, action) => {
         state.isFetchAvailableListing = false;
@@ -466,12 +491,12 @@ const listingSlice = createSlice({
     builder
       .addCase(searchListing.pending, (state) => {
         state.searchedListingList = [];
-        state.isSearchedListing = true;
+        state.isHomePageLoading = false;
         state.isHomePageSearch = true;
         state.error = null;
       })
       .addCase(searchListing.fulfilled, (state, action) => {
-        state.isHomePageSearch = false;
+        state.isHomePageLoading = false;
         state.searchedListingList = action.payload;
       })
       .addCase(searchListing.rejected, (state, action) => {
@@ -526,7 +551,7 @@ const listingSlice = createSlice({
     //fetch amenities list 
     builder
       .addCase(fetchAmenitiesList.pending, (state) => {
-        state.isFetchingAmenities = false;
+        state.isFetchingAmenities = true;
         state.error = null;
       })
       .addCase(fetchAmenitiesList.fulfilled, (state, action) => {
@@ -553,10 +578,26 @@ const listingSlice = createSlice({
       .addCase(saveListingReview.rejected, (state, action) => {
         state.isReviewSaving = false;
         state.error = action.payload;
+      });
+
+    //fetch listing available calender
+
+    builder
+      .addCase(fetchListingAvailabilityCalender.pending, (state) => {
+        state.isCalenderLoading = true;
+        state.error = null;
       })
+      .addCase(fetchListingAvailabilityCalender.fulfilled, (state, action) => {
+        state.isCalenderLoading = false;
+        state.listingAvailableCalender = action.payload;
+      })
+      .addCase(fetchListingAvailabilityCalender.rejected, (state, action) => {
+        state.isCalenderLoading = false;
+        state.error = action.payload;
+      });
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage } = listingSlice.actions;
 
 export default listingSlice.reducer;

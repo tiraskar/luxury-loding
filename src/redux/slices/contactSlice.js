@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { baseUrl } from "../../config/baseurl";
 import axios from "axios";
-import { notifyToastMessage } from "../../components/ui/CustomToast";
+
+import { toast } from "react-toastify";
 
 const submitContactForm = createAsyncThunk(
   'contact/submit',
@@ -65,7 +66,7 @@ const contactSlice = createSlice({
       .addCase(emailSubscription.fulfilled, (state) => {
         state.loading = false;
         state.isEmailSent = true;
-        notifyToastMessage(`Email subscription done successfully. `);
+        toast.success(`You have successfully subscribed to our email updates.`);
       })
       .addCase(emailSubscription.rejected, (state, action) => {
         state.loading = false;
