@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrPowerCycle } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
@@ -94,7 +94,7 @@ const ReviewForm = () => {
 
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       review: ''
     },
@@ -115,9 +115,12 @@ const ReviewForm = () => {
 
   useEffect(() => {
     if (isReviewSent) {
-      setValue('review', '');
+      reset();
+      const textarea = document.getElementById('review');
+      textarea.style.height = 'auto';
+      textarea.nodeValue = ''
     }
-  }, [isReviewSent]);
+  }, [isReviewSent, reset]);
 
   return (
     <form
@@ -129,12 +132,14 @@ const ReviewForm = () => {
     >
       <textarea
         {...register('review')}
+        id="review"
         rows={1}
-        // onInput={handleInput}
+        onInput={handleInput}
         className="w-full outline-none resize-none"
         placeholder="Write a review..."
         style={{ overflow: 'hidden' }}
       />
+      {errors.review && <p className="text-[#FF0000] text-xs">{errors.review.message}</p>}
       <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
       <div className="flex justify-end">
         <button
