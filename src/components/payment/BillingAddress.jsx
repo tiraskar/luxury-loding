@@ -1,10 +1,10 @@
-
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
 import PropTypes from "prop-types";
 
 const BillingAddress = ({ register, errors }) => {
-  const { billingInfo } = useSelector(state => state.payment);
+  const { billingInfo, paymentType } = useSelector(state => state.payment);
   const { countryList } = useSelector(state => state.listing);
 
   const dispatch = useDispatch()
@@ -13,6 +13,10 @@ const BillingAddress = ({ register, errors }) => {
     const inputTitle = 'billingInfo';
     dispatch(handlePaymentInput({ inputTitle, name, value }))
   }
+
+  useEffect(() => {
+    handleChange('country', 'US');
+  }, [paymentType])
 
   return (
 
@@ -50,6 +54,7 @@ const BillingAddress = ({ register, errors }) => {
             value={billingInfo.country}
             onChange={(e) => handleChange("country", e.target.value)}
             id="country-region"
+            disabled={paymentType == 'affirm'}
             className="block w-full default-input pr-10 appearance-none"
           >
             {countryList?.map((data) => {
