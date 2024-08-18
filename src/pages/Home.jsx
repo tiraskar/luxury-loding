@@ -37,7 +37,7 @@ const Home = () => {
               {isHomePageLoading && <ListingLoading numbers={8} />}
               {searchedListingList.length == 0 &&
                 isHomePageSearch ? (
-                <div>
+                  <div className="pt-20">
                   <h1 className="text-3xl font-semibold text-[#333333]">
                     No listings found.
                   </h1>

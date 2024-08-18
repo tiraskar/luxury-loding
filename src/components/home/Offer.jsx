@@ -5,8 +5,8 @@ import CustomImage from "../ui/CustomImage";
 const SingleOffer = ({ offer, index }) => {
   return (
     <div className="space-y-6">
-      <div className="flex flex-row gap-1 items-center">
-        <span className="bg-black text-white flex items-center justify-center rounded-xl text-[22px] w-[46px] h-[46px]">
+      <div className="flex flex-row  items-center">
+        <span className="bg-black font-onest text-white flex items-center px-[10px] py-[10px] justify-center rounded-xl text-[22px] w-[46px] h-[46px] tracking-[-0.44px]">
           {index + 1 < 10 ? `0${index + 1}` : index + 1}
         </span>
         <div className="w-full h-px bg-[#E0E0E0]"></div>
