@@ -40,3 +40,15 @@ export const getRelativeDateOrTime = (dateTime) => {
   }
   return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
 };
+
+
+export const getCurrentMonthStartDate = () => {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+};
+
+export const getNextMonthStartDate = () => {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1);
+};
+
