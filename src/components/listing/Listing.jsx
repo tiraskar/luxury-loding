@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { GoDotFill } from "react-icons/go";
-import { FaRegHeart } from "react-icons/fa";
 import { LuBath, LuShare2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import ListingTabs from "./ListingTabs";
@@ -15,7 +14,7 @@ import { useSelector } from "react-redux";
 import { IoImageOutline } from "react-icons/io5";
 import ListingImages from "./ListingImages";
 import ListingList from "./ListingList";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 
 const tabs = [
@@ -79,9 +78,9 @@ const Listing = () => {
             </p>
           </div>
             <div className="flex flex-row gap-x-3 h-fit">
-              <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2  h-[43px]">
+              {/* <button className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4 flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2  h-[43px]">
                 <FaRegHeart size={20} /> <span>Save</span>
-            </button>
+            </button> */}
               <button
                 onClick={() => handleCopyUrl()}
                 className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4  flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2 h-[43px]">
