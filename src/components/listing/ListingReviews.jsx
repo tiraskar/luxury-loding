@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GrPowerCycle } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
