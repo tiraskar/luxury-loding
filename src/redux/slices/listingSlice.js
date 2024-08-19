@@ -322,7 +322,10 @@ const listingSlice = createSlice({
       state.listingList = [];
     },
 
-    toggleApplyFilter: (state) => {
+    toggleApplyFilter: (state, action) => {
+      const { minValue, maxValue } = action.payload;
+      state.searchListingParams.minPrice = minValue;
+      state.searchListingParams.maxPrice = maxValue;
       state.isFilterApply = true;
     },
 
