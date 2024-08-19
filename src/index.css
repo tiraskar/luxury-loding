@@ -73,3 +73,32 @@
     height: 10px;
   }
 }
+
+.slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0;
+  pointer-events: auto;
+  background: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.slider-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  /* Hides the thumb */
+  cursor: pointer;
+}
+
+.slider-thumb::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  /* Hides the thumb */
+  cursor: pointer;
+}
