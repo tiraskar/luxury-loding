@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle, FaSpinner } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { baseUrl } from '../config/baseurl';
 import axios from 'axios';
 
@@ -112,7 +112,10 @@ const Success = () => {
         <div className="flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center">
                 {renderStatus()}
-                {/* <p className="text-gray-600 mb-6">Payment Intent: {paymentIntent}</p> */}
+                {paymentStatus == "succeeded" && <Link to='/'
+                    className={`flex flex-row items-center justify-center text-white bg-buttonPrimary text-sm  py-[14px] rounded-xl`}>
+                    Back to home
+                </Link>}
             </div>
         </div>
     );
