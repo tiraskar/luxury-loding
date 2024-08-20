@@ -109,13 +109,16 @@ const Success = () => {
     };
 
     return (
-        <div className="flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div className="flex items-center justify-center  bg-gray-100 py-10 my-10">
+            <div className="bg-white justify-center max-w-[500px] p-8 rounded-lg shadow-lg text-center space-y-5 font-onest">
                 {renderStatus()}
+                <div className='flex justify-center'>
+
                 {paymentStatus == "succeeded" && <Link to='/'
-                    className={`flex flex-row items-center justify-center text-white bg-buttonPrimary text-sm  py-[14px] rounded-xl`}>
+                        className={`flex flex-row w-fit items-center justify-center text-white bg-textDark   px-10 py-[11px] rounded-xl font-inter text-sm font-medium`}>
                     Back to home
                 </Link>}
+                </div>
             </div>
         </div>
     );
