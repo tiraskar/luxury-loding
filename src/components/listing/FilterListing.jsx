@@ -324,16 +324,7 @@ const Popup = () => {
               <div className="flex flex-row items-center rounded-xl">
                 <label className="mr-2">Min</label>
                 <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3">
-                  {/* <input
-                    name="min-amount"
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d*"
-                    placeholder=""
-                    value={searchListingParams.minPrice}
-                    onChange={(e) => handleSearchInputChange('minPrice', e.target.value)}
-                    className="outline-none w-8 rounded-xl py-1"
-                  /> */}
+
                   <span>{minValue}$</span>
                 </div>
               </div>
@@ -341,24 +332,11 @@ const Popup = () => {
               <div className="flex flex-row items-center rounded-xl">
                 <label className="mr-2">Max</label>
                 <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3">
-                  {/* <input
-                    name="max-amount"
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d*"
-                    placeholder=""
-                    value={searchListingParams.maxPrice}
-                    onChange={(e) => handleSearchInputChange('maxPrice', e.target.value)}
-                    className="outline-none w-10 rounded-xl py-1"
-                  /> */}
                   <span>{maxValue}$</span>
                 </div>
               </div>
             </div>
           </div>
-
-
-
 
           <div className="space-y-5">
             <p>Amenities</p>
@@ -458,7 +436,6 @@ const PriceRangeSlider = ({ minValue, setMinValue, maxValue, setMaxValue }) => {
   return (
     <div className='flex flex-col space-y-[2px]'>
       <FlexContainer minValue={minValue} maxValue={maxValue} />
-
       <div className='relative h-1 bg-[#F3F3F3] rounded-full'>
         <div className=" top-0 absolute slider-wrapper">
         <input
@@ -495,51 +472,77 @@ PriceRangeSlider.propTypes = {
   setMaxValue: PropTypes.func
 };
 
-const FlexContainer = () => {
+const FlexContainer = ({ minValue, maxValue }) => {
 
-// const minPercentage = (minValue / 5000) * 100;
-// const maxPercentage = (maxValue / 5000) * 100;
+  const minPercentage = (minValue / 5000) * 100;
+  const maxPercentage = (maxValue / 5000) * 100;
 
   return (
-    <div className={`flex w-full items-baseline space-x-[2px] justify-between`}>
-      <div className='bg-buttonPrimary h-[15px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[15px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[35px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[25px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[35px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[25px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[55px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[44px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[44px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[34px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[33px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[24px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[23px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[22px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[22px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[34px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[50px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[27px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[31px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[43px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[50px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[27px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[31px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[43px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
-      <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+
+    <div className='relative'>
+      <div
+        className="absolute h-full top-0 bg-opacity-80 bg-white"
+        style={{
+          width: `${minPercentage}%`,
+        }}
+      ></div>
+      <div
+        className="absolute h-full top-0 bg-opacity-80 bg-white "
+        style={{
+          left: `${maxPercentage}%`,
+          width: `${100 - maxPercentage}%`,
+        }}
+      ></div>
+      <div
+        className="absolute h-full top-0  bg-white bg-opacity-30"
+        style={{
+          left: `${minPercentage}%`,
+          width: `${maxPercentage - minPercentage}%`,
+        }}
+      ></div>
+
+      <div className={`flex w-full items-baseline space-x-[2px] justify-between`}>
+        <div className='bg-buttonPrimary h-[15px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[15px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[35px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[25px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[35px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[25px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[55px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[44px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[44px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[34px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[33px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[24px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[23px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[22px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[22px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[34px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[50px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[27px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[31px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[43px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[50px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[27px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[31px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[30px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[43px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+        <div className='bg-buttonPrimary h-[29px] w-[10px] rounded-t-[3px]'></div>
+      </div>
+
     </div>
+
   );
 };
 
 
-// FlexContainer.propTypes = {
-//   minValue: PropTypes.number,
-//   maxNumber: PropTypes.number,
-// };
+FlexContainer.propTypes = {
+  minValue: PropTypes.number,
+  maxValue: PropTypes.number,
+};
