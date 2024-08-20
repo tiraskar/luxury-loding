@@ -55,7 +55,7 @@ const BillingAddress = ({ register, errors }) => {
             onChange={(e) => handleChange("country", e.target.value)}
             id="country-region"
             disabled={paymentType == 'affirm'}
-            className="block w-full default-input pr-10 appearance-none"
+            className="block w-full py-px default-input pr-10 appearance-none"
           >
             {countryList?.map((data) => {
               return (
