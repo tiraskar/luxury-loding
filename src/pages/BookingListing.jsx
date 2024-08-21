@@ -139,7 +139,7 @@ const BookingListing = () => {
                 am aware that I must be at least 21 to book this stay. I agree
                 to pay the total amount shown, which includes service fees.{" "}
                 <Link to="/contact" className="underline">
-                  Contact us
+                  Contact us &nbsp;
                 </Link>
                 if you have any questions!
               </p>
