@@ -227,6 +227,9 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchAmenitiesList,
+  fetchAvailableListing,
+  fetchListingList,
+  fetchListingTotalCount,
   setAmenitiesListingParams,
   setSearchListingParams,
   setSearchListingParamsToInitialState,
@@ -376,6 +379,8 @@ const Popup = () => {
               onClick={() => {
                 dispatch(setSearchListingParamsToInitialState());
                 dispatch(toggleFilterOpen());
+                dispatch(fetchListingList());
+                dispatch(fetchListingTotalCount());
               }}
               className="flex px-4  text-[13px] items-center py-2 border-[#D7DBE8] border-[0.6px] rounded-[10px] w-[68px] h-8 "
             >
@@ -385,6 +390,7 @@ const Popup = () => {
               onClick={() => {
                 dispatch(toggleApplyFilter({ minValue, maxValue }));
                 dispatch(toggleFilterOpen());
+                dispatch(fetchAvailableListing())
               }}
               className="flex text-[13px] text-center  py-2 items-center bg-[#333333] text-white px-4 rounded-[10px] h-8 w-[109px]"
             >
