@@ -81,6 +81,11 @@ const SearchListingForm = () => {
             dateFormat="dd.MM.YYYY"
             placeholderText="MM.DD.YYYY"
             minDate={minDateCheckIn}
+            onKeyDown={(e) => {
+              if (e.key !== 'Backspace' && e.key !== 'Delete') {
+                e.preventDefault();
+              }
+            }}
             className="outline-none w-[101px]  text-[1rem] tracking-[-0.16px] font-inter  h-[19px]"
           />
         </div>
@@ -98,6 +103,11 @@ const SearchListingForm = () => {
             dateFormat="dd.MM.YYYY"
             placeholderText="MM.DD.YYYY"
             minDate={minDateCheckOut}
+            onKeyDown={(e) => {
+              if (e.key !== 'Backspace' && e.key !== 'Delete') {
+                e.preventDefault();
+              }
+            }}
             className="outline-none  w-[101px]  text-[1rem] tracking-[-0.16px] font-inter  h-[19px]"
           />
         </div>
