@@ -1,2 +1,2 @@
 
-export const baseUrl = "https://luxury-lodging-api-7e4ee.ondigitalocean.app";
+export const baseUrl = "http://3.136.79.39/luxury_lodging_api/";
