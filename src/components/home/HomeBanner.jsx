@@ -35,7 +35,7 @@ const HomeBanner = () => {
     <Wrapper>
       <div className="relative font-onest flex justify-center rounded-xl max-h-[605px]  ">
         <BannerImage />
-        <div className="absolute bottom-0 xs:-mb-[15%]   md:-mb-[7%] lg:-mb-[2.75%] justify-center items-center text-center max-w-[425px] xs:max-w-[500px] md:max-w-[722px] lg:max-w-[822px]">
+        <div className="absolute bottom-0 xs:-mb-[15%]   md:-mb-[7%] lg:-mb-[2.75%] 2xl:-mb-[6.5%] justify-center items-center text-center max-w-[425px] xs:max-w-[450px] sm:max-w-[500px] md:max-w-[722px] lg:max-w-[822px]">
           <BannerTextInfo />
           <SearchListingForm />
         </div>
