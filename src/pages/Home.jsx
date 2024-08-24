@@ -36,7 +36,7 @@ const Home = () => {
             <Wrapper>
               {searchedListingList.length == 0 &&
                 !isHomePageLoading && isHomePageSearch ? (
-                  <div className="pt-20">
+                  <div className="pt-20 2xl:pt-40">
                   <h1 className="text-3xl font-semibold text-[#333333]">
                     No listings found.
                   </h1>
@@ -46,7 +46,7 @@ const Home = () => {
                 </div>
               ) :
                 <div>
-                  <h1 className="text-4xl pt-20 pb-10 font-semibold text-[#333333]">
+                  <h1 className="text-4xl pt-20 2xl:pt-40 pb-10 font-semibold text-[#333333]">
                     {searchedListingList.length > 0 && `Available listings (${searchedListingList.length})`}
                   </h1>
                   {isHomePageLoading && <ListingLoading numbers={8} />}
