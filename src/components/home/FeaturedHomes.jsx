@@ -45,7 +45,7 @@ const FeaturedHomes = () => {
   const renderFeaturedHomes = featuredListings.map(({ images, name, guestsIncluded, bathroomsNumber, bedroomsNumber, id }, index) => (
     <div
       key={name}
-      className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%]  bg-cardBackgroundLight rounded-2xl p-2 sm:p-4 md:p-5 gap-4"
+      className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] 2xl:w-[80%] bg-cardBackgroundLight rounded-2xl p-2 sm:p-4 md:p-5 gap-4"
       ref={(el) => (itemRefs.current[index] = el)}
     >
       {isViewAllImageOpen &&
