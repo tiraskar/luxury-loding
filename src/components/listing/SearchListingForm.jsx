@@ -76,18 +76,21 @@ const SearchListingForm = () => {
             text="Check in"
             htmlFor="checkIn"
           />
-          <DatePicker type="text"
+          <DatePicker
+            type="text"
             selected={searchListingParams.checkIn}
-            // onChange={(date) => handleInputChange('checkIn', date)}
             dateFormat="MM.dd.YYYY"
             placeholderText="MM.DD.YYYY"
             minDate={minDateCheckIn}
-            className="outline-none w-[101px]  text-[1rem] tracking-[-0.16px] font-inter  h-[19px]"
+            className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
             onChange={(date) => {
               if (date && date instanceof Date && !isNaN(date)) {
                 const currentYear = new Date().getFullYear();
                 if (date.getFullYear() >= currentYear) {
                   handleInputChange('checkIn', date);
+                  if (searchListingParams.checkOut && date >= searchListingParams.checkOut) {
+                    handleInputChange('checkOut', ""); 
+                  }
                 } else {
                   handleInputChange('checkIn', "");
                 }
@@ -105,10 +108,24 @@ const SearchListingForm = () => {
                   handleInputChange('checkIn', "");
                 }
               } else {
-                handleInputChange('checkIn', null);
+                handleInputChange('checkIn', "");
+              }
+            }}
+            onKeyDown={(e) => {
+              const value = e.target.value;
+              if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
+                e.preventDefault();
+              }
+              if (e.key !== 'Backspace' && e.key !== 'Delete') {
+                if (value.length === 2) {
+                  e.target.value += '.';
+                } else if (value.length === 5) {
+                  e.target.value += '.';
+                }
               }
             }}
           />
+
         </div>
 
         <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden lg:block "></div>
@@ -118,18 +135,22 @@ const SearchListingForm = () => {
             text="Check out"
             htmlFor="checkOut"
           />
-          <DatePicker type="text"
+          <DatePicker
+            type="text"
             selected={searchListingParams.checkOut}
-            // onChange={(date) => handleInputChange('checkOut', date)}
             dateFormat="MM.dd.YYYY"
             placeholderText="MM.DD.YYYY"
             minDate={minDateCheckOut}
-            className="outline-none  w-[101px]  text-[1rem] tracking-[-0.16px] font-inter  h-[19px]"
+            className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
             onChange={(date) => {
               if (date && date instanceof Date && !isNaN(date)) {
                 const currentYear = new Date().getFullYear();
                 if (date.getFullYear() >= currentYear) {
-                  handleInputChange('checkOut', date);
+                  if (date > searchListingParams.checkIn) {
+                    handleInputChange('checkOut', date);
+                  } else {
+                    handleInputChange('checkOut', "");
+                  }
                 } else {
                   handleInputChange('checkOut', "");
                 }
@@ -142,12 +163,29 @@ const SearchListingForm = () => {
               if (date && date instanceof Date && !isNaN(date)) {
                 const currentYear = new Date().getFullYear();
                 if (date.getFullYear() >= currentYear) {
-                  handleInputChange('checkOut', date);
+                  if (date > searchListingParams.checkIn) {
+                    handleInputChange('checkOut', date);
+                  } else {
+                    handleInputChange('checkOut', "");
+                  }
                 } else {
                   handleInputChange('checkOut', "");
                 }
               } else {
-                handleInputChange('checkOut', null);
+                handleInputChange('checkOut', "");
+              }
+            }}
+            onKeyDown={(e) => {
+              const value = e.target.value;
+              if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
+                e.preventDefault();
+              }
+              if (e.key !== 'Backspace' && e.key !== 'Delete') {
+                if (value.length === 2) {
+                  e.target.value += '.';
+                } else if (value.length === 5) {
+                  e.target.value += '.';
+                }
               }
             }}
           />
