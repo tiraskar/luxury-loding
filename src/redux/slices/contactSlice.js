@@ -36,7 +36,8 @@ const contactSlice = createSlice({
   initialState: {
     loading: false,
     error: null,
-    isEmailSent: false
+    isEmailSent: false,
+    isEmailSubscriptionLoading: false,
   },
   reducers: {
 
@@ -59,17 +60,17 @@ const contactSlice = createSlice({
     //email subscription
     builder
       .addCase(emailSubscription.pending, (state) => {
-        state.loading = true;
+        state.isEmailSubscriptionLoading = true;
         state.error = null;
         state.isEmailSent = false;
       })
       .addCase(emailSubscription.fulfilled, (state) => {
-        state.loading = false;
+        state.isEmailSubscriptionLoading = false;
         state.isEmailSent = true;
         toast.success(`You have successfully subscribed to our email updates.`);
       })
       .addCase(emailSubscription.rejected, (state, action) => {
-        state.loading = false;
+        state.isEmailSubscriptionLoading = false;
         state.error = action.payload;
         state.isEmailSent = false;
 
