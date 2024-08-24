@@ -211,6 +211,7 @@ const SearchListingForm = () => {
         </div>
 
         <button
+          disabled={isHomePageLoading}
           onClick={(e) => handleSearch(e)}
           className="hidden lg:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-auto justify-center items-center h-[43px]">
           {isHomePageLoading ? <LoadingSpinner /> : "Search"}
@@ -219,6 +220,7 @@ const SearchListingForm = () => {
       </form>
       <button
         onClick={(e) => handleSearch(e)}
+        disabled={isHomePageLoading}
         className="block lg:hidden  text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-full justify-center items-center h-[43px]">
         {isHomePageLoading ? <LoadingSpinner /> : "Search"}
       </button>
