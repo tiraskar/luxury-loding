@@ -18,9 +18,9 @@ export const appearance = {
     '.Input': {
       border: '1px solid #D3D3D3',
       borderOpacity: "40%",
-      padding: '16px 20px',
-      borderRadius: '10px',
-      fontSize: '16px',
+      padding: '13px 20px',
+      borderRadius: '12px',
+      fontSize: '13px',
       backgroundColor: 'white',
       outline: "none",
       boxSizing: 'border-box',
@@ -38,11 +38,11 @@ export const appearance = {
       border: '1px solid #F9F9F9',
       backgroundColor: '#F9F9F9',
       color: '#222222',
-      borderRadius: '10px',
-
+      borderRadius: '16px',
       display: 'flex',
       flexDirection: 'row',
-      gap: "10px"
+      gap: "10px",
+      marginBottom: '40px'
     },
     '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
       border: '1px solid #7B6944',

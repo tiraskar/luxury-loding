@@ -17,13 +17,13 @@ const Booking = () => {
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
   return (
-    <div className="space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="lg:max-h-[145px] sm:max-w-[350px] lg:max-w-[207px]">
+    <div className="space-y-8 px-1 xs:px-2 sm:px-0  pt-5">
+      <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4">
+        <div className="xl:max-h-[145px] sm:max-w-[350px] lg:max-w-full xl:max-w-[207px]">
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
-        <div className="flex flex-col space-y-5">
-          <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs"><GrLocation />
+        <div className="flex flex-col space-y-5 h-[145px]">
+          <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs h-[1rem]"><GrLocation />
             <p className="h-[15px]">{listingInfo.address}</p>
           </div>
 
@@ -32,7 +32,7 @@ const Booking = () => {
           </h1>
 
           <div className="flex flex-col space-y-3">
-            <div className="flex gap-x-3 text-[#8E8E80] items-center font-inter ">
+            <div className="flex gap-x-3 text-[#8E8E80] items-center font-inter h-[15px] ">
               <div className="flex gap-1 items-center rounded-2xl text-[13px]">
                 <LuUsers size={14} /> {listingInfo.guestsIncluded} {listingInfo.guestsIncluded > 1 ? 'guests' : 'guest'}
               </div>
@@ -45,14 +45,14 @@ const Booking = () => {
                 <LuBath size={14} /> {listingInfo.bathroomsNumber} {listingInfo.bathroomsNumber > 1 ? 'baths' : 'bath'}
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center h-7">
               <p className="text-[#333333] font-bold text-xl">${listingInfo.price}</p>
               <p className="text-[#8E8E80] text-sm tracking-tight">&nbsp;/ per night</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="min-w-full h-px bg-[#E0E0E0] my-8 px-4 "></div>
+      <div className="min-w-full h-px bg-[#E0E0E0] my-6 px-4 "></div>
       <div className="max-w-[396px]">
         <h1 className="font-onest tracking-normal font-medium text-xl pb-6">Book {listingInfo.propertyType}</h1>
         <div className="space-y-2 ">
@@ -152,7 +152,7 @@ const Booking = () => {
           <p className="text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
         </div>
         <p className="text-[#666666] mt-10">Any question? Call us
-          <a href="tel:+8776408777" className="text-black cursor-pointer">(877) 640-8777</a></p>
+          <a href="tel:+8776408777" className="text-black cursor-pointer"> (877) 640-8777</a></p>
       </div>
     </div>
   );

@@ -56,19 +56,25 @@ const BookingPayment = () => {
   }
 
   return (
+    <div className=" relative">
+      <div className="hidden lg:block absolute top-0 left-0 h-full w-1/2 bg-white"></div>
+      <div className="hidden lg:block -mt-6 absolute top-0 right-0 h-full w-1/3 bg-[#F9F9F9]"></div>
 
-    <div className="relative lg:grid lg:grid-cols-9">
-      {(isFetchingStripKey || isFetchListingInfo || loading) && <LoaderScreen />}
-      <div className="lg:col-span-5 font-inter tracking-[-1%]">
-        <Outlet />
-      </div>
-      <div className="lg:col-span-4 bg-[#F9F9F9] lg:max-w-[649px] w-full lg:-mt-6">
-        <Wrapper>
-          <div className="flex flex-col lg:px-10 lg:mx-auto  py-20">
-            <Booking />
+      <Wrapper>
+        <div className="relative md:grid lg:grid-cols-9">
+          {(isFetchingStripKey || isFetchListingInfo || loading) && <LoaderScreen />}
+          <div className="lg:col-span-5 font-inter tracking-[-1%] lg:pr-5">
+            <Outlet />
           </div>
-        </Wrapper>
-      </div>
+          <div className="lg:col-span-4 bg-[#F9F9F9] lg:max-w-[649px] w-full mt-5 lg:-mt-6 mb-6">
+            <Wrapper>
+              <div className="flex flex-col lg:pl-10 xl:pl-16   py-20">
+                <Booking />
+              </div>
+            </Wrapper>
+          </div>
+        </div>
+      </Wrapper>
     </div>
   );
 };

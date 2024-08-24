@@ -26,25 +26,25 @@ const BookingConfirmation = () => {
   }, [dispatch]);
 
   return (
-    <div className="lg:col-span-5 font-inter tracking-[-1%]">
+    <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">
       {loading && <LoaderScreen />}
-      <Wrapper>
-        <div className=" flex flex-col mx-auto lg:max-w-[652px]">
-          <div className="flex flex-col justify-start lg:ml-[-1%] xl:ml-[-3%] ">
+      <>
+        <div className=" flex flex-col  lg:max-w-[652px]">
+          <div className="flex flex-col justify-start ">
             <div className="space-y-[59px]">
-              <p className="flex items-center text-sm font-medium text-[#A1A196] gap-1">
+              <p className="flex items-center text-sm font-medium h-[17px] text-[#A1A196] gap-1">
                 Home <GoDotFill className="h-2" /> Listings <GoDotFill className="h-2 text-black" />
                 <span className="text-black">Booking</span>
               </p>
 
-              <div className="flex flex-col lg:flex-row justify-between  xl:min-w-[652px] gap-4 pb-[27px]">
-                <div className="flex items-center ">
+              <div className="flex flex-col lg:flex-row justify-between  xl:min-w-[652px] gap-4 pb-[26px] ">
+                <div className="flex items-center space-x-2 h-[26px]">
                   <MdKeyboardArrowLeft size={24} onClick={() => navigate(-1)} />
                   <h1 className="text-xl font-onest tracking-tight font-semibold">
                     Confirm and Pay
                   </h1>
                 </div>
-                <div className="flex  items-center gap-4 ">
+                <div className="flex  items-center gap-4 h-[24px]">
                   <div className="flex items-center space-x-2">
                     <div className="flex justify-center items-center w-6 h-6  bg-[#4AC72B] text-white rounded-full">
                       <TiTick className="text-white" />
@@ -72,7 +72,7 @@ const BookingConfirmation = () => {
             )}
           </div>
         </div>
-      </Wrapper>
+      </>
     </div>
   );
 };

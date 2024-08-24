@@ -4,7 +4,6 @@ import { PiDog } from "react-icons/pi";
 import { TbSmoking } from "react-icons/tb";
 import { LuMusic4 } from "react-icons/lu";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Wrapper } from "../components";
 import { useDispatch } from "react-redux";
 import { checkListingBookingAvailability } from "../redux/slices/bookingSlice";
 import AlertDialog from "../components/ui/AlertDialog";
@@ -37,10 +36,10 @@ const BookingListing = () => {
   };
 
   return (
-    <div className="col-span-5 font-inter tracking-[-1%]">
-      <Wrapper>
-        <div className=" flex flex-col mx-auto  max-w-[652px]">
-          <div className="flex flex-col justify-start lg:-ml-4">
+    <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">
+      <>
+        <div className=" flex flex-col lg:max-w-[652px] ">
+          <div className="flex flex-col justify-start ">
             <div className="space-y-16">
               <p className="flex items-center text-sm font-medium text-[#A1A196] gap-1">
                 Home <GoDotFill className="h-2" /> Listings{" "}
@@ -48,7 +47,7 @@ const BookingListing = () => {
                 <span className="text-black">Booking</span>
               </p>
 
-              <div className="flex flex-col sm:flex-row justify-between  xl:min-w-[652px] gap-4 h-[16px] text-[13px]">
+              <div className="flex flex-col sm:flex-row justify-between  xl:min-w-[652px] gap-4 lg:h-[16px] text-[13px]">
                 <div className="flex items-center gap-2 ">
                   <MdKeyboardArrowLeft
                     size={24}
@@ -143,7 +142,7 @@ const BookingListing = () => {
                 </Link>
                 if you have any questions!
               </p>
-              <div className=" md:pt-64">
+              <div className="absolute  lg:relative bottom-0  md:pt-56">
                 <button
                   onClick={() => handleAgreeAndContinue()}
                   className="py-3 px-7 bg-[#333333] text-white rounded-[14px] flex items-center justify-center font-inter font-semibold text-[13px] h-[40px] w-[179px]"
@@ -154,7 +153,7 @@ const BookingListing = () => {
             </div>
           </div>
         </div>
-      </Wrapper>
+      </>
     </div>
 
     // </div>
