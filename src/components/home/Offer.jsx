@@ -13,10 +13,10 @@ const SingleOffer = ({ offer, index }) => {
       </div>
       <div className="space-y-3">
         <h1 className="text-[26px] h-[33px]">{offer.title}</h1>
-        <p className="text-[1rem] leading-6 text-[#868686] pr-4">{offer.description}</p>
+        <p className="text-[1rem] leading-6 text-[#868686]  lg:pr-4 2xl:pr-0 lg:max-h-[72px]">{offer.description}</p>
       </div>
       <div className="flex justify-center sm:justify-start ">
-        <CustomImage src={offer.image} alt={offer.title} className="w-full max-h-[450px] max-w-[429px] rounded-[1rem]" />
+        <CustomImage src={offer.image} alt={offer.title} className="w-full max-h-[450px] max-w-[429px] 2xl:max-w-full rounded-[1rem]" />
       </div>
     </div>
   );
