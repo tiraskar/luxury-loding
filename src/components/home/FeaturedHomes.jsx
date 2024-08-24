@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchFeaturedListing, toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
 import { Link } from "react-router-dom";
 import ListingImages from "../listing/ListingImages";
+import FeaturedHomeSkeleton from "../ui/FeaturedHomeSkeleton";
 
 
 const Heading = () => {
@@ -28,7 +29,7 @@ const FeaturedHomes = () => {
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const { featuredListings } = useSelector(state => state.listing)
+  const { featuredListings, isFeaturedSearched } = useSelector(state => state.listing)
 
   const [activeIndex, setActiveIndex] = useState(featuredListings.length > 1 ? (featuredListings?.length % 2) : 0);
   const containerRef = useRef(null);
@@ -85,32 +86,36 @@ const FeaturedHomes = () => {
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-[56px]">
       <Heading />
-      <div className="space-y-6">
-        <div
-          className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
-          ref={containerRef}
-        >
-          {renderFeaturedHomes}
-        </div>
+      {isFeaturedSearched && <FeaturedHomeSkeleton />}
+      {
+        !isFeaturedSearched && <div className="space-y-6">
+          <div
+            className="relative flex overflow-x-scroll scrollbar-hide snap-x snap-mandatory gap-4 px-4"
+            ref={containerRef}
+          >
+            {renderFeaturedHomes}
 
-        <div className="hidden sm:flex justify-center space-x-2 ">
-          <div className="bg-[#0000001A] flex rounded-full px-4 h-6 justify-center items-center">
-            {featuredListings?.map((_, index) => (
+          </div>
 
-              <div key={index} onClick={() => handleScroll(index)} className="cursor-pointer">{
-                index == activeIndex ? <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="17" height="2" viewBox="0 0 17 2" fill="none">
-                  <path d="M1 1H16" stroke="#9A9A9A" strokeWidth="2" strokeLinecap="round" />
-                </svg> : <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2" fill="none">
-                  <path d="M1 1H9" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              }</div>
-            ))}
+          <div className="hidden sm:flex justify-center space-x-2 ">
+            <div className="bg-[#0000001A] flex rounded-full px-4 h-6 justify-center items-center">
+              {featuredListings?.map((_, index) => (
+
+                <div key={index} onClick={() => handleScroll(index)} className="cursor-pointer">{
+                  index == activeIndex ? <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="17" height="2" viewBox="0 0 17 2" fill="none">
+                    <path d="M1 1H16" stroke="#9A9A9A" strokeWidth="2" strokeLinecap="round" />
+                  </svg> : <svg className="mx-1" xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2" fill="none">
+                    <path d="M1 1H9" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                }</div>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center pl-4">
+            <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
           </div>
         </div>
-        <div className="flex items-center pl-4">
-          <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
-        </div>
-      </div>
+      }
     </div>
   );
 };

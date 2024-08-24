@@ -245,6 +245,7 @@ const listingSlice = createSlice({
     isReviewSent: false,
     isCalenderLoading: false,
     isHomePageLoading: false,
+    isFeaturedSearched: false,
     //error
     error: null,
 
@@ -494,7 +495,7 @@ const listingSlice = createSlice({
     builder
       .addCase(searchListing.pending, (state) => {
         state.searchedListingList = [];
-        state.isHomePageLoading = false;
+        state.isHomePageLoading = true;
         state.isHomePageSearch = true;
         state.error = null;
       })
@@ -511,15 +512,16 @@ const listingSlice = createSlice({
     //featured listings
     builder
       .addCase(fetchFeaturedListing.pending, (state) => {
-        state.loading = true;
+        state.isFeaturedSearched = true;
         state.featuredListings = [];
         state.error = null;
       })
       .addCase(fetchFeaturedListing.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isFeaturedSearched = false;
         state.featuredListings = action.payload;
       })
       .addCase(fetchFeaturedListing.rejected, (state, action) => {
+        state.isFeaturedSearched = false;
         state.error = action.error.message;
       });
 
