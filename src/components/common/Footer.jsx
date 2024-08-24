@@ -9,15 +9,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { emailSubscription, } from "../../redux/slices/contactSlice";
 import { useEffect } from "react";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const Footer = () => {
   const { pathname } = useLocation();
 
-  // const footerContent = {
-  //   logo: pathname == "/" ? "Luxury Lodging" : "Direct Booking",
-  //   email: pathname == "/" ? "receipts@luxurylodgingstr.co" : "brindy@bybrindy.com",
-  //   contact: pathname == "/" ? "+1 (813) 295-7602" : "+15204013299"
-  // }
   const footerContentMapping = {
     '/': {
       logo: "Luxury Lodging",
@@ -89,7 +85,7 @@ export default Footer;
 
 const EmailSubscription = () => {
 
-  const { isEmailSent } = useSelector(state => state.contact);
+  const { isEmailSent, isEmailSubscriptionLoading } = useSelector(state => state.contact);
 
   const dispatch = useDispatch();
 
@@ -121,7 +117,9 @@ const EmailSubscription = () => {
             className="default-input bg-cardBackgroundLight p-2"
           />
         </div>
-        <button type="submit" className="px-5 py-2 rounded-xl text-white bg-black h-fit">Send</button>
+        <button type="submit" className="px-5 py-2 rounded-xl text-white bg-black h-fit">
+          {isEmailSubscriptionLoading ? <LoadingSpinner /> : "Send"}
+        </button>
       </form>
     </div>
   );
