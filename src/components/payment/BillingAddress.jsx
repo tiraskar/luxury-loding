@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
 import PropTypes from "prop-types";
+import PaymentInputLabel from "../ui/PaymentInputLabel.jsx";
 
 const BillingAddress = ({ register, errors }) => {
   const { billingInfo, paymentType } = useSelector(state => state.payment);
@@ -24,7 +25,10 @@ const BillingAddress = ({ register, errors }) => {
       <h1 className="font-medium tracking-tight text-lg">Billing Address</h1>
       <div className="grid md:grid-cols-2 gap-4 text-black text-sm font-normal">
         <div className="flex flex-col gap-y-2 ">
-          <label htmlFor="first-name" className="flex ">First name</label>
+          <PaymentInputLabel
+            label="First name"
+            htmlFor="billing-first-name"
+          />
           <input
             name="firstName"
             {...register("billingInfo.firstName")}
@@ -36,7 +40,10 @@ const BillingAddress = ({ register, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="last-name" className="flex ">Last name</label>
+          <PaymentInputLabel
+            label="Last name"
+            htmlFor="billing-last-name"
+          />
           <input
             name="lastName"
             {...register("billingInfo.lastName")}
@@ -47,7 +54,10 @@ const BillingAddress = ({ register, errors }) => {
             className={`default-input ${errors.billingInfo && errors?.billingInfo.lastName ? 'border-[#FF0000]' : ''}`} />
         </div>
         <div className="relative flex flex-col gap-y-2">
-          <label htmlFor="country" className="flex">Country or Region</label>
+          <PaymentInputLabel
+            label="Country or Region"
+            htmlFor="country"
+          />
           <select
             name="country"
             {...register("billingInfo.country")}
@@ -73,7 +83,10 @@ const BillingAddress = ({ register, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="state" className="flex">State</label>
+          <PaymentInputLabel
+            label="State"
+            htmlFor="state"
+          />
           <input
             name="state"
             {...register("billingInfo.state")}
@@ -86,7 +99,10 @@ const BillingAddress = ({ register, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="city" className="flex">City</label>
+          <PaymentInputLabel
+            label="City"
+            htmlFor="city"
+          />
           <input
             name="city"
             {...register("billingInfo.city")}
@@ -100,7 +116,10 @@ const BillingAddress = ({ register, errors }) => {
 
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="line1" className="flex">Line1</label>
+          <PaymentInputLabel
+            label="Line1"
+            htmlFor="line1"
+          />
           <input
             name="line1"
             {...register("billingInfo.line1")}
@@ -114,7 +133,10 @@ const BillingAddress = ({ register, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="line2" className="flex">Line2</label>
+          <PaymentInputLabel
+            label="Line2"
+            htmlFor="line2"
+          />
           <input
             name="line2"
             {...register("billingInfo.line2")}
@@ -126,7 +148,10 @@ const BillingAddress = ({ register, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="postalCode" className="flex">Postal code</label>
+          <PaymentInputLabel
+            label="Postal code"
+            htmlFor="postal-code"
+          />
           <input
             name="postalCode"
             {...register("billingInfo.postalCode")}

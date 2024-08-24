@@ -153,13 +153,14 @@ const PaymentMethod = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-[35px]">
       {isPaymentConfirmationLoading && <LoaderScreen />}
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
-      <div className="font-inter text-[#333333] space-y-8">
-        <h1 className="font-medium tracking-tight text-lg">Payment Method</h1>
-        <div className='flex flex-col space-y-2'>
+      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      <div className="font-inter text-[#333333] space-y-[31px]">
+        <h1 className="font-medium tracking-tight text-lg h-[13px]">Payment method</h1>
+        <div className='flex flex-col space-y-[14px]'>
           <PaymentElement onChange={handlePaymentElementChange} id="payment" />
           {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
             By providing your card information, you allow AvantStay, Inc. to

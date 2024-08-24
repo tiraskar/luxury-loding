@@ -3,6 +3,7 @@ import { handlePaymentInput } from "../../redux/slices/paymentSlice.js";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
+import PaymentInputLabel from "../ui/PaymentInputLabel.jsx";
 
 const PersonalInfoForm = ({ register, setValue, errors }) => {
   const dispatch = useDispatch();
@@ -38,13 +39,14 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
   }, []);
 
   return (
-    <div className="font-inter text-[#333333] space-y-8">
-      <h1 className="font-medium tracking-tight text-lg">Personal Info</h1>
+    <div className="font-inter text-[#333333] space-y-9">
+      <h1 className="font-medium tracking-tight text-lg h-[13px]">Personal info</h1>
       <div className="grid md:grid-cols-2 gap-4 text-black text-sm font-normal">
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="first-name" className="flex ">
-            First Name
-          </label>
+          <PaymentInputLabel
+            label="First name"
+            htmlFor="firstName"
+          />
           <input
             name="firstName"
             {...register("personalInfo.firstName")}
@@ -63,9 +65,10 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="last-name" className="flex ">
-            Last Name
-          </label>
+          <PaymentInputLabel
+            label="Last name"
+            htmlFor="lastName"
+          />
           <input
             name="lastName"
             {...register("personalInfo.lastName")}
@@ -84,9 +87,10 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="email" className="flex">
-            Your email
-          </label>
+          <PaymentInputLabel
+            label="Email"
+            htmlFor="email"
+          />
           <input
             name="email"
             {...register("personalInfo.email")}
@@ -105,7 +109,10 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
         </div>
 
         <div className="flex flex-col gap-y-2">
-          <label className="flex">Phone number</label>
+          <PaymentInputLabel
+            label="Phone number"
+            htmlFor="phoneNumber"
+          />
           <div
             className={`flex flex-row w-full border-[1px]  border-[#F5F5F5] rounded-xl bg-white focus-within:border-[#7B6944] focus-within:border-[1px] h-[42px]
             ${errors.personalInfo && errors?.personalInfo.phone
@@ -117,7 +124,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
             <select
               {...register("personalInfo.countryCode")}
               onChange={(e) => handleCountryChange(e)}
-              className="bg-white outline-none pl-5 pr-2 appearance-none border-r-2 border-[#F5F5F5] rounded-l-xl"
+              className="bg-white outline-none pl-5 pr-2 appearance-none border-r-0 border-[#F5F5F5] rounded-l-xl"
             >
               {options.map(({ code, dialCode }) => (
                 <option key={code} value={code}>

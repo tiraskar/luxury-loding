@@ -19,7 +19,7 @@
   @apply border-[2px] border-[#F5F5F5] outline-none px-5 py-[17px] rounded-xl focus:border-[2px] focus:border-[#7B6944] bg-white;
 }
 .default-input {
-  @apply border-[1px] border-[#F5F5F5] outline-none px-5 py-[13px] rounded-xl focus:border-[1px] focus:border-[#7B6944] bg-white h-[42px];
+  @apply border-[1px] border-[#D3D3D3] border-opacity-40 outline-none px-5 py-[13px] rounded-xl focus:border-[1px] focus:border-[#7B6944] bg-white h-[42px] text-[13px];
 }
 }
 @keyframes spin {
@@ -43,7 +43,7 @@
   width: 10px;
   height: 15px;
   margin: 0 5px;
-  background-color: #F4F2DE;
+  background-color: #B69F6F;
   border-radius: 5px;
   animation: loading-wave-animation 1s ease-in-out infinite;
 }
@@ -157,3 +157,159 @@
   display: flex;
   justify-content: space-between;
 }
+/* .react-calendar {
+  width: 100% !important;
+}
+
+.react-calendar__tile--active {
+  background-color: #B69F6F !important;
+}
+
+
+
+.react-calendar__tile--disabled {
+  background-color: #1f1b13 !important;
+}
+
+.react-calendar_month-viewdays_day {
+  margin: 12px !important;
+}
+
+.react-calendar__tile--active:enabled:hover {
+  background-color: #fbbc13 !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #1f1b13 !important;
+  font-size: 0.95rem !important;
+} */
+
+/* .react-calendar__header {
+  color: #1f1b13 !important;
+  font-size: 15px !important;
+  background-color: #B69F6F !important;
+} */
+
+/* .react-calendar__month-view__days__day {
+  color: #1f1b13 !important;
+  font-size: 15px !important;
+  background-color: transparent !important;
+} */
+
+/* 
+.react-calendar__month-view__days__day--neighboringMonth {
+  visibility: hidden;
+} */
+
+
+/* .react-calendar {
+  background: #F5F5EF;
+  width: 1000px;
+  max-width: 100%;
+  background-color: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.125em;
+} */
+
+.react-calendar__navigation {
+  color: black !important;
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  background-color: #F5F5EF;
+}
+
+.react-calendar__navigation:hover {
+  color: black !important;
+  min-width: 44px;
+  background: #F5F5EF;
+  font-size: 16px;
+  /* background-color: #F5F5EF; */
+}
+
+/* .react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f8f8fa;
+} */
+
+/* .react-calendar__navigation button[disabled] {
+  background-color: #f0f0f0;
+} */
+
+/* abbr[title] {
+  text-decoration: none;
+} */
+
+/* .react-calendar__month-view__days__day--weekend {
+ color: #d10000;
+} */
+/* .react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: #f8f8fa;
+  color: #6f48eb;
+  border-radius: 6px;
+} */
+
+/* .react-calendar__tile--now {
+  background: #f8f8fa;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #6f48eb;
+} */
+
+/* .react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: transparent !important;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #6f48eb;
+}
+
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #f8f8fa;
+}
+
+.react-calendar__tile--active {
+  background: #6f48eb;
+  border-radius: 6px;
+  font-weight: bold;
+  color: white;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #6f48eb;
+  color: white;
+}
+
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #f8f8fa;
+}
+
+.react-calendar__tile--range {
+  background: #f8f8fa;
+  color: #6f48eb;
+  border-radius: 0;
+}
+
+.react-calendar__tile--rangeStart {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  background: #6f48eb;
+  color: white;
+}
+
+.react-calendar__tile--rangeEnd {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: #6f48eb;
+  color: white;
+} */
