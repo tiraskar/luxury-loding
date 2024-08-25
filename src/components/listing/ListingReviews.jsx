@@ -17,6 +17,9 @@ const ListingReviews = () => {
     setListSliceIndex(prevState => prevState + 3);
   };
 
+  //todo: filter review 
+
+  const reviewsList = listingReviews?.filter(review => review.status == "published")
 
   return (
     <div id="listing-reviews" className="tracking-tight space-y-8">
@@ -29,7 +32,7 @@ const ListingReviews = () => {
       {isReviewLoading && <p>Loading ...</p>}
       {/* Review List */}
       <div className="flex flex-col space-y-8">
-        {listingReviews?.slice(0, lastSliceIndex).map((review, index) => {
+        {reviewsList?.slice(0, lastSliceIndex).map((review, index) => {
           const reviewFirstText = review.reviewerName ? review.reviewerName.charAt(0) : '' || review.guestName ? review.guestName.charAt(0) : '';
           const reviewTime = getRelativeDateOrTime(review?.insertedOn);
           return (
@@ -42,7 +45,7 @@ const ListingReviews = () => {
                       : reviewFirstText
                   }
                 </div>
-                <p className="text-[1rem] font-semibold capitalize">{review.guestName}</p>
+                <p className="text-[1rem] font-semibold capitalize">{review.guestName || review.reviewerName}</p>
               </div>
               <p className="text-[13px] leading-6">{review.publicReview}</p>
               <div className="flex justify-between items-center">
@@ -58,9 +61,9 @@ const ListingReviews = () => {
             </div>
           );
         })}
-        {!isReviewLoading && listingReviews.length === 0 ?
+        {!isReviewLoading && reviewsList.length === 0 ?
           <p className="text-center text-[14px]">No reviews yet.</p>
-          : lastSliceIndex < listingReviews.length && <button
+          : lastSliceIndex < reviewsList.length && <button
             onClick={() => handleLoadReviews()}
             className="flex flex-row justify-center items-center tracking-normal font-inter text-[13px] gap-x-2 py-2 px-[10px] border-[0.6px] border-[#D7DBE8] w-fit rounded-2xl">
             Load more
@@ -113,12 +116,20 @@ const ReviewForm = () => {
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
 
+  // useEffect(() => {
+  //   if (isReviewSent) {
+  //     reset();
+  //   }
+  // }, [isReviewSent]);
   useEffect(() => {
     if (isReviewSent) {
+      // Reset the form values
       reset();
-      const textarea = document.getElementById('review');
-      textarea.style.height = 'auto';
-      textarea.nodeValue = ''
+
+      // Reset the height of the textarea to its initial state
+      // if (textareaRef.current) {
+      //   textareaRef.current.style.height = "auto";
+      // }
     }
   }, [isReviewSent, reset]);
 
@@ -132,12 +143,13 @@ const ReviewForm = () => {
     >
       <textarea
         {...register('review')}
-        id="review"
+        id="review-textarea"
         rows={1}
         onInput={handleInput}
         className="w-full outline-none resize-none"
         placeholder="Write a review..."
         style={{ overflow: 'hidden' }}
+
       />
       {errors.review && <p className="text-[#FF0000] text-xs">{errors.review.message}</p>}
       <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
