@@ -13,8 +13,8 @@ import {
 import DatePicker from "react-datepicker";
 // import { formateDate } from "../../helper/date";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { notifyToastMessage } from "../ui/CustomToast";
 import PropTypes from 'prop-types';
+import { toast } from "react-toastify";
 
 const FilterableSearchListing = () => {
   const [minDateCheckOut, setMinDateCheckOut] = useState(
@@ -28,6 +28,7 @@ const FilterableSearchListing = () => {
     searchListingParams,
     searchFilter,
     isFilterOpen,
+    isFetchListing
   } = useSelector((state) => state.listing);
 
   // const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -51,7 +52,7 @@ const FilterableSearchListing = () => {
       (searchListingParams.checkIn && !searchListingParams.checkOut) ||
       (searchListingParams.checkOut && !searchListingParams.checkIn)
     ) {
-      return notifyToastMessage("Provide check-in and check-out date.");
+      return toast.info("Provide check-in and check-out date.");
     }
 
     if (
@@ -115,6 +116,7 @@ const FilterableSearchListing = () => {
               handleSearch={handleSearch}
               dispatch={dispatch}
               toggleFilterOpen={toggleFilterOpen}
+              isFetchListing={isFetchListing}
             />
 
           </div>
@@ -159,6 +161,7 @@ const FilterableSearchListing = () => {
                   handleSearch={handleSearch}
                   dispatch={dispatch}
                   toggleFilterOpen={toggleFilterOpen}
+                  isFetchListing={isFetchListing}
                 />
               </div>
 
@@ -175,7 +178,7 @@ export default FilterableSearchListing;
 
 
 
-const SearchButton = ({ isFetchAvailableListing, handleSearch, dispatch, toggleFilterOpen }) => {
+const SearchButton = ({ isFetchAvailableListing, handleSearch, dispatch, toggleFilterOpen, isFetchListing }) => {
   return (
     <div className=" flex flex-row gap-3 w-full sm:w-auto ">
       <button
@@ -186,6 +189,7 @@ const SearchButton = ({ isFetchAvailableListing, handleSearch, dispatch, toggleF
         <RiFilter2Line size={20} /> <span className="block sm:hidden lg:block">Filters</span>
       </button>
       <button
+        disabled={isFetchListing || isFetchAvailableListing}
         onClick={(e) => handleSearch(e)}
         className="flex items-center flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4  sm:w-auto min-w-[117px] h-[43px]"
       >
@@ -201,6 +205,7 @@ SearchButton.propTypes = {
   handleSearch: PropTypes.func,
   dispatch: PropTypes.func,
   toggleFilterOpen: PropTypes.func,
+  isFetchListing: PropTypes.bool,
 };
 
 const Location = ({ searchListingParams, handleInputChange }) => {
@@ -263,11 +268,57 @@ const CheckOut = ({ handleInputChange, minDateCheckOut, searchListingParams }) =
         <label className="text-sm font-semibold">Check out</label>
         <DatePicker
           selected={searchListingParams.checkOut}
-          onChange={(date) => handleInputChange("checkOut", date)}
+          // onChange={(date) => handleInputChange("checkOut", date)}
           dateFormat="MM.dd.YYYY"
           placeholderText="MM.DD.YYYY"
           minDate={minDateCheckOut}
           className="search-input max-w-[117px]"
+          onChange={(date) => {
+            if (date && date instanceof Date && !isNaN(date)) {
+              const currentYear = new Date().getFullYear();
+              if (date.getFullYear() >= currentYear) {
+                if (date > searchListingParams.checkIn) {
+                  handleInputChange('checkOut', date);
+                } else {
+                  handleInputChange('checkOut', "");
+                }
+              } else {
+                handleInputChange('checkOut', "");
+              }
+            } else {
+              handleInputChange('checkOut', "");
+            }
+          }}
+          onBlur={(e) => {
+            const date = new Date(e.target.value);
+            if (date && date instanceof Date && !isNaN(date)) {
+              const currentYear = new Date().getFullYear();
+              if (date.getFullYear() >= currentYear) {
+                if (date > searchListingParams.checkIn) {
+                  handleInputChange('checkOut', date);
+                } else {
+                  handleInputChange('checkOut', "");
+                }
+              } else {
+                handleInputChange('checkOut', "");
+              }
+            } else {
+              handleInputChange('checkOut', "");
+            }
+          }}
+          onKeyDown={(e) => {
+            const value = e.target.value;
+            if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
+              e.preventDefault();
+            }
+            if (e.key !== 'Backspace' && e.key !== 'Delete') {
+              if (value.length === 2) {
+                e.target.value += '.';
+              } else if (value.length === 5) {
+                e.target.value += '.';
+              }
+            }
+          }}
         />
       </div>
     </div>
@@ -289,12 +340,53 @@ const CheckIn = ({ searchListingParams, handleInputChange, minDateCheckIn }) => 
         <label className="text-sm font-semibold">Check in</label>
         <DatePicker
           selected={searchListingParams.checkIn}
-          onChange={(date) => handleInputChange("checkIn", date)}
+          // onChange={(date) => handleInputChange("checkIn", date)}
           dateFormat="MM.dd.YYYY"
           placeholderText="MM.DD.YYYY"
           backgroundColor="transparent"
           minDate={minDateCheckIn}
           className="search-input max-w-[117px]"
+          onChange={(date) => {
+            if (date && date instanceof Date && !isNaN(date)) {
+              const currentYear = new Date().getFullYear();
+              if (date.getFullYear() >= currentYear) {
+                handleInputChange('checkIn', date);
+                if (searchListingParams.checkOut && date >= searchListingParams.checkOut) {
+                  handleInputChange('checkOut', "");
+                }
+              } else {
+                handleInputChange('checkIn', "");
+              }
+            } else {
+              handleInputChange('checkIn', "");
+            }
+          }}
+          onBlur={(e) => {
+            const date = new Date(e.target.value);
+            if (date && date instanceof Date && !isNaN(date)) {
+              const currentYear = new Date().getFullYear();
+              if (date.getFullYear() >= currentYear) {
+                handleInputChange('checkIn', date);
+              } else {
+                handleInputChange('checkIn', "");
+              }
+            } else {
+              handleInputChange('checkIn', "");
+            }
+          }}
+          onKeyDown={(e) => {
+            const value = e.target.value;
+            if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
+              e.preventDefault();
+            }
+            if (e.key !== 'Backspace' && e.key !== 'Delete') {
+              if (value.length === 2) {
+                e.target.value += '.';
+              } else if (value.length === 5) {
+                e.target.value += '.';
+              }
+            }
+          }}
         />
       </div>
     </div>
