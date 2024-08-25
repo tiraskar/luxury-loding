@@ -36,7 +36,9 @@ const BillingAddress = ({ register, errors }) => {
             onChange={(e) => handleChange("firstName", e.target.value)}
             type="text"
             placeholder="Enter first name"
-            className={`default-input ${errors.billingInfo && errors?.billingInfo.firstName ? 'border-[#FF0000]' : ''}`} />
+            className={`default-input ${errors.billingInfo && errors?.billingInfo.firstName ? 'border-[#FF0000]' : ''}`}
+            autoComplete="off"
+          />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -66,6 +68,7 @@ const BillingAddress = ({ register, errors }) => {
             id="country-region"
             disabled={paymentType == 'affirm'}
             className="block w-full py-px default-input pr-10 appearance-none"
+            autoComplete="off"
           >
             {countryList?.map((data) => {
               return (
@@ -95,6 +98,7 @@ const BillingAddress = ({ register, errors }) => {
             type="text"
             placeholder="Enter state"
             className={`default-input ${errors.billingInfo && errors?.billingInfo.state ? 'border-[#FF0000]' : ''}`}
+            autoComplete="off"
           />
         </div>
 
@@ -111,6 +115,7 @@ const BillingAddress = ({ register, errors }) => {
             type="text"
             placeholder="Enter city"
             className={`default-input ${errors.billingInfo && errors?.billingInfo.city ? 'border-[#FF0000]' : ''}`}
+            autoComplete="off"
           />
         </div>
 
@@ -128,7 +133,7 @@ const BillingAddress = ({ register, errors }) => {
             type="text"
             placeholder="Enter primary address line"
             className={`default-input ${errors.billingInfo && errors?.billingInfo.line1 ? 'border-[#FF0000]' : ''}`}
-            // required
+            autoComplete="off"
           />
         </div>
 
@@ -144,7 +149,9 @@ const BillingAddress = ({ register, errors }) => {
             onChange={(e) => handleChange("line2", e.target.value)}
             type="text"
             placeholder="Enter secondary address line (optional)"
-            className="default-input" />
+            className="default-input"
+            autoComplete="off"
+          />
         </div>
 
         <div className="flex flex-col gap-y-2">
@@ -160,6 +167,7 @@ const BillingAddress = ({ register, errors }) => {
             type="number"
             placeholder="Enter postal code"
             className={`default-input ${errors.billingInfo && errors?.billingInfo.postalCode ? 'border-[#FF0000]' : ''}`}
+            autoComplete="off"
           />
         </div>
       </div>

@@ -61,6 +61,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
                 : ""
               }
               `}
+            autoComplete="off"
           />
         </div>
 
@@ -83,6 +84,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
                 : ""
               }
               `}
+            autoComplete="off"
           />
         </div>
 
@@ -105,6 +107,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
                 : ""
               }
               `}
+            autoComplete="off"
           />
         </div>
 
@@ -141,6 +144,7 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
               pattern="\d*"
               placeholder="Enter phone number"
               className={`pl-2 pr-5 py-[13px] w-full outline-none rounded-xl `}
+              autoComplete="off"
             />
           </div>
         </div>
