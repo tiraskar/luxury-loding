@@ -29,7 +29,8 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
     <div className="">
       <ul className="flex flex-wrap  relative sm:justify-between">
         {tabs?.map((tab, index) => (
-          <li
+          <a
+            href={`#${tab}`}
             key={tab}
             className={`py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
             onClick={() => {
@@ -40,7 +41,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
             ref={(el) => (tabsRef.current[index] = el)}
           >
             {tab}
-          </li>
+          </a>
         ))}
       </ul>
       <div className="hidden sm:block relative min-w-full h-px bg-[#E0E0E0]">

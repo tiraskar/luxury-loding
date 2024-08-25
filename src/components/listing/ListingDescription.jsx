@@ -6,7 +6,7 @@ const ListingDescription = ({ listingInfo }) => {
   const [lineClamp, setIsLineClamp] = useState(5)
   return (
     <Wrapper>
-      <div id="listing-description" className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
+      <div id="Description" className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
         <h1 className="text-xl font-semibold">Description</h1>
         {/* <div className="flex flex-col space-y-3 font-normal text-[13px] leading-6">
         <h3 className="text-sm font-semibold">Summary</h3>
