@@ -42,6 +42,7 @@ const Success = () => {
     const renderStatus = () => {
         switch (paymentStatus) {
             case 'succeeded':
+                localStorage.clear();
                 return (
                     <>
                         <FaCheckCircle color='green' className="h-24 w-24 text-green-500 mx-auto mb-4" />
@@ -60,7 +61,7 @@ const Success = () => {
             case 'requires_confirmation':
                 return (
                     <>
-                        <FaSpinner color='gray' className="h-24 w-24 text-blue-500 animate-spin mx-auto mb-4" />
+                        <FaSpinner className="h-24 w-24 text-blue-500 animate-spin mx-auto mb-4 text-buttonPrimary" />
                         <h2 className="text-2xl font-bold mb-2">Payment Pending!</h2>
                         <p className="text-gray-600 mb-6">Your payment is currently pending confirmation. Please wait a moment.</p>
                     </>
@@ -76,7 +77,7 @@ const Success = () => {
             case 'processing':
                 return (
                     <>
-                        <FaSpinner color='gray' className="h-24 w-24 text-blue-500 animate-spin mx-auto mb-4" />
+                        <FaSpinner color='#B69F6F' className="h-24 w-24 text-blue-500 animate-spin mx-auto mb-4 " />
                         <h2 className="text-2xl font-bold mb-2">Payment Processing!</h2>
                         <p className="text-gray-600 mb-6">Your payment is currently being processed. Please wait a moment.</p>
                     </>
