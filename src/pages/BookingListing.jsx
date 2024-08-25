@@ -21,6 +21,7 @@ const BookingListing = () => {
     );
 
     if (bookingAvailable) {
+      localStorage.setItem("agreeTerms", true)
       navigate(`/listing/${id}/booking/payment`);
     } else {
       return (

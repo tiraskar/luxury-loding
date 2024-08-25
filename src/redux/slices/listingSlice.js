@@ -337,7 +337,6 @@ const listingSlice = createSlice({
 
     setSearchListingParams: (state, action) => {
       const { name, value } = action.payload;
-      console.log(name, value);
 
       if (name === 'guests') {
         //guest value should be 50 or below 50

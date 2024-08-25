@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRelativeDateOrTime } from "../../helper/date";
 import { saveListingReview } from "../../redux/slices/listingSlice";
 import { useForm } from "react-hook-form";
+import PropTypes from "prop-types"
 
-const ListingReviews = () => {
+const ListingReviews = ({ className }) => {
 
   const { listingReviews, isReviewLoading } = useSelector(state => state.listing);
 
@@ -22,15 +23,15 @@ const ListingReviews = () => {
   const reviewsList = listingReviews?.filter(review => review.status == "published" && review.reviewerName)
 
   return (
-    <div id="listing-reviews" className="tracking-tight space-y-8">
+    <div id="listing_reviews" className={`${className} tracking-tight space-y-8`}>
       <h1 className="text-xl font-semibold tracking-[-2%]">Reviews</h1>
-
-      {/* Review form */}
       <ReviewForm />
 
 
-      {isReviewLoading && <p>Loading ...</p>}
-      {/* Review List */}
+      {isReviewLoading && Array.from({ length: 4 }, (_, index) => (
+        <ReviewLoading key={index} />
+      ))}
+
       <div className="flex flex-col space-y-8">
         {reviewsList?.slice(0, lastSliceIndex).map((review, index) => {
           const reviewFirstText = review.reviewerName ? review.reviewerName.charAt(0) : '' || review.guestName ? review.guestName.charAt(0) : '';
@@ -55,7 +56,7 @@ const ListingReviews = () => {
                 </div>
                 <p className="opacity-50">{reviewTime}</p>
               </div>
-              {index < lastSliceIndex - index && (
+              {reviewsList.length > 1 && index < lastSliceIndex - 1 && (
                 <div className="h-px bg-textDark opacity-20"></div>
               )}
             </div>
@@ -76,11 +77,16 @@ const ListingReviews = () => {
   );
 };
 
+ListingReviews.propTypes = {
+  className: PropTypes.string,
+};
+
 export default ListingReviews;
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import ReviewLoading from "../ui/ReviewLoading";
 
 
 const schema = yup.object({

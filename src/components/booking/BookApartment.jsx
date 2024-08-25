@@ -10,18 +10,19 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import AlertDialog from "../ui/AlertDialog";
 import { formateDate } from "../../helper/date";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const BookApartment = ({ listingInfo }) => {
 
   const dispatch = useDispatch();
+
+  // const [isBookingAvailable, setIsBookingAvailable] = useState(false)
 
   const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog } = useSelector(state => state.booking);
 
   const handleInputChange = (name, value) => {
     dispatch(setCheckBookingParams({ name, value }));
   };
-
-  console.log('lisitng booking availability', isListingBookingAvailable);
 
   const minDateCheckIn = new Date();
 
@@ -37,6 +38,22 @@ const BookApartment = ({ listingInfo }) => {
   }, [listingInfo]);
 
   const handleSubmit = () => {
+
+    toast.dismiss();
+    // const checkInAvailability = isDateAvailable(checkBookingParams.checkIn);
+    // const checkOutAvailability = isDateAvailable(checkBookingParams.checkOut);
+
+    // if (!checkInAvailability || !checkOutAvailability) {
+    //   setIsBookingAvailable(true);
+    //   toast.info("Please provide available date!!!");
+    // } else {
+    //   setIsBookingAvailable(true);
+    // }
+
+    if ((checkBookingParams.checkIn && !checkBookingParams.checkOut) || (checkBookingParams.checkOut && !checkBookingParams.checkIn)) {
+      return toast.info("Provide check-in and check-out date.");
+    }
+    if (checkBookingParams.checkIn > checkBookingParams.checkOut) return toast.info("Please provide valid date for checkout!!!")
     dispatch(checkListingBookingAvailability());
   };
 
@@ -117,8 +134,9 @@ const BookApartment = ({ listingInfo }) => {
             <div className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} className="mr-1" />Guests
             </div>
-            <div className={`flex  space-x-1 font-semibold ${checkBookingParams.guests >= 10 ? "pl-6" : "pl-4"} `}>
+            <div className={`flex  space-x-2 font-semibold ${checkBookingParams.guests >= 10 ? "pl-4" : "pl-0"} `}>
               <input
+                id="guest-booking"
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -137,11 +155,16 @@ const BookApartment = ({ listingInfo }) => {
 
                 placeholder=""
                 autoFocus
-                className="bg-white outline-none min-w-[10px] max-w-[20px] text-right"
+                className="bg-white outline-none min-w-[20px] max-w-[20px] text-right"
               />
 
               {/* {listingInfo.guestsIncluded >= 1 ? listingInfo.guestsIncluded : 0} */}
-              <p>
+              <p
+                onClick={() => {
+                  document.getElementById('guest-booking').focus();
+                }}
+                className="cursor-text select-none"
+              >
                 {checkBookingParams.guests > 1 ? "guests" : "guest"}
               </p>
             </div>

@@ -51,7 +51,7 @@ const Listing = () => {
   // const componentMapping = {
   //   "Description": <ListingDescription listingInfo={listingInfo} />,
   //   "Details": <ListingDetails listingAmenities={listingAmenities} />,
-  //   "Booking Terms": <ListingBookingTerms bookingTerms={bookingTerms} />,
+  //   "Booking Terms": <ListingBookingTerms />,
   //   "Reviews": <ListingReviews listingReviews={listingReviews} />,
   //   "Availability": <ListingAvailability />,
   // };
@@ -92,7 +92,7 @@ const Listing = () => {
                     {listingInfo?.address}{" "}
                     <GoDotFill className="text-black text-[8px]" />
                     <a className="text-black underline cursor-pointer "
-                      href="#listing-reviews"
+                      href="#listing_reviews"
                     >
                       {" "}
                       {listingReviews.length} reviews
@@ -198,15 +198,34 @@ const Listing = () => {
                       componentMapping[activeTab]
                     )}
                   </Wrapper> */}
-                  <ListingDescription listingInfo={listingInfo} />
+                  <ListingDescription
+                    listingInfo={listingInfo}
+                    className={`${["Details", "Booking Terms", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                  />
+                  <div
+                    className={`min-w-full h-px bg-[#E0E0E0] ${["Booking Terms", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                  // className="relative min-w-full h-px bg-[#E0E0E0]"
+                  ></div>
+                  <ListingDetails
+                    listingAmenities={listingAmenities}
+                    className={`${["Booking Terms", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                  />
+                  <div className={` min-w-full h-px bg-[#E0E0E0] ${["Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                  // className="relative min-w-full h-px bg-[#E0E0E0]"
+                  ></div>
+                  <ListingBookingTerms
+                    className={`${["Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                  />
+                  <div
+                    className={`min-w-full h-px bg-[#E0E0E0] ${activeTab == "Availability" ? "hidden" : "block"}`}
+                  // className="relative min-w-full h-px bg-[#E0E0E0]"
+                  ></div>
+                  <ListingReviews
+                    className={`${activeTab == "Availability" ? "hidden" : "block"}`}
+                  />
               <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                  <ListingDetails listingAmenities={listingAmenities} />
-              <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                  <ListingBookingTerms />
-              <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                  <ListingReviews />
-              <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                  <ListingAvailability />
+                  <ListingAvailability
+                  />
                 </div>
                 <div className="flex justify-center lg:justify-end h-fit pt-10 lg:pt-0">
                   {listingInfo.id && <BookApartment listingInfo={listingInfo} />}

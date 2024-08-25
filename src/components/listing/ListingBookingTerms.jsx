@@ -2,9 +2,9 @@ import { LuMusic4 } from "react-icons/lu";
 import { TbSmoking } from "react-icons/tb";
 import { PiDog } from "react-icons/pi";
 
-const ListingBookingTerms = () => {
+const ListingBookingTerms = ({ className }) => {
   return (
-    <div id="listing-booking-terms" className="lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight">
+    <div id="listing_booking_terms" className={`lg:max-w-[652px] space-y-8 font-inter text-[#333333] tracking-tight ${className}`}>
       <h1 className="text-xl font-semibold">Booking terms</h1>
       <div className="flex">
         <div className="lg:max-w-[318px] flex  p-3 rounded-2xl space-x-3 ">

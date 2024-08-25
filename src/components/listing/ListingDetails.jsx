@@ -3,14 +3,14 @@ import AmenitiesSkeleton from "../ui/AmenitiesSkeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleAllAmenitiesOpen } from "../../redux/slices/listingSlice";
 
-const ListingDetails = ({ listingAmenities }) => {
+const ListingDetails = ({ listingAmenities, className }) => {
 
   const dispatch = useDispatch();
   // const [amenitiesSlice, setAmenitiesSlice] = useState(8)
   const { isFetchingAmenities } = useSelector(state => state.listing)
 
   return (
-    <div id="Details" className="tracking-[-1%] space-y-8">
+    <div id="Details" className={`tracking-[-1%] space-y-8 ${className}`}>
       <h1 className="text-xl font-semibold tracking-[-2%]">Details</h1>
       <div className="grid sm:grid-cols-2 gap-3 ">
 
@@ -43,7 +43,8 @@ const ListingDetails = ({ listingAmenities }) => {
 };
 
 ListingDetails.propTypes = {
-  listingAmenities: PropTypes.array.isRequired
+  listingAmenities: PropTypes.array.isRequired,
+  className: PropTypes.string,
 }
 
 export default ListingDetails;

@@ -1,7 +1,7 @@
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
-import { Wrapper } from "../components";
+// import { Wrapper } from "../components";
 import PaymentMethod from "../components/payment/PaymentMethod";
 import { Elements } from "@stripe/react-stripe-js";
 import { useEffect } from "react";
@@ -10,13 +10,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountryList } from "../redux/slices/listingSlice";
 import { appearance } from "../lib/stripe";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const stripePromise = loadStripe(
   "pk_test_51OsSKpGurTGjjGfhdLcO3WBZDR1UkYvvDWBUFFRnqQU2pSAThq4xfLVHLz11h94g2i4jONlHecSXhcxwkbJNz4a300y43aO1nM"
 );
 
 const BookingConfirmation = () => {
+  const { id } = useParams()
   const dispatch = useDispatch();
   const { clientSecret, loading } = useSelector((state) => state.payment);
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const BookingConfirmation = () => {
   useEffect(() => {
     dispatch(fetchCountryList());
   }, [dispatch]);
+
+  useEffect(() => {
+    const agreeTerms = localStorage?.getItem('agreeTerms');
+
+    if (agreeTerms == 'false' || "") {
+      navigate(`/listings/${id}`);
+    }
+  }, [])
 
   return (
     <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">
@@ -39,7 +48,7 @@ const BookingConfirmation = () => {
 
               <div className="flex flex-col lg:flex-row justify-between  xl:min-w-[652px] gap-4 pb-[26px] ">
                 <div className="flex items-center space-x-2 h-[26px]">
-                  <MdKeyboardArrowLeft size={24} onClick={() => navigate(-1)} />
+                  <MdKeyboardArrowLeft size={24} onClick={() => navigate(-1)} className="cursor-pointer" />
                   <h1 className="text-xl font-onest tracking-tight font-semibold">
                     Confirm and Pay
                   </h1>

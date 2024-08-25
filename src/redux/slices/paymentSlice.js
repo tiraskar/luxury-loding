@@ -145,7 +145,6 @@ const paymentSlice = createSlice({
     handlePaymentInput: (state, action) => {
 
       const { inputTitle, name, value } = action.payload;
-      console.log('dial code', action.payload);
 
       if (inputTitle == 'personalInfo') {
         state.personalInfo[name] = value;
