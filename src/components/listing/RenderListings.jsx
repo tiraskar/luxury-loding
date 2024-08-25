@@ -110,7 +110,7 @@ const RenderListings = ({ listingList }) => {
               <Link
                 to={`/listings/${listing.id}`}
                 onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
-                className="text-[18px] font-inter tracking-[-1%] leading-6" 
+                className="text-[18px] font-inter tracking-[-1%] leading-6 line-clamp-2" 
               >
                 {listing.name}
               </Link>
