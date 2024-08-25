@@ -137,9 +137,15 @@ const PersonalInfoForm = ({ register, setValue, errors }) => {
             </select>
             <input
               {...register("personalInfo.phone")}
-              type="text"
+              type="number"
               value={personalInfo.phone}
               onChange={(e) => handleChange("phone", e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "e") {
+                  e.preventDefault();
+                }
+              }}
+              min={0}
               inputMode="numeric"
               pattern="\d*"
               placeholder="Enter phone number"
