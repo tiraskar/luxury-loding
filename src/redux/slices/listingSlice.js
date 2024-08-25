@@ -246,6 +246,7 @@ const listingSlice = createSlice({
     isCalenderLoading: false,
     isHomePageLoading: false,
     isFeaturedSearched: false,
+    isAllAmenitiesOpen: false,
     //error
     error: null,
 
@@ -361,6 +362,10 @@ const listingSlice = createSlice({
       } else {
         state.searchListingParams.amenities = [...state.searchListingParams.amenities, item];
       }
+    },
+
+    toggleAllAmenitiesOpen: (state) => {
+      state.isAllAmenitiesOpen = !state.isAllAmenitiesOpen;
     }
   },
 
@@ -603,6 +608,6 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen } = listingSlice.actions;
 
 export default listingSlice.reducer;

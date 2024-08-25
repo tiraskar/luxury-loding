@@ -16,6 +16,7 @@ import ListingImages from "./ListingImages";
 import ListingList from "./ListingList";
 import { toast } from "react-toastify";
 import ListingInfoSkeleton from "../ui/ListingInfoSkeleton";
+import AmenitiesPopup from "./AmenitiesPopup";
 
 const tabs = [
   "Description",
@@ -31,7 +32,8 @@ const Listing = () => {
     loading,
     listingReviews,
     isSearchOnSingleListing,
-    isFetchListingInfo
+    isFetchListingInfo,
+    isAllAmenitiesOpen
   } = useSelector((state) => state.listing);
   const [activeTab, setActiveTab] = useState("");
 
@@ -43,16 +45,16 @@ const Listing = () => {
 
   const images = listingInfo?.images || [];
   const listingAmenities = listingInfo?.amenities || [];
-  const bookingTerms = listingInfo?.terms || {};
+  // const bookingTerms = listingInfo?.terms || {};
   // const listingReviews = listingInfo?.reviews || [];
 
-  const componentMapping = {
-    Description: <ListingDescription listingInfo={listingInfo} />,
-    Details: <ListingDetails listingAmenities={listingAmenities} />,
-    "Booking Terms": <ListingBookingTerms bookingTerms={bookingTerms} />,
-    Reviews: <ListingReviews listingReviews={listingReviews} />,
-    Availability: <ListingAvailability />,
-  };
+  // const componentMapping = {
+  //   "Description": <ListingDescription listingInfo={listingInfo} />,
+  //   "Details": <ListingDetails listingAmenities={listingAmenities} />,
+  //   "Booking Terms": <ListingBookingTerms bookingTerms={bookingTerms} />,
+  //   "Reviews": <ListingReviews listingReviews={listingReviews} />,
+  //   "Availability": <ListingAvailability />,
+  // };
 
   const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
   const handleCopyUrl = () => {
@@ -178,7 +180,7 @@ const Listing = () => {
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                   />
-                  <Wrapper>
+                  {/* <Wrapper>
                     {activeTab === "" ? (
                       <div className="space-y-8">
                         {Object.values(componentMapping)?.map(
@@ -195,22 +197,23 @@ const Listing = () => {
                     ) : (
                       componentMapping[activeTab]
                     )}
-                  </Wrapper>
-                  {/* <ListingDescription />
+                  </Wrapper> */}
+                  <ListingDescription listingInfo={listingInfo} />
               <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-              <ListingDetails />
+                  <ListingDetails listingAmenities={listingAmenities} />
               <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-              <ListingBookingTerms />
+                  <ListingBookingTerms />
               <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-              <ListingReviews />
+                  <ListingReviews />
               <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-              <ListingAvailability /> */}
+                  <ListingAvailability />
                 </div>
                 <div className="flex justify-center lg:justify-end h-fit pt-10 lg:pt-0">
                   {listingInfo.id && <BookApartment listingInfo={listingInfo} />}
                 </div>
               </div>
             </div>
+            {isAllAmenitiesOpen && <AmenitiesPopup listingAmenities={listingAmenities} />}
           </Wrapper>
       }
     </div>
