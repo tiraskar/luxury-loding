@@ -15,11 +15,13 @@ const BookApartment = ({ listingInfo }) => {
 
   const dispatch = useDispatch();
 
-  const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog } = useSelector(state => state.booking)
+  const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog } = useSelector(state => state.booking);
 
   const handleInputChange = (name, value) => {
     dispatch(setCheckBookingParams({ name, value }));
   };
+
+  console.log('lisitng booking availability', isListingBookingAvailable);
 
   const minDateCheckIn = new Date();
 
@@ -46,10 +48,19 @@ const BookApartment = ({ listingInfo }) => {
     checkIn: formateDate(checkBookingParams.checkIn),
     checkOut: formateDate(checkBookingParams.checkOut),
     guests: checkBookingParams.guests
-  })
+  });
 
 
-  // checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
+  const { listingAvailableCalender } = useSelector(state => state.listing);
+
+  const isDateAvailable = (date) => {
+    const formattedDate = formateDate(date);
+    const availability = listingAvailableCalender?.find(
+      (item) => item.date === formattedDate
+    );
+    return availability?.isAvailable == 0 ? 0 : 1;
+  };
+
 
   return (
     <div className="font-inter tracking-[-1%]">
@@ -79,6 +90,7 @@ const BookApartment = ({ listingInfo }) => {
                   minDate={minDateCheckIn}
                   disabled={loading}
                   placeholderText="DD.MM.YYYY"
+                  filterDate={isDateAvailable}
                 />
               </div>
             </div>
@@ -95,6 +107,7 @@ const BookApartment = ({ listingInfo }) => {
                   minDate={minDateCheckOut}
                   disabled={loading}
                   placeholderText="DD.MM.YYYY"
+                  filterDate={isDateAvailable}
                 />
               </div>
             </div>
@@ -172,6 +185,6 @@ const BookApartment = ({ listingInfo }) => {
 
 BookApartment.propTypes = {
   listingInfo: PropTypes.object.isRequired,
-}
+};
 
 export default BookApartment;
