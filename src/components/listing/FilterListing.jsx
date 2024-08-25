@@ -104,7 +104,7 @@ const Popup = () => {
             <div className="flex justify-between">
               <div className="flex flex-row items-center rounded-xl">
                 <label className="mr-2">Min</label>
-                <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3">
+                <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3 py-1">
 
                   <span>{minValue}$</span>
                 </div>
@@ -112,7 +112,7 @@ const Popup = () => {
 
               <div className="flex flex-row items-center rounded-xl">
                 <label className="mr-2">Max</label>
-                <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3">
+                <div className="flex items-center border-[1px] border-[#F4F4F4] rounded-xl px-3 py-1">
                   <span>{maxValue}$</span>
                 </div>
               </div>
@@ -320,11 +320,11 @@ const AmenitiesCheckbox = ({ name, id, handleAmenitiesChange, isChecked }) => {
     <div
       onClick={() => handleAmenitiesChange(id)}
       key={id}
-      className="p-5 bg-[#F9F9F9] rounded-2xl flex items-center space-x-3 h-[66px]"
+      className="p-5 bg-[#F9F9F9] rounded-2xl flex items-center space-x-3 h-[66px] cursor-pointer"
     >
       <svg
-        width={30}
-        height={30}
+        width={24}
+        height={24}
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -340,7 +340,7 @@ const AmenitiesCheckbox = ({ name, id, handleAmenitiesChange, isChecked }) => {
           {isChecked && (
             <path
               d="M9 12l1 3 6-6"
-              stroke="#B69F6F"
+              stroke="black"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
