@@ -25,6 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(setSearchListingParamsToInitialState());
+    localStorage.clear();
   }, []);
 
   return (
