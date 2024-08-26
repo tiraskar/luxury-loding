@@ -83,11 +83,11 @@ ListingReviews.propTypes = {
 
 export default ListingReviews;
 
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import LoadingSpinner from "../ui/LoadingSpinner";
-import ReviewLoading from "../ui/ReviewLoading";
 
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import LoadingSpinner from '../ui/LoadingSpinner';
+import ReviewLoading from '../ui/ReviewLoading';
 
 const schema = yup.object({
   review: yup.string().min(10, 'Review must be at least 10 characters')
@@ -96,63 +96,56 @@ const schema = yup.object({
 const ReviewForm = () => {
   const { isReviewSent, isReviewSaving } = useSelector(state => state.listing);
   const dispatch = useDispatch();
-  const [review, setReview] = useState('')
-
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm({
     defaultValues: {
       review: ''
     },
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = () => {
-    dispatch(saveListingReview(review));
+  const [rows, setRows] = useState(1); // Initial rows value
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setValue('review', value); // Update form state
+    setRows(Math.max(1, Math.ceil(value.length / 80))); // Adjust rows based on length
   };
 
-  let textarea = document.getElementById('review-textarea');
-  const [rows, setRows] = useState(1);
+  const onSubmit = (data) => {
+    dispatch(saveListingReview(data.review));
+  };
 
   useEffect(() => {
-    if (isReviewSent) {
-      reset(); // Reset the form values
-      setReview('');
-      setRows(1);
-      textarea.style.height = 'auto';
-    }
-  }, [isReviewSent, reset]);
+    isReviewSent && reset({ review: '' });
+  }, [isReviewSent]);
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={`${errors.review ? "border-[#FF0000]" : "border-[#0085FF] "} border-[1px] rounded-2xl p-4 space-y-4`}
+      className={`${errors.review ? 'border-[#FF0000]' : 'border-[#0085FF] '} border-[1px] rounded-2xl p-4 space-y-4`}
       style={{
-        boxShadow: `${!errors.review && '-0.5px 1px 6px 1px  rgba(0, 133, 255, 0.4)'}`
+        boxShadow: `${!errors.review && '-0.5px 1px 6px 1px rgba(0, 133, 255, 0.4)'}`
       }}
     >
       <textarea
         {...register('review')}
         id="review-textarea"
         rows={rows}
-        onChange={(e) => {
-          textarea = e.target;
-          textarea.style.height = 'auto';
-          textarea.style.height = `${textarea.scrollHeight}px`;
-          setReview(e.target.value);
-        }
-        }
+        onChange={handleChange}
         className="w-full outline-none resize-none"
         placeholder="Write a review..."
         style={{ overflow: 'hidden' }}
       />
 
-      {errors?.review && <p className="text-[#FF0000] text-xs">{errors?.review.message}</p>}
+      {errors.review && <p className="text-[#FF0000] text-xs">{errors.review.message}</p>}
       <div className="min-w-full h-px bg-[#E0E0E0] my-[2px] px-4"></div>
       <div className="flex justify-end">
         <button
           type="submit"
           disabled={isReviewSaving}
-          className="px-5 py-3 rounded-xl text-white bg-black">
-          {isReviewSaving ? <LoadingSpinner /> : "Send"}
+          className="px-5 py-3 rounded-xl text-white bg-black"
+        >
+          {isReviewSaving ? <LoadingSpinner /> : 'Send'}
         </button>
       </div>
     </form>
