@@ -182,6 +182,7 @@ const BookApartment = ({ listingInfo }) => {
           {isListingBookingAvailable && <Link
             to={`/listing/${listingInfo.id}/booking?${query}`}
             type="button"
+            onClick={() => localStorage.setItem('listingId', listingInfo.id)}
             className="flex flex-row items-center justify-center text-white bg-buttonPrimary text-sm  py-[14px] rounded-xl">
             Continue Booking
           </Link>

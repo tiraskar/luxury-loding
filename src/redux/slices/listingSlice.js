@@ -577,6 +577,7 @@ const listingSlice = createSlice({
     builder
       .addCase(saveListingReview.pending, (state) => {
         state.isReviewSaving = true;
+        state.isReviewSent = false;
         state.error = null;
       })
       .addCase(saveListingReview.fulfilled, (state) => {
@@ -586,6 +587,7 @@ const listingSlice = createSlice({
       })
       .addCase(saveListingReview.rejected, (state, action) => {
         state.isReviewSaving = false;
+        state.isReviewSent = false;
         state.error = action.payload;
       });
 

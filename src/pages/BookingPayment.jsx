@@ -22,7 +22,7 @@ const BookingPayment = () => {
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
-
+  const listingId = localStorage?.getItem('listingId');
 
   useEffect(() => {
     dispatch(fetchStripPromiseKey());
@@ -47,8 +47,11 @@ const BookingPayment = () => {
         }));
       }
     }
-  }, [id, dispatch, bookingPrice.totalPrice]);
+  }, [id, dispatch, bookingPrice?.totalPrice]);
 
+  useEffect(() => {
+    listingId !== id && navigate(`/listings/${id}`);
+  }, [listingId]);
 
   if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
     navigate(`/listings/${id}`);
