@@ -2,12 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../../config/baseurl";
-import { formateDate } from "../../helper/date";
 
-
-const bookingCheckIn = localStorage.getItem('checkIn');
-const bookingCheckOut = localStorage.getItem('checkOut');
-const bookingGuest = localStorage.getItem('guests');
 
 export const fetchStripPromiseKey = createAsyncThunk(
   'stripe/key', async () => {
@@ -28,9 +23,9 @@ export const createPaymentIntent = createAsyncThunk(
     try {
       const paymentIndentData = {
         listingId: listing.id,
-        checkIn: formateDate(new Date(bookingCheckIn)),
-        checkOut: formateDate(new Date(bookingCheckOut)),
-        guests: Number(bookingGuest),
+        checkIn: listing.checkIn,
+        checkOut: listing.checkOut,
+        guests: listing.guests,
         amount: Math.round(Number(listing.amount) * 100),
         currency: 'usd'
       };
@@ -70,7 +65,7 @@ export const createCustomer = createAsyncThunk(
 );
 
 export const savePaymentInfo = createAsyncThunk(
-  'payment/savePayment', async (customerId, { getState, rejectWithValue }) => {
+  'payment/savePayment', async (listing, { getState, rejectWithValue }) => {
     try {
       const { personalInfo, paymentType, paymentIntentId
       } = getState().payment;
@@ -78,14 +73,14 @@ export const savePaymentInfo = createAsyncThunk(
       const { bookingPrice } = getState().booking;
 
       const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, {
-        customerId: customerId,
+        customerId: listing.customerId,
         guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
         guestEmail: personalInfo.email,
         guestPhone: `${personalInfo.countryDialCode} ${personalInfo.phone}`,
         listingId: listingInfo.id,
-        checkInDate: formateDate(new Date(bookingCheckIn)),
-        checkOutDate: formateDate(new Date(bookingCheckOut)),
-        guests: Number(bookingGuest),
+        checkInDate: listing.checkIn,
+        checkOutDate: listing.checkOut,
+        guests: listing.guests,
         paymentIntentId: paymentIntentId,
         paymentMethod: paymentType,
         amount: (Number(bookingPrice.totalPrice) * 100),

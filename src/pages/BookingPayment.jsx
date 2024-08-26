@@ -33,6 +33,9 @@ const BookingPayment = () => {
       dispatch(createPaymentIntent({
         id,
         amount: bookingPrice.totalPrice,
+        guests: Number(guestNumber),
+        checkIn: formateDate(new Date(bookingCheckIn)),
+        checkOut: formateDate(new Date(bookingCheckOut)),
       }));
     }
     if (id) {

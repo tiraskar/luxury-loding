@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoaderScreen from "../ui/LoaderScreen";
+import { formateDate } from "../../helper/date";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -117,6 +118,10 @@ const PaymentMethod = () => {
     toast.success("Payment successful!!!", { duration: 2000 });
   };
 
+  const guestNumber = localStorage?.getItem('guests');
+  const bookingCheckIn = localStorage?.getItem('checkIn');
+  const bookingCheckOut = localStorage?.getItem('checkOut');
+
   useEffect(() => {
     if (confirmPayment) {
       paymentConfirmation();
@@ -125,7 +130,12 @@ const PaymentMethod = () => {
 
   useEffect(() => {
     if (customerId !== "") {
-      dispatch(savePaymentInfo(customerId));
+      dispatch(savePaymentInfo({
+        customerId: customerId,
+        guests: Number(guestNumber),
+        checkIn: formateDate(new Date(bookingCheckIn)),
+        checkOut: formateDate(new Date(bookingCheckOut)),
+      }));
     }
   }, [customerId]);
 

@@ -12,9 +12,7 @@ import { fetchCountryList } from "../redux/slices/listingSlice";
 import { appearance } from "../lib/stripe";
 import { useNavigate, useParams } from "react-router-dom";
 
-const stripePromise = loadStripe(
-  "pk_test_51OsSKpGurTGjjGfhdLcO3WBZDR1UkYvvDWBUFFRnqQU2pSAThq4xfLVHLz11h94g2i4jONlHecSXhcxwkbJNz4a300y43aO1nM"
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const BookingConfirmation = () => {
   const { id } = useParams()
