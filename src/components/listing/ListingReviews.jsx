@@ -117,6 +117,7 @@ const ReviewForm = () => {
 
   useEffect(() => {
     isReviewSent && reset({ review: '' });
+    isReviewSent && setRows(1);
   }, [isReviewSent]);
 
   return (
