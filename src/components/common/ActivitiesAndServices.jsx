@@ -4,8 +4,8 @@ import Wrapper from "./Wrapper";
 const ActivitiesAndServices = () => {
   return (
     <Wrapper>
-      <div className="flex flex-col space-y-[56px]">
-        <h1 className="text-3xl sm:text-[35px] font-semibold">Activities & Services</h1>
+      <div className="flex flex-col space-y-6 sm:space-y-8 md:space-y-9 lg:space-y-[56px]">
+        <h1 className="text-2xl xs:text-3xl sm:text-[35px] font-semibold">Activities & Services</h1>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
           {activitesData?.map(({ icon, title, description }) => {

@@ -13,10 +13,10 @@ import FeaturedHomeSkeleton from "../ui/FeaturedHomeSkeleton";
 const Heading = () => {
   return (
     <Wrapper>
-      <div className="flex sm:justify-between items-center ">
-        <h1 className="text-[#333333] text-[26px] sm:text-3xl md:text-[35px] font-semibold">Our featured homes</h1>
+      <div className="flex justify-between items-center ">
+        <h1 className="text-[#333333] text-2xl xs:text-[26px] sm:text-3xl md:text-[35px] font-semibold">Our featured homes</h1>
         <Link to="/listings"
-          className="hidden sm:block h-[38px] px-5 py-[7px] rounded-xl text-white bg-black">View All</Link>
+          className="hidden xs:flex text-sm justify-center  items-center h-[38px] px-3 sm:px-5  py-1 sm:py-[7px] rounded-xl text-white bg-black">View All</Link>
       </div>
     </Wrapper>
   );
@@ -53,22 +53,22 @@ const FeaturedHomes = () => {
           images={images}
           setIsviewAllImageOpen={setIsviewAllImageOpen}
         />}
-      <div className="flex flex-col justify-end space-y-10 sm:min-w-[400px]">
-        <Link onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))} to={`/listings/${id}`} className="text-xl sm:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
+      <div className="flex flex-col justify-end space-y-4 xs:space-y-6 sm:space-y-8 lg:space-y-10 sm:min-w-[400px]">
+        <Link onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))} to={`/listings/${id}`} className="text-lg xs:text-xl md:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
         <div className="flex flex-wrap gap-2 text-[#7B6944]">
-          <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
+          <div className="flex gap-1 sm:border border-[#7B6944] sm:px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
             <LuUsers size={14} /> {guestsIncluded} {guestsIncluded > 1 ? "guests" : "guest"}
           </div>
-          <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
+          <div className="flex gap-1 sm:border border-[#7B6944] sm:px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
             <TbBed size={14} /> {bedroomsNumber} {bedroomsNumber > 1 ? "bedrooms" : "bedroom"}
           </div>
-          <div className="flex gap-1 border border-[#7B6944] px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
+          <div className="flex gap-1 sm:border border-[#7B6944] sm:px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
             <LuBath size={14} /> {bathroomsNumber} {bathroomsNumber > 1 ? "baths" : "bath"}
           </div>
         </div>
       </div>
-      <div className="xl:w-[813px] 2xl:w-full xl:h-[598px]">
-        <img src={images[0].url} className="w-full h-full  rounded-xl object-fill" />
+      <div className="  xl:w-[813px] 2xl:w-full md:h-[450px] lg:h-[500px] xl:h-[598px]">
+        <img src={images[0].url} className="w-full h-full  rounded-xl object-cover" />
 
       </div>
       <div
@@ -84,7 +84,7 @@ const FeaturedHomes = () => {
   }, []);
 
   return (
-    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-[56px]">
+    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-6 sm:space-y-9 lg:space-y-[56px]">
       <Heading />
       {isFeaturedSearched && <FeaturedHomeSkeleton />}
       {
@@ -111,8 +111,9 @@ const FeaturedHomes = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center pl-4">
-            <Link to={`/listings`} className="block sm:hidden px-5 rounded-xl text-white bg-black my-4 h-[38px] py-[7px]">View All</Link>
+          <div className="pl-2">
+            <Link to="/listings"
+              className="xs:hidden flex text-sm justify-center  items-center h-[38px] px-3 sm:px-5 w-[91px]  py-1 sm:py-[7px] rounded-xl text-white bg-black">View All</Link>
           </div>
         </div>
       }

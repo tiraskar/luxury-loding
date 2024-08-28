@@ -17,17 +17,17 @@ const Testimonial = () => {
   const renderTestimonial = testimonialData?.map(({ quotes, image, profile, name, position }, index) => (
     <div
       key={index}
-      className="relative flex-shrink-0 grid md:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
+      className="relative flex-shrink-0 grid sm:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] bg-cardBackgroundLight rounded-2xl p-5 gap-4"
       ref={(el) => (itemRefs.current[index] = el)}
     >
-      <div className="">
+      <div className=" xs:min-w-[200px] md:min-w-[300px]">
         <CustomImage
           src={image}
-          className="w-full h-auto max-h-[514px] rounded-xl object-contain" />
+          className="w-full h-auto  max-h-[350px] md:max-h-[514px] rounded-xl object-contain" />
       </div>
 
-      <div className="relative flex flex-col justify-between sm:min-w-[400px] max-w-[675px]">
-        <q className=" text-sm sm:text-xl md:text-lg lg:text-2xl tracking-normal lg:pt-12">{quotes}</q>
+      <div className="relative flex flex-col justify-between lg:min-w-[400px] lg:max-w-[675px]">
+        <q className=" text-sm sm:text-lg md:text-xl lg:text-2xl tracking-normal lg:pt-12">{quotes}</q>
 
         <div className="flex flex-row items-center gap-3 mt-4 lg:mt-0">
           <div className="w-[42px] h-[42px] rounded-full">
@@ -38,20 +38,19 @@ const Testimonial = () => {
           </div>
 
           <div className="flex flex-col tracking-tight font-inter ">
-            <h1 className="font-medium text-[1rem]">{name}</h1>
-            <p className="text-[13px] text-[#A1A196]">{position}</p>
+            <h1 className="font-medium text-[13px] md:text-[1rem]">{name}</h1>
+            <p className="text-[10px] sm:text-[13px] text-[#A1A196]">{position}</p>
           </div>
         </div>
       </div>
-
     </div>
   ));
 
 
   return (
-    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-[3.5rem]">
+    <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-6 xs:space-y-8 sm:space-y-8 md:space-y-9 lg:space-y-[3.5rem]">
       <Wrapper>
-        <h1 className="text-[#333333] text-[26px] md:text-3xl md:text-[35px] font-semibold">Hear from our happy guests</h1>
+        <h1 className="text-[#333333] text-xl xxs:text-2xl xs:text-[26px] md:text-3xl md:text-[35px] font-semibold">Hear from our happy guests</h1>
       </Wrapper>
 
       <div className="space-y-6">
