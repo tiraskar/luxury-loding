@@ -15,7 +15,7 @@ const LoadingListingPlaceholder = () => (
 
 const ListingLoading = ({ numbers = 8 }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
         {Array.from({ length: numbers }, (_, index) => (
           <LoadingListingPlaceholder key={index} />
         ))}

@@ -6,7 +6,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
-const SearchInputLabel = ({ text, htmlFor }) => {
+export const SearchInputLabel = ({ text, htmlFor }) => {
   return (
     <label
       htmlFor={htmlFor}
@@ -52,11 +52,11 @@ const SearchListingForm = () => {
   return (
     <div
       style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
-      className="flex flex-col font-onest items-center bg-white rounded-3xl  shadow-lg ">
+      className="hidden xs:flex flex-col font-onest items-center bg-white rounded-3xl  shadow-lg">
 
-      <form action="" className=" grid grid-cols-2  md:flex md:flex-wrap md:flex-grow-0 items-center space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px]">
+      <form action="" className=" xs:flex sm:flex-row xs:flex-nowrap items-center xs:space-x-3 py-0.5 lg:w-[822px] h-auto  lg:h-[73px] sm:mr-4 ">
 
-        <div className="justify-start w-[153.25px] h-[69px] flex flex-col gap-y-2 px-7 py-3">
+        <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2   md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">
           <SearchInputLabel
             text="Where to go?"
             htmlFor="location"
@@ -65,13 +65,13 @@ const SearchListingForm = () => {
             value={searchListingParams.location}
             placeholder="Anywhere"
             onChange={(e) => handleInputChange('location', e.target.value)}
-            className="outline-none  w-full text-[1rem] tracking-[-0.16px] font-inter pl-1 h-[19px]"
+            className="outline-none w-[101px] lg:w-full text-[1rem] tracking-[-0.16px] font-inter lg:pl-1 h-[19px]"
           />
         </div>
 
-        <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden lg:block "></div>
+        <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden sm:block "></div>
 
-        <div className="justify-start text-start w-[153.25px] h-[69px] flex flex-col px-7 py-3 gap-y-[6px]">
+        <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3 gap-y-[6px]">
           <SearchInputLabel
             text="Check in"
             htmlFor="checkIn"
@@ -128,9 +128,9 @@ const SearchListingForm = () => {
 
         </div>
 
-        <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden lg:block "></div>
+        <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden sm:block "></div>
 
-        <div className="justify-start text-start w-[153.25px] h-[69px] flex flex-col px-7 py-3 gap-y-[6px]">
+        <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col md:px-5 sm:px-3 xs:px-2 lg:px-7  py-3 gap-y-[6px]">
           <SearchInputLabel
             text="Check out"
             htmlFor="checkOut"
@@ -191,7 +191,7 @@ const SearchListingForm = () => {
           />
         </div>
 
-        <div className="justify-start text-start w-[153.25px] h-[69px] flex flex-col gap-y-2 px-7 py-3">
+        <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2 md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">
           <SearchInputLabel
             text="Guests"
             htmlFor="guests"
@@ -213,7 +213,7 @@ const SearchListingForm = () => {
         <button
           disabled={isHomePageLoading}
           onClick={(e) => handleSearch(e)}
-          className="hidden lg:flex text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-auto justify-center items-center h-[43px]">
+          className="hidden sm:flex text-white bg-buttonPrimary rounded-xl px-6 lg:px-8 py-2 lg:py-4 lg:mt-0 w-auto justify-center items-center h-[43px]">
           {isHomePageLoading ? <LoadingSpinner /> : "Search"}
         </button>
 
@@ -221,8 +221,8 @@ const SearchListingForm = () => {
       <button
         onClick={(e) => handleSearch(e)}
         disabled={isHomePageLoading}
-        className="block lg:hidden  text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-full justify-center items-center h-[43px]">
-        {isHomePageLoading ? <LoadingSpinner /> : "Search"}
+        className="block sm:hidden  text-white bg-buttonPrimary rounded-xl px-8 py-2 lg:py-4 lg:mt-0 w-full justify-center items-center h-[43px]">
+        {isHomePageLoading ? <div className="flex justify-center"><LoadingSpinner /></div> : "Search"}
       </button>
     </div >
   );

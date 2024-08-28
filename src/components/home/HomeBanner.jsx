@@ -1,11 +1,16 @@
+// import { Link } from "react-router-dom";
 import Wrapper from "../common/Wrapper";
 import SearchListingForm from "../listing/SearchListingForm";
 import CustomImage from "../ui/CustomImage";
+// import SearchListingMobileView from "../listing/SearchListingMobileView";
+// import { toggleIsSearchHomePageOpen } from "../../redux/slices/listingSlice";
+import BannerTextInfo from "./BannerTextInfo";
 
 const BannerImage = () => {
   return (
     <div
-      className="relative min-h-[400px] md:min-h-[450px] lg:h-full w-full overflow-hidden">
+      className="relative 
+      min-h-[250px] xs:min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:h-full w-full overflow-hidden">
       <CustomImage
         src={`banner-background.png`}
         alt="Banner Background"
@@ -15,28 +20,19 @@ const BannerImage = () => {
   );
 };
 
-const BannerTextInfo = () => {
-  return (
-    <div className="text-white md:space-y-[30px]  md:mb-[45px] h-[130px]">
-      <h1 className="font-medium font-onest text-[1.125rem] xxs:text-[1.5rem] xs:text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[3rem] tracking-[-0.8px] leading-[40px] sm:leading-[46px] md:leading-[50px] lg:leading-[56px] h-[90px]">
-        Your Ideal Spot for Groups, Events, and Corporate Travel
-      </h1>
 
-      <p className="text-[8px] sm:text-xs md:text-sm lg:text-[1rem] h-[11px]">
-        Top destinations for all groups with excellent amenities,
-        corporate travel, and events
-      </p>
-    </div>
-  );
-};
 
 const HomeBanner = () => {
+
   return (
     <Wrapper>
-      <div className="relative font-onest flex justify-center rounded-xl max-h-[605px]  ">
+      <div className="relative font-onest flex justify-center rounded-xl max-h-[605px]">
         <BannerImage />
-        <div className="absolute bottom-0 xs:-mb-[15%]   md:-mb-[7%] lg:-mb-[2.75%] 2xl:-mb-[6.5%] justify-center items-center text-center max-w-[425px] xs:max-w-[450px] sm:max-w-[500px] md:max-w-[722px] lg:max-w-[822px]">
+        <div className="absolute bottom-3 xs:bottom-0   xs:-mb-[11.75%]   sm:-mb-[4.75%] lg:-mb-[2.75%] 2xl:-mb-[6.5%] justify-center items-center text-center max-w-[425px] xs:max-w-[480px] xs:min-w-[400px] sm:min-w-[630px] md:max-w-[722px] lg:max-w-[822px]">
           <BannerTextInfo />
+          {/* {isSearchHomePageOpen && */}
+          {/* <SearchListingMobileView /> */}
+          {/* } */}
           <SearchListingForm />
         </div>
       </div>

@@ -247,6 +247,7 @@ const listingSlice = createSlice({
     isHomePageLoading: false,
     isFeaturedSearched: false,
     isAllAmenitiesOpen: false,
+    isSearchHomePageOpen: false,
     //error
     error: null,
 
@@ -299,6 +300,10 @@ const listingSlice = createSlice({
 
     toggleIsSearchedOnSingleListing: (state, action) => {
       state.isSearchOnSingleListing = action.payload;
+    },
+
+    toggleIsSearchHomePageOpen: (state) => {
+      state.isSearchHomePageOpen = !state.isSearchHomePageOpen;
     },
 
     setSearchListingParamsToInitialState: (state) => {
@@ -505,6 +510,7 @@ const listingSlice = createSlice({
       })
       .addCase(searchListing.fulfilled, (state, action) => {
         state.isHomePageLoading = false;
+        state.isSearchHomePageOpen = false;
         state.searchedListingList = action.payload;
       })
       .addCase(searchListing.rejected, (state, action) => {
@@ -609,6 +615,6 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen } = listingSlice.actions;
 
 export default listingSlice.reducer;

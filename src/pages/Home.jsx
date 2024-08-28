@@ -16,11 +16,12 @@ import {
 import RenderListings from "../components/listing/RenderListings";
 import { useEffect } from "react";
 import { setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
+import SearchListingMobileView from "../components/listing/SearchListingMobileView";
 
 const Home = () => {
   const dispatch = useDispatch();
 
-  const { searchedListingList, isHomePageSearch, isHomePageLoading } =
+  const { searchedListingList, isHomePageSearch, isHomePageLoading, isSearchHomePageOpen } =
     useSelector((state) => state.listing);
 
   useEffect(() => {
@@ -29,10 +30,11 @@ const Home = () => {
   }, []);
 
   return (
-    <div className=" space-y-[9.375rem] font-onest pt-[5px]">
-      <div className="space-y-[10.5625rem]">
+    <div className="space-y-[3rem] xxs:space-y-[4rem] xs:space-y-[5rem] sm:space-y-[6rem] lg:space-y-[9.375rem] font-onest pt-[5px]">
+      <div className="space-y-[3rem] xxs:space-y-[4rem] xs:space-y-[5rem] sm:space-y-[6rem] lg:space-y-[10.5625rem]">
         <div className="">
           <HomeBanner />
+          {isSearchHomePageOpen && <SearchListingMobileView />}
           {isHomePageSearch && 
             <Wrapper>
               {searchedListingList.length == 0 &&
@@ -47,8 +49,8 @@ const Home = () => {
                 </div>
               ) :
                 <div>
-                  <h1 className="text-4xl pt-20 2xl:pt-40 pb-10 font-semibold text-[#333333]">
-                    {searchedListingList.length > 0 && `Available listings (${searchedListingList.length})`}
+                  <h1 className="text-3xl md:text-4xl pt-10 xs:pt-20 2xl:pt-40 pb-4 xs:pb-7 sm:pb-10 font-semibold text-[#333333]">
+                    {searchedListingList.length > 0 && `Available listings -${searchedListingList.length}`}
                   </h1>
                   {isHomePageLoading && <ListingLoading numbers={8} />}
                   {searchedListingList.length > 0 && (
@@ -59,7 +61,7 @@ const Home = () => {
           </Wrapper>
           }
         </div>
-        <div className="space-y-[10.1875rem]">
+        <div className="space-y-[3rem] xxs:space-y-[4rem] xs:space-y-[5rem] sm:space-y-[6rem] lg:space-y-[10.1875rem]">
           <Greeting />
           <FeaturedHomes />
         </div>
