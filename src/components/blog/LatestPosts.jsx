@@ -13,7 +13,7 @@ const LatestPosts = () => {
 
   return (
     <Wrapper>
-      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-center gap-y-[56px]">
+      <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-center space-y-6 xs:space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-[56px]">
 
         {pathname !== '/blog' && <h1 className="text-[35px] font-semibold">Latest Posts</h1>}
 
