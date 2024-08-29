@@ -72,9 +72,9 @@ const BookingPayment = () => {
           <div className="lg:col-span-5 font-inter tracking-[-1%] lg:pr-5">
             <Outlet />
           </div>
-          <div className="lg:col-span-4 bg-[#F9F9F9] lg:max-w-[649px] w-full mt-5 lg:-mt-6 mb-6">
+          <div className="hidden lg:block lg:col-span-4 bg-[#F9F9F9] lg:max-w-[649px] w-full mt-5 lg:-mt-6 mb-6">
             <Wrapper>
-              <div className="flex flex-col lg:pl-10 xl:pl-16   py-20">
+              <div className="flex flex-col lg:pl-10 xl:pl-16  pb-20 lg:pb-0  lg:py-20">
                 <Booking />
               </div>
             </Wrapper>

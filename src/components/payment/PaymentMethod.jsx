@@ -182,7 +182,7 @@ const PaymentMethod = () => {
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <BillingAddress register={register} errors={errors} />
 
-      <div className="absolute bottom-0 lg:relative lg:pt-10 lg:pb-10">
+      <div className=" relative pt-10 pb-10">
         <button
           type="submit"
           className="flex  items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"

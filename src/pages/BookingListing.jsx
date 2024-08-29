@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { checkListingBookingAvailability } from "../redux/slices/bookingSlice";
 import AlertDialog from "../components/ui/AlertDialog";
+import { Booking } from "../components";
 
 const BookingListing = () => {
   const { id } = useParams();
@@ -47,7 +48,6 @@ const BookingListing = () => {
                 <GoDotFill className="h-2 text-black" />
                 <span className="text-black">Booking</span>
               </p>
-
               <div className="flex flex-col sm:flex-row justify-between  xl:min-w-[652px] gap-4 lg:h-[16px] text-[13px]">
                 <div className="flex items-center gap-2 ">
                   <MdKeyboardArrowLeft
@@ -79,6 +79,12 @@ const BookingListing = () => {
 
             <div className="min-w-full h-px bg-[#E0E0E0] my-[28px] px-4"></div>
             <div className="flex flex-col space-y-10">
+
+              <div className="block lg:hidden">
+                <Booking />
+              </div>
+
+              <div className="block lg:hidden min-w-full h-px bg-[#E0E0E0] my-[28px] px-4"></div>
 
               <div className="flex gap-3">
                 <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
@@ -133,7 +139,7 @@ const BookingListing = () => {
               </div>
               <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 
-              <p className="text-xs leading-6 ">
+              <p className="  lg:relative text-xs leading-6 ">
                 By clicking the button below, I agree to Luxury {`Lodging's`}{" "}
                 terms & conditions, guest agreement and cancellation policy, I
                 am aware that I must be at least 21 to book this stay. I agree
@@ -143,7 +149,7 @@ const BookingListing = () => {
                 </Link>
                 if you have any questions!
               </p>
-              <div className="absolute  lg:relative bottom-0  md:pt-56">
+              <div className="  lg:relative bottom-0 pt-40 md:pt-48 lg:pt-56">
                 <button
                   onClick={() => handleAgreeAndContinue()}
                   className="py-3 px-7 bg-[#333333] text-white rounded-[14px] flex items-center justify-center font-inter font-semibold text-[13px] h-[40px] w-[179px]"

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCountryList } from "../redux/slices/listingSlice";
 import { appearance } from "../lib/stripe";
 import { useNavigate, useParams } from "react-router-dom";
+import { Booking } from "../components";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -68,6 +69,13 @@ const BookingConfirmation = () => {
                 </div>
               </div>
             </div>
+
+            <div className="block lg:hidden space-y-6 pb-10">
+              <div className="w-full h-px bg-textDark  bg-opacity-20 px-8 "></div>
+              <Booking />
+            </div>
+
+
 
             {clientSecret && (
               <Elements
