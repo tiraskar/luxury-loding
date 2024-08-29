@@ -11,7 +11,6 @@ import {
   toggleFilterOpen,
 } from "../../redux/slices/listingSlice";
 import DatePicker from "react-datepicker";
-// import { formateDate } from "../../helper/date";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
@@ -70,7 +69,7 @@ const FilterableSearchListing = () => {
 
   return (
     <Wrapper>
-      <div className="space-y-6">
+      <div className=" space-y-4 sm:space-y-6">
         <p className="flex items-center text-sm font-medium font-inter tracking-[-0.16px] text-[#A1A196] gap-x-0.5 h-[17px]">
           Home <GoDotFill className="h-2 text-black" />
           <span className="text-black">Listings</span>
@@ -78,10 +77,10 @@ const FilterableSearchListing = () => {
 
         <form
           // className=" grid grid-cols-2  sm:flex flex-wrap justify-between items-center gap-3 bg-[#F9F9F9] p-4 rounded-2xl font-onest tracking-[-1%] md:h-[77px]"
-          className=" grid grid-cols-2 gap-x-4 xs:flex md:space-x-0 xs:flex-wrap sm:justify-between lg:grid lg:grid-cols-12 bg-[#F9F9F9] rounded-2xl font-onest tracking-[-1%] md:h-[77px] px-4 "
+          className="md:gap-x-4 grid grid-cols-2 xs:flex md:space-x-0 xs:justify-between lg:grid lg:grid-cols-12 bg-[#F9F9F9] rounded-2xl font-onest tracking-[-1%] md:h-[77px] px-4 xs:px-2 md:px-4 "
         >
 
-          <div className="block lg:hidden max-w-[150px]  py-4 h-[45px]">
+          <div className="block lg:hidden max-w-[110px]  py-4 h-[45px]">
             <Location
               searchListingParams={searchListingParams}
               handleInputChange={handleInputChange}
@@ -110,7 +109,7 @@ const FilterableSearchListing = () => {
             />
 
           </div>
-          <div className="block lg:hidden pt-[17px] pb-[17px]">
+          <div className="hidden sm:block md:block lg:hidden pt-[17px] pb-[17px]">
             <SearchButton
               isFetchAvailableListing={isFetchAvailableListing}
               handleSearch={handleSearch}
@@ -130,7 +129,48 @@ const FilterableSearchListing = () => {
             </div>
           </div>
 
-          <div className="hidden justify-end lg:flex flex-row  lg:space-x-[100px] xl:space-x-[173px] md:col-span-10">
+          {/*lg screen*/}
+
+          <div className="hidden justify-between lg:flex xl:hidden flex-row lg:space-x-[100px]  xl:space-x-[173px] md:col-span-10 items-center">
+            <div className="">
+              <CheckIn
+                searchListingParams={searchListingParams}
+                handleInputChange={handleInputChange}
+                minDateCheckIn={minDateCheckIn}
+              />
+            </div>
+            {/* <div className="hidden lg:flex flex-row  md:space-x-[40px] lg:space-x-[100px] xl:space-x-[173px] pt-[15px] pb-[17px]"> */}
+            {/* </div> */}
+            <div className="">
+              <CheckOut
+                searchListingParams={searchListingParams}
+                handleInputChange={handleInputChange}
+                minDateCheckOut={minDateCheckOut}
+              />
+            </div>
+
+            <div className="pt-[15px] pb-[17px]">
+              <Guests
+                searchListingParams={searchListingParams}
+                handleInputChange={handleInputChange}
+              />
+            </div>
+            {/* <div className="hidden lg:flex flex-wrap  lg:space-x-[70px] xl:space-x-[121px] ">
+
+            </div> */}
+            <div className="hidden sm:block pt-[17px] pb-[17px]">
+              <SearchButton
+                isFetchAvailableListing={isFetchAvailableListing}
+                handleSearch={handleSearch}
+                dispatch={dispatch}
+                toggleFilterOpen={toggleFilterOpen}
+                isFetchListing={isFetchListing}
+              />
+            </div>
+          </div>
+
+          {/*xl screen */}
+          <div className="hidden justify-end  xl:flex flex-row  xl:space-x-[173px] md:col-span-10">
             <div className="hidden lg:flex flex-row  md:space-x-[40px] lg:space-x-[100px] xl:space-x-[173px] pt-[15px] pb-[17px]">
               <div className="">
                 <CheckIn
@@ -168,6 +208,23 @@ const FilterableSearchListing = () => {
             </div>
           </div>
         </form>
+        <div className="flex gap-x-4 sm:hidden ">
+          <button
+            type="button"
+            onClick={() => dispatch(toggleFilterOpen())}
+            className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-3 sm:py-4 h-[43px] flex items-center justify-center text-[13px] font-medium w-full min-w-[100px] space-x-2"
+          >
+            <RiFilter2Line size={20} /> Filters
+          </button>
+          <button
+            disabled={isFetchListing || isFetchAvailableListing}
+            onClick={(e) => handleSearch(e)}
+            className="flex items-center flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-4 md:px-8 py-3 sm:py-4 w-full min-w-[117px] h-[43px]"
+          >
+            {!isFetchAvailableListing && "Search"}
+            {isFetchAvailableListing && <LoadingSpinner />}
+          </button>
+        </div>
         {isFilterOpen && <FilterListing />}
       </div>
     </Wrapper>
@@ -180,20 +237,20 @@ export default FilterableSearchListing;
 
 const SearchButton = ({ isFetchAvailableListing, handleSearch, dispatch, toggleFilterOpen, isFetchListing }) => {
   return (
-    <div className=" flex flex-row gap-3 w-full sm:w-auto ">
+    <div className=" flex flex-row gap-2 md:gap-3 w-full sm:w-auto ">
       <button
         type="button"
         onClick={() => dispatch(toggleFilterOpen())}
         className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-3 sm:py-4 h-[43px] flex items-center justify-center text-[13px] font-medium lg:w-[100px] space-x-2"
       >
-        <RiFilter2Line size={20} /> <span className="block sm:hidden lg:block">Filters</span>
+        <RiFilter2Line size={20} /> <span className="hidden md:block">Filters</span>
       </button>
       <button
         disabled={isFetchListing || isFetchAvailableListing}
         onClick={(e) => handleSearch(e)}
-        className="flex items-center flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-8 py-3 sm:py-4  sm:w-auto min-w-[117px] h-[43px]"
+        className="flex items-center flex-row justify-center space-x-1 text-white bg-buttonPrimary rounded-xl px-4 md:px-8 py-3 sm:py-4  sm:w-auto md:min-w-[117px] h-[43px]"
       >
-        {!isFetchAvailableListing && "Search"}{" "}
+        {!isFetchAvailableListing && "Search"}
         {isFetchAvailableListing && <LoadingSpinner />}
       </button>
     </div>
@@ -230,7 +287,7 @@ Location.propTypes = {
 
 const Guests = ({ searchListingParams, handleInputChange }) => {
   return (
-    <div className=" grid grid-flow-col space-x-4 items-center w-[62px] ">
+    <div className="grid grid-flow-col sm:space-x-4 items-center w-[62px] ">
       <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden lg:block "></div>
       <div className="flex flex-col  text-sm gap-1.5 h-[45px]">
         <label className="text-sm font-semibold">Guests</label>

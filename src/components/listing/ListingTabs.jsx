@@ -32,7 +32,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
           <a
             href={`#${tab == "Reviews" ? "listing_reviews" : (tab == "Booking Terms" ? 'listing_booking_terms' : tab)}`}
             key={tab}
-            className={`py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
+            className={`py-2 sm:py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
             onClick={() => {
               setActiveTab(tab);
               handleTabClick(tab);

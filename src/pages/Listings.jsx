@@ -22,6 +22,7 @@ const Listings = () => {
     <div className="space-y-[47px]">
       <div className="space-y-8">
         <FilterableSearchListing />
+        
         <div className="min-w-full h-px bg-[#E0E0E0]"></div>
       </div>
       <ListingList />

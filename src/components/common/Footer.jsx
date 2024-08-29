@@ -31,7 +31,7 @@ const Footer = () => {
 
   return (
     <Wrapper>
-      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest mt-[9.375rem] ">
+      <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest    mt-[5rem] sm:mt-[7rem] lg:mt-[8rem] xl:mt-[9.375rem] ">
         <div className="space-y-16">
           <div>
             <Logo logoText={`${footerContent.logo}`} />

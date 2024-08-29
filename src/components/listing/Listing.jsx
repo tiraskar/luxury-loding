@@ -83,13 +83,25 @@ const Listing = () => {
           :
           <Wrapper>
             <div className="font-inter tracking-[-1%] space-y-[30px]">
-              <div className="flex flex-wrap md:flex-nowrap gap-y-6 md:gap-y-0 md:justify-between">
-                <div className="flex flex-col gap-y-6">
-                  <h1 className=" text-3xl lg:text-[35px] font-semibold leading-[44.62px] font-onest tracking-tight  ">
+              <div className="flex flex-wrap md:flex-nowrap gap-y-6 md:gap-y-0 xs:justify-between">
+                <div className="flex flex-col gap-y-3 xs:gap-y-4 sm:gap-y-5 lg:gap-y-6">
+                  <h1 className=" text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-[35px] font-semibold md:leading-[40px] lg:leading-[44.62px] font-onest tracking-tight  ">
                     {listingInfo?.name}
                   </h1>
                   <p className="flex items-center text-sm text-[#A1A196] gap-1 h-[17px]">
                     {listingInfo?.address}{" "}
+
+                    <div className="hidden xs:flex items-center text-xs sm:text-sm">
+                      <GoDotFill className="text-black text-[8px]" />
+                      <a className="text-black underline cursor-pointer "
+                        href="#listing_reviews"
+                      >
+                        {" "}
+                        {listingReviews.length} reviews
+                      </a>
+                    </div>
+                  </p>
+                  <div className=" xs:hidden flex items-center text-xs sm:text-sm">
                     <GoDotFill className="text-black text-[8px]" />
                     <a className="text-black underline cursor-pointer "
                       href="#listing_reviews"
@@ -97,15 +109,15 @@ const Listing = () => {
                       {" "}
                       {listingReviews.length} reviews
                     </a>
-                  </p>
+                  </div>
                 </div>
-                <div className="flex flex-row gap-x-3 h-fit">
+                <div className="flex flex-row h-fit">
 
                   <button
                     onClick={() => handleCopyUrl()}
-                    className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4  flex items-center justify-center text-[13px] font-medium w-[105px] gap-x-2 h-[43px]"
+                    className="text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl px-4 py-4  flex items-center justify-center text-[13px] font-medium w-[95px] md:w-[105px] gap-x-2 h-[40px] md:h-[43px]"
                   >
-                    <LuShare2 size={20} /> <span>Share</span>
+                    <LuShare2 className=" size-4 md:size-5" /> <span>Share</span>
                   </button>
                 </div>
               </div>

@@ -17,17 +17,17 @@ const Booking = () => {
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
   return (
-    <div className="space-y-8 px-1 xs:px-2 sm:px-0  pt-5">
+    <div className=" space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
       <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4">
         <div className="xl:max-h-[145px] sm:max-w-[350px] lg:max-w-full xl:max-w-[207px]">
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
-        <div className="flex flex-col space-y-5 h-[145px]">
+        <div className="flex flex-col space-y-5 lg:h-[145px]">
           <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs h-[1rem]"><GrLocation />
             <p className="h-[15px]">{listingInfo.address}</p>
           </div>
 
-          <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px]">
+          <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px] line-clamp-2 sm:line-clamp-none">
             {listingInfo.name}
           </h1>
 
@@ -53,7 +53,7 @@ const Booking = () => {
         </div>
       </div>
       <div className="min-w-full h-px bg-[#E0E0E0] my-6 px-4 "></div>
-      <div className="max-w-[396px]">
+      <div className="max-w-[396px] flex flex-col justify-center ">
         <h1 className="font-onest tracking-normal font-medium text-xl pb-6">Book {listingInfo.propertyType}</h1>
         <div className="space-y-2 ">
 
@@ -97,7 +97,7 @@ const Booking = () => {
           </div>
 
         </div>
-        <div className="flex flex-col space-y-6 my-10">
+        <div className="flex flex-col space-y-4 md:space-y-6 my-10">
           {bookingPrice?.components?.price?.map(({ title, total }, index) => {
             return (
               <div key={index} className="flex items-center">
@@ -149,7 +149,7 @@ const Booking = () => {
 
         <div className="flex justify-between">
           <p className="text sm font-[#8E8E80]">Total</p>
-          <p className="text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
+          <p className=" text-xl sm:text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
         </div>
         <p className="text-[#666666] mt-10">Any question? Call us
           <a href="tel:+8776408777" className="text-black cursor-pointer"> (877) 640-8777</a></p>
