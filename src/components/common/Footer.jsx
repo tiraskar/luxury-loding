@@ -32,7 +32,7 @@ const Footer = () => {
   return (
     <Wrapper>
       <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest    mt-[5rem] sm:mt-[7rem] lg:mt-[8rem] xl:mt-[9.375rem] ">
-        <div className="space-y-16">
+        <div className="space-y-9 md:space-y-12 lg:space-y-16">
           <div>
             <Logo logoText={`${footerContent.logo}`} />
             <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p>
@@ -45,7 +45,7 @@ const Footer = () => {
             }</a>
           </div>
         </div>
-        <div className="flex flex-col space-y-[17px]">
+        <div className="flex flex-col  space-y-4 md:space-y-[17px]">
           <h1 className="text-textLight font-inter font-medium">Main</h1>
           <ul className="flex flex-col space-y-[14px] text-sm">
             <Link to='#'>About Us</Link>
@@ -53,7 +53,7 @@ const Footer = () => {
             <Link to='/listings'>Listing</Link>
           </ul>
         </div>
-        <div className="flex flex-col space-y-[17px]">
+        <div className="flex flex-col space-y-4 md:space-y-[17px]">
           <h1 className="text-textLight font-inter font-medium">Manual</h1>
           <ul className="space-y-[14px] text-sm">
             <Link to={`/blog/guidebook/`}>Guidebook</Link>
@@ -65,9 +65,9 @@ const Footer = () => {
 
       <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 
-      <div className="flex flex-col md:flex-row gap-10 md:gap-0 md:justify-between text-textLight text-sm items-center pb-[60px] px-4 xl:px-0">
+      <div className="flex flex-col md:flex-row lg:gap-10 md:gap-0 md:justify-between text-textLight text-sm items-center pb-[40px] lg:pb-[60px] px-4 xl:px-0">
         <p className="order-2 md:order-1">@ 2024 Direct Booking</p>
-        <div className="order-1 md:order-2 flex flex-wrap gap-[38px]">
+        <div className="order-1 md:order-2 flex flex-wrap gap-[22px] md:gap-[30px] lg:gap-[38px]">
           <p>Privacy and policy</p>
           <p>Terms and conditions</p>
           <div className="flex gap-6 text-black text-2xl">
