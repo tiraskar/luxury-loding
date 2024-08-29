@@ -160,7 +160,7 @@ const ContactForm = () => {
         </div>
         <button
           type="submit"
-          className="flex justify-center items-center text-white bg-black w-full text-center px-8 py-[19px] font-inter font-semibold text-[1rem] rounded-[1rem]"
+          className="flex justify-center items-center text-white bg-black w-full text-center px-8 py-[19px] h-[56px] font-inter font-semibold text-[1rem] rounded-[1rem]"
           disabled={isLoading}
         >
           {isLoading ? `Submitting` : "Submit"} {isLoading && <p className="animate-bounce">&nbsp;...</p>}
