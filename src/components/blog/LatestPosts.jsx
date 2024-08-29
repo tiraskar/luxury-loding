@@ -15,9 +15,9 @@ const LatestPosts = () => {
     <Wrapper>
       <div className="text-[#333333] font-onest tracking-tight flex flex-col justify-center space-y-6 xs:space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-[56px]">
 
-        {pathname !== '/blog' && <h1 className="text-[35px] font-semibold">Latest Posts</h1>}
+        {pathname !== '/blog' && <h1 className="  text-[28px] sm:text-3xl md:text-[32px] lg:text-[35px] font-semibold">Latest Posts</h1>}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
           {lastestPosts?.map((post, index) => (
             <div key={index} className="flex flex-col gap-7 xl:max-w-[318px]">
               <CustomImage src={post.image} alt={post.title} className="rounded-2xl" />

@@ -23,7 +23,7 @@ const ListingViewOptions = ({ setIsMapViewOpen, isMapViewOpen }) => {
 
   return (
     <div className="flex items-center space-x-[9px]">
-      <div className="flex flex-row text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl text-[13px] font-medium h-fit py-[9px] px-2.5">
+      <div className="flex flex-row text-black bg-white border-[0.6px] border-[#D7DBE8] rounded-xl text-[13px] font-medium h-fit py-[6px] sm:py-[9px] px-2.5">
         <p className="opacity-50">Sort by :</p>
         <select
           onChange={(e) => handleSortChange(e, e.target.value)}
