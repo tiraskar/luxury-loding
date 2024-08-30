@@ -239,7 +239,7 @@ const Listing = () => {
                   <ListingAvailability
                   />
                 </div>
-                <div className="flex justify-center lg:justify-end h-fit pt-10 lg:pt-0">
+                <div className="sm:flex sm:justify-center lg:justify-end h-fit pt-10 lg:pt-0">
                   {listingInfo.id && <BookApartment listingInfo={listingInfo} />}
                 </div>
               </div>

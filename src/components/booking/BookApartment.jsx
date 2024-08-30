@@ -81,7 +81,7 @@ const BookApartment = ({ listingInfo }) => {
 
   return (
     <div className="font-inter tracking-[-1%]">
-      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl xxs:w-[345px] xs:w-[429px] lg:min-h-[404px]">
+      <div className="bg-[#F9F9F9] py-5 px-4 rounded-2xl w-full sm:w-[429px] lg:min-h-[404px]">
         <h1 className="font-onest tracking-normal font-medium text-xl">Book {listingInfo.propertyType}</h1>
         <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 

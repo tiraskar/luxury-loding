@@ -26,10 +26,10 @@ const BannerTextInfo = () => {
           onClick={() => {
             dispatch(toggleIsSearchHomePageOpen(true));
           }}
-          className="flex p-[12px_16px] justify-center items-center gap-[10px] rounded-lg hover:bg-buttonPrimary   border-buttonPrimary border-[1px]  ">
-          <span className="flex items-center font-onest font-normal leading-normal h-[10px] ">Search listing</span>
+          className="flex p-[12px_20px] justify-center items-center gap-[10px] rounded-lg bg-buttonPrimary  bg-opacity-100 border-buttonPrimary border-[1px]   ">
+          <span className="flex items-center font-onest font-normal leading-normal h-[10px] ">Search</span>
         </button>
-        <Link to='/listings' className="flex p-[12px_16px] justify-center items-center gap-[10px] rounded-lg border-black border-[1px] hover:bg-black">
+        <Link to='/listings' className="flex p-[12px_16px] justify-center items-center gap-[10px] rounded-lg border-black border-[1px bg-black">
           <span className="flex items-center text-white font-onest font-normal leading-normal h-[10px]  hover:text-white">Book now</span>
         </Link>
 
