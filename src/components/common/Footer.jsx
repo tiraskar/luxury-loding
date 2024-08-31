@@ -70,9 +70,12 @@ const Footer = () => {
         <div className="order-1 md:order-2 flex flex-wrap gap-[22px] md:gap-[30px] lg:gap-[38px]">
           <p>Privacy and policy</p>
           <p>Terms and conditions</p>
-          <div className="flex gap-6 text-black text-2xl">
+
+          <div className="flex gap-4 md:gap-6 text-black text-2xl ">
             <FaLinkedin />
-            <FaSquareInstagram />
+            <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
+              <FaSquareInstagram className="cursor-pointer" />
+            </a>
             <FaYoutube />
           </div>
         </div>
