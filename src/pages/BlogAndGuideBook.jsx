@@ -1,11 +1,11 @@
-import { GuideBookBanner, LatestPosts, RentalExperience } from "../components";
+import { GuideBookBanner, RentalExperience } from "../components";
 
 
 const BlogAndGuideBook = () => {
   return (
     <div className="flex flex-col gap-y-[150px] pt-8">
       <GuideBookBanner />
-      <LatestPosts />
+      {/* <LatestPosts /> */}
       <RentalExperience />
     </div>
   );
