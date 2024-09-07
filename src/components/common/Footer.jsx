@@ -55,9 +55,11 @@ const Footer = () => {
         </div>
         <div className="flex flex-col space-y-4 md:space-y-[17px]">
           <h1 className="text-textLight font-inter font-medium">Manual</h1>
-          <ul className="space-y-[14px] text-sm">
+          <ul className="space-y-[14px] text-sm flex-col">
             <Link to={`/blog/guidebook/`}>Guidebook</Link>
-            <li>Management</li>
+            <li>
+              <Link to="https://luxurylodgingpm.com" target="_blank">Management</Link>
+            </li>
           </ul>
         </div>
         <EmailSubscription />
