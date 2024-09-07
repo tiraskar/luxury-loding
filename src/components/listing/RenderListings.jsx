@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
-import { GrLocation } from "react-icons/gr";
+// import { GrLocation } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
@@ -96,15 +96,15 @@ const RenderListings = ({ listingList }) => {
                 </div>
               )}
             </div>
-            {listing.featured && (
+            {/* {listing.featured && (
               <p className="absolute tracking-[-1%] bg-white px-3 py-1.5 rounded-lg top-5 left-5 md:top-2 mg:left-2">
                 Featured
               </p>
-            )}
+            )} */}
 
-            <p className="flex items-baseline space-x-1 text-xs text-[#0094FF] h-[15px]">
+            {/* <p className="flex items-baseline space-x-1 text-xs text-[#0094FF] h-[15px]">
               <GrLocation /> <span>{listing.address}</span>
-            </p>
+            </p> */}
 
             <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
               <Link

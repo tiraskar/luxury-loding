@@ -1,6 +1,6 @@
 import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
-import { GrLocation } from "react-icons/gr";
+// import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
@@ -23,9 +23,9 @@ const Booking = () => {
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div className="flex flex-col space-y-5 lg:h-[145px]">
-          <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs h-[1rem]"><GrLocation />
+          {/* <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs h-[1rem]"><GrLocation />
             <p className="h-[15px]">{listingInfo.address}</p>
-          </div>
+          </div> */}
 
           <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px] line-clamp-2 sm:line-clamp-none">
             {listingInfo.name}
