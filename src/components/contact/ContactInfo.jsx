@@ -7,8 +7,8 @@ const ContactInfo = () => {
           <p className="text-xs leading-[22px] text-[#8E8E80]">Whether you have questions about our services or need assistance with your property, we’re here to help. Fill out the contact form below, and a member of our team will get back to you.</p>
         </div>
         <div className="flex flex-col gap-y-8 text-lg sm:text-xl md:text-2xl font-inter">
-          <a href="mailto:info@directbooking.com">info@directbooking.com</a>
-          <a href="tel:+18111-874-512">(+1) 8111-874-512</a>
+          <a href="mailto:receipts@luxurylodgingstr.com">receipts@luxurylodgingstr.com</a>
+          <a href="tel:+1813531-8988">+ 1 (813) 531-8988</a>
         </div>
       </div>
       <div className="flex flex-col gap-y-2 xs:gap-y-4 md:gap-y-6 max-w-[501px]">

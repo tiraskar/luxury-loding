@@ -61,10 +61,10 @@ const questionAnswer = [
   },
   {
     question: `Do you have a minimum stay requirement?`,
-    answer: `We recommend a minimum stay of 7 nights, but you can book as short as 3 nights if you'd like. We are committed to providing excellent service and making your stay as memorable as possible.`
+    answer: `Most properties are a minimum stay of 2 nights, but please reach out to our customer support phone number if you are in need of a reservation less than the listed minimum stay.`
   },
   {
     question: `What amenities are included in the vacation rentals?`,
-    answer: `We offer a variety of amenities, including a spacious living area, a private bathroom, a kitchen, a dining area, and a comfortable bedroom. We also include a secure lock system, a private entrance, and a complimentary air conditioning and heating system.`
+    answer: `With Luxury Lodging, the essentials are covered at all properties, including linens, toiletries, free wifi, coffee, and more!`
   }
 ];
