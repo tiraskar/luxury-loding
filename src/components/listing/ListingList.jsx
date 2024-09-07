@@ -37,7 +37,17 @@ const ListingList = () => {
           <RenderListings
             listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
           />
-        }
+          }
+          {isSearchedListing && availableListing.length == 0 && (
+            <div className="pt-5  xs:pt-20 2xl:pt-40">
+              <h1 className="text-lg xxs:text-xl md:text-2xl lg:text-3xl font-semibold text-[#333333]">
+                No listings found.
+              </h1>
+              <p className="text-sm text-[#939387]">
+                Please refine your search criteria and try again.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center pt-8">
