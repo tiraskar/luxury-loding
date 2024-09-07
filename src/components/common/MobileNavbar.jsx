@@ -15,10 +15,11 @@ const MobileNavbar = ({ navLinks, onClose, pathname }) => {
       </div>
 
       <ul className="flex flex-col   space-y-4 transition-all delay-100">
-        {navLinks?.map(({ href, label }) => (
+        {navLinks?.map(({ href, label, target }) => (
           <Link
             key={href}
             to={href}
+            target={target ? `${target}` : "_parent"}
             className={`px-2 text-[1rem] text-textDark  ${pathname === href ? 'opacity-100 font-medium bg-cardBackgroundDark py-2 rounded-sm' : 'opacity-40'}`}
             onClick={() => onClose(false)}>
             {label}

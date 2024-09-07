@@ -11,11 +11,12 @@ const Navbar = () => {
 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  const renderNavbar = navLinks?.map(({ href, label }) => {
+  const renderNavbar = navLinks?.map(({ href, label, target }) => {
     return (
       <Link
         key={href}
         to={href}
+        target={target ? `${target}` : "_parent"}
         className={`text-[#222]  text-base font-onest leading-normal ${pathname === href ? 'opacity-100 font-medium' : 'font-normal opacity-40'}`}
       >
         {label}
@@ -71,4 +72,5 @@ const navLinks = [
   { label: "Blog", href: "/blogs" },
   { label: "Listing", href: "/listings" },
   { label: "Contact Us", href: "/contact" },
+  { label: "Partner with Us", href: "https://luxurylodgingpm.com/", target: "_blank" }
 ];
