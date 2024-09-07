@@ -103,10 +103,10 @@ const BookApartment = ({ listingInfo }) => {
                   selected={checkBookingParams.checkIn}
                   onChange={(date) => handleInputChange('checkIn', date)}
                   className="outline-none max-w-[117px]  text-[1rem]"
-                  dateFormat="dd.MM.YYYY"
+                  dateFormat="dd/MM/YYYY"
                   minDate={minDateCheckIn}
                   disabled={loading}
-                  placeholderText="DD.MM.YYYY"
+                  placeholderText="DD/MM/YYYY"
                   filterDate={isDateAvailable}
                 />
               </div>
@@ -120,10 +120,10 @@ const BookApartment = ({ listingInfo }) => {
                   selected={checkBookingParams.checkOut}
                   onChange={(date) => handleInputChange('checkOut', date)}
                   className="outline-none max-w-[117px] text-[1rem]"
-                  dateFormat="dd.MM.YYYY"
+                  dateFormat="dd/MM/YYYY"
                   minDate={minDateCheckOut}
                   disabled={loading}
-                  placeholderText="DD.MM.YYYY"
+                  placeholderText="DD/MM/YYYY"
                   filterDate={isDateAvailable}
                 />
               </div>

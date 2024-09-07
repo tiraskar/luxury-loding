@@ -70,8 +70,8 @@ const SearchListingMobileView = () => {
               <DatePicker
                 type="text"
                 selected={searchListingParams.checkIn}
-                dateFormat="MM.dd.YYYY"
-                placeholderText="MM.DD.YYYY"
+                dateFormat="MM/dd/YYYY"
+                placeholderText="MM/dd/YYYY"
                 minDate={minDateCheckIn}
                 className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
                 onChange={(date) => {
@@ -128,8 +128,8 @@ const SearchListingMobileView = () => {
               <DatePicker
                 type="text"
                 selected={searchListingParams.checkOut}
-                dateFormat="MM.dd.YYYY"
-                placeholderText="MM.DD.YYYY"
+                dateFormat="MM/dd/YYYY"
+                placeholderText="MM/dd/YYYY"
                 minDate={minDateCheckOut}
                 className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
                 onChange={(date) => {

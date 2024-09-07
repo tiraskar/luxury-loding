@@ -66,8 +66,8 @@ const Booking = () => {
                 <DatePicker
                   selected={bookingCheckIn}
                   readOnly
-                  dateFormat="dd.MM.YYYY"
-                  placeholderText="DD.MM.YYYY"
+                  dateFormat="MM/dd/YYYY"
+                  placeholderText="MM/DD/YYYY"
                   className="outline-none max-w-[117px] bg-white"
                 />
                 {/* {checkBookingParams?.checkIn} */}
@@ -81,8 +81,8 @@ const Booking = () => {
                 <DatePicker
                   selected={bookingCheckOut}
                   readOnly
-                  dateFormat="dd.MM.YYYY"
-                  placeholderText="DD.MM.YYYY"
+                  dateFormat="MM/dd/YYYY"
+                  placeholderText="MM/DD/YYYY"
                   className="outline-none max-w-[117px] bg-white"
                 />
               </p>

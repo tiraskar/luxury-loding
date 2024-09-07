@@ -326,8 +326,8 @@ const CheckOut = ({ handleInputChange, minDateCheckOut, searchListingParams }) =
         <DatePicker
           selected={searchListingParams.checkOut}
           // onChange={(date) => handleInputChange("checkOut", date)}
-          dateFormat="MM.dd.YYYY"
-          placeholderText="MM.DD.YYYY"
+          dateFormat="MM/dd/YYYY"
+          placeholderText="MM/DD/YYYY"
           minDate={minDateCheckOut}
           className="search-input max-w-[117px]"
           onChange={(date) => {
@@ -370,9 +370,9 @@ const CheckOut = ({ handleInputChange, minDateCheckOut, searchListingParams }) =
             }
             if (e.key !== 'Backspace' && e.key !== 'Delete') {
               if (value.length === 2) {
-                e.target.value += '.';
+                e.target.value += '/';
               } else if (value.length === 5) {
-                e.target.value += '.';
+                e.target.value += '/';
               }
             }
           }}
@@ -398,8 +398,8 @@ const CheckIn = ({ searchListingParams, handleInputChange, minDateCheckIn }) => 
         <DatePicker
           selected={searchListingParams.checkIn}
           // onChange={(date) => handleInputChange("checkIn", date)}
-          dateFormat="MM.dd.YYYY"
-          placeholderText="MM.DD.YYYY"
+          dateFormat="MM/dd/YYYY"
+          placeholderText="MM/DD/YYYY"
           backgroundColor="transparent"
           minDate={minDateCheckIn}
           className="search-input max-w-[117px]"
@@ -438,9 +438,9 @@ const CheckIn = ({ searchListingParams, handleInputChange, minDateCheckIn }) => 
             }
             if (e.key !== 'Backspace' && e.key !== 'Delete') {
               if (value.length === 2) {
-                e.target.value += '.';
+                e.target.value += '/';
               } else if (value.length === 5) {
-                e.target.value += '.';
+                e.target.value += '/';
               }
             }
           }}

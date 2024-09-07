@@ -38,6 +38,13 @@ const Popup = () => {
     listingTotalCount == 0 && dispatch(fetchListingTotalCount());
   }, [amenitiesList.length, dispatch, listingTotalCount]);
 
+  const constantAmenities = ['Pool', 'Hot tub', 'Game room', 'Suitable for events'];
+
+  const amenities = amenitiesList?.filter(item => constantAmenities.includes(item.name));
+
+
+
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-[#333333] transition-all delay-500 ease-in-out">
       <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 py-2 md:w-[430px] max-h-[820px] h-auto overflow-y-auto sm:max-w-[95%] sm:max-h-[90%]">
@@ -67,7 +74,7 @@ const Popup = () => {
                   className="font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none"
                 />
               </div>
-              <div className="p-5 space-y-2 bg-[#F9F9F9] rounded-2xl h-[85px]">
+              {/* <div className="p-5 space-y-2 bg-[#F9F9F9] rounded-2xl h-[85px]">
                 <h1 className="font-semibold">Rooms</h1>
                 <input
                   type="number"
@@ -76,7 +83,7 @@ const Popup = () => {
                   placeholder="3 rooms"
                   className="font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none"
                 />
-              </div>
+              </div> */}
               <div className="p-5 space-y-2 bg-[#F9F9F9] rounded-2xl h-[85px]">
                 <h1 className="font-semibold">Room Type</h1>
                 <select
@@ -123,13 +130,13 @@ const Popup = () => {
             <p>Amenities</p>
             <div className="space-y-4">
               <h5 className="font-inter text-[#8A8A8A] text-[13px]">Entertainment & Games</h5>
-              {isFetchingAmenities ? Array.from({ length: 8 }, (_, index) => (
+              {isFetchingAmenities ? Array.from({ length: 4 }, (_, index) => (
                 <AmenitiesSkeleton key={index} />
               ))
                 : (
 
                   <AmenitiesList
-                    amenitiesList={amenitiesList}
+                    amenitiesList={amenities}
                     selectedAmenities={searchListingParams.amenities}
                     handleAmenitiesChange={handleAmenitiesChange}
                   />)}
