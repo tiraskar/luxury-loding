@@ -17,6 +17,7 @@ import RenderListings from "../components/listing/RenderListings";
 import { useEffect } from "react";
 import { setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 import SearchListingMobileView from "../components/listing/SearchListingMobileView";
+import { fetchUserReviews } from "../redux/slices/otherSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(setSearchListingParamsToInitialState());
+    dispatch(fetchUserReviews())
     localStorage.clear();
   }, []);
 

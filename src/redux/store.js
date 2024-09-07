@@ -4,12 +4,14 @@ import listingReducer from "./slices/listingSlice";
 import bookingReducer from "./slices/bookingSlice";
 import paymentReducer from "./slices/paymentSlice";
 import contactReducer from "./slices/contactSlice";
+import otherReducer from "./slices/otherSlice";
 
 export const store = configureStore({
   reducer: {
     listing: listingReducer,
     booking: bookingReducer,
     payment: paymentReducer,
-    contact: contactReducer
+    contact: contactReducer,
+    other: otherReducer
   }
 });
