@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Wrapper from "../common/Wrapper";
-import { MdArrowOutward } from "react-icons/md";
+// import { MdArrowOutward } from "react-icons/md";
 import CustomImage from "../ui/CustomImage";
 
 const Greeting = () => {
@@ -13,12 +13,12 @@ const Greeting = () => {
             className="font-inter font-medium text-2xl xs:text-4xl sm:text-[44px] md:text-[50px] lg:text-[58px] xl:text-[66px] leading-9 xxs:leading-[40px]  xs:leading-[50px] sm:leading-[60px] md:leading-[67px] lg:leading-[72px] xl:leading-[88px] max-w-[1164px] gap-[22.57px] tracking-[-1.32px]"
           >
 
-            Welcome to Luxury Lodging!
-            <br />
+            {/* Welcome to Luxury Lodging!
+            <br /> */}
             <div className="font-normal ">Luxurious retreats designed for <br className=" hidden lg:block xl:hidden" /> groups
 
               <div className="">
-                <CustomImage src={`images/inclined.png`} className="hidden lg:block absolute right-0 top-[30%] xl:top-[50%]  h-[88px] w-[140px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
+                <CustomImage src={`images/inclined.png`} className="hidden lg:block absolute right-0 top-[20%] xl:top-[10%]  h-[88px] w-[140px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
               </div> 
               {/* <div className="">
                 <CustomImage src={`images/inclined.png`} className=" absolute right-0 top-[50%]  lg:hidden h-[40px] w-[70px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
@@ -33,10 +33,10 @@ const Greeting = () => {
             <p className="text-[#999999] text-xl xs:text-2xl sm:text-[26px] md:text-[28px]">perfect for creating unforgettable memories with your group</p>
         </div>
 
-          <div className="flex flex-row space-x-2 items-center text-[#333333] text-[1rem] ">
+          {/* <div className="flex flex-row space-x-2 items-center text-[#333333] text-[1rem] ">
           <Link >Read more </Link>
           <MdArrowOutward />
-        </div>
+        </div> */}
         </div>
 
       </div>

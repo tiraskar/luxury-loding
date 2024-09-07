@@ -72,11 +72,11 @@ const activitesData = [
   {
     icon: 'svg/pet.svg',
     title: `Pet friendly`,
-    description: `We warmly welcome your pets with special amenities and designated areas for their comfort. Enjoy a stress-free stay knowing your pets are as valued as you are.`,
+    description: `We warmly welcome your pets and deep clean for pets at no additional charge between stays. Enjoy a stress-free stay knowing your pets are as valued as you are.`,
   },
   {
     icon: 'svg/event.svg',
     title: `Event friendly`,
-    description: `We warmly welcome events at our hotels, providing versatile spaces and dedicated staff to ensure your event is a success with seamless planning and exceptional service.`,
+    description: `Designated event spaces are available, providing versatile accommodations and dedicated staff to ensure your event is a success with seamless planning and exceptional service.`,
   },
 ];

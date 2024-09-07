@@ -67,7 +67,7 @@ const offerData = [
   {
     image: 'images/offer-inclusive.png',
     title: 'All inclusive',
-    description: `Our homes are furnished with all the comforts of home. You’ll find a fully equipped kitchen, bed linens, towels, TV, free wifi and more!`,
+    description: `Every property is furnished with all the comforts of home. You’ll find a fully equipped kitchen, towels, streaming services, free wifi, bathroom accessories, and more!`,
   },
   {
     image: 'images/private-offer.png',

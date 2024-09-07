@@ -7,7 +7,7 @@ import {
   RentalExperience,
   ActivitiesAndServices,
   Testimonials,
-  AccommodationExperience,
+  // AccommodationExperience,
   Accommodation,
   QuestionAndAnswers,
   Wrapper,
@@ -71,7 +71,7 @@ const Home = () => {
       <ActivitiesAndServices /> 
       <Testimonials />
       <div className="space-y-[3.5rem]"> 
-        <AccommodationExperience />
+        {/* <AccommodationExperience /> */}
         <Accommodation />
       </div>
       <QuestionAndAnswers />
