@@ -71,7 +71,7 @@ const SearchListingMobileView = () => {
                 type="text"
                 selected={searchListingParams.checkIn}
                 dateFormat="MM/dd/YYYY"
-                placeholderText="MM/dd/YYYY"
+                placeholderText="MM/DD/YYYY"
                 minDate={minDateCheckIn}
                 className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
                 onChange={(date) => {
@@ -109,9 +109,9 @@ const SearchListingMobileView = () => {
                   }
                   if (e.key !== 'Backspace' && e.key !== 'Delete') {
                     if (value.length === 2) {
-                      e.target.value += '.';
+                      e.target.value += '/';
                     } else if (value.length === 5) {
-                      e.target.value += '.';
+                      e.target.value += '/';
                     }
                   }
                 }}
@@ -129,7 +129,7 @@ const SearchListingMobileView = () => {
                 type="text"
                 selected={searchListingParams.checkOut}
                 dateFormat="MM/dd/YYYY"
-                placeholderText="MM/dd/YYYY"
+                placeholderText="MM/DD/YYYY"
                 minDate={minDateCheckOut}
                 className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
                 onChange={(date) => {
@@ -172,9 +172,9 @@ const SearchListingMobileView = () => {
                   }
                   if (e.key !== 'Backspace' && e.key !== 'Delete') {
                     if (value.length === 2) {
-                      e.target.value += '.';
+                      e.target.value += '/';
                     } else if (value.length === 5) {
-                      e.target.value += '.';
+                      e.target.value += '/';
                     }
                   }
                 }}
