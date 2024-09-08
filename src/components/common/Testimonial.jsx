@@ -14,7 +14,8 @@ const RightArrowButton = ({ onClick }) => {
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className=" w-8 h-8 sm:w-10 sm:h-10"
+        className=" w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10"
+
       >
         <circle cx="20" cy="20" r="20" fill="white" />
         <path
@@ -42,7 +43,7 @@ const LeftArrowButton = ({ onClick }) => {
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className=" w-8 h-8 sm:w-10 sm:h-10"
+        className=" w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10"
       >
         <circle cx="20" cy="20" r="20" fill="white" />
         <path
@@ -102,15 +103,17 @@ const Testimonial = () => {
 
       <div className="bg-cardBackgroundLight justify-center flex flex-col relative">
         <Wrapper>
-          <div className="flex flex-col justify-center text-center items-center py-[1rem] lg:py-[6.25rem] space-y-2">
-            <div className="flex">
+          <div className="flex flex-col justify-center text-center items-center py-[1rem] pt-20 lg:py-[6.25rem] space-y-2">
+            <div className="flex gap-2">
               {Array.from({ length: (currentReview?.rating) / 2 }, (_, index) => (
                 <FaStar key={index} className="w-5 h-5 text-buttonPrimary" />
               ))}
 
             </div>
             <div className="flex  items-center ">
-              <LeftArrowButton onClick={handlePrev} />
+              <div className="-mt-20">
+                <LeftArrowButton onClick={handlePrev} />
+              </div>
 
               <div className="flex flex-col justify-center items-center">
                 <q className="text-sm sm:text-lg md:text-xl lg:text-2xl tracking-normal lg:pt-12 md:max-w-[625px] lg:max-w-[970px] xl:max-w-[1120px]">
@@ -123,8 +126,9 @@ const Testimonial = () => {
                   {/* <p className="text-sm opacity-30">MBA Student</p> */}
                 </div>
               </div>
-
-              <RightArrowButton onClick={handleNext} />
+              <div className="-mt-20">
+                <RightArrowButton onClick={handleNext} />
+              </div>
             </div>
           </div>
         </Wrapper>
