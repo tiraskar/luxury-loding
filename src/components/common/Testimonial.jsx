@@ -65,7 +65,7 @@ const Testimonial = () => {
   const { reviewList } = useSelector((state) => state.other);
 
   const newReviewList = reviewList.filter(review => {
-    const hasRating = review.rating;
+    const hasRating = review.rating == 10;
     const hasPublicReview = review.publicReview && review.publicReview.split(' ').length > 10;
     const hasName = review.guestName || review.reviewerName;
 
@@ -104,7 +104,7 @@ const Testimonial = () => {
         <Wrapper>
           <div className="flex flex-col justify-center text-center items-center py-[1rem] lg:py-[6.25rem] space-y-2">
             <div className="flex">
-              {Array.from({ length: currentReview?.rating }, (_, index) => (
+              {Array.from({ length: (currentReview?.rating) / 2 }, (_, index) => (
                 <FaStar key={index} className="w-5 h-5 text-buttonPrimary" />
               ))}
 

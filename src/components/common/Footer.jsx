@@ -35,7 +35,7 @@ const Footer = () => {
         <div className="space-y-9 md:space-y-12 lg:space-y-16">
           <div>
             <Logo logoText={`${footerContent.logo}`} />
-            <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p>
+            {/* <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p> */}
           </div>
           <div className="flex flex-col font-inter text-sm space-y-4">
             <a href={`tel:${footerContent.contact}`} className="flex items-center gap-4"><LuPhone size={20} />
@@ -68,18 +68,25 @@ const Footer = () => {
       <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
 
       <div className="flex flex-col md:flex-row lg:gap-10 md:gap-0 md:justify-between text-textLight text-sm items-center pb-[40px] lg:pb-[60px] px-4 xl:px-0">
-        <p className="order-2 md:order-1">@ 2024 Direct Booking</p>
+        <p className="order-2 md:order-1 my-4 md:my-0">@ 2024 Direct Booking Luxury Lodging</p>
         <div className="order-1 md:order-2 flex flex-wrap gap-[22px] md:gap-[30px] lg:gap-[38px]">
           <p>Privacy and policy</p>
           <p>Terms and conditions</p>
 
-          <div className="flex gap-4 md:gap-6 text-black text-2xl ">
+          <div className="hidden md:flex gap-4 md:gap-6 text-black text-2xl ">
             <FaLinkedin />
             <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
               <FaSquareInstagram className="cursor-pointer" />
             </a>
             <FaYoutube />
           </div>
+        </div>
+        <div className="flex justify-center md:hidden gap-4  order-3 text-black text-2xl ">
+          <FaLinkedin />
+          <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
+            <FaSquareInstagram className="cursor-pointer" />
+          </a>
+          <FaYoutube />
         </div>
       </div>
     </Wrapper>
@@ -113,7 +120,7 @@ const EmailSubscription = () => {
   return (
     <div className="flex flex-col space-y-[14px]">
       <h1 className="text-textLight font-inter font-medium">Subscribe</h1>
-      <p className="text-xs">Enter your email to get notified about our updates!</p>
+      {/* <p className="text-xs">Enter your email to get notified about our updates!</p> */}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap gap-4 items-center">
         <div className="">
           <input
