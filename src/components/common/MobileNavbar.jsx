@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
-import Logo from "./Logo";
+// import Logo from "./Logo";
 import { RxCross2 } from "react-icons/rx";
 import PropTypes from "prop-types";
+import ImageLogo from "./ImageLogo";
 
 const MobileNavbar = ({ navLinks, onClose, pathname }) => {
   return (
-    <div className="fixed transition-all delay-1000 md:hidden inset-0 bg-cardBackgroundLight z-50 flex flex-col  py-6 my-1 h-full">
+    <div className="fixed transition-all delay-1000 md:hidden inset-0 bg-white z-50 flex flex-col  py-6 my-1 h-full">
       <div className="flex justify-between items-center w-full px-2 mb-10">
-        <Logo onClose={onClose} />
+        {/* <Logo onClose={onClose} /> */}
+        <ImageLogo onClose={onClose} />
         <RxCross2
           onClick={() => onClose(false)}
           className="text-xl sm:text-2xl"

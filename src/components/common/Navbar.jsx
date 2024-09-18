@@ -2,8 +2,9 @@ import { Link, useLocation } from "react-router-dom";
 import Wrapper from "./Wrapper";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
-import Logo from "./Logo";
+// import Logo from "./Logo";
 import MobileNavbar from "./MobileNavbar";
+import ImageLogo from "./ImageLogo";
 
 const Navbar = () => {
   const location = useLocation();
@@ -28,7 +29,15 @@ const Navbar = () => {
     <div className="py-6 space-y-6 ">
       <Wrapper>
         <div className="flex flex-row justify-between items-center  font-onest h-[38px]">
-          <Logo />
+          {/* <Logo /> */}
+          {/* <div className="h-5 w-full">
+            <CustomImage
+              src={`images/logo_luxury.png`}
+              // alt="Banner Background"
+              className="h-2 "
+            />
+          </div> */}
+          <ImageLogo onClose={onclose} />
 
           {!isMobileNavOpen &&
             <RxHamburgerMenu
