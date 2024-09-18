@@ -10,11 +10,11 @@ const BannerImage = () => {
   return (
     <div
       className="relative 
-      min-h-[250px] xs:min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:h-full w-full overflow-hidden">
+      min-h-[250px] xs:min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:h-full w-full overflow-hidden max-h-[605px]  rounded-2xl ">
       <CustomImage
-        src={`banner-background.png`}
+        src={`images/search_banner.jpg`}
         alt="Banner Background"
-        className=" w-full h-full rounded-2xl"
+        className=" w-full h-full object-cover"
       />
     </div>
   );
