@@ -28,7 +28,7 @@ const HomeBanner = () => {
     <Wrapper>
       <div className="relative font-onest flex justify-center rounded-xl max-h-[605px]">
         <BannerImage />
-        <div className="absolute bottom-3 xs:bottom-0  xs:-mb-[11.75%]   sm:-mb-[4.75%] lg:-mb-[2.75%] 2xl:-mb-[6.5%] justify-center items-center text-center max-w-[425px] xs:max-w-[480px] xs:min-w-[400px] sm:min-w-[630px] md:max-w-[722px] lg:max-w-[822px]">
+        <div className="absolute bottom-3 xs:bottom-0  xs:-mb-[11.75%]   sm:-mb-[4.75%] lg:-mb-[2.75%]  justify-center items-center text-center max-w-[425px] xs:max-w-[480px] xs:min-w-[400px] sm:min-w-[630px] md:max-w-[722px] lg:max-w-[822px]">
           <BannerTextInfo />
           {/* {isSearchHomePageOpen && */}
           {/* <SearchListingMobileView /> */}
