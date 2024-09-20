@@ -54,7 +54,7 @@ export const fetchAvailableListing = createAsyncThunk(
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
-        priceOrder: listingOrder || "",
+        priceOrder: listingOrder,
         bedrooms: isFilterApply ? (searchListingParams.bedrooms) : "",
         roomType: isFilterApply ? (searchListingParams.roomType) : "",
         minPrice: isFilterApply ? (searchListingParams.minPrice) : "",
@@ -270,7 +270,7 @@ const listingSlice = createSlice({
     listingPage: 1,
     listingTotalCount: 0,
     // minDate: new Date(),
-    listingOrder: '',
+    listingOrder: 'high-to-low',
 
     //form
     searchListingParams: {
@@ -312,7 +312,7 @@ const listingSlice = createSlice({
       state.searchListingParams.guests = '';
       state.searchListingParams.location = '';
       state.listingPage = 1;
-      state.listingOrder = '';
+      state.listingOrder = 'high-to-low';
       state.searchListingParams.minPrice = 50;
       state.searchListingParams.maxPrice = 550;
       state.searchListingParams.amenities = [];
