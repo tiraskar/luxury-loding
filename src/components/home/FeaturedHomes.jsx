@@ -42,7 +42,7 @@ const FeaturedHomes = () => {
 
 
 
-  const renderFeaturedHomes = featuredListings.map(({ images, name, guestsIncluded, bathroomsNumber, bedroomsNumber, id }, index) => (
+  const renderFeaturedHomes = featuredListings.map(({ images, name, personCapacity, bathroomsNumber, bedroomsNumber, id }, index) => (
     <div
       key={name}
       className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] 2xl:w-[80%] bg-cardBackgroundLight rounded-2xl p-2 sm:p-4 md:p-5 gap-4"
@@ -57,7 +57,7 @@ const FeaturedHomes = () => {
         <Link onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))} to={`/listings/${id}`} className="text-lg xs:text-xl md:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
         <div className="flex flex-wrap gap-2 text-[#7B6944]">
           <div className="flex gap-1 sm:border border-[#7B6944] sm:px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
-            <LuUsers size={14} /> {guestsIncluded} {guestsIncluded > 1 ? "guests" : "guest"}
+            <LuUsers size={14} /> {personCapacity} {personCapacity > 1 ? "guests" : "guest"}
           </div>
           <div className="flex gap-1 sm:border border-[#7B6944] sm:px-2 py-1 items-center rounded-2xl text-xs sm:text-sm">
             <TbBed size={14} /> {bedroomsNumber} {bedroomsNumber > 1 ? "bedrooms" : "bedroom"}

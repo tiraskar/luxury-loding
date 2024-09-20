@@ -34,7 +34,7 @@ const Booking = () => {
           <div className="flex flex-col space-y-3">
             <div className="flex gap-x-3 text-[#8E8E80] items-center font-inter h-[15px] ">
               <div className="flex gap-1 items-center rounded-2xl text-[13px]">
-                <LuUsers size={14} /> {listingInfo.guestsIncluded} {listingInfo.guestsIncluded > 1 ? 'guests' : 'guest'}
+                <LuUsers size={14} /> {listingInfo.personCapacity} {listingInfo.personCapacity > 1 ? 'guests' : 'guest'}
               </div>
 
               <div className="flex gap-1 items-center rounded-2xl text-[13px]">

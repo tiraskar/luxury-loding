@@ -169,8 +169,8 @@ const Listing = () => {
               <div className="flex space-x-2 text-[#333333]">
                 <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">
                   <LuUsers size={14} />
-                  {listingInfo.guestsIncluded}{" "}
-                  {listingInfo?.guestsIncluded > 1 ? "guests" : "guest"}
+                  {listingInfo.personCapacity}{" "}
+                  {listingInfo?.personCapacity > 1 ? "guests" : "guest"}
                 </div>
 
                 <div className="flex gap-1 border border-[#333333] px-2 py-1 items-center rounded-2xl text-sm">

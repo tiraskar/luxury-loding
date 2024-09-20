@@ -32,7 +32,7 @@ const BookApartment = ({ listingInfo }) => {
 
 
   useEffect(() => {
-    handleInputChange('guests', listingInfo.guestsIncluded);
+    handleInputChange('guests', listingInfo.personCapacity);
     handleInputChange('listingId', listingInfo.id);
     handleInputChange('checkIn', minDateCheckIn);
   }, [listingInfo]);
@@ -167,7 +167,7 @@ const BookApartment = ({ listingInfo }) => {
                 className="bg-white outline-none min-w-[20px] max-w-[20px] text-right"
               />
 
-              {/* {listingInfo.guestsIncluded >= 1 ? listingInfo.guestsIncluded : 0} */}
+              {/* {listingInfo.personCapacity >= 1 ? listingInfo.personCapacity : 0} */}
               <p
                 onClick={() => {
                   document.getElementById('guest-booking').focus();

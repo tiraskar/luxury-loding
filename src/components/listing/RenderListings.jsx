@@ -122,8 +122,8 @@ const RenderListings = ({ listingList }) => {
             <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]  text-[13px]">
 
               <div className="flex gap-1 items-center">
-                <LuUsers size={14} /> {listing.guestsIncluded}
-                {listing.guestsIncluded > 1 ? " guests" : " guest"}
+                <LuUsers size={14} /> {listing.personCapacity}
+                {listing.personCapacity > 1 ? " guests" : " guest"}
               </div>
 
               <div className="flex gap-1 items-center">
