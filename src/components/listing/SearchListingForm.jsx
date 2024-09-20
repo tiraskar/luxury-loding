@@ -82,7 +82,7 @@ const SearchListingForm = () => {
             dateFormat="MM/dd/YYYY"
             placeholderText="MM/DD/YYYY"
             minDate={minDateCheckIn}
-            className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
+            className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
             onChange={(date) => {
               if (date && date instanceof Date && !isNaN(date)) {
                 const currentYear = new Date().getFullYear();
@@ -141,7 +141,7 @@ const SearchListingForm = () => {
             dateFormat="MM/dd/YYYY"
             placeholderText="MM/DD/YYYY"
             minDate={minDateCheckOut}
-            className="outline-none w-[101px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
+            className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
             onChange={(date) => {
               if (date && date instanceof Date && !isNaN(date)) {
                 const currentYear = new Date().getFullYear();
