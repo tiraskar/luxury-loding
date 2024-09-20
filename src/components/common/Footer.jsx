@@ -17,13 +17,13 @@ const Footer = () => {
   const footerContentMapping = {
     '/': {
       logo: "Luxury Lodging",
-      email: "receipts@luxurylodgingstr.com",
-      contact: "+1 (813) 295-7602"
+      email: "support@luxurylodgingpm.com",
+      contact: "(813) 531-8988"
     },
     '/default': {
       logo: "Direct Booking",
-      email: "brindy@bybrindy.com",
-      contact: "+15204013299"
+      email: "support@luxurylodgingpm.com",
+      contact: "(813) 531-8988"
     }
   };
 

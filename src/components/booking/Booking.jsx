@@ -152,7 +152,7 @@ const Booking = () => {
           <p className=" text-xl sm:text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
         </div>
         <p className="text-[#666666] mt-10">Any question? Call us
-          <a href="tel:+8776408777" className="text-black cursor-pointer"> (877) 640-8777</a></p>
+          <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
       </div>
     </div>
   );
