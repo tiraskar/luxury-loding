@@ -140,9 +140,10 @@ export const searchListing = createAsyncThunk(
 
 export const fetchFeaturedListing = createAsyncThunk(
   'listing/featured',
-  async () => {
+  async (listing, { getState }) => {
     try {
-      const { data } = await axios.get(`${baseUrl}/listing?limit=${5}&page=1`);
+      const { listingOrder } = getState().listing;
+      const { data } = await axios.get(`${baseUrl}/listing?limit=${5}&page=1&priceOrder=${listingOrder}`);
       return data;
     } catch (error) {
       return Promise.reject(error.message);
