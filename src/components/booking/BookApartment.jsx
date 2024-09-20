@@ -100,8 +100,12 @@ const BookApartment = ({ listingInfo }) => {
               </p>
               <div className="font-semibold pl-6">
                 <DatePicker
+                  id='availability-checkInDate'
                   selected={checkBookingParams.checkIn}
-                  onChange={(date) => handleInputChange('checkIn', date)}
+                  onChange={(date) => {
+                    handleInputChange('checkIn', date);
+                    document.getElementById('availability-checkOutDate').focus();
+                  }}
                   className="outline-none max-w-[117px]  text-[1rem]"
                   dateFormat="dd/MM/YYYY"
                   minDate={minDateCheckIn}
@@ -117,8 +121,13 @@ const BookApartment = ({ listingInfo }) => {
               </p>
               <div className="font-semibold pl-6">
                 <DatePicker
+                  id="availability-checkOutDate"
                   selected={checkBookingParams.checkOut}
-                  onChange={(date) => handleInputChange('checkOut', date)}
+                  onChange={(date) => {
+                    handleInputChange('checkOut', date);
+                    document.getElementById('guest-booking').focus();
+                  }
+                  }
                   className="outline-none max-w-[117px] text-[1rem]"
                   dateFormat="dd/MM/YYYY"
                   minDate={minDateCheckOut}
@@ -200,7 +209,7 @@ const BookApartment = ({ listingInfo }) => {
 
       </div>
       <div className="flex justify-center text-center py-4">
-        <p className="text-[#666666]">Any question? Call us <a href="tel:+8776408777" className="text-black cursor-pointer">(877) 640-8777</a>
+        <p className="text-[#666666]">Any question? Call us <a href="tel:(813) 531-8988" className="text-black cursor-pointer">(813) 531-8988</a>
         </p>
       </div>
     </div>
