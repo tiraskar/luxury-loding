@@ -133,7 +133,7 @@ const Booking = () => {
             );
           })
           }
-          {bookingPrice?.components?.discount?.map(({ title, total }, index) => {
+          {bookingPrice?.components?.map(({ title, total }, index) => {
             return (
               <div key={index} className="flex items-center">
                 <p className="pr-4">{title}</p>

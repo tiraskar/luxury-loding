@@ -173,7 +173,7 @@ const PaymentMethod = () => {
         <div className='flex flex-col space-y-[14px]'>
           <PaymentElement onChange={handlePaymentElementChange} id="payment" />
           {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
-            By providing your card information, you allow AvantStay, Inc. to
+            By providing your card information, you allow Luxury Lodging, Inc. to
             charge your card for future payments in accordance with their terms.
           </p>}
         </div>

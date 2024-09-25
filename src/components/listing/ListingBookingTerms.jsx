@@ -46,7 +46,7 @@ const ListingBookingTerms = ({ className }) => {
         <div className="mt-3 space-y-[6px]">
           <h1 className="text-sm font-semibold tracking-[-1%]">Pets</h1>
           <p className="text-xs leading-5 ">
-            Dogs are welcome! A fee per pet is required. Contact <a href="mailto:experience@avantstay.com" className="underline">experience@avantstay.com</a> to let us know if you plan on bringing a registered service animal or emotional support animal. Unauthorized pets may be subject to a fine.
+            Dogs are welcome! A fee per pet is required. Contact <a href="mailto:support@luxurylodgingpm.com" className="underline">support@luxurylodgingpm.com</a> to let us know if you plan on bringing a registered service animal or emotional support animal. Unauthorized pets may be subject to a fine.
           </p>
         </div>
       </div>
