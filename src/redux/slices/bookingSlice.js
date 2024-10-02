@@ -40,6 +40,25 @@ export const calculateBookingPrice = createAsyncThunk(
   }
 );
 
+export const getDiscountedPrice = createAsyncThunk(
+  'booking/discount-price',
+  async (booking, { rejectWithValue }) => {
+    const query = new URLSearchParams({
+      couponCode: booking.couponCode,
+      listingId: booking.listingId,
+      checkInDate: booking.checkInDate,
+      checkOutDate: booking.checkOutDate,
+      totalPrice: booking.totalPrice
+    });
+    try {
+      const response = await axios.get(`${baseUrl}/listing/getdiscountedprice?${query}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 const bookingSlice = createSlice({
 
   name: 'booking',
@@ -57,32 +76,9 @@ const bookingSlice = createSlice({
       guests: '',
     },
 
-    //   paymentType: 'card',
-
-    //   //personalInfo
-    //   personalInfo: {
-    //     firstName: '',
-    //     lastName: '',
-    //     email: '',
-    //     phone: '',
-    //   },
-
-    //   //paymentInfo
-    //   paymentInfo: {
-
-    //   },
-
-    //   //
-    //   billingInfo: {
-    //     firstName: '',
-    //     lastName: '',
-    //     line1: '',
-    //     line2: '',
-    //     city: '',
-    //     state: '',
-    //     postalCode: '',
-    //     country: 'US'
-    //   }
+    discountPrice: '',
+    tokenError: '',
+    tokenLoading: false
   },
 
   reducers: {
@@ -118,6 +114,11 @@ const bookingSlice = createSlice({
     toggleBookingNotAvailableAlertDialog: (state) => {
       state.bookingNotAvailableAlertDialog = false;
     },
+
+    handleTokenStateChange: (state) => {
+      state.tokenError = '';
+      localStorage.removeItem('coupon');
+    }
 
 
   },
@@ -155,6 +156,36 @@ const bookingSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       });
+
+    //get discounted price
+    builder
+      .addCase(getDiscountedPrice.pending, (state) => {
+
+        state.tokenLoading = true;
+        state.isDiscountAmount = false;
+        localStorage.setItem('isTokenValid', false);
+        state.tokenError = '';
+      })
+      .addCase(getDiscountedPrice.fulfilled, (state, action) => {
+        state.tokenLoading = false;
+        if (action.payload.discountedPrice == null || action.payload.discountedPrice == undefined) {
+          state.discountPrice = 0;
+          state.isTokenValid = false;
+          localStorage.setItem('discountPrice', 0);
+          state.tokenError = 'Discount not available';
+        } else {
+          state.isTokenValid = true;
+          state.discountPrice = action.payload.discountedPrice;
+          localStorage.setItem('discountPrice', action.payload.discountedPrice);
+          localStorage.setItem('isTokenValid', true);
+        }
+
+      })
+      .addCase(getDiscountedPrice.rejected, (state, action) => {
+        state.tokenLoading = false;
+        state.error = action.payload.message;
+        state.tokenError = action.payload.message;
+      });
   }
 });
 
@@ -162,5 +193,6 @@ export const
   { setCheckBookingParams,
     toggleBookingNotAvailableAlertDialog,
     setCheckBookingParamsToInitialState,
+    handleTokenStateChange
   } = bookingSlice.actions;
 export default bookingSlice.reducer;

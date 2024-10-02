@@ -72,6 +72,10 @@ export const savePaymentInfo = createAsyncThunk(
       const { listingInfo } = getState().listing;
       const { bookingPrice } = getState().booking;
 
+      const discountAmount = localStorage.getItem('discountPrice');
+
+      const totalPrice = discountAmount ? Number(Number(bookingPrice.totalPrice) - Number(discountAmount !== 0 ? discountAmount : 0)) : bookingPrice.totalPrice;
+
       const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, {
         customerId: listing.customerId,
         guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
@@ -83,7 +87,7 @@ export const savePaymentInfo = createAsyncThunk(
         guests: listing.guests,
         paymentIntentId: paymentIntentId,
         paymentMethod: paymentType,
-        amount: (Number(bookingPrice.totalPrice) * 100),
+        amount: (Number(totalPrice) * 100),
         currency: "usd",
         paymentStatus: "initiated",
       });

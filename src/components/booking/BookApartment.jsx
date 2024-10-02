@@ -11,6 +11,7 @@ import AlertDialog from "../ui/AlertDialog";
 import { formateDate } from "../../helper/date";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { formattedPrice } from "../../helper/formatter";
 
 const BookApartment = ({ listingInfo }) => {
 
@@ -184,7 +185,7 @@ const BookApartment = ({ listingInfo }) => {
 
         <div className="grid space-y-2 xxs:space-y-0 xxs:grid-cols-2">
           <div className="flex items-center">
-            <p className="text-[#333333] font-bold text-2xl">${listingInfo.price}</p>
+            <p className="text-[#333333] font-bold text-2xl">${formattedPrice(listingInfo.price)}</p>
             <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
           </div>
 

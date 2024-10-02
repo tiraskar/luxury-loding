@@ -4,17 +4,25 @@ import { TbBed } from "react-icons/tb";
 import { CiCalendar } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
+import { useLocation } from "react-router-dom";
+import TokenDiscount from "./TokenDiscount";
+import { formateDate } from "../../helper/date";
+import { formattedPrice } from "../../helper/formatter";
 
 const Booking = () => {
 
+  const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
-  const { bookingPrice } = useSelector(state => state.booking);
+  const { bookingPrice, loading } = useSelector(state => state.booking);
 
   const images = listingInfo?.images || [];
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
+
+  const discountPrice = localStorage?.getItem('discountPrice');
+  const isTokenValid = localStorage?.getItem('isTokenValid');
 
   return (
     <div className=" space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
@@ -147,10 +155,27 @@ const Booking = () => {
           }
         </div>
 
-        <div className="flex justify-between">
-          <p className="text sm font-[#8E8E80]">Total</p>
-          <p className=" text-xl sm:text-2xl font-bold text-[#333333]">${bookingPrice.totalPrice}</p>
+        {isTokenValid == 'true' && discountPrice !== 0 &&
+          <div className="flex justify-between">
+            <p className="text-sm font-[#8E8E80]">Discount</p>
+            <p className=" text-lg sm:text-2xl font-bold text-[#333333]">${discountPrice}</p>
+          </div>
+        }
+        <div className="flex justify-between items-center mt-2">
+          <p className="text sm font-[#8E8E80]">
+            Total</p>
+
+          {!loading && <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
+            {isTokenValid == 'true' && discountPrice !== 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
+            <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isTokenValid == 'true' && discountPrice !== 0 ? Number(discountPrice) : 0))}</span>
+          </p>}
         </div>
+        {pathname.includes('payment') && <TokenDiscount
+          listingId={listingInfo.id}
+          checkInDate={formateDate(new Date(bookingCheckIn))}
+          checkOutDate={formateDate(new Date(bookingCheckOut))}
+          totalPrice={bookingPrice.totalPrice}
+        />}
         <p className="text-[#666666] mt-10">Any question? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
       </div>
