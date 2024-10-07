@@ -182,6 +182,7 @@ const Booking = () => {
 
           {!loading &&
             <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
+              {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>}
               {
                 isValidToken && totalDiscountPrice ? <span>
                   $ {formattedPrice(`${Number(bookingPrice.totalPrice).toFixed(2) - Number(totalDiscountPrice).toFixed(2)}`)}
