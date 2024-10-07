@@ -180,7 +180,7 @@ const bookingSlice = createSlice({
           state.tokenError = 'Discount not available';
         } else {
           state.isTokenValid = true;
-          state.totalDiscountPrice = action.payload.discountedPrice;
+          state.totalDiscountPrice = Number(action.payload.discountedPrice).toFixed(2);
           state.isValidToken = true;
         }
 

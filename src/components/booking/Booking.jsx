@@ -184,9 +184,9 @@ const Booking = () => {
             <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
               {
                 isValidToken && totalDiscountPrice ? <span>
-                  $ {formattedPrice(`${Number(bookingPrice.totalPrice) - Number(totalDiscountPrice)}`)}
+                  $ {formattedPrice(`${Number(bookingPrice.totalPrice).toFixed(2) - Number(totalDiscountPrice).toFixed(2)}`)}
                 </span>
-                  : <span>${formattedPrice(bookingPrice.totalPrice)}</span>
+                  : <span>${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>
               }
               {/* {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
               <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isValidToken == 'true' && totalDiscountPrice !== 0 ? Number(totalDiscountPrice) : 0))}

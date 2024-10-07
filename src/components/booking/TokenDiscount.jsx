@@ -21,9 +21,6 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => 
     }
   });
 
-  console.log('token code', isValidToken);
-
-
   const onSubmit = (value) => {
     if (isValidToken) {
       // localStorage.setItem('isTokenValid', 'false');
