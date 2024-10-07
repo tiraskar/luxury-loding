@@ -14,9 +14,10 @@ import {
 } from "./pages";
 import BookingListing from "./pages/BookingListing";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { persistor, store } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from "redux-persist/integration/react";
 
 // Routing
 const router = createBrowserRouter([
@@ -93,7 +94,9 @@ function App() {
     <main className="remove-scrollbar scroll-smooth">
       <ToastContainer />
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <PersistGate loading={null} persistor={persistor}>
+          <RouterProvider router={router} />
+        </PersistGate>
       </Provider>
     </main>
   );
