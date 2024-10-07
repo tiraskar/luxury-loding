@@ -28,29 +28,16 @@ const BookApartment = ({ listingInfo }) => {
   const minDateCheckIn = new Date();
 
 
-  const minDateCheckOut = checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
+  // const minDateCheckOut = checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
+  const minDateCheckOut = checkBookingParams.checkIn instanceof Date && !isNaN(checkBookingParams.checkIn)
+    ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1)
+    : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
 
-
-  useEffect(() => {
-    handleInputChange('guests', listingInfo.personCapacity);
-    handleInputChange('listingId', listingInfo.id);
-    handleInputChange('checkIn', minDateCheckIn);
-  }, [listingInfo]);
 
   const handleSubmit = () => {
 
     toast.dismiss();
-    // const checkInAvailability = isDateAvailable(checkBookingParams.checkIn);
-    // const checkOutAvailability = isDateAvailable(checkBookingParams.checkOut);
-
-    // if (!checkInAvailability || !checkOutAvailability) {
-    //   setIsBookingAvailable(true);
-    //   toast.info("Please provide available date!!!");
-    // } else {
-    //   setIsBookingAvailable(true);
-    // }
-
     if ((checkBookingParams.checkIn && !checkBookingParams.checkOut) || (checkBookingParams.checkOut && !checkBookingParams.checkIn)) {
       return toast.info("Provide check-in and check-out date.");
     }
@@ -78,6 +65,13 @@ const BookApartment = ({ listingInfo }) => {
     );
     return availability?.isAvailable == 0 ? 0 : 1;
   };
+
+  useEffect(() => {
+    handleInputChange('guests', listingInfo.personCapacity);
+    handleInputChange('listingId', listingInfo.id);
+    handleInputChange('checkIn', minDateCheckIn); // Ensure this is a valid date object
+  }, [listingInfo]);
+
 
 
   return (

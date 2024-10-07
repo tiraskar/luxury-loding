@@ -1,16 +1,17 @@
 import { useForm } from "react-hook-form";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { getDiscountedPrice, handleTokenStateChange } from "../../redux/slices/bookingSlice";
+import { getDiscountedPrice, setCouponCode, toggleTokenState } from "../../redux/slices/bookingSlice";
+import { useEffect } from "react";
+import { MdError } from "react-icons/md";
 
 
 const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => {
-
-  const { tokenError, tokenLoading } = useSelector(state => state.booking);
-  console.log('tokenError', tokenError);
-
+  // const isTokenValid = localStorage.getItem('isTokenValid');
+  // const coupon = localStorage.getItem('coupon');
+  const { tokenError, tokenLoading, isValidToken, totalDiscountPrice, couponCode } = useSelector(state => state.booking);
+  // const [validToken, setValidToken] = useState(false)
 
   const dispatch = useDispatch();
 
@@ -20,48 +21,65 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => 
     }
   });
 
+  console.log('token code', isValidToken);
+
+
   const onSubmit = (value) => {
-    // setIsLoading(true);
-    localStorage.setItem('coupon', value.couponCode);
-    dispatch(getDiscountedPrice({
-      couponCode: value.couponCode,
-      listingId,
-      checkInDate,
-      checkOutDate,
-      totalPrice
-    }));
-    // if (data?.meta.requestStatus == 'fulfilled') {
-    //   setValue('couponCode', '');
-    // }
+    if (isValidToken) {
+      // localStorage.setItem('isTokenValid', 'false');
+      setValue('couponCode', '');
+      dispatch(setCouponCode(''));
+      dispatch(toggleTokenState());
+    } else {
+      dispatch(setCouponCode(value));
+      // localStorage.setItem('coupon', value.couponCode);
+      dispatch(getDiscountedPrice({
+        couponCode: value.couponCode,
+        listingId,
+        checkInDate,
+        checkOutDate,
+        totalPrice
+      }));
+    }
+
   };
 
-  const isTokenValid = localStorage.getItem('isTokenValid');
-  const coupon = localStorage.getItem('coupon');
+
 
   useEffect(() => {
-    if (coupon) {
-      setValue('couponCode', coupon);
+    if (couponCode) {
+      setValue('couponCode', couponCode);
     }
-  }, [coupon]);
+  }, [couponCode, setValue]);
+
   return (
-    <div className="flex flex-col space-y-1">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex gap-4 mt-8">
-        <input
-          {...register('couponCode', { required: 'Coupon Code is required' })}
-          type="text"
-          disabled={tokenLoading || isTokenValid == 'true'}
-          className="default-input w-full"
-          onChange={() => dispatch(handleTokenStateChange())}
-        />
+    <div className="flex flex-col space-y-1 mt-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-10 items-end gap-4">
+        <div className="flex flex-col col-span-7">
+          <label className="text-sm ">Promo Code/Coupon</label>
+          <input
+            {...register('couponCode', { required: 'Coupon Code is required' })}
+            type="text"
+            // disabled={tokenLoading || isTokenValid == 'true'}
+            className={`default-input w-full font-onest`}
+            onChange={() => dispatch(toggleTokenState())}
+            placeholder="Enter coupon code"
+          />
+        </div>
         <button
-          disabled={tokenLoading || isTokenValid == "true"}
-          type="submit" className="px-5 py-2 rounded-xl text-white bg-black h-fit">
-          {tokenLoading ? <LoadingSpinner /> : "Send"}
+          // disabled={tokenLoading || isTokenValid == "true"}
+          type="submit" className="flex justify-center col-span-3 px-5 py-2 rounded-xl text-white bg-black h-fit">
+          {tokenLoading ? <LoadingSpinner /> : isValidToken ? "Remove" : "Apply"}
         </button>
       </form>
       <span className="text-xs font-onest" style={{
         color: "red"
-      }}>{tokenError}</span>
+      }}> {tokenError !== '' ?? <MdError color="red" className="mr-1" />} {tokenError}</span>
+
+      {isValidToken && <span className="flex items-center text-xs font-onest" style={{
+        color: "green"
+      }}> {(totalDiscountPrice !== '' || totalDiscountPrice !== 0) && <MdError color="green" className="mr-1" />} Promo code added.</span>
+      }
     </div>
   );
 };

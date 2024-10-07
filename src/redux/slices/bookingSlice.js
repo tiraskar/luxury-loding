@@ -51,7 +51,7 @@ export const getDiscountedPrice = createAsyncThunk(
       totalPrice: booking.totalPrice
     });
     try {
-      const response = await axios.get(`${baseUrl}/listing/getdiscountedprice?${query}`);
+      const response = await axios.get(`${baseUrl}/listing/getdiscountprice?${query}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -76,9 +76,11 @@ const bookingSlice = createSlice({
       guests: '',
     },
 
-    discountPrice: '',
+    couponCode: '',
+    totalDiscountPrice: 0,
     tokenError: '',
-    tokenLoading: false
+    tokenLoading: false,
+    isValidToken: false,
   },
 
   reducers: {
@@ -115,11 +117,16 @@ const bookingSlice = createSlice({
       state.bookingNotAvailableAlertDialog = false;
     },
 
-    handleTokenStateChange: (state) => {
-      state.tokenError = '';
-      localStorage.removeItem('coupon');
-    }
+    setCouponCode: (state, action) => {
+      state.couponCode = action.payload.couponCode;
+    },
 
+    toggleTokenState: (state) => {
+      state.isValidToken = false;
+      state.tokenError = '';
+      state.couponCode = "";
+      state.totalDiscountPrice = 0;
+    }
 
   },
 
@@ -163,21 +170,18 @@ const bookingSlice = createSlice({
 
         state.tokenLoading = true;
         state.isDiscountAmount = false;
-        localStorage.setItem('isTokenValid', false);
         state.tokenError = '';
       })
       .addCase(getDiscountedPrice.fulfilled, (state, action) => {
         state.tokenLoading = false;
         if (action.payload.discountedPrice == null || action.payload.discountedPrice == undefined) {
-          state.discountPrice = 0;
+          state.totalDiscountPrice = 0;
           state.isTokenValid = false;
-          localStorage.setItem('discountPrice', 0);
           state.tokenError = 'Discount not available';
         } else {
           state.isTokenValid = true;
-          state.discountPrice = action.payload.discountedPrice;
-          localStorage.setItem('discountPrice', action.payload.discountedPrice);
-          localStorage.setItem('isTokenValid', true);
+          state.totalDiscountPrice = action.payload.discountedPrice;
+          state.isValidToken = true;
         }
 
       })
@@ -193,6 +197,7 @@ export const
   { setCheckBookingParams,
     toggleBookingNotAvailableAlertDialog,
     setCheckBookingParamsToInitialState,
-    handleTokenStateChange
+    toggleTokenState,
+    setCouponCode
   } = bookingSlice.actions;
 export default bookingSlice.reducer;

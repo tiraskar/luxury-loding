@@ -5,9 +5,10 @@ import { TbSmoking } from "react-icons/tb";
 import { LuMusic4 } from "react-icons/lu";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { checkListingBookingAvailability } from "../redux/slices/bookingSlice";
+import { checkListingBookingAvailability, toggleTokenState } from "../redux/slices/bookingSlice";
 import AlertDialog from "../components/ui/AlertDialog";
 import { Booking } from "../components";
+import { useEffect } from "react";
 
 const BookingListing = () => {
   const { id } = useParams();
@@ -36,6 +37,10 @@ const BookingListing = () => {
       );
     }
   };
+
+  useEffect(() => {
+    dispatch(toggleTokenState());
+  }, [])
 
   return (
     <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">

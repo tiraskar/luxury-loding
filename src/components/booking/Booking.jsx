@@ -8,12 +8,16 @@ import { useLocation } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
+// import { useEffect, useState } from "react";
 
 const Booking = () => {
 
   const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
-  const { bookingPrice, loading } = useSelector(state => state.booking);
+  const { bookingPrice, loading, totalDiscountPrice, isValidToken } = useSelector(state => state.booking);
+
+  // const [isValidToken, setIsTokenValid] = useState(false);
+  // const [totalDiscountPrice, setTotalDiscountPrice] = useState()
 
   const images = listingInfo?.images || [];
 
@@ -21,8 +25,21 @@ const Booking = () => {
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
-  const discountPrice = localStorage?.getItem('discountPrice');
-  const isTokenValid = localStorage?.getItem('isTokenValid');
+  // const discountPrice = localStorage?.getItem('discountPrice');
+  // const isTokenValid = localStorage?.getItem('isTokenValid');
+
+  // useEffect(() => {
+  //   if (isTokenValid == 'true') {
+  //     setIsTokenValid(true);
+  //   } else {
+  //     setIsTokenValid(false);
+  //   }
+
+  //   if (discountPrice && discountPrice !== 0) {
+  //     setTotalDiscountPrice(Number(discountPrice).toFixed(2));
+  //   }
+  // }, [isTokenValid, discountPrice])
+
 
   return (
     <div className=" space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
@@ -31,9 +48,6 @@ const Booking = () => {
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div className="flex flex-col space-y-5 lg:h-[145px]">
-          {/* <div className="flex flex-row items-center text-[#0094FF] space-x-1 text-xs h-[1rem]"><GrLocation />
-            <p className="h-[15px]">{listingInfo.address}</p>
-          </div> */}
 
           <h1 className="text-[1rem] font-inter tracking-[-1%] font-semibold leading-[22px] line-clamp-2 sm:line-clamp-none">
             {listingInfo.name}
@@ -78,7 +92,8 @@ const Booking = () => {
                   placeholderText="MM/DD/YYYY"
                   className="outline-none max-w-[117px] bg-white"
                 />
-                {/* {checkBookingParams?.checkIn} */}
+
+
               </p>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
@@ -155,19 +170,27 @@ const Booking = () => {
           }
         </div>
 
-        {isTokenValid == 'true' && discountPrice !== 0 &&
+        {isValidToken && totalDiscountPrice !== 0 &&
           <div className="flex justify-between">
             <p className="text-sm font-[#8E8E80]">Discount</p>
-            <p className=" text-lg sm:text-2xl font-bold text-[#333333]">${discountPrice}</p>
+            <p className=" text-sm sm:text-lg font-bold text-[#333333]">- $ {totalDiscountPrice}</p>
           </div>
         }
         <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
 
-          {!loading && <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
-            {isTokenValid == 'true' && discountPrice !== 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
-            <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isTokenValid == 'true' && discountPrice !== 0 ? Number(discountPrice) : 0))}</span>
+          {!loading &&
+            <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
+              {
+                isValidToken && totalDiscountPrice ? <span>
+                  $ {formattedPrice(`${Number(bookingPrice.totalPrice) - Number(totalDiscountPrice)}`)}
+                </span>
+                  : <span>${formattedPrice(bookingPrice.totalPrice)}</span>
+              }
+              {/* {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
+              <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isValidToken == 'true' && totalDiscountPrice !== 0 ? Number(totalDiscountPrice) : 0))}
+            </span> */}
           </p>}
         </div>
         {pathname.includes('payment') && <TokenDiscount
