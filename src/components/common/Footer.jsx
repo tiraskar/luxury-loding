@@ -127,6 +127,7 @@ const EmailSubscription = () => {
             {...register('email', { required: 'Email is required' })}
             type="email"
             className="default-input bg-cardBackgroundLight p-2"
+            placeholder="Enter your email"
           />
         </div>
         <button type="submit" className="px-5 py-2 rounded-xl text-white bg-black h-fit">
