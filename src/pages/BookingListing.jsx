@@ -1,19 +1,24 @@
 import { GoDotFill } from "react-icons/go";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { PiDog } from "react-icons/pi";
-import { TbSmoking } from "react-icons/tb";
-import { LuMusic4 } from "react-icons/lu";
+// import { PiDog } from "react-icons/pi";
+// import { TbSmoking } from "react-icons/tb";
+// import { LuMusic4 } from "react-icons/lu";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { checkListingBookingAvailability, toggleTokenState } from "../redux/slices/bookingSlice";
 import AlertDialog from "../components/ui/AlertDialog";
 import { Booking } from "../components";
 import { useEffect } from "react";
+import { FaHouseChimneyWindow } from "react-icons/fa6";
 
 const BookingListing = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { listingInfo } = useSelector(state => state.listing);
+  console.log('listinginfo', listingInfo);
+
 
   const handleAgreeAndContinue = () => {
     const bookingAvailable = dispatch(
@@ -91,7 +96,28 @@ const BookingListing = () => {
 
               <div className="block lg:hidden min-w-full h-px bg-[#E0E0E0] my-[28px] px-4"></div>
 
-              <div className="flex gap-3">
+              {listingInfo?.houseRules && <div className="flex gap-3">
+                <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
+                  <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
+                    <FaHouseChimneyWindow size={22} color="black" />
+                  </div>
+                </div>
+                <div className=" space-y-[6px]">
+                  <h1 className="text-sm font-semibold tracking-[-1%]">
+                    House rule
+                  </h1>
+                  <p className="text-xs leading-5 ">
+                    {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
+                      <span key={index} className="py-4">
+                        {index !== 0 && "✔️"} {rule}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              </div>}
+
+              {/* <div className="flex gap-3">
                 <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
                   <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
                     <LuMusic4 size={22} color="black" />
@@ -107,8 +133,8 @@ const BookingListing = () => {
                     note we do not provide speakers or sound systems.
                   </p>
                 </div>
-              </div>
-              <div className="flex gap-3">
+              </div> */}
+              {/* <div className="flex gap-3">
                 <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
                   <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
                     <TbSmoking size={22} color="black" />
@@ -139,8 +165,8 @@ const BookingListing = () => {
                     Dogs are welcome! A fee per pet is required. Contact <a href="mailto:support@luxurylodgingpm.com" className="underline">support@luxurylodgingpm.com</a> to let us know if you plan on bringing a registered service animal or emotional support animal. Unauthorized pets may be subject to a fine.
                   </p>
                 </div>
-              </div>
-              <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>
+              </div> */}
+              {listingInfo?.houseRules && <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>}
 
               <p className="  lg:relative text-xs leading-6 ">
                 By clicking the button below, I agree to Luxury {`Lodging's`}{" "}

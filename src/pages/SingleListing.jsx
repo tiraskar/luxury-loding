@@ -3,7 +3,7 @@ import { FilterableSearchListing, Listing, OtherListing } from "../components";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
-import { setCheckBookingParamsToInitialState } from "../redux/slices/bookingSlice";
+import { setCheckBookingParamsToInitialState, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 
 
@@ -24,6 +24,7 @@ const SingleListing = () => {
     dispatch(fetchOtherListings({ limit: 4 }));
     dispatch(setCheckBookingParamsToInitialState());
     dispatch(setSearchListingParamsToInitialState());
+    dispatch(toggleTokenState())
   }, [id])
 
   return (

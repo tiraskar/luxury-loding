@@ -151,7 +151,7 @@ const Booking = () => {
                 <div className="flex-grow flex space-x-2 items-center">
                   <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
                 </div>
-                <p className="pl-4">${total}</p>
+                <p className="pl-4">${formattedPrice(total)}</p>
               </div>
             );
           })
@@ -163,7 +163,7 @@ const Booking = () => {
                 <div className="flex-grow flex space-x-2 items-center">
                   <div className="border-t border-dashed border-[#D3D3D3] flex-grow opacity-60" />
                 </div>
-                <p className="pl-4">${total}</p>
+                <p className="pl-4">${formattedPrice(total)}</p>
               </div>
             );
           })
@@ -173,14 +173,30 @@ const Booking = () => {
         {isValidToken && totalDiscountPrice !== 0 &&
           <div className="flex justify-between">
             <p className="text-sm font-[#8E8E80]">Discount</p>
-            <p className=" text-sm sm:text-lg font-bold text-[#333333]">- $ {totalDiscountPrice}</p>
+            <p className=" text-sm sm:text-lg font-bold text-[#333333]">- $ {formattedPrice(totalDiscountPrice)}</p>
           </div>
         }
         <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
+          {!loading && (
+            <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
+              {isValidToken && totalDiscountPrice !== 0 && (
+                <span className="line-through text-sm justify-end text-left">
+                  ${formattedPrice(bookingPrice.totalPrice)}
+                </span>
+              )}
+              {isValidToken && totalDiscountPrice ? (
+                <span>
+                  $ {formattedPrice((Number(bookingPrice.totalPrice) - Number(totalDiscountPrice)))}
+                </span>
+              ) : (
+                <span>${formattedPrice(bookingPrice.totalPrice)}</span>
+              )}
+            </p>
+          )}
 
-          {!loading &&
+          {/* {!loading &&
             <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
               {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>}
               {
@@ -189,10 +205,10 @@ const Booking = () => {
                 </span>
                   : <span>${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>
               }
+          </p>} */}
               {/* {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
               <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isValidToken == 'true' && totalDiscountPrice !== 0 ? Number(totalDiscountPrice) : 0))}
             </span> */}
-          </p>}
         </div>
         {pathname.includes('payment') && <TokenDiscount
           listingId={listingInfo.id}
@@ -200,7 +216,7 @@ const Booking = () => {
           checkOutDate={formateDate(new Date(bookingCheckOut))}
           totalPrice={bookingPrice.totalPrice}
         />}
-        <p className="text-[#666666] mt-10">Any question? Call us
+        <p className="text-[#666666] mt-10 mb-3">Any question? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
       </div>
     </div>

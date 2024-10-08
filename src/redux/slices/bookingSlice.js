@@ -126,6 +126,10 @@ const bookingSlice = createSlice({
       state.tokenError = '';
       state.couponCode = "";
       state.totalDiscountPrice = 0;
+      state.loading = false;
+      state.isListingBookingAvailable = false;
+      state.bookingNotAvailableAlertDialog = false;
+
     }
 
   },
