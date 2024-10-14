@@ -26,6 +26,9 @@ const Popup = () => {
   const [maxValue, setMaxValue] = useState(searchListingParams.maxPrice);
 
   const handleSearchInputChange = (name, value) => {
+    if (parseInt(value) < 0) {
+      value = parseInt(value) * -1;
+    }
     dispatch(setSearchListingParams({ name, value }));
   };
 
@@ -72,6 +75,7 @@ const Popup = () => {
                   onChange={(e) => handleSearchInputChange('bedrooms', e.target.value)}
                   placeholder="4 bedrooms"
                   className="font-inter text-[#8A8A8A] bg-[#F9F9F9] outline-none"
+                  min={0}
                 />
               </div>
               {/* <div className="p-5 space-y-2 bg-[#F9F9F9] rounded-2xl h-[85px]">
