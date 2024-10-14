@@ -177,11 +177,11 @@ const BookApartment = ({ listingInfo }) => {
 
         <div className="min-w-full h-px bg-[#E0E0E0] my-[30px]"></div>
 
-        <div className="grid space-y-2 xxs:space-y-0 xxs:grid-cols-2">
-          <div className="flex items-center">
+        <div className="grid space-y-2 xxs:space-y-0 xxs:grid-cols-1">
+          {/* <div className="flex items-center">
             <p className="text-[#333333] font-bold text-2xl">${formattedPrice(listingInfo.price)}</p>
             <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
-          </div>
+          </div> */}
 
           {isListingBookingAvailable && <Link
             to={`/listing/${listingInfo.id}/booking?${query}`}

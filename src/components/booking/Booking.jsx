@@ -67,10 +67,10 @@ const Booking = () => {
                 <LuBath size={14} /> {listingInfo.bathroomsNumber} {listingInfo.bathroomsNumber > 1 ? 'baths' : 'bath'}
               </div>
             </div>
-            <div className="flex items-center h-7">
+            {/* <div className="flex items-center h-7">
               <p className="text-[#333333] font-bold text-xl">${listingInfo.price}</p>
               <p className="text-[#8E8E80] text-sm tracking-tight">&nbsp;/ per night</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

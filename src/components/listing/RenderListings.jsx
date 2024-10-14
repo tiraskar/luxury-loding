@@ -138,12 +138,12 @@ const RenderListings = ({ listingList }) => {
               </div>
             </div>
 
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <p className="text-[#333333] font-bold text-xl h-7">${listing.price}</p>
               <p className="text-[#8E8E80] text-sm tracking-tight h-[17px]">
                 &nbsp;/ per night
               </p>
-            </div>
+            </div> */}
           </div>
         );
       })}
