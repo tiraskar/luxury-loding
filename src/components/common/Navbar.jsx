@@ -73,7 +73,7 @@ export default Navbar;
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blogs" },
-  { label: "Listing", href: "/listings" },
+  { label: "Listings", href: "/listings" },
   { label: "Contact Us", href: "/contact" },
   { label: "Partner with Us", href: "https://luxurylodgingpm.com/", target: "_blank" }
 ];
