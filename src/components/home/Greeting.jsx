@@ -15,7 +15,7 @@ const Greeting = () => {
 
             {/* Welcome to Luxury Lodging!
             <br /> */}
-            <div className="font-normal ">Luxurious retreats designed for <br className=" hidden lg:block xl:hidden" /> groups
+            <div className="font-normal ">Luxury Retreats For<br className=" hidden lg:block xl:hidden" /> Groups
 
               <div className="">
                 <CustomImage src={`images/inclined.png`} className="hidden lg:block absolute right-0 top-[20%] xl:top-[10%]  h-[88px] w-[140px] flex-shrink-0 rotate-[15deg] rounded-md" alt="" />
