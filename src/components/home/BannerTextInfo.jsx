@@ -7,16 +7,19 @@ const BannerTextInfo = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="text-white md:space-y-[30px]  md:mb-[45px] xs:h-[120px] sm:h-[130px]">
+    <div className="text-white  stroke-textDark stroke-2 md:space-y-[30px]  md:mb-[45px] xs:h-[120px] sm:h-[130px]">
       <h1
-        className="font-medium font-onest text-[1.125rem] xxs:text-[1.3rem] xs:text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[3rem] tracking-[-0.8px] leading-[30px] xs:leading-[40px] sm:leading-[50px] lg:leading-[56px] 
+        className="font-onest text-[1.125rem] xxs:text-[1.3rem] xs:text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[3rem] tracking-[-0.8px] leading-[30px] xs:leading-[40px] sm:leading-[50px] lg:leading-[56px] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
         "
+        style={{ textShadow: "0 4px 10px rgba(0, 0, 0, 0.5)" }}
       >
         Your Ideal Spot for Groups, Events,
         <br />and Corporate Travel
       </h1>
 
-      <p className="text-[8px] sm:text-xs md:text-sm lg:text-[1rem] h-[11px]">
+      <p className="text-[8px] tracking-wide sm:text-xs md:text-sm lg:text-[1rem] h-[11px] stroke-textDark font-medium stroke-2"
+        style={{ textShadow: "0 4px 10px rgba(0, 0, 0, 100)" }}
+      >
         Top destinations for all groups with excellent amenities,
         <br className="block xs:hidden" />
         corporate travel, and events

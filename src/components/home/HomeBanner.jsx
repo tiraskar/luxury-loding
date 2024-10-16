@@ -16,6 +16,7 @@ const BannerImage = () => {
         alt="Banner Background"
         className=" w-full h-full object-cover"
       />
+      <div className="absolute inset-0 bg-black opacity-40 h-full"></div>
     </div>
   );
 };
