@@ -103,7 +103,7 @@ const BookingListing = () => {
                   </div>
                 </div>
                 <div className=" space-y-[6px]">
-                  <h1 className="text-sm font-semibold tracking-[-1%]">
+                  <h1 className="text-sm font-semibold tracking-[-1%] mt-3">
                     House rule
                   </h1>
                   <p className="text-xs leading-5 ">
