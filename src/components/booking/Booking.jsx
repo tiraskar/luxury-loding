@@ -14,7 +14,9 @@ const Booking = () => {
 
   const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
-  const { bookingPrice, loading, totalDiscountPrice, isValidToken } = useSelector(state => state.booking);
+  const { bookingPrice,
+    // loading,
+    totalDiscountPrice, isValidToken } = useSelector(state => state.booking);
 
   // const [isValidToken, setIsTokenValid] = useState(false);
   // const [totalDiscountPrice, setTotalDiscountPrice] = useState()
@@ -157,6 +159,8 @@ const Booking = () => {
           })
           }
           {bookingPrice?.components?.map(({ title, total }, index) => {
+            console.log('title', title);
+
             return (
               <div key={index} className="flex items-center">
                 <p className="pr-4">{title}</p>
@@ -179,22 +183,22 @@ const Booking = () => {
         <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
-          {!loading && (
+          {/* {!loading && ( */}
             <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
-              {isValidToken && totalDiscountPrice !== 0 && (
+            {/* {isValidToken && totalDiscountPrice !== 0 && (
                 <span className="line-through text-sm justify-end text-left">
                   ${formattedPrice(bookingPrice.totalPrice)}
                 </span>
-              )}
-              {isValidToken && totalDiscountPrice ? (
+              )} */}
+            {/* {isValidToken && totalDiscountPrice ? (
                 <span>
                   $ {formattedPrice((Number(bookingPrice.totalPrice) - Number(totalDiscountPrice)))}
                 </span>
-              ) : (
+              ) : ( */}
                 <span>${formattedPrice(bookingPrice.totalPrice)}</span>
-              )}
+            {/* )} */}
             </p>
-          )}
+          {/* )} */}
 
           {/* {!loading &&
             <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
@@ -215,6 +219,7 @@ const Booking = () => {
           checkInDate={formateDate(new Date(bookingCheckIn))}
           checkOutDate={formateDate(new Date(bookingCheckOut))}
           totalPrice={bookingPrice.totalPrice}
+          guestNumber={guestNumber}
         />}
         <p className="text-[#666666] mt-10 mb-3">Any question? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>

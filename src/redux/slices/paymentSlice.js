@@ -70,6 +70,7 @@ export const savePaymentInfo = createAsyncThunk(
       const { personalInfo, paymentType, paymentIntentId
       } = getState().payment;
       const { listingInfo } = getState().listing;
+      const { couponCode, isValidToken } = getState().booking
       const { bookingPrice, totalDiscountPrice } = getState().booking;
 
       // const totalDiscountPrice = localStorage.getItem('discountPrice');
@@ -90,6 +91,7 @@ export const savePaymentInfo = createAsyncThunk(
         amount: (Number(totalPrice) * 100),
         currency: "usd",
         paymentStatus: "initiated",
+        couponName: isValidToken ? couponCode : null
       });
 
       return response.data;

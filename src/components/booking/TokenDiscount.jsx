@@ -2,12 +2,13 @@ import { useForm } from "react-hook-form";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { getDiscountedPrice, setCouponCode, toggleTokenState } from "../../redux/slices/bookingSlice";
+import { calculateBookingPrice, setCouponCode, toggleTokenState } from "../../redux/slices/bookingSlice";
 import { useEffect } from "react";
 import { MdError } from "react-icons/md";
+import { formateDate } from "../../helper/date";
 
-
-const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => {
+//eslint-disable-next-line
+const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guestNumber }) => {
   // const isTokenValid = localStorage.getItem('isTokenValid');
   // const coupon = localStorage.getItem('coupon');
   const { tokenError, tokenLoading, isValidToken, totalDiscountPrice, couponCode } = useSelector(state => state.booking);
@@ -27,15 +28,28 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => 
       setValue('couponCode', '');
       dispatch(setCouponCode(''));
       dispatch(toggleTokenState());
+      dispatch(calculateBookingPrice({
+        listingId: Number(listingId),
+        checkIn: formateDate(new Date(checkInDate)),
+        checkOut: formateDate(new Date(checkOutDate)),
+        guests: Number(guestNumber),
+      }));
+
     } else {
       dispatch(setCouponCode(value));
       // localStorage.setItem('coupon', value.couponCode);
-      dispatch(getDiscountedPrice({
-        couponCode: value.couponCode,
-        listingId,
-        checkInDate,
-        checkOutDate,
-        totalPrice
+      // dispatch(getDiscountedPrice({
+      //   couponCode: value.couponCode,
+      //   listingId,
+      //   checkInDate,
+      //   checkOutDate,
+      //   totalPrice
+      // }));
+      dispatch(calculateBookingPrice({
+        listingId: Number(listingId),
+        checkIn: formateDate(new Date(checkInDate)),
+        checkOut: formateDate(new Date(checkOutDate)),
+        guests: Number(guestNumber),
       }));
     }
 
@@ -52,8 +66,8 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => 
   return (
     <div className="flex flex-col space-y-1 mt-4">
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-10 items-end gap-4">
-        <div className="flex flex-col col-span-7">
-          <label className="text-sm ">Promo Code/Coupon</label>
+        <div className="flex flex-col col-span-7 space-y-2">
+          <label className="text-sm ">Promo Code/ Coupon</label>
           <input
             {...register('couponCode', { required: 'Coupon Code is required' })}
             type="text"
@@ -69,9 +83,9 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice }) => 
           {tokenLoading ? <LoadingSpinner /> : isValidToken ? "Remove" : "Apply"}
         </button>
       </form>
-      <span className="text-xs font-onest" style={{
+      <span className="flex items-center text-xs font-onest" style={{
         color: "red"
-      }}> {tokenError !== '' ?? <MdError color="red" className="mr-1" />} {tokenError}</span>
+      }}> {tokenError !== '' && <MdError color="red" className="mr-1" />} {tokenError}</span>
 
       {isValidToken && <span className="flex items-center text-xs font-onest" style={{
         color: "green"
@@ -85,7 +99,8 @@ TokenDiscount.propTypes = {
   listingId: PropTypes.number.isRequired,
   checkInDate: PropTypes.string.isRequired,
   checkOutDate: PropTypes.string.isRequired,
-  totalPrice: PropTypes.number.isRequired
+  totalPrice: PropTypes.number.isRequired,
+  guestNumber: PropTypes.number.isRequired,
 };
 
 export default TokenDiscount;

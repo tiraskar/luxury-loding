@@ -30,12 +30,13 @@ export const checkListingBookingAvailability = createAsyncThunk(
 
 export const calculateBookingPrice = createAsyncThunk(
   'booking/price-calculate',
-  async (booking) => {
+  async (booking, { getState, rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, { ...booking });
+      const { couponCode } = getState().booking;
+      const { data } = await axios.post(`${baseUrl}/listing/calculateprice`, { ...booking, couponName: couponCode });
       return data;
     } catch (error) {
-      return Promise.reject(error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -76,7 +77,7 @@ const bookingSlice = createSlice({
       guests: '',
     },
 
-    couponCode: '',
+    couponCode: null,
     totalDiscountPrice: 0,
     tokenError: '',
     tokenLoading: false,
@@ -124,7 +125,7 @@ const bookingSlice = createSlice({
     toggleTokenState: (state) => {
       state.isValidToken = false;
       state.tokenError = '';
-      state.couponCode = "";
+      state.couponCode = null;
       state.totalDiscountPrice = 0;
       state.loading = false;
       state.isListingBookingAvailable = false;
@@ -160,12 +161,26 @@ const bookingSlice = createSlice({
         state.loading = true;
       })
       .addCase(calculateBookingPrice.fulfilled, (state, action) => {
+        // console.log('action paylaod for calculation price', action.payload.components.filter(data => data.name == 'couponDiscount'));
+
         state.loading = false;
         state.bookingPrice = action.payload;
+        if (state.couponCode !== null) {
+          const discountObj = action.payload.components.filter(data => data.name == 'couponDiscount');
+          if (discountObj) {
+            state.isValidToken = true;
+          } else {
+            state.isValidToken = false;
+          }
+        } else {
+          state.isValidToken = false;
+          state.tokenError = '';
+        }
       })
       .addCase(calculateBookingPrice.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        // state.error = action.payload;
+        state.tokenError = action.payload.message;
       });
 
     //get discounted price
