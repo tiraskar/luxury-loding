@@ -1,22 +1,54 @@
 import { useDispatch, useSelector } from "react-redux";
 import { searchListing, setSearchListingParams, toggleIsSearchedOnSingleListing, toggleIsSearchHomePageOpen } from "../../redux/slices/listingSlice";
 import { SearchInputLabel } from "./SearchListingForm";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { toast } from "react-toastify";
+import { CiLocationOn } from "react-icons/ci";
 
 
 const SearchListingMobileView = () => {
   const dispatch = useDispatch();
-  const { searchListingParams, isHomePageLoading } = useSelector(state => state.listing);
+  const { searchListingParams, isHomePageLoading, listingLocationList } = useSelector(state => state.listing);
   const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
+
+  const [filteredLocation, setSearchFilterLocation] = useState([]);
+  const [showLocationFilter, setShowLocationFilter] = useState(false)
 
   const minDateCheckIn = new Date(Date.now());
   const handleInputChange = (name, value) => {
     if (name == 'checkIn') {
       const checkInDate = new Date(value);
       setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
+    }
+    if (name === 'location') {
+      const filterLocation = listingLocationList.map((location) => {
+
+        const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
+
+
+        if (stateMatch) {
+          return location;
+        }
+
+        // Filter the cities based on the value
+        const filteredCities = location.cities.filter((cityObj) =>
+          cityObj.city.toLowerCase().includes(value.toLowerCase())
+        );
+
+        // Return the location with only filtered cities if city matches
+        if (filteredCities.length > 0) {
+          return {
+            ...location,
+            cities: filteredCities, // Only the filtered cities
+          };
+        }
+        return null; // Exclude location if no match is found
+      }).filter(location => location !== null); // Remove null entries
+
+      // Update the filtered location list
+      setSearchFilterLocation(filterLocation);
     }
     dispatch(setSearchListingParams({ name, value }));
   };
@@ -30,6 +62,30 @@ const SearchListingMobileView = () => {
     dispatch(searchListing());
     dispatch(toggleIsSearchedOnSingleListing(true));
   };
+
+  useEffect(() => {
+    if (listingLocationList.length > 0) {
+      setSearchFilterLocation(listingLocationList);
+    } else {
+      setSearchFilterLocation([]);
+    }
+  }, [listingLocationList]);
+
+  //track div using ref
+  const filterRef = useRef(null);
+
+  //close the filter outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowLocationFilter(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [filterRef]);
 
   return (
     <div className="xs:hidden fixed inset-0 bg-black bg-opacity-50 flex  justify-center  items-center  z-50 text-[#333333] transition-all delay-500 ease-in-out">
@@ -58,7 +114,31 @@ const SearchListingMobileView = () => {
                 placeholder="Anywhere"
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 className="text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
+                onFocus={() => setShowLocationFilter(true)}
               />
+              {showLocationFilter &&
+                <div
+                  ref={filterRef}
+                  className="bg-white text-textDark z-40 absolute min-w-[250px] sm:max-w-[400px] max-h-56 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg px-2">
+                  <ul className="space-y-1 text-sm">
+                    {filteredLocation?.map((location, index) => (
+                      <ul key={index} className="ml-1 space-y-1">
+                        {location.cities.map((cityObj, cityIndex) => (
+                          <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer"
+                            onClickCapture={() => {
+                              handleInputChange('location', cityObj.city);
+                              setShowLocationFilter(false);
+                            }}
+                          >
+                            <CiLocationOn className="text-buttonPrimary text-xs" />
+                            <span>{cityObj.city}, {location.state}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ))}
+                  </ul>
+                </div>
+              }
             </div>
 
 

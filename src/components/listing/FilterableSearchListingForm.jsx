@@ -1,12 +1,13 @@
 import { GoDotFill } from "react-icons/go";
 import { Wrapper } from "..";
 import { RiFilter2Line } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FilterListing from "./FilterListing";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAvailableListing,
   fetchListingList,
+  fetchListingLocationList,
   setSearchListingParams,
   toggleFilterOpen,
 } from "../../redux/slices/listingSlice";
@@ -14,6 +15,7 @@ import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
+import { CiLocationOn } from "react-icons/ci";
 
 const FilterableSearchListing = () => {
   const [minDateCheckOut, setMinDateCheckOut] = useState(
@@ -27,10 +29,12 @@ const FilterableSearchListing = () => {
     searchListingParams,
     searchFilter,
     isFilterOpen,
-    isFetchListing
+    isFetchListing,
+    listingLocationList
   } = useSelector((state) => state.listing);
 
-  // const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filteredLocation, setSearchFilterLocation] = useState([]);
+  const [showLocationFilter, setShowLocationFilter] = useState(false)
 
   const minDateCheckIn = new Date(Date.now());
 
@@ -41,6 +45,35 @@ const FilterableSearchListing = () => {
         new Date(checkInDate.setDate(checkInDate.getDate() + 1))
       );
     }
+    if (name === 'location') {
+      const filterLocation = listingLocationList.map((location) => {
+
+        const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
+
+
+        if (stateMatch) {
+          return location;
+        }
+
+        // Filter the cities based on the value
+        const filteredCities = location.cities.filter((cityObj) =>
+          cityObj.city.toLowerCase().includes(value.toLowerCase())
+        );
+
+        // Return the location with only filtered cities if city matches
+        if (filteredCities.length > 0) {
+          return {
+            ...location,
+            cities: filteredCities, // Only the filtered cities
+          };
+        }
+        return null; // Exclude location if no match is found
+      }).filter(location => location !== null); // Remove null entries
+
+      // Update the filtered location list
+      setSearchFilterLocation(filterLocation);
+    }
+
     dispatch(setSearchListingParams({ name, value }));
   };
 
@@ -67,6 +100,36 @@ const FilterableSearchListing = () => {
     dispatch(fetchListingList());
   };
 
+  useEffect(() => {
+    if (listingLocationList.length > 0) {
+      setSearchFilterLocation(listingLocationList);
+    } else {
+      setSearchFilterLocation([]);
+    }
+    console.log('listing location', listingLocationList);
+
+  }, [listingLocationList]);
+
+  useEffect(() => {
+    dispatch(fetchListingLocationList());
+  }, []);
+
+  //track div using ref
+  const filterRef = useRef(null);
+
+  // close the filter outside click;
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowLocationFilter(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [filterRef]);
+
   return (
     <Wrapper>
       <div className=" space-y-4 sm:space-y-6">
@@ -84,6 +147,10 @@ const FilterableSearchListing = () => {
             <Location
               searchListingParams={searchListingParams}
               handleInputChange={handleInputChange}
+              setShowLocationFilter={setShowLocationFilter}
+              filteredLocation={filteredLocation}
+              showLocationFilter={showLocationFilter}
+              filterRef={filterRef}
             />
           </div>
 
@@ -125,6 +192,10 @@ const FilterableSearchListing = () => {
               <Location
                 searchListingParams={searchListingParams}
                 handleInputChange={handleInputChange}
+                setShowLocationFilter={setShowLocationFilter}
+                filteredLocation={filteredLocation}
+                showLocationFilter={showLocationFilter}
+                filterRef={filterRef}
               />
             </div>
           </div>
@@ -265,7 +336,8 @@ SearchButton.propTypes = {
   isFetchListing: PropTypes.bool,
 };
 
-const Location = ({ searchListingParams, handleInputChange }) => {
+const Location = ({ searchListingParams, handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+
   return (
     <div className="flex flex-col w-full text-sm gap-1.5 ">
       <label className="text-sm font-semibold">Where to go?</label>
@@ -275,7 +347,31 @@ const Location = ({ searchListingParams, handleInputChange }) => {
         onChange={(e) => handleInputChange("location", e.target.value)}
         placeholder="Anywhere"
         className="search-input"
+        onFocus={() => setShowLocationFilter(true)}
       />
+      {showLocationFilter &&
+        <div
+          ref={filterRef}
+          className="bg-white text-textDark z-40 absolute min-w-[250px] sm:max-w-[400px] max-h-56 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg px-2">
+          <ul className="space-y-1 text-sm">
+            {filteredLocation?.map((location, index) => (
+              <ul key={index} className="ml-1 space-y-1">
+                {location.cities.map((cityObj, cityIndex) => (
+                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer"
+                    onClick={() => {
+                      handleInputChange('location', cityObj.city);
+                      setShowLocationFilter(false);
+                    }}
+                  >
+                    <CiLocationOn className="text-buttonPrimary text-xs" />
+                    <span>{cityObj.city}, {location.state}</span>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </ul>
+        </div>
+      }
     </div>
   );
 }
@@ -283,6 +379,10 @@ const Location = ({ searchListingParams, handleInputChange }) => {
 Location.propTypes = {
   searchListingParams: PropTypes.object,
   handleInputChange: PropTypes.func,
+  setShowLocationFilter: PropTypes.func,
+  filteredLocation: PropTypes.array,
+  showLocationFilter: PropTypes.bool,
+  filterRef: PropTypes.any,
 };
 
 const Guests = ({ searchListingParams, handleInputChange }) => {

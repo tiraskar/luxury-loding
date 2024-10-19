@@ -218,6 +218,17 @@ export const fetchListingAvailabilityCalender = createAsyncThunk(
   }
 )
 
+export const fetchListingLocationList = createAsyncThunk(
+  'listing/location', async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${baseUrl}/listing/getlocationlist`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -262,6 +273,7 @@ const listingSlice = createSlice({
     countryList: [],
     amenitiesList: [],
     listingAvailableCalender: [],
+    listingLocationList: [],
 
     //object
     listingInfo: {},
@@ -579,7 +591,7 @@ const listingSlice = createSlice({
         state.error = action.payload;
       });
 
-    //save listing reviw 
+    //save listing review
 
     builder
       .addCase(saveListingReview.pending, (state) => {
@@ -613,6 +625,23 @@ const listingSlice = createSlice({
         state.isCalenderLoading = false;
         state.error = action.payload;
       });
+
+    //fetch listing location list 
+
+    builder
+      .addCase(fetchListingLocationList.pending, (state) => {
+        state.isLocationLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchListingLocationList.fulfilled, (state, action) => {
+        state.isLocationLoading = false;
+        state.listingLocationList = action.payload;
+      })
+      .addCase(fetchListingLocationList.rejected, (state, action) => {
+        state.isLocationLoading = false;
+        state.error = action.payload;
+      });
+
   }
 });
 
