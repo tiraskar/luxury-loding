@@ -352,7 +352,7 @@ const Location = ({ searchListingParams, handleInputChange, setShowLocationFilte
       {showLocationFilter &&
         <div
           ref={filterRef}
-          className="bg-white text-textDark z-40 absolute min-w-[250px] sm:max-w-[400px] max-h-56 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg px-2">
+          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg px-2">
           <ul className="space-y-1 text-sm">
             {filteredLocation?.map((location, index) => (
               <ul key={index} className="ml-1 space-y-1">
@@ -363,7 +363,7 @@ const Location = ({ searchListingParams, handleInputChange, setShowLocationFilte
                       setShowLocationFilter(false);
                     }}
                   >
-                    <CiLocationOn className="text-buttonPrimary text-xs" />
+                    <CiLocationOn className="text-buttonPrimary text-lg" />
                     <span>{cityObj.city}, {location.state}</span>
                   </li>
                 ))}
