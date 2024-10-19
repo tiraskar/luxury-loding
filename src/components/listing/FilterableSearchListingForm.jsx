@@ -352,12 +352,12 @@ const Location = ({ searchListingParams, handleInputChange, setShowLocationFilte
       {showLocationFilter &&
         <div
           ref={filterRef}
-          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg px-2">
-          <ul className="space-y-1 text-sm">
+          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg ">
+          <ul className=" text-sm">
             {filteredLocation?.map((location, index) => (
-              <ul key={index} className="ml-1 space-y-1">
+              <ul key={index} className=" space-y-1">
                 {location.cities.map((cityObj, cityIndex) => (
-                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer"
+                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
                     onClick={() => {
                       handleInputChange('location', cityObj.city);
                       setShowLocationFilter(false);
