@@ -353,18 +353,16 @@ const listingSlice = createSlice({
       state.isFilterOpen = !state.isFilterOpen;
     },
 
+    clearSearchCheckInCheckOutDate: (state) => {
+      state.searchListingParams.checkIn = '';
+      state.searchListingParams.checkOut = '';
+    },
+
     setSearchListingParams: (state, action) => {
       const { name, value } = action.payload;
-
       if (name === 'guests') {
-        //guest value should be 50 or below 50
         const numericValue = Math.min(Math.max(parseInt(value, 10), 0), 50);
         state.searchListingParams[name] = numericValue;
-      } else if (name === 'checkIn' && value >= state.searchListingParams.checkOut) {
-        let minDateCheckOut = new Date(value);
-        minDateCheckOut.setDate(value.getDate() + 1);
-        state.searchListingParams.checkIn = value;
-        state.searchListingParams.checkOut = minDateCheckOut;
       } else {
         state.searchListingParams[name] = value;
       }
@@ -645,6 +643,6 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen, clearSearchCheckInCheckOutDate } = listingSlice.actions;
 
 export default listingSlice.reducer;

@@ -159,8 +159,6 @@ const Booking = () => {
           })
           }
           {bookingPrice?.components?.map(({ title, total }, index) => {
-            console.log('title', title);
-
             return (
               <div key={index} className="flex items-center">
                 <p className="pr-4">{title}</p>

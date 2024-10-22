@@ -1,27 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
-import { searchListing, setSearchListingParams, toggleIsSearchedOnSingleListing, toggleIsSearchHomePageOpen } from "../../redux/slices/listingSlice";
+import { clearSearchCheckInCheckOutDate, searchListing, setSearchListingParams, toggleIsSearchedOnSingleListing, toggleIsSearchHomePageOpen } from "../../redux/slices/listingSlice";
 import { SearchInputLabel } from "./SearchListingForm";
 import { useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { CiLocationOn } from "react-icons/ci";
+import { addDays, format } from "date-fns";
+import { DateRange } from "react-date-range";
+import { IoClose } from "react-icons/io5";
 
 
 const SearchListingMobileView = () => {
   const dispatch = useDispatch();
   const { searchListingParams, isHomePageLoading, listingLocationList } = useSelector(state => state.listing);
-  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
 
   const [filteredLocation, setSearchFilterLocation] = useState([]);
   const [showLocationFilter, setShowLocationFilter] = useState(false)
 
-  const minDateCheckIn = new Date(Date.now());
   const handleInputChange = (name, value) => {
-    if (name == 'checkIn') {
-      const checkInDate = new Date(value);
-      setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
-    }
     if (name === 'location') {
       const filterLocation = listingLocationList.map((location) => {
 
@@ -87,6 +83,65 @@ const SearchListingMobileView = () => {
     };
   }, [filterRef]);
 
+  // date state
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+      key: 'selection'
+    }
+  ]);
+
+
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
+  const hideOnEscape = (e) => {
+    if (e.key === "Escape") {
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+  };
+
+  const hideOnClickOutside = (e) => {
+    if (checkInRef.current && !checkInRef.current.contains(e.target)) {
+      setOpenCheckIn(false);
+    }
+    if (checkOutRef.current && !checkOutRef.current.contains(e.target)) {
+      setOpenCheckOut(false);
+    }
+  };
+
+  useEffect(() => {
+
+    if (openCheckIn && range[0].startDate) {
+      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
+      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
+    }
+    if (openCheckOut && range[0].endDate) {
+      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
+      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
+    }
+  }, [range[0].startDate, range[0].endDate]);
+
+  const handleClear = () => {
+    dispatch(clearSearchCheckInCheckOutDate());
+    setRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      },
+    ]);
+  }
+
   return (
     <div className="xs:hidden fixed inset-0 bg-black bg-opacity-50 flex  justify-center  items-center  z-50 text-[#333333] transition-all delay-500 ease-in-out">
       <div className="relative w-full bg-white rounded-2xl shadow-lg z-10 py-2 mx-5 xss:mx-7 ">
@@ -147,55 +202,45 @@ const SearchListingMobileView = () => {
                 text="Check in"
                 htmlFor="checkIn"
               />
-              <DatePicker
-                type="text"
-                selected={searchListingParams.checkIn}
-                dateFormat="MM/dd/YYYY"
-                placeholderText="MM/DD/YYYY"
-                minDate={minDateCheckIn}
-                className="outline-none w-[105px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
-                onChange={(date) => {
-                  if (date && date instanceof Date && !isNaN(date)) {
-                    const currentYear = new Date().getFullYear();
-                    if (date.getFullYear() >= currentYear) {
-                      handleInputChange('checkIn', date);
-                      if (searchListingParams.checkOut && date >= searchListingParams.checkOut) {
-                        handleInputChange('checkOut', "");
-                      }
-                    } else {
-                      handleInputChange('checkIn', "");
-                    }
-                  } else {
-                    handleInputChange('checkIn', "");
+              <div className="relative w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]">
+                <input
+                  value={`${searchListingParams.checkIn ? format(searchListingParams.checkIn, "MM/dd/yyyy") : ""}`}
+                  readOnly
+                  className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
+                  onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+                  placeholder="MM/DD/YYYY"
+                />
+
+                {searchListingParams.checkIn && (
+                  <IoClose
+                    onClick={() => handleClear()}
+                    className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                  />
+                )}
+
+              </div>
+              <div className="absolute top-0">
+                <div ref={checkInRef}>
+                  {openCheckIn &&
+                    <DateRange
+                      showClearButton={true}
+                      onChange={item => setRange([item.selection])}
+                      editableDateInputs={false}
+                      moveRangeOnFirstSelection={true}
+                      ranges={range}
+                      months={2}
+                      direction='vertical'
+                      className="calendarElement"
+                      minDate={new Date()}
+                      showDateDisplay={false}
+                      showMonthAndYearPickers={false}
+                      rangeColors={["#B69F6F"]}
+                    />
                   }
-                }}
-                onBlur={(e) => {
-                  const date = new Date(e.target.value);
-                  if (date && date instanceof Date && !isNaN(date)) {
-                    const currentYear = new Date().getFullYear();
-                    if (date.getFullYear() >= currentYear) {
-                      handleInputChange('checkIn', date);
-                    } else {
-                      handleInputChange('checkIn', "");
-                    }
-                  } else {
-                    handleInputChange('checkIn', "");
-                  }
-                }}
-                onKeyDown={(e) => {
-                  const value = e.target.value;
-                  if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
-                    e.preventDefault();
-                  }
-                  if (e.key !== 'Backspace' && e.key !== 'Delete') {
-                    if (value.length === 2) {
-                      e.target.value += '/';
-                    } else if (value.length === 5) {
-                      e.target.value += '/';
-                    }
-                  }
-                }}
-              />
+                </div>
+
+              </div>
+
 
             </div>
 
@@ -205,60 +250,21 @@ const SearchListingMobileView = () => {
                 text="Check out"
                 htmlFor="checkOut"
               />
-              <DatePicker
-                type="text"
-                selected={searchListingParams.checkOut}
-                dateFormat="MM/dd/YYYY"
-                placeholderText="MM/DD/YYYY"
-                minDate={minDateCheckOut}
-                className="outline-none w-[105px] text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
-                onChange={(date) => {
-                  if (date && date instanceof Date && !isNaN(date)) {
-                    const currentYear = new Date().getFullYear();
-                    if (date.getFullYear() >= currentYear) {
-                      if (date > searchListingParams.checkIn) {
-                        handleInputChange('checkOut', date);
-                      } else {
-                        handleInputChange('checkOut', "");
-                      }
-                    } else {
-                      handleInputChange('checkOut', "");
-                    }
-                  } else {
-                    handleInputChange('checkOut', "");
-                  }
-                }}
-                onBlur={(e) => {
-                  const date = new Date(e.target.value);
-                  if (date && date instanceof Date && !isNaN(date)) {
-                    const currentYear = new Date().getFullYear();
-                    if (date.getFullYear() >= currentYear) {
-                      if (date > searchListingParams.checkIn) {
-                        handleInputChange('checkOut', date);
-                      } else {
-                        handleInputChange('checkOut', "");
-                      }
-                    } else {
-                      handleInputChange('checkOut', "");
-                    }
-                  } else {
-                    handleInputChange('checkOut', "");
-                  }
-                }}
-                onKeyDown={(e) => {
-                  const value = e.target.value;
-                  if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
-                    e.preventDefault();
-                  }
-                  if (e.key !== 'Backspace' && e.key !== 'Delete') {
-                    if (value.length === 2) {
-                      e.target.value += '/';
-                    } else if (value.length === 5) {
-                      e.target.value += '/';
-                    }
-                  }
-                }}
-              />
+              <div className="relative w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]">
+                <input
+                  value={`${searchListingParams.checkOut ? format(searchListingParams.checkOut, "MM/dd/yyyy") : ""}`}
+                  readOnly
+                  className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
+                  onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+                  placeholder="MM/DD/YYYY"
+                />
+                {searchListingParams.checkOut && (
+                  <IoClose
+                    onClick={() => handleClear()}
+                    className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                  />
+                )}
+              </div>
             </div>
 
             <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2 md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">

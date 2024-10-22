@@ -1,43 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
-// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
-import { checkListingBookingAvailability, setCheckBookingParams, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
+import { checkListingBookingAvailability, clearBookingDateSelection, setCheckBookingParams, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import AlertDialog from "../ui/AlertDialog";
 import { formateDate } from "../../helper/date";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { formattedPrice } from "../../helper/formatter";
-
+import { addDays, format } from "date-fns";
+import { DateRange } from "react-date-range";
+import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { IoClose } from "react-icons/io5";
 const BookApartment = ({ listingInfo }) => {
 
   const dispatch = useDispatch();
 
-  // const [isBookingAvailable, setIsBookingAvailable] = useState(false)
 
-  const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog } = useSelector(state => state.booking);
+  const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
+
+  const { listingAvailableCalender } = useSelector(state => state.listing);
 
   const handleInputChange = (name, value) => {
     dispatch(setCheckBookingParams({ name, value }));
   };
 
-  const minDateCheckIn = new Date();
-
-
-  // const minDateCheckOut = checkBookingParams.checkIn !== "" ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1) : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
-
-  const minDateCheckOut = checkBookingParams.checkIn instanceof Date && !isNaN(checkBookingParams.checkIn)
-    ? new Date(checkBookingParams.checkIn).setDate(checkBookingParams.checkIn.getDate() + 1)
-    : new Date(minDateCheckIn).setDate(minDateCheckIn.getDate() + 1);
-
 
   const handleSubmit = () => {
 
     toast.dismiss();
+    if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
+      document.getElementById('bookingCheckIn').focus();
+    }
     if ((checkBookingParams.checkIn && !checkBookingParams.checkOut) || (checkBookingParams.checkOut && !checkBookingParams.checkIn)) {
       return toast.info("Provide check-in and check-out date.");
     }
@@ -56,22 +51,105 @@ const BookApartment = ({ listingInfo }) => {
   });
 
 
-  const { listingAvailableCalender } = useSelector(state => state.listing);
-
-  const isDateAvailable = (date) => {
-    const formattedDate = formateDate(date);
-    const availability = listingAvailableCalender?.find(
-      (item) => item.date === formattedDate
-    );
-    return availability?.isAvailable == 0 ? 0 : 1;
-  };
-
   useEffect(() => {
     handleInputChange('guests', listingInfo.personCapacity);
     handleInputChange('listingId', listingInfo.id);
-    handleInputChange('checkIn', minDateCheckIn); // Ensure this is a valid date object
   }, [listingInfo]);
 
+
+  const getUnavailableDates = () => {
+    return listingAvailableCalender
+      .filter(item => item.isAvailable === 0)
+      .map(item => new Date(item.date));
+  };
+
+
+  // date state
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+      key: 'selection'
+    }
+  ]);
+
+
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
+  const hideOnEscape = (e) => {
+    if (e.key === "Escape") {
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+  };
+
+  const hideOnClickOutside = (e) => {
+    if (checkInRef.current && !checkInRef.current.contains(e.target)) {
+      setOpenCheckIn(false);
+    }
+    if (checkOutRef.current && !checkOutRef.current.contains(e.target)) {
+      setOpenCheckOut(false);
+    }
+  };
+
+  useEffect(() => {
+
+    if (openCheckIn && range[0].startDate) {
+      dispatch(setCheckBookingParams({ name: 'checkIn', value: range[0].startDate }));
+      dispatch(setCheckBookingParams({ name: 'checkOut', value: range[0].endDate }));
+    }
+    if (openCheckOut && range[0].endDate) {
+      dispatch(setCheckBookingParams({ name: 'checkOut', value: range[0].endDate }));
+      dispatch(setCheckBookingParams({ name: 'checkIn', value: range[0].startDate }));
+    }
+  }, [range[0].startDate, range[0].endDate]);
+
+  const [direction, setDirection] = useState('horizontal');
+  useEffect(() => {
+    const updateDirection = () => {
+      if (window.innerWidth <= 640) {
+        setDirection('vertical');
+      } else {
+        setDirection('horizontal');
+      }
+    };
+    updateDirection();
+    window.addEventListener('resize', updateDirection);
+    return () => {
+      window.removeEventListener('resize', updateDirection);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isDateRangedPickedFromAvailability) {
+      setRange([
+        {
+          startDate: checkBookingParams.checkIn ? new Date(checkBookingParams.checkIn) : new Date(),
+          endDate: checkBookingParams.checkOut ? new Date(checkBookingParams.checkOut) : new Date(),
+          key: 'selection',
+        },
+      ]);
+    }
+  }, [isDateRangedPickedFromAvailability, checkBookingParams.checkIn, checkBookingParams.checkOut]);
+
+  const handleClear = () => {
+    dispatch(clearBookingDateSelection());
+    setRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      },
+    ]);
+  }
 
 
   return (
@@ -94,42 +172,69 @@ const BookApartment = ({ listingInfo }) => {
                 <CiCalendar size={18} /> <p className="text-sm">Check in</p>
               </p>
               <div className="font-semibold pl-6">
-                <DatePicker
-                  id='availability-checkInDate'
-                  selected={checkBookingParams.checkIn}
-                  onChange={(date) => {
-                    handleInputChange('checkIn', date);
-                    document.getElementById('availability-checkOutDate').focus();
-                  }}
-                  className="outline-none max-w-[117px]  text-[1rem]"
-                  dateFormat="dd/MM/YYYY"
-                  minDate={minDateCheckIn}
-                  disabled={loading}
-                  placeholderText="DD/MM/YYYY"
-                  filterDate={isDateAvailable}
-                />
+                <div className="relative max-w-[117px]">
+                  <input
+                    id="bookingCheckIn"
+                    value={`${checkBookingParams.checkIn ? format(checkBookingParams.checkIn, "MM/dd/yyyy") : ""}`}
+                    readOnly
+                    className="outline-none max-w-[117px]  text-[1rem]"
+                    onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+                    placeholder="MM/DD/YYYY"
+                  />
+                  {checkBookingParams.checkIn && (
+                    <IoClose
+                      onClick={() => handleClear()}
+                      className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="calendarWrap ml-24 xxs:ml-32 lg:ml-0">
+                  <div ref={checkInRef}>
+                    {openCheckIn &&
+                      <DateRange
+                        showClearButton={true}
+                        onChange={item => {
+                          dispatch(toggleDateRangedPickedForBooking('bookingDatePick'));
+                          setRange([item.selection]);
+                        }}
+                      editableDateInputs={false}
+                      moveRangeOnFirstSelection={true}
+                      ranges={range}
+                      months={2}
+                      direction={direction}
+                      className="calendarElement"
+                      minDate={new Date()}
+                      showDateDisplay={false}
+                      showMonthAndYearPickers={false}
+                      rangeColors={["#B69F6F"]}
+                      disabledDates={getUnavailableDates()}
+                    />
+                    }
+                  </div>
+
+                </div>
+
               </div>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p className="text-sm">Check out</p>
               </p>
-              <div className="font-semibold pl-6">
-                <DatePicker
-                  id="availability-checkOutDate"
-                  selected={checkBookingParams.checkOut}
-                  onChange={(date) => {
-                    handleInputChange('checkOut', date);
-                    document.getElementById('guest-booking').focus();
-                  }
-                  }
-                  className="outline-none max-w-[117px] text-[1rem]"
-                  dateFormat="dd/MM/YYYY"
-                  minDate={minDateCheckOut}
-                  disabled={loading}
-                  placeholderText="DD/MM/YYYY"
-                  filterDate={isDateAvailable}
-                />
+              <div className="font-semibold pl-6 ">
+                <div className="relative max-w-[117px]">
+                  <input
+                    value={`${checkBookingParams.checkOut ? format(checkBookingParams.checkOut, "MM/dd/yyyy") : ""}`}
+                    readOnly
+                    className="outline-none max-w-[117px]  text-[1rem]"
+                    onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+                    placeholder="MM/DD/YYYY" />
+                  {checkBookingParams.checkOut && (
+                    <IoClose
+                      onClick={() => handleClear()}
+                      className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -161,8 +266,6 @@ const BookApartment = ({ listingInfo }) => {
                 autoFocus
                 className="bg-white outline-none min-w-[20px] max-w-[20px] text-right"
               />
-
-              {/* {listingInfo.personCapacity >= 1 ? listingInfo.personCapacity : 0} */}
               <p
                 onClick={() => {
                   document.getElementById('guest-booking').focus();
@@ -178,11 +281,6 @@ const BookApartment = ({ listingInfo }) => {
         <div className="min-w-full h-px bg-[#E0E0E0] my-[30px]"></div>
 
         <div className="grid space-y-2 xxs:space-y-0 xxs:grid-cols-1">
-          {/* <div className="flex items-center">
-            <p className="text-[#333333] font-bold text-2xl">${formattedPrice(listingInfo.price)}</p>
-            <p className="text-[#8E8E80] text-sm ">&nbsp;/ per night</p>
-          </div> */}
-
           {isListingBookingAvailable && <Link
             to={`/listing/${listingInfo.id}/booking?${query}`}
             type="button"
@@ -193,7 +291,12 @@ const BookApartment = ({ listingInfo }) => {
           }
           {!isListingBookingAvailable &&
             <button
-              onClick={() => handleSubmit()}
+              onClick={() => {
+                if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
+                  return setOpenCheckIn(openCheckIn => !openCheckIn);
+                }
+                handleSubmit();
+              }}
               disabled={loading}
               className={`flex flex-row items-center justify-center text-white bg-textDark text-sm  py-[14px] rounded-xl`}>
               {!isListingBookingAvailable && !loading ? "Check availability" : `Checking`} &nbsp;&nbsp;

@@ -1,11 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { searchListing, setSearchListingParams, toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
-import DatePicker from "react-datepicker";
+import { clearSearchCheckInCheckOutDate, searchListing, setSearchListingParams, toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
+// import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { CiLocationOn } from "react-icons/ci";
+
+import { DateRange } from 'react-date-range';
+
+import format from 'date-fns/format';
+import { addDays } from 'date-fns';
+import { IoClose } from "react-icons/io5";
+
 
 export const SearchInputLabel = ({ text, htmlFor }) => {
   return (
@@ -25,20 +32,20 @@ SearchInputLabel.propTypes = {
 
 
 const SearchListingForm = () => {
-  const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))
+  // const [minDateCheckOut, setMinDateCheckOut] = useState(new Date(new Date().setDate(new Date().getDate() + 1)))
   const dispatch = useDispatch();
   const { searchListingParams, isHomePageLoading, listingLocationList } = useSelector(state => state.listing)
 
-  const minDateCheckIn = new Date(Date.now());
+  // const minDateCheckIn = new Date(Date.now());
   const [filteredLocation, setSearchFilterLocation] = useState([]);
   const [showLocationFilter, setShowLocationFilter] = useState(false)
 
 
   const handleInputChange = (name, value) => {
-    if (name == 'checkIn') {
-      const checkInDate = new Date(value);
-      setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
-    }
+    // if (name == 'checkIn') {
+    //   const checkInDate = new Date(value);
+    //   setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
+    // }
 
     if (name === 'location') {
       const filterLocation = listingLocationList.map((location) => {
@@ -106,6 +113,81 @@ const SearchListingForm = () => {
     };
   }, [filterRef]);
 
+  // date state
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+      key: 'selection'
+    }
+  ]);
+
+
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
+  const hideOnEscape = (e) => {
+    if (e.key === "Escape") {
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+  };
+
+  const hideOnClickOutside = (e) => {
+    if (checkInRef.current && !checkInRef.current.contains(e.target)) {
+      setOpenCheckIn(false);
+    }
+    if (checkOutRef.current && !checkOutRef.current.contains(e.target)) {
+      setOpenCheckOut(false);
+    }
+  };
+
+  useEffect(() => {
+
+    if (openCheckIn && range[0].startDate) {
+      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
+      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
+    }
+    if (openCheckOut && range[0].endDate) {
+      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
+      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
+    }
+  }, [range[0].startDate, range[0].endDate]);
+
+  const [direction, setDirection] = useState('horizontal');
+  useEffect(() => {
+    const updateDirection = () => {
+      if (window.innerWidth <= 640) {
+        setDirection('vertical');
+      } else {
+        setDirection('horizontal');
+      }
+    };
+    updateDirection();
+    window.addEventListener('resize', updateDirection);
+    return () => {
+      window.removeEventListener('resize', updateDirection);
+    };
+  }, []);
+
+  const handleClear = () => {
+    dispatch(clearSearchCheckInCheckOutDate());
+    setRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      },
+    ]);
+  }
+
   return (
     <div
       style={{ boxShadow: "0px 4px 26px 0px rgba(96, 96, 82, 0.24), 0px 0px 0px 6px rgba(255, 255, 255, 0.32)" }}
@@ -157,55 +239,43 @@ const SearchListingForm = () => {
             text="Check in"
             htmlFor="checkIn"
           />
-          <DatePicker
-            type="text"
-            selected={searchListingParams.checkIn}
-            dateFormat="MM/dd/YYYY"
-            placeholderText="MM/DD/YYYY"
-            minDate={minDateCheckIn}
-            className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
-            onChange={(date) => {
-              if (date && date instanceof Date && !isNaN(date)) {
-                const currentYear = new Date().getFullYear();
-                if (date.getFullYear() >= currentYear) {
-                  handleInputChange('checkIn', date);
-                  if (searchListingParams.checkOut && date >= searchListingParams.checkOut) {
-                    handleInputChange('checkOut', ""); 
-                  }
-                } else {
-                  handleInputChange('checkIn', "");
-                }
-              } else {
-                handleInputChange('checkIn', "");
+          <div className="relative w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]">
+            <input
+              value={`${searchListingParams.checkIn ? format(searchListingParams.checkIn, "MM/dd/yyyy") : ""}`}
+              readOnly
+              className="outline-none w-[101px] lg:w-[105px]"
+              onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+              placeholder="MM/DD/YYYY"
+            />
+            {searchListingParams.checkIn && (
+              <IoClose
+                onClick={() => handleClear()}
+                className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+              />
+            )}
+          </div>
+
+          <div className="calendarWrap ml-10 mt-7">
+            <div ref={checkInRef}>
+              {openCheckIn &&
+                <DateRange
+                  showClearButton={true}
+                  onChange={item => setRange([item.selection])}
+                  editableDateInputs={false}
+                  moveRangeOnFirstSelection={true}
+                  ranges={range}
+                  months={2}
+                  direction={direction}
+                  className="calendarElement"
+                  minDate={new Date()}
+                  showDateDisplay={false}
+                  showMonthAndYearPickers={false}
+                  rangeColors={["#B69F6F"]}
+                />
               }
-            }}
-            onBlur={(e) => {
-              const date = new Date(e.target.value);
-              if (date && date instanceof Date && !isNaN(date)) {
-                const currentYear = new Date().getFullYear();
-                if (date.getFullYear() >= currentYear) {
-                  handleInputChange('checkIn', date);
-                } else {
-                  handleInputChange('checkIn', "");
-                }
-              } else {
-                handleInputChange('checkIn', "");
-              }
-            }}
-            onKeyDown={(e) => {
-              const value = e.target.value;
-              if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
-                e.preventDefault();
-              }
-              if (e.key !== 'Backspace' && e.key !== 'Delete') {
-                if (value.length === 2) {
-                  e.target.value += '/';
-                } else if (value.length === 5) {
-                  e.target.value += '/';
-                }
-              }
-            }}
-          />
+            </div>
+
+          </div>
 
         </div>
 
@@ -216,60 +286,44 @@ const SearchListingForm = () => {
             text="Check out"
             htmlFor="checkOut"
           />
-          <DatePicker
-            type="text"
-            selected={searchListingParams.checkOut}
-            dateFormat="MM/dd/YYYY"
-            placeholderText="MM/DD/YYYY"
-            minDate={minDateCheckOut}
-            className="outline-none w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px]"
-            onChange={(date) => {
-              if (date && date instanceof Date && !isNaN(date)) {
-                const currentYear = new Date().getFullYear();
-                if (date.getFullYear() >= currentYear) {
-                  if (date > searchListingParams.checkIn) {
-                    handleInputChange('checkOut', date);
-                  } else {
-                    handleInputChange('checkOut', "");
-                  }
-                } else {
-                  handleInputChange('checkOut', "");
-                }
-              } else {
-                handleInputChange('checkOut', "");
+          <div className="relative w-[101px] lg:w-[105px] text-[15px] lg:text-[1rem] tracking-[-0.16px] font-inter h-[19px] pr-8 ">
+            <input
+              value={`${searchListingParams.checkOut ? format(searchListingParams.checkOut, "MM/dd/yyyy") : ""}`}
+              readOnly
+              className="outline-none w-[101px] lg:w-[105px]" // Added padding-right for the icon space
+              onClick={() => setOpenCheckOut(openCheckOut => !openCheckOut)}
+              placeholder="MM/DD/YYYY"
+            />
+
+            {searchListingParams.checkOut && (
+              <IoClose
+                onClick={() => handleClear()}
+                className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+              />
+            )}
+          </div>
+          <div className="calendarWrap mt-7">
+            <div ref={checkOutRef}>
+              {openCheckOut &&
+                <DateRange
+                  showClearButton={true}
+                  retainEndDateOnFirstSelection
+                  onChange={item => setRange([item.selection])}
+                  editableDateInputs={false}
+                  moveRangeOnFirstSelection={true}
+                  ranges={range}
+                  months={2}
+                  direction={direction}
+                  className="calendarElement"
+                  minDate={new Date}
+                  showDateDisplay={false}
+                  showMonthAndYearPickers={false}
+                  rangeColors={["#B69F6F"]}
+                />
               }
-            }}
-            onBlur={(e) => {
-              const date = new Date(e.target.value);
-              if (date && date instanceof Date && !isNaN(date)) {
-                const currentYear = new Date().getFullYear();
-                if (date.getFullYear() >= currentYear) {
-                  if (date > searchListingParams.checkIn) {
-                    handleInputChange('checkOut', date);
-                  } else {
-                    handleInputChange('checkOut', "");
-                  }
-                } else {
-                  handleInputChange('checkOut', "");
-                }
-              } else {
-                handleInputChange('checkOut', "");
-              }
-            }}
-            onKeyDown={(e) => {
-              const value = e.target.value;
-              if (!/[0-9.]/.test(e.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(e.key)) {
-                e.preventDefault();
-              }
-              if (e.key !== 'Backspace' && e.key !== 'Delete') {
-                if (value.length === 2) {
-                  e.target.value += '/';
-                } else if (value.length === 5) {
-                  e.target.value += '/';
-                }
-              }
-            }}
-          />
+            </div>
+
+          </div>
         </div>
 
         <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2 md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">

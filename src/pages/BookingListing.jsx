@@ -17,8 +17,6 @@ const BookingListing = () => {
   const navigate = useNavigate();
 
   const { listingInfo } = useSelector(state => state.listing);
-  console.log('listinginfo', listingInfo);
-
 
   const handleAgreeAndContinue = () => {
     const bookingAvailable = dispatch(

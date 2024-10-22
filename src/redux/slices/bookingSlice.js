@@ -82,6 +82,8 @@ const bookingSlice = createSlice({
     tokenError: '',
     tokenLoading: false,
     isValidToken: false,
+    isDateRangedPickedFromBooking: false,
+    isDateRangedPickedFromAvailability: false,
   },
 
   reducers: {
@@ -93,12 +95,8 @@ const bookingSlice = createSlice({
       }
 
       if (name === 'checkIn' && value >= state.checkBookingParams.checkOut) {
-        const minDateCheckOut = new Date(value);
-        minDateCheckOut.setDate(value.getDate() + 1);
         state.checkBookingParams.checkIn = value;
-        state.checkBookingParams.checkOut = minDateCheckOut;
         localStorage.setItem('checkIn', value);
-        localStorage.setItem('checkOut', minDateCheckOut);
       } else {
         state.checkBookingParams[name] = value;
         localStorage.setItem(name, value);
@@ -131,7 +129,31 @@ const bookingSlice = createSlice({
       state.isListingBookingAvailable = false;
       state.bookingNotAvailableAlertDialog = false;
 
-    }
+    },
+
+
+    toggleDateRangedPickedForBooking: (state, action) => {
+      if (action.payload == 'bookingDatePick') {
+        state.isDateRangedPickedFromAvailability = false;
+        state.isDateRangedPickedFromBooking = true;
+      }
+      if (action.payload == 'availabilityDatePick') {
+        state.isDateRangedPickedFromAvailability = true;
+        state.isDateRangedPickedFromBooking = false;
+
+      }
+    },
+
+
+    clearBookingDateSelection: (state) => {
+      state.isDateRangedPickedFromAvailability = false;
+      state.isDateRangedPickedFromBooking = false;
+      state.checkBookingParams.checkIn = '';
+      state.checkBookingParams.checkOut = '';
+      localStorage.removeItem('checkIn');
+      localStorage.removeItem('checkOut');
+      state.isListingBookingAvailable = false;
+    },
 
   },
 
@@ -161,8 +183,6 @@ const bookingSlice = createSlice({
         state.loading = true;
       })
       .addCase(calculateBookingPrice.fulfilled, (state, action) => {
-        // console.log('action paylaod for calculation price', action.payload.components.filter(data => data.name == 'couponDiscount'));
-
         state.loading = false;
         state.bookingPrice = action.payload;
         if (state.couponCode !== null) {
@@ -217,6 +237,8 @@ export const
     toggleBookingNotAvailableAlertDialog,
     setCheckBookingParamsToInitialState,
     toggleTokenState,
-    setCouponCode
+    setCouponCode,
+    toggleDateRangedPickedForBooking,
+    clearBookingDateSelection
   } = bookingSlice.actions;
 export default bookingSlice.reducer;

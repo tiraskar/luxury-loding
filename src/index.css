@@ -161,7 +161,7 @@
   color: rgba(0, 0, 0, 0.4);
   background-color: transparent !important;
 }
-
+/* 
 .react-calendar__navigation {
   color: black !important;
   min-width: 44px;
@@ -241,4 +241,55 @@
   background-color: var(--brand) !important;
   color: var(--dark) !important;
 
+}
+.react-datepicker__portal {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.custom-datepicker-container {
+  position: relative;
+  overflow: visible;
+}
+
+*/
+ .calendarWrap {
+  display: inline-block;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+.calendarElement {
+  background-color: white;
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 40px;
+  border: 1px solid #B69F6F;
+  z-index: 999;
+  max-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .calendarElement {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 640px) {
+  .calendarElement {
+    margin-left: 50px;
+    max-width: 500px;
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendarElement {
+    max-width: 600px;
+    max-height: 400px;
+  }
 }
