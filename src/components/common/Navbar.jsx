@@ -43,7 +43,7 @@ const Navbar = () => {
               onClick={() => setIsMobileNavOpen(false)}
               className="block md:hidden text-2xl" />
           }
-          <ul className="hidden md:flex  space-x-8">
+          <ul className="hidden md:flex space-x-5  lg:space-x-8">
             {renderNavbar}
           </ul>
 
