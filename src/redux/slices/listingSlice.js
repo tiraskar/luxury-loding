@@ -245,7 +245,7 @@ const listingSlice = createSlice({
     isFetchAvailableListing: false,
     isLoadMoreListing: false,
     isHomePageSearch: false,
-    mapView: false,
+    isMapViewOpen: false,
     isSearchedListing: false,
     isListingAvailableForBooking: false,
     isReviewLoading: false, 
@@ -302,8 +302,8 @@ const listingSlice = createSlice({
   },
 
   reducers: {
-    toggleMapView: (state) => {
-      state.mapView = !state.mapView;
+    toggleMapView: (state, action) => {
+      state.isMapViewOpen = action.payload;
     },
     setListingOrder: (state, action) => {
       state.listingPage = 1;
@@ -643,6 +643,6 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen, clearSearchCheckInCheckOutDate } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen, clearSearchCheckInCheckOutDate, toggleMapView } = listingSlice.actions;
 
 export default listingSlice.reducer;

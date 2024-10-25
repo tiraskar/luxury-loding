@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
-// import { GrLocation } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const RenderListings = ({ listingList }) => {
+
+  const { isMapViewOpen } = useSelector(state => state.listing)
+
   const dispatch = useDispatch()
   const [currentIndex, setCurrentIndex] = useState(
     Array(listingList?.length).fill(0)
@@ -41,14 +43,14 @@ const RenderListings = ({ listingList }) => {
   }, [listingList]);
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
+    <div className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 "} gap-x-4 gap-y-[56px]`}>
       {listingList?.map((listing, listingIndex) => {
         return (
           <div
             key={listingIndex}
-            className="relative flex flex-col gap-y-4 xl:max-w-[318px]"
+            className={`relative gap-y-4 ${isMapViewOpen ? " lg:grid lg:grid-cols-5 gap-4 " : "flex flex-col xl:max-w-[318px]"}`}
           >
-            <div className="relative flex overflow-hidden">
+            <div className="relative flex overflow-hidden md:col-span-2">
               {listing?.images?.map((data, index) => {
                 return (
                   <div
@@ -58,7 +60,7 @@ const RenderListings = ({ listingList }) => {
                       }`}
                   >
                     <img
-                      className="object-cover w-full rounded-xl md:h-[241px] "
+                      className={` object-cover w-full rounded-xl ${isMapViewOpen ? "  lg:h-[150px] " : "md:h-[241px]"}`}
                       src={data.url}
                       alt=""
                     />
@@ -105,36 +107,37 @@ const RenderListings = ({ listingList }) => {
             {/* <p className="flex items-baseline space-x-1 text-xs text-[#0094FF] h-[15px]">
               <GrLocation /> <span>{listing.address}</span>
             </p> */}
-
-            <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
-              <Link
-                to={`/listings/${listing.id}`}
-                onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
-                className="text-[18px] font-inter tracking-[-1%] leading-6 line-clamp-2" 
-              >
-                {listing.name}
-              </Link>
-              <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px] h-[40px]">
-                {listing.description}
-              </p>
-            </div>
-
-            <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]  text-[13px]">
-
-              <div className="flex gap-1 items-center">
-                <LuUsers size={14} /> {listing.personCapacity}
-                {listing.personCapacity > 1 ? " guests" : " guest"}
+            <div className="flex flex-col  md:col-span-3">
+              <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
+                <Link
+                  to={`/listings/${listing.id}`}
+                  onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
+                  className="text-[18px] font-inter tracking-[-1%] leading-6 line-clamp-2"
+                >
+                  {listing.name}
+                </Link>
+                <p className="line-clamp-2 text-[#8E8E80] leading-[20px] font-normal text-[13px] h-[40px]">
+                  {listing.description}
+                </p>
               </div>
 
-              <div className="flex gap-1 items-center">
-                <TbBed size={14} /> {listing.bedroomsNumber}
-                {listing.bedroomsNumber > 1 ? " bedrooms" : " bedroom"}
+              <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]  text-[13px]">
+
+                <div className="flex gap-1 items-center">
+                  <LuUsers size={14} /> {listing.personCapacity}
+                  {listing.personCapacity > 1 ? " guests" : " guest"}
+                </div>
+
+                <div className="flex gap-1 items-center">
+                  <TbBed size={14} /> {listing.bedroomsNumber}
+                  {listing.bedroomsNumber > 1 ? " bedrooms" : " bedroom"}
                 </div>
 
 
-              <div className="flex gap-1 items-center">
-                <LuBath size={14} /> {listing.bathroomsNumber}
-                {listing.bathroomsNumber > 1 ? " baths" : " bath"}
+                <div className="flex gap-1 items-center">
+                  <LuBath size={14} /> {listing.bathroomsNumber}
+                  {listing.bathroomsNumber > 1 ? " baths" : " bath"}
+                </div>
               </div>
             </div>
 

@@ -1,11 +1,10 @@
 import { IoListOutline, IoMapOutline } from 'react-icons/io5';
-import PropTypes from 'prop-types';
-import { fetchAvailableListing, fetchListingList, setListingOrder } from '../../redux/slices/listingSlice';
+import { fetchAvailableListing, fetchListingList, setListingOrder, toggleMapView } from '../../redux/slices/listingSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const ListingViewOptions = ({ setIsMapViewOpen, isMapViewOpen }) => {
+const ListingViewOptions = () => {
 
-  const { isSearchedListing } = useSelector(state => state.listing);
+  const { isSearchedListing, isMapViewOpen } = useSelector(state => state.listing);
   const dispatch = useDispatch();
 
   const handleSortChange = (e, value) => {
@@ -34,11 +33,11 @@ const ListingViewOptions = ({ setIsMapViewOpen, isMapViewOpen }) => {
           {/* <option value="high-to-low" className="font-semibold text-[13px]">Price High</option> */}
         </select>
       </div>
-      <div className="bg-[#F9F9F9] p-0.5 w-[64] h-[34px] rounded-[10px] flex items-center space-x-[7px]">
-        <div onClick={() => setIsMapViewOpen(false)} className={` h-[30px] w-[30px] flex items-center  justify-center ${!isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
+      <div className="bg-[#F9F9F9] p-0.5 w-[64] h-[34px] rounded-[10px] flex items-center space-x-[7px] cursor-pointer">
+        <div onClick={() => dispatch(toggleMapView(false))} className={` h-[30px] w-[30px] flex items-center  justify-center ${!isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
           <IoListOutline className="h-4 w-4" />
         </div>
-        <div onClick={() => setIsMapViewOpen(true)} className={` h-[30px] w-[30px] flex items-center justify-center ${isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
+        <div onClick={() => dispatch(toggleMapView(true))} className={` h-[30px] w-[30px] flex items-center justify-center ${isMapViewOpen && "bg-white rounded-lg shadow-sm"}`}>
           <IoMapOutline className="h-4 w-4" />
         </div>
       </div>
@@ -46,9 +45,5 @@ const ListingViewOptions = ({ setIsMapViewOpen, isMapViewOpen }) => {
   );
 };
 
-ListingViewOptions.propTypes = {
-  setIsMapViewOpen: PropTypes.func.isRequired,
-  isMapViewOpen: PropTypes.bool.isRequired,
-};
 
 export default ListingViewOptions;
