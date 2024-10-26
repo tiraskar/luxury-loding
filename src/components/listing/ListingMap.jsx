@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { GoogleMap, LoadScript, OverlayView } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, OverlayView } from "@react-google-maps/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
@@ -10,16 +10,18 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
 
 const ListingMap = ({ listingList }) => {
-
-
   const mapRef = useRef(null);
   const [overlaysReady, setOverlaysReady] = useState(false);
   const [hoveredListingId, setHoveredListingId] = useState(null);
   const [clickedListingId, setClickedListingId] = useState(null);
-  const [centerZoom, setCenterZoom] = useState({
-    lat: 0,
-    lng: 0,
-    zoom: 13,
+  const dispatch = useDispatch();
+  const [currentIndex, setCurrentIndex] = useState(
+    Array(listingList?.length).fill(0)
+  );
+  const [mapStyle, setMapStyle] = useState({
+    height: "80vh",
+    width: "58.5vw",
+    marginTop: "-47px",
   });
 
   const onLoad = useCallback(
@@ -33,20 +35,22 @@ const ListingMap = ({ listingList }) => {
         });
         map.fitBounds(bounds);
       }
-
+      const lat = listingList[0]?.lat;
+      const lng = listingList[0]?.lng;
       setTimeout(() => {
         setOverlaysReady(true);
+        mapRef.current.setZoom(13);
+        mapRef.current.panTo({ lat, lng });
       }, 200);
     },
     [listingList]
   );
 
-
   useEffect(() => {
     if (mapRef.current) {
       setOverlaysReady(true);
     }
-  }, [mapRef]);
+  }, [listingList]);
 
   const handleMouseEnter = (id) => {
     setHoveredListingId(id);
@@ -62,11 +66,6 @@ const ListingMap = ({ listingList }) => {
       mapRef.current.panTo({ lat, lng });
     }
   };
-
-  const dispatch = useDispatch();
-  const [currentIndex, setCurrentIndex] = useState(
-    Array(listingList?.length).fill(0)
-  );
 
   const handleSlide = (listingIndex, direction) => {
     const imagesCount = listingList[listingIndex].images.length;
@@ -89,46 +88,42 @@ const ListingMap = ({ listingList }) => {
   useEffect(() => {
     if (listingList.length > 0) {
       setCurrentIndex(Array(listingList?.length).fill(0));
-      setCenterZoom({
-        lat: listingList[0].lat,
-        lng: listingList[0].lng,
-        zoom: 13,
-      });
     }
   }, [listingList]);
-
-
-  const [mapStyle, setMapStyle] = useState({
-    height: '80vh',
-    width: '58.5vw',
-    marginTop: '-47px'
-  });
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
         setMapStyle({
-          height: '70vh',
-          width: '100vw',
-          marginTop: '20px'
+          height: "70vh",
+          width: "100vw",
+          marginTop: "20px",
         });
-      } else {
+      }
+
+      if (window.innerWidth < 768) {
         setMapStyle({
-          height: '80vh',
-          width: '58.5vw',
-          marginTop: '-47px'
+          height: "50vh",
+          width: "100vw",
+          marginTop: "20px",
+        });
+      }
+
+      if (window.innerWidth > 1024) {
+        setMapStyle({
+          height: "90vh",
+          width: "58.5vw",
+          marginTop: "-47px",
         });
       }
     };
 
     handleResize();
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-
 
   return (
     <div>
@@ -137,7 +132,7 @@ const ListingMap = ({ listingList }) => {
           mapContainerStyle={{
             height: mapStyle.height,
             width: mapStyle.width,
-            marginTop: mapStyle.marginTop
+            marginTop: mapStyle.marginTop,
           }}
           onLoad={onLoad}
           options={{
@@ -146,10 +141,7 @@ const ListingMap = ({ listingList }) => {
             keyboardShortcuts: false,
             gestureHandling: false,
             rotateControl: false,
-            center: centerZoom,
-            zoom: centerZoom.zoom,
           }}
-
         >
           {overlaysReady &&
             listingList.map((listing, listingIndex) => (
@@ -160,24 +152,16 @@ const ListingMap = ({ listingList }) => {
               >
                 <div
                   className="text-lg items-center bg-white w-[70px] p-2 rounded-lg shadow-lg font-bold relative"
-                  onMouseEnter={() => {
-                    handleMouseEnter(listing.id);
-                  }}
-                  onMouseOver={() => {
-                    setCenterZoom({
-                      lat: listing.lat,
-                      lng: listing.lng,
-                      zoom: 13,
-                    });
-                  }}
+                  onMouseEnter={() => handleMouseEnter(listing.id)}
                   onMouseLeave={handleMouseLeave}
                   onClick={() => {
                     handleClick(listing.id, listing.lat, listing.lng);
+                    mapRef.current.setZoom(13)
                   }}
                 >
                   ${listing.price}
 
-                  {hoveredListingId == listing.id &&
+                  {hoveredListingId === listing.id && (
                     <div
                       key={listingIndex}
                       className={`absolute gap-y-4 w-[300px] bg-white rounded-2xl z-40`}
@@ -186,12 +170,13 @@ const ListingMap = ({ listingList }) => {
                         {listing?.images?.map((data, index) => (
                           <div
                             key={index}
-                            className={`snap-start flex-shrink-0 w-full transition-transform duration-300
-                        ${index === currentIndex[listingIndex] ? "block" : "hidden"
+                            className={`snap-start flex-shrink-0 w-full transition-transform duration-300 ${index === currentIndex[listingIndex]
+                              ? "block"
+                              : "hidden"
                               }`}
                           >
                             <img
-                              className={` object-cover w-full rounded-xl `}
+                              className="object-cover w-full rounded-xl"
                               src={data.url}
                               alt=""
                             />
@@ -218,7 +203,7 @@ const ListingMap = ({ listingList }) => {
                                   key={index}
                                   size={14}
                                   onClick={() => setSlide(listingIndex, index)}
-                                  className={`cursor-pointer text-white mx-px ${index == currentIndex[listingIndex]
+                                  className={`cursor-pointer text-white mx-px ${index === currentIndex[listingIndex]
                                     ? "opacity-100"
                                     : "opacity-60"
                                     }`}
@@ -233,15 +218,16 @@ const ListingMap = ({ listingList }) => {
                         <div className="flex flex-col gap-4 text-[#333333] font-inter text-sm font-semibold">
                           <Link
                             to={`/listings/${listing.id}`}
-                            onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))}
+                            onClick={() =>
+                              dispatch(toggleIsSearchedOnSingleListing(false))
+                            }
                             className="text-sm font-inter tracking-[-1%] leading-6 line-clamp-2"
                           >
                             {listing.name}
                           </Link>
                         </div>
 
-                        <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%]  text-[10px]">
-
+                        <div className="flex gap-x-3 text-[#7B6944] items-center font-inter tracking-[-1%] text-[10px]">
                           <div className="flex gap-1 items-center">
                             <LuUsers size={14} /> {listing.personCapacity}
                             {listing.personCapacity > 1 ? " guests" : " guest"}
@@ -259,7 +245,7 @@ const ListingMap = ({ listingList }) => {
                         </div>
                       </div>
                     </div>
-                  }
+                  )}
                 </div>
               </OverlayView>
             ))}

@@ -15,7 +15,7 @@ import {
 } from "../components";
 import RenderListings from "../components/listing/RenderListings";
 import { useEffect } from "react";
-import { fetchListingLocationList, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
+import { fetchListingLocationList, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import SearchListingMobileView from "../components/listing/SearchListingMobileView";
 import { fetchUserReviews } from "../redux/slices/otherSlice";
 
@@ -29,6 +29,7 @@ const Home = () => {
     dispatch(setSearchListingParamsToInitialState());
     dispatch(fetchUserReviews())
     dispatch(fetchListingLocationList())
+    dispatch(toggleMapView(false))
     localStorage.clear();
   }, []);
 

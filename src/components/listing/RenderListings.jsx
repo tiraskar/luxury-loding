@@ -43,12 +43,12 @@ const RenderListings = ({ listingList }) => {
   }, [listingList]);
 
   return (
-    <div className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 "} gap-x-4 gap-y-[56px]`}>
+    <div className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4 gap-y-[56px] lg:gap-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-[56px]"} gap-x-4 `}>
       {listingList?.map((listing, listingIndex) => {
         return (
           <div
             key={listingIndex}
-            className={`relative gap-y-4 ${isMapViewOpen ? " lg:grid lg:grid-cols-5 gap-4 " : "flex flex-col xl:max-w-[318px]"}`}
+            className={`relative ${isMapViewOpen ? " lg:grid lg:grid-cols-5 gap-4 lg:space-y-0 space-y-4" : "flex flex-col xl:max-w-[318px] gap-y-4"}`}
           >
             <div className="relative flex overflow-hidden md:col-span-2">
               {listing?.images?.map((data, index) => {
