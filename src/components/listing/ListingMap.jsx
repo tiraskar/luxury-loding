@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { GoogleMap, LoadScript, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, OverlayView } from "@react-google-maps/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
@@ -46,11 +46,6 @@ const ListingMap = ({ listingList }) => {
     [listingList]
   );
 
-  useEffect(() => {
-    if (mapRef.current) {
-      setOverlaysReady(true);
-    }
-  }, [listingList]);
 
   const handleMouseEnter = (id) => {
     setHoveredListingId(id);
@@ -89,6 +84,9 @@ const ListingMap = ({ listingList }) => {
     if (listingList.length > 0) {
       setCurrentIndex(Array(listingList?.length).fill(0));
     }
+    if (mapRef.current) {
+      setOverlaysReady(true);
+    }
   }, [listingList]);
 
   useEffect(() => {
@@ -125,9 +123,8 @@ const ListingMap = ({ listingList }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return (
-    <div>
-      <LoadScript googleMapsApiKey={import.meta.env.VITE_MAP_KEY}>
+  const renderMap = () => {
+    return (
         <GoogleMap
           mapContainerStyle={{
             height: mapStyle.height,
@@ -156,7 +153,7 @@ const ListingMap = ({ listingList }) => {
                   onMouseLeave={handleMouseLeave}
                   onClick={() => {
                     handleClick(listing.id, listing.lat, listing.lng);
-                    mapRef.current.setZoom(13)
+                    mapRef.current.setZoom(13);
                   }}
                 >
                   ${listing.price}
@@ -250,7 +247,12 @@ const ListingMap = ({ listingList }) => {
               </OverlayView>
             ))}
         </GoogleMap>
-      </LoadScript>
+    );
+  };
+
+  return (
+    <div>
+      {renderMap()}
     </div>
   );
 };

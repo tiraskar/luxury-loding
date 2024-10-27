@@ -107,7 +107,7 @@ const RenderListings = ({ listingList }) => {
             {/* <p className="flex items-baseline space-x-1 text-xs text-[#0094FF] h-[15px]">
               <GrLocation /> <span>{listing.address}</span>
             </p> */}
-            <div className="flex flex-col  md:col-span-3">
+            <div className="flex flex-col  md:col-span-3 space-y-2">
               <div className="flex flex-col gap-4 text-[#333333] font-inter text-lg font-semibold">
                 <Link
                   to={`/listings/${listing.id}`}

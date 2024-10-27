@@ -3,6 +3,8 @@ import { Navbar, Footer, Wrapper } from "../components";
 import { useEffect, useState } from "react";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import useScrollToTop from "../hooks/scrollTop";
+import { LoadScript } from "@react-google-maps/api";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const SharedLayout = () => {
   useScrollToTop()
@@ -33,6 +35,7 @@ const SharedLayout = () => {
       <Navbar />
       <Outlet />
       <Footer />
+      <LoadScript loadingElement={<LoadingSpinner />} googleMapsApiKey={import.meta.env.VITE_MAP_KEY} />
       <Wrapper>
       <div
         className={`fixed bottom-0 right-0 p-4 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}

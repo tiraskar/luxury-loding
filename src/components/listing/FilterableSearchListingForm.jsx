@@ -12,7 +12,6 @@ import {
   setSearchListingParams,
   toggleFilterOpen,
 } from "../../redux/slices/listingSlice";
-// import DatePicker from "react-datepicker";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
@@ -26,9 +25,6 @@ import { IoClose } from "react-icons/io5";
 
 
 const FilterableSearchListing = () => {
-  // const [minDateCheckOut, setMinDateCheckOut] = useState(
-  //   new Date(new Date().setDate(new Date().getDate() + 1))
-  // );
 
   const dispatch = useDispatch();
 
@@ -42,43 +38,44 @@ const FilterableSearchListing = () => {
   } = useSelector((state) => state.listing);
 
   const [filteredLocation, setSearchFilterLocation] = useState([]);
-  const [showLocationFilter, setShowLocationFilter] = useState(false)
+  const [showLocationFilter, setShowLocationFilter] = useState(false);
+  const [showLocationLargeFilterLargeScreen, setShowLocationFilterLargeScreen] = useState(false);
 
-  const minDateCheckIn = new Date(Date.now());
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const checkInSmallScreenRef = useRef(null);
+  const checkOutSmallScreenRef = useRef(null);
+  const checkInLargeScreenRef = useRef(null);
+  const checkOutLargeScreenRef = useRef(null);
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  const [openCheckInLargeScreen, setOpenCheckInLargeScreen] = useState(false);
+  const [openCheckOutLargeScreen, setOpenCheckOutLargeScreen] = useState(false);
+  const [openCheckInSmallScreen, setOpenCheckInSmallScreen] = useState(false);
+  const [openCheckOutSmallScreen, setOpenCheckOutSmallScreen] = useState(false);
 
   const handleInputChange = (name, value) => {
-    // if (name == "checkIn") {
-    //   const checkInDate = new Date(value);
-    //   setMinDateCheckOut(
-    //     new Date(checkInDate.setDate(checkInDate.getDate() + 1))
-    //   );
-    // }
-    if (name === 'location') {
-      const filterLocation = listingLocationList.map((location) => {
+    if (name === "location") {
+      const filterLocation = listingLocationList
+        .map((location) => {
+          const stateMatch = location.state
+            .toLowerCase()
+            .includes(value.toLowerCase());
 
-        const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
+          if (stateMatch) return location;
 
+          const filteredCities = location.cities.filter((cityObj) =>
+            cityObj.city.toLowerCase().includes(value.toLowerCase())
+          );
 
-        if (stateMatch) {
-          return location;
-        }
+          if (filteredCities.length > 0) {
+            return { ...location, cities: filteredCities };
+          }
+          return null;
+        })
+        .filter((location) => location !== null);
 
-        // Filter the cities based on the value
-        const filteredCities = location.cities.filter((cityObj) =>
-          cityObj.city.toLowerCase().includes(value.toLowerCase())
-        );
-
-        // Return the location with only filtered cities if city matches
-        if (filteredCities.length > 0) {
-          return {
-            ...location,
-            cities: filteredCities, // Only the filtered cities
-          };
-        }
-        return null; // Exclude location if no match is found
-      }).filter(location => location !== null); // Remove null entries
-
-      // Update the filtered location list
       setSearchFilterLocation(filterLocation);
     }
 
@@ -120,98 +117,131 @@ const FilterableSearchListing = () => {
     dispatch(fetchListingLocationList());
   }, []);
 
-  //track div using ref
   const filterRef = useRef(null);
+  const filterRefLargeScreen = useRef(null);
 
-  // close the filter outside click;
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setShowLocationFilter(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [filterRef]);
-
-
-
-  // date state
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 0),
-      key: 'selection'
-    }
-  ]);
-
-
-  const checkInRef = useRef(null);
-  const checkOutRef = useRef(null);
-  const [openCheckIn, setOpenCheckIn] = useState(false);
-  const [openCheckOut, setOpenCheckOut] = useState(false);
-
-  useEffect(() => {
-    document.addEventListener("keydown", hideOnEscape, true);
-    document.addEventListener("click", hideOnClickOutside, true);
-  }, []);
 
   const hideOnEscape = (e) => {
     if (e.key === "Escape") {
       setOpenCheckIn(false);
       setOpenCheckOut(false);
-    }
-  };
-
-  const hideOnClickOutside = (e) => {
-    if (checkInRef.current && !checkInRef.current.contains(e.target)) {
-      setOpenCheckIn(false);
-    }
-    if (checkOutRef.current && !checkOutRef.current.contains(e.target)) {
-      setOpenCheckOut(false);
+      setSearchFilterLocation(false);
     }
   };
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
 
-    if (openCheckIn && range[0].startDate) {
-      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
-      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowLocationFilter(false);
+      }
+      if (filterRefLargeScreen.current && !filterRefLargeScreen.current.contains(event.target)) {
+        setShowLocationFilterLargeScreen(false);
+      }
+      if (checkInRef.current && !checkInRef.current.contains(event.target)) {
+        setOpenCheckIn(false);
+      }
+
+      if (checkOutRef.current && !checkOutRef.current.contains(event.target)) {
+        setOpenCheckOut(false);
+      }
+      if (checkInSmallScreenRef.current && !checkInSmallScreenRef.current.contains(event.target)) {
+        setOpenCheckInSmallScreen(false);
+      }
+      if (checkOutSmallScreenRef.current && !checkOutSmallScreenRef.current.contains(event.target)) {
+        setOpenCheckOutSmallScreen(false);
+      }
+
+      if (checkInLargeScreenRef.current && !checkInLargeScreenRef.current.contains(event.target)) {
+        setOpenCheckInLargeScreen(false);
+
+      }
+      if (checkOutLargeScreenRef.current && !checkOutLargeScreenRef.current.contains(event.target)) {
+        setOpenCheckOutLargeScreen(false);
+      }
+
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", hideOnEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", hideOnEscape);
+
+    };
+  }, [filterRef, checkInRef, checkOutRef, checkInSmallScreenRef, checkOutSmallScreenRef, checkInLargeScreenRef, checkOutLargeScreenRef, filterRefLargeScreen]);
+
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+      key: "selection",
+    },
+  ]);
+
+  useEffect(() => {
+    if (openCheckIn || openCheckInSmallScreen || openCheckInLargeScreen && range[0].startDate) {
+      dispatch(
+        setSearchListingParams({ name: "checkIn", value: range[0].startDate })
+      );
+      dispatch(
+        setSearchListingParams({ name: "checkOut", value: range[0].endDate })
+      );
     }
-    if (openCheckOut && range[0].endDate) {
-      dispatch(setSearchListingParams({ name: 'checkOut', value: range[0].endDate }));
-      dispatch(setSearchListingParams({ name: 'checkIn', value: range[0].startDate }));
+    if (openCheckOut || openCheckOutSmallScreen || openCheckOutLargeScreen && range[0].endDate) {
+      dispatch(
+        setSearchListingParams({ name: "checkOut", value: range[0].endDate })
+      );
+      dispatch(
+        setSearchListingParams({ name: "checkIn", value: range[0].startDate })
+      );
     }
   }, [range[0].startDate, range[0].endDate]);
 
-  const [direction, setDirection] = useState('horizontal');
+  const [direction, setDirection] = useState("horizontal");
   useEffect(() => {
     const updateDirection = () => {
       if (window.innerWidth <= 640) {
-        setDirection('vertical');
+        setDirection("vertical");
       } else {
-        setDirection('horizontal');
+        setDirection("horizontal");
       }
     };
     updateDirection();
-    window.addEventListener('resize', updateDirection);
+    window.addEventListener("resize", updateDirection);
     return () => {
-      window.removeEventListener('resize', updateDirection);
+      window.removeEventListener("resize", updateDirection);
     };
   }, []);
 
   const handleClear = () => {
+    if (checkInRef.current) checkInRef.current.value = "";
+    if (checkOutRef.current) checkOutRef.current.value = "";
+    setOpenCheckIn(false);
+    setOpenCheckOut(false);
+
+    if (checkInSmallScreenRef.current) checkInSmallScreenRef.current.value = "";
+    if (checkOutSmallScreenRef.current) checkOutSmallScreenRef.current.value = "";
+    setOpenCheckInSmallScreen(false);
+    setOpenCheckOutSmallScreen(false);
+
+
+    if (checkInLargeScreenRef.current) checkInLargeScreenRef.current.value = "";
+    if (checkOutLargeScreenRef.current) checkOutLargeScreenRef.current.value = "";
+    setOpenCheckInLargeScreen(false);
+    setOpenCheckOutLargeScreen(false);
+
+
     dispatch(clearSearchCheckInCheckOutDate());
     setRange([
       {
         startDate: new Date(),
         endDate: new Date(),
-        key: 'selection',
+        key: "selection",
       },
     ]);
-  }
+  };
+
 
   return (
     <Wrapper>
@@ -222,7 +252,6 @@ const FilterableSearchListing = () => {
         </p>
 
         <form
-          // className=" grid grid-cols-2  sm:flex flex-wrap justify-between items-center gap-3 bg-[#F9F9F9] p-4 rounded-2xl font-onest tracking-[-1%] md:h-[77px]"
           className="md:gap-x-4 grid grid-cols-2 xs:flex md:space-x-0 xs:justify-between lg:grid lg:grid-cols-12 bg-[#F9F9F9] rounded-2xl font-onest tracking-[-1%] md:h-[77px] px-4 xs:px-2 md:px-4 "
         >
 
@@ -238,28 +267,31 @@ const FilterableSearchListing = () => {
           </div>
 
           <div className="block lg:hidden pt-[15px] pb-[17px]">
-            <CheckIn
-              checkInRef={checkInRef}
-              openCheckIn={openCheckIn}
+            <CheckInSmallScreen
+              checkInRef={checkInSmallScreenRef}
               range={range}
               setRange={setRange}
               direction={direction}
-              setOpenCheckIn={setOpenCheckIn}
+              openCheckIn={openCheckInSmallScreen}
+              setOpenCheckIn={setOpenCheckInSmallScreen}
+              openCheckOut={openCheckOutSmallScreen}
+              setOpenCheckOut={setOpenCheckOutSmallScreen}
               searchListingParams={searchListingParams}
               handleClear={handleClear}
             />
           </div>
           <div className="block lg:hidden pt-[15px] pb-[17px]">
-            <CheckOut
-              checkOutRef={checkOutRef}
-              openCheckOut={openCheckOut}
+            <CheckOutSmallScreen
+              checkOutRef={checkOutSmallScreenRef}
               range={range}
               setRange={setRange}
               direction={direction}
-              setOpenCheckOut={setOpenCheckOut}
+              openCheckOut={openCheckOutSmallScreen}
+              setOpenCheckOut={setOpenCheckOutSmallScreen}
               searchListingParams={searchListingParams}
               handleClear={handleClear}
-
+              openCheckIn={openCheckInSmallScreen}
+              setOpenCheckIn={setOpenCheckInSmallScreen}
             />
 
           </div>
@@ -283,13 +315,12 @@ const FilterableSearchListing = () => {
 
           <div className="hidden lg:flex lg:col-span-2">
             <div className="max-w-[150px]   lg:py-4 h-[45px]">
-              <Location
-                searchListingParams={searchListingParams}
+              <LocationLargeScreen
+                filterRef={filterRefLargeScreen}
                 handleInputChange={handleInputChange}
-                setShowLocationFilter={setShowLocationFilter}
+                setShowLocationFilter={setShowLocationFilterLargeScreen}
                 filteredLocation={filteredLocation}
-                showLocationFilter={showLocationFilter}
-                filterRef={filterRef}
+                showLocationFilter={showLocationLargeFilterLargeScreen}
               />
             </div>
           </div>
@@ -298,33 +329,32 @@ const FilterableSearchListing = () => {
 
           <div className="hidden justify-between lg:flex xl:hidden flex-row lg:space-x-[100px]  xl:space-x-[173px] md:col-span-10 items-center">
             <div className="">
-              <CheckIn
-                checkInRef={checkInRef}
-                openCheckIn={openCheckIn}
+              <CheckInLargeScreen
+                checkInRef={checkInLargeScreenRef}
                 range={range}
                 setRange={setRange}
                 direction={direction}
-                setOpenCheckIn={setOpenCheckIn}
+                openCheckIn={openCheckInLargeScreen}
+                setOpenCheckIn={setOpenCheckInLargeScreen}
+                openCheckOut={openCheckOutLargeScreen}
+                setOpenCheckOut={setOpenCheckOutLargeScreen}
                 searchListingParams={searchListingParams}
-                handleInputChange={handleInputChange}
-                minDateCheckIn={minDateCheckIn}
                 handleClear={handleClear}
-
               />
             </div>
-            {/* <div className="hidden lg:flex flex-row  md:space-x-[40px] lg:space-x-[100px] xl:space-x-[173px] pt-[15px] pb-[17px]"> */}
-            {/* </div> */}
+
             <div className="">
-              <CheckOut
-                checkOutRef={checkOutRef}
-                openCheckOut={openCheckOut}
+              <CheckOutLargeScreen
+                checkOutRef={checkOutLargeScreenRef}
                 range={range}
-                setRange={setRange}
+                setRange={setRange} 
                 direction={direction}
-                setOpenCheckOut={setOpenCheckOut}
+                openCheckOut={openCheckOutLargeScreen}
+                setOpenCheckOut={setOpenCheckOutLargeScreen}
                 searchListingParams={searchListingParams}
                 handleClear={handleClear}
-
+                openCheckIn={openCheckInLargeScreen}
+                setOpenCheckIn={setOpenCheckInLargeScreen}
               />
             </div>
 
@@ -334,9 +364,7 @@ const FilterableSearchListing = () => {
                 handleInputChange={handleInputChange}
               />
             </div>
-            {/* <div className="hidden lg:flex flex-wrap  lg:space-x-[70px] xl:space-x-[121px] ">
 
-            </div> */}
             <div className="hidden sm:block pt-[17px] pb-[17px]">
               <SearchButton
                 isFetchAvailableListing={isFetchAvailableListing}
@@ -354,29 +382,29 @@ const FilterableSearchListing = () => {
               <div className="">
                 <CheckIn
                   checkInRef={checkInRef}
-                  openCheckIn={openCheckIn}
                   range={range}
                   setRange={setRange}
                   direction={direction}
+                  openCheckIn={openCheckIn}
                   setOpenCheckIn={setOpenCheckIn}
+                  openCheckOut={openCheckOut}
+                  setOpenCheckOut={setOpenCheckOut}
                   searchListingParams={searchListingParams}
-                  handleInputChange={handleInputChange}
-                  minDateCheckIn={minDateCheckIn}
                   handleClear={handleClear}
-
                 />
               </div>
               <div className="">
                 <CheckOut
                   checkOutRef={checkOutRef}
-                  openCheckOut={openCheckOut}
                   range={range}
                   setRange={setRange}
                   direction={direction}
+                  openCheckOut={openCheckOut}
                   setOpenCheckOut={setOpenCheckOut}
                   searchListingParams={searchListingParams}
                   handleClear={handleClear}
-
+                  openCheckIn={openCheckIn}
+                  setOpenCheckIn={setOpenCheckIn}
                 />
               </div>
             </div>
@@ -458,7 +486,9 @@ SearchButton.propTypes = {
   isFetchListing: PropTypes.bool,
 };
 
-const Location = ({ searchListingParams, handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+const Location = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
 
   return (
     <div className="flex flex-col w-full text-sm gap-1.5 ">
@@ -499,7 +529,57 @@ const Location = ({ searchListingParams, handleInputChange, setShowLocationFilte
 }
 
 Location.propTypes = {
-  searchListingParams: PropTypes.object,
+  handleInputChange: PropTypes.func,
+  setShowLocationFilter: PropTypes.func,
+  filteredLocation: PropTypes.array,
+  showLocationFilter: PropTypes.bool,
+  filterRef: PropTypes.any,
+};
+
+
+const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
+
+  return (
+    <div className="flex flex-col w-full text-sm gap-1.5 ">
+      <label className="text-sm font-semibold">Where to go?</label>
+      <input
+        type="text"
+        value={searchListingParams.location}
+        onChange={(e) => handleInputChange("location", e.target.value)}
+        placeholder="Anywhere"
+        className="search-input"
+        onFocus={() => setShowLocationFilter(true)}
+      />
+      {showLocationFilter &&
+        <div
+          ref={filterRef}
+          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg ">
+          <ul className=" text-sm">
+            {filteredLocation?.map((location, index) => (
+              <ul key={index} className=" space-y-1">
+                {location.cities.map((cityObj, cityIndex) => (
+                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
+                    onClick={() => {
+                      handleInputChange('location', cityObj.city);
+                      setShowLocationFilter(false);
+                    }}
+                  >
+                    <CiLocationOn className="text-buttonPrimary text-lg" />
+                    <span>{cityObj.city}, {location.state}</span>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </ul>
+        </div>
+      }
+    </div>
+  );
+};
+
+LocationLargeScreen.propTypes = {
   handleInputChange: PropTypes.func,
   setShowLocationFilter: PropTypes.func,
   filteredLocation: PropTypes.array,
@@ -538,31 +618,43 @@ Guests.propTypes = {
   handleInputChange: PropTypes.func,
 };
 
-//eslint-disable-next-line 
-const CheckOut = ({ searchListingParams, setOpenCheckOut, checkOutRef, openCheckOut, setRange, direction, range, handleClear }) => {
+const CheckOut = ({
+  searchListingParams,
+  setOpenCheckOut,
+  openCheckOut,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckIn,
+  checkOutRef
+}) => {
   return (
-    <div className=" lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
-      <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden lg:block "></div>
-      <div className="flex flex-col w-[117px] text-sm gap-1.5 ">
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block"></div>
+      <div className="flex flex-col w-[117px] text-sm gap-1.5">
         <label className="text-sm font-semibold">Check out</label>
         <div className="relative max-w-[117px]">
           <input
             value={`${searchListingParams.checkOut ? format(searchListingParams.checkOut, "MM/dd/yyyy") : ""}`}
             readOnly
             className="search-input max-w-[117px]"
-            onClick={() => setOpenCheckOut(openCheckOut => !openCheckOut)}
+            onClick={() => {
+              setOpenCheckOut(openCheckOut => !openCheckOut);
+              setOpenCheckIn(false);
+            }}
             placeholder="MM/DD/YYYY"
           />
           {searchListingParams.checkOut && (
             <IoClose
-              onClick={() => handleClear()}
-              className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
             />
           )}
         </div>
-        <div className="calendarWrap  ml-32 xs:ml-10 mt-7">
+        <div className="calendarWrap ml-32 xs:ml-10 mt-7">
           <div ref={checkOutRef}>
-            {openCheckOut &&
+            {openCheckOut && (
               <DateRange
                 showClearButton={true}
                 onChange={item => setRange([item.selection])}
@@ -577,50 +669,69 @@ const CheckOut = ({ searchListingParams, setOpenCheckOut, checkOutRef, openCheck
                 showMonthAndYearPickers={false}
                 rangeColors={["#B69F6F"]}
               />
-            }
+            )}
           </div>
-
         </div>
       </div>
     </div>
   );
 };
 
+
 CheckOut.propTypes = {
-  handleInputChange: PropTypes.func,
-  minDateCheckOut: PropTypes.object,
-  searchListingParams: PropTypes.object,
-  handleClearButton: PropTypes.func,
+  searchListingParams: PropTypes.object.isRequired,
+  setOpenCheckOut: PropTypes.func.isRequired,
+  openCheckOut: PropTypes.bool.isRequired,
+  setRange: PropTypes.func.isRequired,
+  direction: PropTypes.string.isRequired,
+  range: PropTypes.array.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  setOpenCheckIn: PropTypes.func,
+  checkOutRef: PropTypes.any
+
 };
 
 
-//eslint-disable-next-line
-const CheckIn = ({ searchListingParams, setOpenCheckIn, checkInRef, openCheckIn, setRange, direction, range, handleClear }) => {
+const CheckIn = ({
+
+  setOpenCheckIn,
+  openCheckIn,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckOut,
+  checkInRef
+}) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
+
   return (
-    <div className=" lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
-      <div className="hidden lg:block h-10 w-px bg-textDark bg-opacity-10 "></div>
-      <div className="flex flex-col w-full text-sm gap-1.5 ">
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="hidden lg:block h-10 w-px bg-textDark bg-opacity-10"></div>
+      <div className="flex flex-col w-full text-sm gap-1.5">
         <label className="text-sm font-semibold">Check in</label>
-        <div className="relative  max-w-[117px]">
+        <div className="relative max-w-[117px]">
           <input
-            //eslint-disable-next-line
             value={`${searchListingParams.checkIn ? format(searchListingParams.checkIn, "MM/dd/yyyy") : ""}`}
             readOnly
             className="search-input max-w-[117px]"
-            onClick={() => setOpenCheckIn(openCheckIn => !openCheckIn)}
+            onClick={() => {
+              setOpenCheckIn(openCheckIn => !openCheckIn);
+              setOpenCheckOut(false);
+            }}
             placeholder="MM/DD/YYYY"
           />
           {searchListingParams.checkIn && (
             <IoClose
-              onClick={() => handleClear()}
-              className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
             />
           )}
         </div>
         <div className="calendarWrap xs:ml-10 sm:ml-20 mt-7">
-
-          <div ref={checkInRef}>
-            {openCheckIn &&
+          {openCheckIn && (
+            <div ref={checkInRef}>
               <DateRange
                 showClearButton={true}
                 onChange={item => setRange([item.selection])}
@@ -635,9 +746,8 @@ const CheckIn = ({ searchListingParams, setOpenCheckIn, checkInRef, openCheckIn,
                 showMonthAndYearPickers={false}
                 rangeColors={["#B69F6F"]}
               />
-            }
-          </div>
-
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -649,4 +759,316 @@ CheckIn.propTypes = {
   minDateCheckIn: PropTypes.object,
   searchListingParams: PropTypes.object,
   handleClear: PropTypes.func,
+  openCheckIn: PropTypes.bool,
+  setOpenCheckIn: PropTypes.func,
+  setRange: PropTypes.func,
+  direction: PropTypes.string,
+  range: PropTypes.array,
+  setOpenCheckOut: PropTypes.func,
+  checkInRef: PropTypes.any
+};
+
+
+
+const CheckOutSmallScreen = ({
+  // searchListingParams,
+  setOpenCheckOut,
+  openCheckOut,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckIn,
+  checkOutRef
+}) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
+  return (
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block"></div>
+      <div className="flex flex-col w-[117px] text-sm gap-1.5">
+        <label className="text-sm font-semibold">Check out</label>
+        <div className="relative max-w-[117px]">
+          <input
+            value={`${searchListingParams.checkOut ? format(searchListingParams.checkOut, "MM/dd/yyyy") : ""}`}
+            readOnly
+            className="search-input max-w-[117px]"
+            onClick={() => {
+              setOpenCheckOut(openCheckOut => !openCheckOut);
+              setOpenCheckIn(false);
+            }}
+            placeholder="MM/DD/YYYY"
+          />
+          {searchListingParams.checkOut && (
+            <IoClose
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+            />
+          )}
+        </div>
+        <div className="calendarWrap ml-32 xs:ml-10 mt-7">
+          <div ref={checkOutRef}>
+            {openCheckOut && (
+              <DateRange
+                showClearButton={true}
+                onChange={item => setRange([item.selection])}
+                editableDateInputs={false}
+                moveRangeOnFirstSelection={true}
+                ranges={range}
+                months={2}
+                direction={direction}
+                className="calendarElement"
+                minDate={new Date()}
+                showDateDisplay={false}
+                showMonthAndYearPickers={false}
+                rangeColors={["#B69F6F"]}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+CheckOutSmallScreen.propTypes = {
+  searchListingParams: PropTypes.object.isRequired,
+  setOpenCheckOut: PropTypes.func.isRequired,
+  openCheckOut: PropTypes.bool.isRequired,
+  setRange: PropTypes.func.isRequired,
+  direction: PropTypes.string.isRequired,
+  range: PropTypes.array.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  setOpenCheckIn: PropTypes.func,
+  checkOutRef: PropTypes.any
+
+};
+
+
+const CheckInSmallScreen = ({
+  // searchListingParams,
+  setOpenCheckIn,
+  openCheckIn,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckOut,
+  checkInRef
+}) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
+  return (
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="hidden lg:block h-10 w-px bg-textDark bg-opacity-10"></div>
+      <div className="flex flex-col w-full text-sm gap-1.5">
+        <label className="text-sm font-semibold">Check in</label>
+        <div className="relative max-w-[117px]">
+          <input
+            value={`${searchListingParams.checkIn ? format(searchListingParams.checkIn, "MM/dd/yyyy") : ""}`}
+            readOnly
+            className="search-input max-w-[117px]"
+            onClick={() => {
+              setOpenCheckIn(openCheckIn => !openCheckIn);
+              setOpenCheckOut(false);
+            }}
+            placeholder="MM/DD/YYYY"
+          />
+          {searchListingParams.checkIn && (
+            <IoClose
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+            />
+          )}
+        </div>
+        <div className="calendarWrap xs:ml-10 sm:ml-20 mt-7">
+          {openCheckIn && (
+            <div ref={checkInRef}>
+              <DateRange
+                showClearButton={true}
+                onChange={item => setRange([item.selection])}
+                editableDateInputs={false}
+                moveRangeOnFirstSelection={true}
+                ranges={range}
+                months={2}
+                direction={direction}
+                className="calendarElement"
+                minDate={new Date()}
+                showDateDisplay={false}
+                showMonthAndYearPickers={false}
+                rangeColors={["#B69F6F"]}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CheckInSmallScreen.propTypes = {
+  handleInputChange: PropTypes.func,
+  minDateCheckIn: PropTypes.object,
+  searchListingParams: PropTypes.object,
+  handleClear: PropTypes.func,
+  openCheckIn: PropTypes.bool,
+  setOpenCheckIn: PropTypes.func,
+  setRange: PropTypes.func,
+  direction: PropTypes.string,
+  range: PropTypes.array,
+  setOpenCheckOut: PropTypes.func,
+  checkInRef: PropTypes.any
+};
+
+
+const CheckOutLargeScreen = ({
+  // searchListingParams,
+  setOpenCheckOut,
+  openCheckOut,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckIn,
+  checkOutRef
+}) => {
+  const { searchListingParams } = useSelector(state => state.listing);
+  return (
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="h-10 w-px bg-textDark bg-opacity-10 hidden lg:block"></div>
+      <div className="flex flex-col w-[117px] text-sm gap-1.5">
+        <label className="text-sm font-semibold">Check out</label>
+        <div className="relative max-w-[117px]">
+          <input
+            value={`${searchListingParams.checkOut ? format(searchListingParams.checkOut, "MM/dd/yyyy") : ""}`}
+            readOnly
+            className="search-input max-w-[117px]"
+            onClick={() => {
+              setOpenCheckOut(openCheckOut => !openCheckOut);
+              setOpenCheckIn(false);
+            }}
+            placeholder="MM/DD/YYYY"
+          />
+          {searchListingParams.checkOut && (
+            <IoClose
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+            />
+          )}
+        </div>
+        <div className="calendarWrap ml-32 xs:ml-10 mt-7">
+          <div ref={checkOutRef}>
+            {openCheckOut && (
+              <DateRange
+                showClearButton={true}
+                onChange={item => setRange([item.selection])}
+                editableDateInputs={false}
+                moveRangeOnFirstSelection={true}
+                ranges={range}
+                months={2}
+                direction={direction}
+                className="calendarElement"
+                minDate={new Date()}
+                showDateDisplay={false}
+                showMonthAndYearPickers={false}
+                rangeColors={["#B69F6F"]}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+CheckOutLargeScreen.propTypes = {
+  searchListingParams: PropTypes.object.isRequired,
+  setOpenCheckOut: PropTypes.func.isRequired,
+  openCheckOut: PropTypes.bool.isRequired,
+  setRange: PropTypes.func.isRequired,
+  direction: PropTypes.string.isRequired,
+  range: PropTypes.array.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  setOpenCheckIn: PropTypes.func,
+  checkOutRef: PropTypes.any
+
+};
+
+
+const CheckInLargeScreen = ({
+  // searchListingParams,
+  setOpenCheckIn,
+  openCheckIn,
+  setRange,
+  direction,
+  range,
+  handleClear,
+  setOpenCheckOut,
+  checkInRef
+}) => {
+
+  const { searchListingParams } = useSelector(state => state.listing);
+
+  return (
+    <div className="lg:grid lg:grid-flow-col lg:space-x-4 items-center w-[117px] h-[45px]">
+      <div className="hidden lg:block h-10 w-px bg-textDark bg-opacity-10"></div>
+      <div className="flex flex-col w-full text-sm gap-1.5">
+        <label className="text-sm font-semibold">Check in</label>
+        <div className="relative max-w-[117px]">
+          <input
+            value={`${searchListingParams.checkIn ? format(searchListingParams.checkIn, "MM/dd/yyyy") : ""}`}
+            readOnly
+            className="search-input max-w-[117px]"
+            onClick={() => {
+              setOpenCheckIn(openCheckIn => !openCheckIn);
+              setOpenCheckOut(false);
+            }}
+            placeholder="MM/DD/YYYY"
+          />
+          {searchListingParams.checkIn && (
+            <IoClose
+              onClick={handleClear}
+              className="absolute size-3 right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+            />
+          )}
+        </div>
+        <div className="calendarWrap xs:ml-10 sm:ml-20 mt-7">
+          {openCheckIn && (
+            <div ref={checkInRef}>
+              <DateRange
+                showClearButton={true}
+                onChange={item => setRange([item.selection])}
+                editableDateInputs={false}
+                moveRangeOnFirstSelection={true}
+                ranges={range}
+                months={2}
+                direction={direction}
+                className="calendarElement"
+                minDate={new Date()}
+                showDateDisplay={false}
+                showMonthAndYearPickers={false}
+                rangeColors={["#B69F6F"]}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CheckInLargeScreen.propTypes = {
+  handleInputChange: PropTypes.func,
+  minDateCheckIn: PropTypes.object,
+  searchListingParams: PropTypes.object,
+  handleClear: PropTypes.func,
+  openCheckIn: PropTypes.bool,
+  setOpenCheckIn: PropTypes.func,
+  setRange: PropTypes.func,
+  direction: PropTypes.string,
+  range: PropTypes.array,
+  setOpenCheckOut: PropTypes.func,
+  checkInRef: PropTypes.any
 };
