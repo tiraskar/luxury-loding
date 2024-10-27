@@ -10,6 +10,7 @@ const CustomImage = ({ src, width, height, alt, title, className, style }) => {
       title={title || ''}
       className={` ${className}`}
       style={{ style }}
+      loading="lazy"
     />
   );
 };
