@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FilterableSearchListing, OtherListing, Wrapper } from "../components";
 import { useDispatch } from "react-redux";
 import { lazy, Suspense, useEffect } from "react";
-import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
+import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import { setCheckBookingParamsToInitialState, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 import { wait } from "../utils/helper";
@@ -30,6 +30,7 @@ const SingleListing = () => {
     dispatch(setCheckBookingParamsToInitialState());
     dispatch(setSearchListingParamsToInitialState());
     dispatch(toggleTokenState())
+    dispatch(toggleMapView(false))
   }, [id])
 
   return (
