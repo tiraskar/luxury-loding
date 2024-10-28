@@ -296,7 +296,9 @@ const listingSlice = createSlice({
       minPrice: 50,
       maxPrice: 550,
       amenities: [],
-      rooms: ''
+      rooms: '',
+      lat: 0,
+      lng: 0
     },
 
   },
@@ -334,6 +336,8 @@ const listingSlice = createSlice({
       state.searchListingParams.rooms = '';
       state.isFilterApply = false;
       state.isHomePageSearch = false;
+      state.searchListingParams.lng = 0;
+      state.searchListingParams.lat = 0;
 
     },
 
@@ -448,6 +452,8 @@ const listingSlice = createSlice({
         state.isHomePageSearch = false;
         state.listingList = [];
         state.searchedListingList = [];
+        state.searchListingParams.lng = 0;
+        state.searchListingParams.lat = 0;
       })
       .addCase(fetchAvailableListing.fulfilled, (state, action) => {
         state.isFetchAvailableListing = false;

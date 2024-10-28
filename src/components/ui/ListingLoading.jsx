@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 
 const LoadingListingPlaceholder = () => (
@@ -14,8 +15,12 @@ const LoadingListingPlaceholder = () => (
 );
 
 const ListingLoading = ({ numbers = 8 }) => {
+
+  const { isMapViewOpen } = useSelector(state => state.listing)
+
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-4 gap-y-[56px]">
+    // <div className={"grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-4 gap-y-[56px]"}>
+    <div className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4 gap-y-[56px] lg:gap-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-[56px]"} gap-x-4 `}>
         {Array.from({ length: numbers }, (_, index) => (
           <LoadingListingPlaceholder key={index} />
         ))}

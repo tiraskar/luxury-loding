@@ -1,11 +1,12 @@
 import { ListingLoading, Wrapper } from "../../components";
-
-// import ListingMap from "./ListingMap";
 import ListingViewOptions from "./ListingViewOptions";
 import { useSelector } from "react-redux";
 import RenderListings from "./RenderListings";
 import LoadMoreListingButton from "../ui/LoadMoreListingButton";
-import ListingMap from "./ListingMap";
+import { lazy, Suspense } from "react";
+import { wait } from "../../utils/helper";
+
+const ListingMap = lazy(() => wait(1000).then(() => import("../../components/listing/ListingMap")));
 
 const ListingList = () => {
 
@@ -28,9 +29,13 @@ const ListingList = () => {
           </div>
 
           <div className="block lg:hidden  lg:col-span-3 pb-10">
-            {isMapViewOpen && <ListingMap
-              listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
-            />}
+            {isMapViewOpen && <Suspense fallback={
+              <div>Loading map <span className="animate animate-bounce px-4">...</span></div>
+            }>
+              <ListingMap
+                listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
+              />
+            </Suspense>}
           </div>
 
           <div>
@@ -41,7 +46,7 @@ const ListingList = () => {
                 listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
               />
             }
-            {isSearchedListing && availableListing.length == 0 && (
+            {isSearchedListing && !isFetchAvailableListing && availableListing.length == 0 && (
               <div className="pt-5  xs:pt-20 2xl:pt-40">
                 <h1 className="text-lg xxs:text-xl md:text-2xl lg:text-3xl font-semibold text-[#333333]">
                   No listings found.
@@ -62,9 +67,18 @@ const ListingList = () => {
           </div>
         </div>
         <div className=" w-full hidden lg:block  lg:col-span-3">
-          {isMapViewOpen && <ListingMap
-            listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
-          />}
+          {isMapViewOpen &&
+            <Suspense fallback={
+              <div>Loading map...</div>
+            }>
+              <ListingMap
+                listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
+              />
+            </Suspense>
+            //   <ListingMap
+            //   listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
+            // />
+          }
         </div>
       </div>
     </Wrapper>
