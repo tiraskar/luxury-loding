@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { GoogleMap, OverlayView } from "@react-google-maps/api";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
 import { Link } from "react-router-dom";
 import { LuBath, LuUsers } from "react-icons/lu";
@@ -14,6 +14,7 @@ const ListingMap = ({ listingList }) => {
   const [overlaysReady, setOverlaysReady] = useState(false);
   const [hoveredListingId, setHoveredListingId] = useState(null);
   const [clickedListingId, setClickedListingId] = useState(null);
+  const { searchListingParams } = useSelector(state => state.listing)
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(
     Array(listingList?.length).fill(0)
@@ -28,20 +29,31 @@ const ListingMap = ({ listingList }) => {
     (map) => {
       mapRef.current = map;
 
-      if (listingList.length > 1) {
+      if (listingList.length > 0) {
         const bounds = new window.google.maps.LatLngBounds();
         listingList.forEach((listing) => {
           bounds.extend({ lat: listing.lat, lng: listing.lng });
         });
         map.fitBounds(bounds);
+        const lat = listingList[0]?.lat;
+        const lng = listingList[0]?.lng;
+        setTimeout(() => {
+          setOverlaysReady(true);
+          mapRef.current.setZoom(13);
+          mapRef.current.panTo({ lat, lng });
+        }, 200);
+      } else {
+        const bounds = new window.google.maps.LatLngBounds();
+        map.fitBounds(bounds);
+        const lat = 27.9944024;
+        const lng = -81.7602544;
+        setTimeout(() => {
+          setOverlaysReady(true);
+          mapRef.current.setZoom(13);
+          mapRef.current.panTo({ lat, lng });
+        }, 200);
       }
-      const lat = listingList[0]?.lat;
-      const lng = listingList[0]?.lng;
-      setTimeout(() => {
-        setOverlaysReady(true);
-        mapRef.current.setZoom(13);
-        mapRef.current.panTo({ lat, lng });
-      }, 200);
+
     },
     [listingList]
   );
@@ -88,6 +100,15 @@ const ListingMap = ({ listingList }) => {
       setOverlaysReady(true);
     }
   }, [listingList]);
+
+  useEffect(() => {
+    if (searchListingParams.lng !== 0 && searchListingParams.lat !== 0) {
+      if (mapRef.current) {
+        mapRef.current.panTo({ lat: searchListingParams.lat, lng: searchListingParams.lng });
+        setOverlaysReady(true);
+      }
+    }
+  }, [searchListingParams.lat, searchListingParams.lng])
 
   useEffect(() => {
     const handleResize = () => {

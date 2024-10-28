@@ -512,6 +512,8 @@ const Location = ({ handleInputChange, setShowLocationFilter, filteredLocation, 
                   <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
                     onClick={() => {
                       handleInputChange('location', cityObj.city);
+                      handleInputChange('lat', cityObj.lat);
+                      handleInputChange('lng', cityObj.lng);
                       setShowLocationFilter(false);
                     }}
                   >
@@ -563,6 +565,8 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
                   <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
                     onClick={() => {
                       handleInputChange('location', cityObj.city);
+                      handleInputChange('lat', cityObj.lat);
+                      handleInputChange('lng', cityObj.lng);
                       setShowLocationFilter(false);
                     }}
                   >
