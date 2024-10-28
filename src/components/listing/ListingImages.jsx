@@ -17,6 +17,7 @@ const ListingImages = ({ images, setIsviewAllImageOpen }) => {
               key={index}
               src={image.url}
               className="w-full h-fit max-h-[80vh] rounded-md sm:rounded-xl object-cover"
+              loading="lazy"
             />
           ))}
         </div>

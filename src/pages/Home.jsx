@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   HomeBanner,
   Greeting,
-  FeaturedHomes,
+  // FeaturedHomes,
   Offer,
   RentalExperience,
   ActivitiesAndServices,
@@ -14,10 +14,14 @@ import {
   ListingLoading,
 } from "../components";
 import RenderListings from "../components/listing/RenderListings";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { fetchListingLocationList, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import SearchListingMobileView from "../components/listing/SearchListingMobileView";
 import { fetchUserReviews } from "../redux/slices/otherSlice";
+import { wait } from "../utils/helper";
+import FeaturedHomeSkeleton from "../components/ui/FeaturedHomeSkeleton";
+
+const FeaturedHomes = lazy(() => wait(2000).then(() => import("../components/home/FeaturedHomes")))
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -67,7 +71,9 @@ const Home = () => {
         </div>
         <div className="space-y-[3rem] xxs:space-y-[4rem] xs:space-y-[5rem] sm:space-y-[6rem] lg:space-y-[10.1875rem]">
           <Greeting />
-          <FeaturedHomes />
+          <Suspense fallback={<FeaturedHomeSkeleton />}>
+            <FeaturedHomes />
+          </Suspense>
         </div>
       </div>
       <Offer />

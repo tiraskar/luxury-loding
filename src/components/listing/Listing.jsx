@@ -129,6 +129,7 @@ const Listing = () => {
                       src={images[0]?.url}
                       alt="Listing Image"
                       className="rounded-md sm:rounded-xl h-full w-full object-fill"
+                      loading="lazy"
                     />
                   )}
                 </div>
@@ -138,6 +139,7 @@ const Listing = () => {
                       src={images[1]?.url}
                       alt="Listing Image"
                       className="rounded-md sm:rounded-xl"
+                      loading="lazy"
                     />
                   )}
                   <div className="grid grid-cols-2 gap-x-1.5 md:gap-x-3">
@@ -146,6 +148,7 @@ const Listing = () => {
                         src={images[2]?.url}
                         alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full md:object-cover lg:h-[217px] lg:w-[321px] md:h-[170px]"
+                        loading="lazy"
                       />
                     )}
                     {images[3] && (
@@ -153,6 +156,7 @@ const Listing = () => {
                         src={images[3]?.url}
                         alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full md:object-cover md:h-[170px]  lg:h-[217px]"
+                        loading="lazy"
                       />
                     )}
                   </div>

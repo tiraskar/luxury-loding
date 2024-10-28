@@ -68,7 +68,7 @@ const FeaturedHomes = () => {
         </div>
       </div>
       <div className="  xl:w-[813px] 2xl:w-full md:h-[450px] lg:h-[500px] xl:h-[598px]">
-        <img src={images[0].url} className="w-full h-full  rounded-xl object-cover" />
+        <img src={images[0].url} className="w-full h-full  rounded-xl object-cover" loading="lazy" />
 
       </div>
       <div

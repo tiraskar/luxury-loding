@@ -63,6 +63,8 @@ const RenderListings = ({ listingList }) => {
                       className={` object-cover w-full rounded-xl ${isMapViewOpen ? "  lg:h-[150px] " : "md:h-[241px]"}`}
                       src={data.url}
                       alt=""
+                      loading="lazy"
+                      
                     />
                   </div>
                 );
