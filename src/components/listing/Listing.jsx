@@ -89,7 +89,8 @@ const Listing = () => {
                     {listingInfo?.name}
                   </h1>
                   <p className="flex items-center text-sm text-[#A1A196] gap-1 h-[17px]">
-                    {listingInfo?.address}{" "}
+                    {/* {listingInfo?.address}{" "} */}
+                    {listingInfo?.city}, {listingInfo?.state}{" "}
 
                     <div className="hidden xs:flex items-center text-xs sm:text-sm">
                       <GoDotFill className="text-black text-[8px]" />
