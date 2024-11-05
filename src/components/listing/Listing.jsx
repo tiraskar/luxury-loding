@@ -139,7 +139,7 @@ const Listing = () => {
                     <img
                       src={images[1]?.url}
                       alt="Listing Image"
-                      className="rounded-md sm:rounded-xl md:max-h-[310px] object-fill"
+                      className="rounded-md sm:rounded-xl md:max-h-[310px] object-cover"
                       loading="lazy"
                     />
                   )}
