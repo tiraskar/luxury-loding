@@ -21,7 +21,7 @@ const Footer = () => {
       contact: "(813) 531-8988"
     },
     '/default': {
-      logo: "Direct Booking",
+      logo: "Luxury Lodging",
       email: "support@luxurylodgingpm.com",
       contact: "(813) 531-8988"
     }
