@@ -60,7 +60,7 @@ const RenderListings = ({ listingList }) => {
                       }`}
                   >
                     <img
-                      className={` object-cover w-full rounded-xl ${isMapViewOpen ? "  lg:h-[150px] " : "md:h-[241px]"}`}
+                      className={` object-cover w-full rounded-xl ${isMapViewOpen ? "  lg:h-[150px] " : "md:h-[241px] md:max-h-[241px]"}`}
                       src={data.url}
                       alt=""
                       loading="lazy"

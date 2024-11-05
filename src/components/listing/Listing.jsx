@@ -129,7 +129,7 @@ const Listing = () => {
                     <img
                       src={images[0]?.url}
                       alt="Listing Image"
-                      className="rounded-md sm:rounded-xl h-full w-full object-fill"
+                      className="rounded-md sm:rounded-xl h-full w-full object-cover"
                       loading="lazy"
                     />
                   )}
@@ -139,7 +139,7 @@ const Listing = () => {
                     <img
                       src={images[1]?.url}
                       alt="Listing Image"
-                      className="rounded-md sm:rounded-xl"
+                      className="rounded-md sm:rounded-xl md:max-h-[310px] object-fill"
                       loading="lazy"
                     />
                   )}
@@ -148,7 +148,7 @@ const Listing = () => {
                       <img
                         src={images[2]?.url}
                         alt="Listing Image"
-                        className="rounded-md sm:rounded-xl w-full md:object-cover lg:h-[217px] lg:w-[321px] md:h-[170px]"
+                        className="rounded-md sm:rounded-xl w-full h-full object-cover max-h-[217px] lg:w-[321px] md:h-[170px]"
                         loading="lazy"
                       />
                     )}
@@ -156,7 +156,7 @@ const Listing = () => {
                       <img
                         src={images[3]?.url}
                         alt="Listing Image"
-                        className="rounded-md sm:rounded-xl w-full md:object-cover md:h-[170px]  lg:h-[217px]"
+                        className="rounded-md sm:rounded-xl w-full h-full object-cover md:h-[170px]  max-h-[217px]"
                         loading="lazy"
                       />
                     )}
