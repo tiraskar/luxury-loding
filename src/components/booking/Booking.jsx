@@ -219,7 +219,7 @@ const Booking = () => {
           totalPrice={bookingPrice.totalPrice}
           guestNumber={guestNumber}
         />}
-        <p className="text-[#666666] mt-10 mb-3">Any question? Call us
+        <p className="text-[#666666] mt-10 mb-3">Any questions? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
       </div>
     </div>
