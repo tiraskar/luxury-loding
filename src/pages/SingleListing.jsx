@@ -1,16 +1,10 @@
 import { useParams } from "react-router-dom";
-import { FilterableSearchListing, OtherListing, Wrapper } from "../components";
+import { FilterableSearchListing, Listing, OtherListing } from "../components";
 import { useDispatch } from "react-redux";
-import { lazy, Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import { setCheckBookingParamsToInitialState, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
-import { wait } from "../utils/helper";
-import ListingInfoSkeleton from "../components/ui/ListingInfoSkeleton";
-import ReviewLoading from "../components/ui/ReviewLoading";
-import AmenitiesSkeleton from "../components/ui/AmenitiesSkeleton";
-
-const Listing = lazy(() => wait(1000).then(() => import("../components/listing/Listing")))
 
 const SingleListing = () => {
 
@@ -39,22 +33,7 @@ const SingleListing = () => {
         <FilterableSearchListing />
         <div className="h-px w-full bg-[#D3D3D3]"></div>
       </div>
-      <Suspense fallback={<Wrapper>
-        <ListingInfoSkeleton />
-        <div>
-          <div className="py-10">
-            {Array.from({ length: 8 }, (_, index) => (
-              <AmenitiesSkeleton key={index} />
-            ))}
-          </div>
-
-          {Array.from({ length: 4 }, (_, index) => (
-            <ReviewLoading key={index} />
-          ))}
-        </div>
-      </Wrapper>}>
-        <Listing />
-      </Suspense>
+      <Listing />
       <OtherListing />
     </div>
   );
