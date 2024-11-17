@@ -30,7 +30,7 @@ const Navbar = () => {
         <div className="flex flex-row justify-between items-center  font-onest h-[38px]">
           {/* <Logo /> */}
           <Link to='/'>
-            <ImageLogo onClose={onclose} />
+            <ImageLogo onClose={setIsMobileNavOpen} />
           </Link>
 
           {!isMobileNavOpen &&

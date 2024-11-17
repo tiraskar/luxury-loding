@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const Logo = ({ onClose, logoText = "Luxury Lodging" }) => {
   return (
     <Link to='/' className="font-onest text-lg sm:text-xl md:text-[24px] tracking-[-0.48px] font-medium"
-      onClickCapture={() => onClose(false)}
+      onClick={() => onClose(false)}
     >
       {logoText}
     </Link>
