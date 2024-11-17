@@ -3,11 +3,10 @@ import ListingViewOptions from "./ListingViewOptions";
 import { useSelector } from "react-redux";
 import RenderListings from "./RenderListings";
 import LoadMoreListingButton from "../ui/LoadMoreListingButton";
-// import { lazy, Suspense } from "react";
-// import { wait } from "../../utils/helper";
-import ListingMap from "../../components/listing/ListingMap";
+import { lazy, Suspense } from "react";
+import { wait } from "../../utils/helper";
 
-// const ListingMap = lazy(() => wait(1000).then(() => import("../../components/listing/ListingMap")));
+const ListingMap = lazy(() => wait(1000).then(() => import("../../components/listing/ListingMap")));
 
 const ListingList = () => {
 
@@ -70,14 +69,14 @@ const ListingList = () => {
           </div>
         </div>
         <div className=" w-full hidden lg:block  lg:col-span-3">
-          {isMapViewOpen && <ListingMap
-            listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
-          />
-            // <Suspense fallback={
-            //   <div>Loading map...</div>
-            // }>
-              
-            // </Suspense>
+          {isMapViewOpen &&
+            <Suspense fallback={
+              <div>Loading map...</div>
+            }>
+              <ListingMap
+                listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
+              />
+            </Suspense>
             //   <ListingMap
             //   listingList={(isSearchedListing && !isHomePageSearch) ? availableListing : listingList}
             // />

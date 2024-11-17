@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { FilterableSearchListing, ListingList } from "../components";
-import { useEffect } from "react";
+import { FilterableSearchListing, ListingLoading, Wrapper } from "../components";
+import { lazy, Suspense, useEffect } from "react";
 import { fetchAmenitiesList, fetchListingList, fetchListingTotalCount, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
-// import { wait } from "../utils/helper";
+import { wait } from "../utils/helper";
 
-// const ListingList = lazy(() => wait(1000).then(() => import("../components/listing/ListingList")));
+const ListingList = lazy(() => wait(1000).then(() => import("../components/listing/ListingList")));
 
 const Listings = () => {
 
@@ -28,12 +28,12 @@ const Listings = () => {
         
         <div className="min-w-full h-px bg-[#E0E0E0]"></div>
       </div>
-      {/* <Suspense fallback={<Wrapper>
+      <Suspense fallback={<Wrapper>
         <ListingLoading numbers={8} />
       </Wrapper>}>
         <ListingList />
-      </Suspense> */}
-      <ListingList />
+      </Suspense>
+      {/* <ListingList /> */}
     </div>
   );
 };
