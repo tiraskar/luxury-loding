@@ -13,6 +13,8 @@ import { addDays, format } from "date-fns";
 import { DateRange } from "react-date-range";
 import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 import { IoClose } from "react-icons/io5";
+import BookApartmentMap from "./BookApartmentMap";
+
 const BookApartment = ({ listingInfo }) => {
 
   const dispatch = useDispatch();
@@ -166,6 +168,12 @@ const BookApartment = ({ listingInfo }) => {
         />}
 
         <div className="space-y-2">
+          {listingInfo &&
+            <div>
+              <BookApartmentMap listingInfo={listingInfo} />
+            </div>
+          }
+
           <div className="grid xs:grid-cols-2 gap-[10px]">
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
