@@ -17,5 +17,16 @@ export default defineConfig({
   base: '/',
   server: {
     historyApiFallback: true, // Ensures SPA routing is respected
+    cors: true // Added for Authorize.Net seal script
   },
+  optimizeDeps: {
+    exclude: ['verify.authorize.net']
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        'https://verify.authorize.net/anetseal/seal.js'
+      ]
+    }
+  }
 });
