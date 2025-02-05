@@ -33,8 +33,17 @@ const Footer = () => {
     <Wrapper>
       <div className="  flex flex-wrap gap-20 lg:gap-0 lg:justify-between font-onest    mt-[5rem] sm:mt-[7rem] lg:mt-[8rem] xl:mt-[9.375rem] ">
         <div className="space-y-9 md:space-y-12 lg:space-y-16">
-          <div>
+          <div className="flex flex-col space-y-1">
             <Logo logoText={`${footerContent.logo}`} />
+            <a
+              href="https://www.instagram.com/luxurylodgingstr/"
+              target="_blank"
+              className="flex flex-row items-center text-sm font-semibold text-black opacity-50 hover:text-[#F43F5E] transition-colors duration-300"
+            >
+              <FaSquareInstagram className="text-2xl pr-2 hover:scale-110 transform transition-all duration-200" />
+              <span>@LuxuryLodgingstr</span>
+            </a>
+
             {/* <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p> */}
           </div>
           <div className="flex flex-col font-inter text-sm space-y-4">
