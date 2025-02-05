@@ -270,9 +270,10 @@ const Listing = () => {
                   <ListingAvailability
                   />
                 </div>
-                <div className="sm:flex sm:justify-center lg:justify-end h-fit pt-10 lg:pt-0">
-                  {listingInfo.id && <BookApartment listingInfo={listingInfo} />}
+                <div className="sm:flex sm:justify-center lg:justify-end h-fit pt-10 lg:pt-5 sticky top-0 z-10">
+                  {listingInfo?.id && <BookApartment listingInfo={listingInfo} />}
                 </div>
+
               </div>
             </div>
             {isAllAmenitiesOpen && <AmenitiesPopup listingAmenities={listingAmenities} />}
