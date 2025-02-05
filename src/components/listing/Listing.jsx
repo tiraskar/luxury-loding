@@ -17,6 +17,7 @@ import ListingList from "./ListingList";
 import { toast } from "react-toastify";
 import ListingInfoSkeleton from "../ui/ListingInfoSkeleton";
 import AmenitiesPopup from "./AmenitiesPopup";
+import SingleImageOnSlide from "./SingleImageOnSlide";
 
 const tabs = [
   "Description",
@@ -38,7 +39,8 @@ const Listing = () => {
   const [activeTab, setActiveTab] = useState("");
 
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
-
+  const [isViewSingleImageOnSlide, setIsviewSingleImageOnSlide] = useState(false);
+  const [imageViewIndex, setImageViewIndex] = useState(0)
   if (loading) {
     return <div className="text-center">Loading...</div>;
   }
@@ -77,6 +79,14 @@ const Listing = () => {
           />
         )}
       </div>
+      {isViewSingleImageOnSlide && (
+        <SingleImageOnSlide
+          images={images}
+          imageIndex={imageViewIndex}
+          setIsviewSingleImageOnSlide={setIsviewSingleImageOnSlide}
+          setImageViewIndex={setImageViewIndex}
+        />
+      )}
       {
         isFetchListingInfo ?
           <ListingInfoSkeleton />
@@ -127,6 +137,10 @@ const Listing = () => {
                 <div className="min-h-full rounded-md hidden md:block sm:rounded-xl">
                   {images[0] && (
                     <img
+                      onClick={() => {
+                        setImageViewIndex(0);
+                        setIsviewSingleImageOnSlide(true);
+                      }}
                       src={images[0]?.url}
                       alt="Listing Image"
                       className="rounded-md sm:rounded-xl h-full w-full object-cover"
@@ -137,6 +151,10 @@ const Listing = () => {
                 <div className="flex flex-col gap-y-1.5 md:gap-y-3">
                   {images[1] && (
                     <img
+                      onClick={() => {
+                        setImageViewIndex(1);
+                        setIsviewSingleImageOnSlide(true);
+                      }}
                       src={images[1]?.url}
                       alt="Listing Image"
                       className="rounded-md sm:rounded-xl md:max-h-[310px] object-cover"
@@ -147,6 +165,10 @@ const Listing = () => {
                     {images[2] && (
                       <img
                         src={images[2]?.url}
+                        onClick={() => {
+                          setImageViewIndex(2);
+                          setIsviewSingleImageOnSlide(true);
+                        }}
                         alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full h-full object-cover max-h-[217px] lg:w-[321px] md:h-[170px]"
                         loading="lazy"
@@ -154,6 +176,10 @@ const Listing = () => {
                     )}
                     {images[3] && (
                       <img
+                        onClick={() => {
+                          setImageViewIndex(3);
+                          setIsviewSingleImageOnSlide(true);
+                        }}
                         src={images[3]?.url}
                         alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full h-full object-cover md:h-[170px]  max-h-[217px]"
