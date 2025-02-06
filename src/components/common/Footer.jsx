@@ -41,7 +41,7 @@ const Footer = () => {
               className="flex flex-row items-center text-sm font-semibold text-black opacity-50 hover:text-[#F43F5E] transition-colors duration-300"
             >
               <FaSquareInstagram className="text-2xl pr-2 hover:scale-110 transform transition-all duration-200" />
-              <span>@LuxuryLodgingstr</span>
+              <span>@LuxuryLodgingSTR</span>
             </a>
 
             {/* <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p> */}

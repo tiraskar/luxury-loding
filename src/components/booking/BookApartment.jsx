@@ -3,11 +3,13 @@ import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+//eslint-disable-next-line
 import { checkListingBookingAvailability, clearBookingDateSelection, setCheckBookingParams, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
+//eslint-disable-next-line
 import LoadingSpinner from "../ui/LoadingSpinner";
 import AlertDialog from "../ui/AlertDialog";
 import { formateDate } from "../../helper/date";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-date-range";
@@ -18,8 +20,8 @@ import BookApartmentMap from "./BookApartmentMap";
 const BookApartment = ({ listingInfo }) => {
 
   const dispatch = useDispatch();
-
-
+  const navigate = useNavigate();
+  //eslint-disable-next-line
   const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
 
   const { listingAvailableCalender } = useSelector(state => state.listing);
@@ -29,8 +31,8 @@ const BookApartment = ({ listingInfo }) => {
   };
 
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
     toast.dismiss();
     if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
       document.getElementById('bookingCheckIn').focus();
@@ -39,7 +41,11 @@ const BookApartment = ({ listingInfo }) => {
       return toast.info("Provide check-in and check-out date.");
     }
     if (checkBookingParams.checkIn > checkBookingParams.checkOut) return toast.info("Please provide valid date for checkout!!!")
-    dispatch(checkListingBookingAvailability());
+
+    if (checkBookingParams.guests == "") return toast.info("Please provide guest count");
+
+    navigate(`/listing/${listingInfo.id}/booking?${query}`);
+
   };
 
   const handleCloseAlert = () => {
@@ -289,15 +295,21 @@ const BookApartment = ({ listingInfo }) => {
         <div className="min-w-full h-px bg-[#E0E0E0] my-[30px]"></div>
 
         <div className="grid space-y-2 xxs:space-y-0 xxs:grid-cols-1">
-          {isListingBookingAvailable && <Link
-            to={`/listing/${listingInfo.id}/booking?${query}`}
+          {/* {isListingBookingAvailable && */}
+          <button
             type="button"
-            onClick={() => localStorage.setItem('listingId', listingInfo.id)}
-            className="flex flex-row items-center justify-center text-white bg-buttonPrimary text-sm  py-[14px] rounded-xl">
-            Continue Booking
-          </Link>
-          }
-          {!isListingBookingAvailable &&
+            onClick={(e) => {
+              if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
+                return setOpenCheckIn(openCheckIn => !openCheckIn);
+              }
+              handleSubmit(e);
+              // localStorage.setItem('listingId', listingInfo.id);
+            }}
+            className="flex flex-row items-center justify-center text-white bg-black text-sm  py-[14px] rounded-xl">
+            Book Now
+          </button>
+          {/* } */}
+          {/* {!isListingBookingAvailable &&
             <button
               onClick={() => {
                 if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
@@ -310,7 +322,7 @@ const BookApartment = ({ listingInfo }) => {
               {!isListingBookingAvailable && !loading ? "Check availability" : `Checking`} &nbsp;&nbsp;
               {loading && <LoadingSpinner />}
             </button>
-          }
+          } */}
         </div>
 
       </div>
