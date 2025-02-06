@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { emailSubscription, } from "../../redux/slices/contactSlice";
 import { useEffect } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { IoLogoInstagram } from "react-icons/io5";
 
 const Footer = () => {
   const { pathname } = useLocation();
@@ -35,18 +36,13 @@ const Footer = () => {
         <div className="space-y-9 md:space-y-12 lg:space-y-16">
           <div className="flex flex-col space-y-1">
             <Logo logoText={`${footerContent.logo}`} />
-            <a
-              href="https://www.instagram.com/luxurylodgingstr/"
-              target="_blank"
-              className="flex flex-row items-center text-sm font-semibold text-black opacity-50 hover:text-[#F43F5E] transition-colors duration-300"
-            >
-              <FaSquareInstagram className="text-2xl pr-2 hover:scale-110 transform transition-all duration-200" />
-              <span>@LuxuryLodgingSTR</span>
-            </a>
-
             {/* <p className="text-sm font-inter tracking-tight text-[#939387] py-2">Discover the soul of the southestwest</p> */}
           </div>
           <div className="flex flex-col font-inter text-sm space-y-4">
+            <a href="https://www.instagram.com/luxurylodgingstr/"
+              target="_blank"
+              className="flex items-center gap-4"><IoLogoInstagram size={20} />
+              @LuxuryLodgingSTR</a>
             <a href={`tel:${footerContent.contact}`} className="flex items-center gap-4"><LuPhone size={20} />
               {footerContent.contact}</a>
             <a href={`mailto:${footerContent.email}`} className="flex  items-center gap-4"><FiMail size={20} /> {
