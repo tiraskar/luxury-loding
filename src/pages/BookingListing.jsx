@@ -19,26 +19,26 @@ const BookingListing = () => {
   const { listingInfo } = useSelector(state => state.listing);
 
   const handleAgreeAndContinue = () => {
-    const bookingAvailable = dispatch(
-      checkListingBookingAvailability({
-        listingId: Number(id),
-      })
-    );
+    localStorage.setItem("agreeTerms", true);
+    // const bookingAvailable = dispatch(
+    //   checkListingBookingAvailability({
+    //     listingId: Number(id),
+    //   })
+    // );
 
-    if (bookingAvailable) {
-      localStorage.setItem("agreeTerms", true)
-      navigate(`/listing/${id}/booking/payment`);
-    } else {
-      return (
-        <AlertDialog
-          warningMessage="Sorry, this listing is not available for booking now."
-          message="This listing has been booked now. Please check for other date or try fro other listings."
-          isCancel={false}
-          submitText="Close"
-          onCancel={() => navigate(`/listings/${id}`)}
-        />
-      );
-    }
+    // if (bookingAvailable) {
+    //   navigate(`/listing/${id}/booking/payment`);
+    // } else {
+    //   return (
+    //     <AlertDialog
+    //       warningMessage="Sorry, this listing is not available for booking now."
+    //       message="This listing has been booked now. Please check for other date or try fro other listings."
+    //       isCancel={false}
+    //       submitText="Close"
+    //       onCancel={() => navigate(`/listings/${id}`)}
+    //     />
+    //   );
+    // }
   };
 
   useEffect(() => {
@@ -115,7 +115,38 @@ const BookingListing = () => {
                 </div>
               </div>}
 
-              {/* <div className="flex gap-3">
+              {listingInfo?.houseRules && <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>}
+              <p className="  lg:relative text-xs leading-6 ">
+                By clicking the button below, I agree to Luxury {`Lodging's`}{" "}
+                terms & conditions, guest agreement and cancellation policy, I
+                am aware that I must be at least 21 to book this stay. I agree
+                to pay the total amount shown, which includes service fees.{" "}
+                <Link to="/contact" className="underline">
+                  Contact us &nbsp;
+                </Link>
+                if you have any questions!
+              </p>
+              <div className="  lg:relative bottom-0 pt-40 md:pt-48 lg:pt-56">
+                <button
+                  onClick={() => handleAgreeAndContinue()}
+                  className="py-3 px-7 bg-[#333333] text-white rounded-[14px] flex items-center justify-center font-inter font-semibold text-[13px] h-[40px] w-[179px]"
+                >
+                  Agree and continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    </div>
+  );
+};
+
+export default BookingListing;
+
+
+
+{/* <div className="flex gap-3">
                 <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
                   <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
                     <LuMusic4 size={22} color="black" />
@@ -132,7 +163,7 @@ const BookingListing = () => {
                   </p>
                 </div>
               </div> */}
-              {/* <div className="flex gap-3">
+{/* <div className="flex gap-3">
                 <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
                   <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
                     <TbSmoking size={22} color="black" />
@@ -164,34 +195,3 @@ const BookingListing = () => {
                   </p>
                 </div>
               </div> */}
-              {listingInfo?.houseRules && <div className="min-w-full h-px bg-[#E0E0E0] my-[22px] px-4"></div>}
-
-              <p className="  lg:relative text-xs leading-6 ">
-                By clicking the button below, I agree to Luxury {`Lodging's`}{" "}
-                terms & conditions, guest agreement and cancellation policy, I
-                am aware that I must be at least 21 to book this stay. I agree
-                to pay the total amount shown, which includes service fees.{" "}
-                <Link to="/contact" className="underline">
-                  Contact us &nbsp;
-                </Link>
-                if you have any questions!
-              </p>
-              <div className="  lg:relative bottom-0 pt-40 md:pt-48 lg:pt-56">
-                <button
-                  onClick={() => handleAgreeAndContinue()}
-                  className="py-3 px-7 bg-[#333333] text-white rounded-[14px] flex items-center justify-center font-inter font-semibold text-[13px] h-[40px] w-[179px]"
-                >
-                  Agree and continue
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    </div>
-
-    // </div>
-  );
-};
-
-export default BookingListing;

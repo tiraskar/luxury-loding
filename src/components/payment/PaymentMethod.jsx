@@ -14,6 +14,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoaderScreen from "../ui/LoaderScreen";
 import { formateDate } from "../../helper/date";
+import { Link } from "react-router-dom";
+import { FaHouseChimneyWindow } from "react-icons/fa6";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -36,6 +39,9 @@ const schema = yup.object({
 })
 
 const PaymentMethod = () => {
+  const [isAgreeTerms, setIsAgreeTerms] = useState(false);
+  const [isShowHouseRule, setIsShowHouseRule] = useState(false);
+
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
       personalInfo: {
@@ -121,7 +127,7 @@ const PaymentMethod = () => {
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
-
+  const { listingInfo } = useSelector(state => state.listing);
   useEffect(() => {
     if (confirmPayment) {
       paymentConfirmation();
@@ -163,9 +169,48 @@ const PaymentMethod = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-[35px]">
+    <form onSubmit={handleSubmit(onSubmit)}
+      className="space-y-[35px]">
       {isPaymentConfirmationLoading && <LoaderScreen />}
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      {listingInfo?.houseRules && <div className="flex gap-3">
+        <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
+          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
+            <FaHouseChimneyWindow
+              onClick={() => setIsShowHouseRule(!isShowHouseRule)}
+              size={22} color="black"
+              className="cursor-pointer"
+            />
+          </div>
+        </div>
+        <div className="w-full space-y-[6px]">
+          <div
+            onClick={() => setIsShowHouseRule(!isShowHouseRule)}
+            className=" flex justify-between items-center text-sm font-semibold tracking-[-1%] mt-3 cursor-pointer w-full"
+          >
+            <p className="flex-grow">House rule</p>
+            {
+              isShowHouseRule ? (
+                <IoIosArrowUp size={18} className="text-gray-600" />
+              ) : (
+                <IoIosArrowDown size={18} className="text-gray-600" />
+              )}
+
+          </div>
+
+          {
+            isShowHouseRule &&
+            <p className="text-xs leading-5 -ml-10">
+              {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
+                <span key={index} className="py-4">
+                  {index !== 0 && "✔️"} {rule}
+                  <br />
+                </span>
+              ))}
+            </p>
+          }
+        </div>
+      </div>}
       <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <div className="font-inter text-[#333333] space-y-[31px]">
@@ -181,10 +226,28 @@ const PaymentMethod = () => {
 
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       <BillingAddress register={register} errors={errors} />
+      <div className="flex items-start space-x-2">
+        <input
+          type="checkbox"
+          value={isAgreeTerms}
+          onClick={() => setIsAgreeTerms(!isAgreeTerms)}
+          className="mt-1.5" />
+        <p className="  lg:relative text-xs leading-6 ">
+          By clicking the button below, I agree to Luxury {`Lodging's`}{" "}
+          terms & conditions, guest agreement and cancellation policy, I
+          am aware that I must be at least 21 to book this stay. I agree
+          to pay the total amount shown, which includes service fees.{" "}
+          <Link to="/contact" className="underline">
+            Contact us &nbsp;
+          </Link>
+          if you have any questions!
+        </p>
+      </div>
 
       <div className=" relative pt-10 pb-10">
         <button
           type="submit"
+          disabled={!isAgreeTerms}
           className="flex  items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"
         >
           Confirm and pay

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import {
   Blog,
   BlogAndGuideBook,
@@ -58,8 +58,8 @@ const router = createBrowserRouter([
         element: <BookingPayment />,
         children: [
           {
-            path: "",
-            element: <BookingListing />,
+            index: true,
+            element: <Navigate to="payment" replace />,
           },
           {
             path: "payment",
