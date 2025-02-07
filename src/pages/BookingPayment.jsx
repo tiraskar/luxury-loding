@@ -8,6 +8,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { createPaymentIntent, fetchStripPromiseKey } from "../redux/slices/paymentSlice";
 import { calculateBookingPrice } from "../redux/slices/bookingSlice";
 import { formateDate } from "../helper/date";
+import BookingConfirmation from "./BookingConfirmation";
 
 const BookingPayment = () => {
 
@@ -37,9 +38,7 @@ const BookingPayment = () => {
         checkIn: formateDate(new Date(bookingCheckIn)),
         checkOut: formateDate(new Date(bookingCheckOut)),
       }));
-    }
-    if (id) {
-      dispatch(fetchListingInfo(id));
+    } else if (id) {
 
       if (bookingCheckIn && bookingCheckOut && guestNumber) {
         dispatch(calculateBookingPrice({
@@ -50,10 +49,11 @@ const BookingPayment = () => {
         }));
       }
     }
-  }, [id, dispatch, bookingPrice?.totalPrice, isBookingDetailsChange]);
+  }, [id, bookingPrice?.totalPrice, isBookingDetailsChange]);
 
 
   useEffect(() => {
+    dispatch(fetchListingInfo(id || listingId));
     !isBooking && navigate(`/listings/${id}`)
     listingId !== id && navigate(`/listings/${id}`);
     if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
@@ -74,7 +74,8 @@ const BookingPayment = () => {
         <div className="relative md:grid lg:grid-cols-9">
           {(isFetchingStripKey || isFetchListingInfo || loading) && <LoaderScreen />}
           <div className="lg:col-span-5 font-inter tracking-[-1%] lg:pr-5">
-            <Outlet />
+            {/* <Outlet /> */}
+            <BookingConfirmation />
           </div>
           <div className="hidden lg:block lg:col-span-4 bg-[#F9F9F9] lg:max-w-[649px] w-full mt-5 lg:-mt-6 mb-6">
             <Wrapper>

@@ -16,7 +16,7 @@ import { Booking } from "../components";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const BookingConfirmation = () => {
-  const { id } = useParams()
+  // const { id } = useParams()
   const dispatch = useDispatch();
   const { clientSecret, loading } = useSelector((state) => state.payment);
   const navigate = useNavigate();
@@ -25,13 +25,13 @@ const BookingConfirmation = () => {
     dispatch(fetchCountryList());
   }, [dispatch]);
 
-  useEffect(() => {
-    const agreeTerms = localStorage?.getItem('agreeTerms');
+  // useEffect(() => {
+  //   const agreeTerms = localStorage?.getItem('agreeTerms');
 
-    if (agreeTerms == 'false' || "") {
-      navigate(`/listings/${id}`);
-    }
-  }, [])
+  //   if (agreeTerms == 'false' || "") {
+  //     navigate(`/listings/${id}`);
+  //   }
+  // }, [])
 
   return (
     <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">
