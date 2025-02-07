@@ -76,7 +76,12 @@ const bookingSlice = createSlice({
       listingId: '',
       guests: '',
     },
-
+    bookingInitialValues: {
+      checkIn: '',
+      checkOut: '',
+      guests: '',
+    },
+    isBooking: false,
     couponCode: null,
     totalDiscountPrice: 0,
     tokenError: '',
@@ -84,6 +89,7 @@ const bookingSlice = createSlice({
     isValidToken: false,
     isDateRangedPickedFromBooking: false,
     isDateRangedPickedFromAvailability: false,
+    isBookingDetailsChange: false
   },
 
   reducers: {
@@ -103,6 +109,19 @@ const bookingSlice = createSlice({
       }
     },
 
+    setBookingInitialValues: (state, action) => {
+      state.bookingInitialValues.checkIn = action.payload.checkIn;
+      state.bookingInitialValues.checkOut = action.payload.checkOut;
+      state.bookingInitialValues.guests = action.payload.guests;
+    },
+
+
+
+    setIsBookingDetailsChange: (state) => {
+      state.isBookingDetailsChange = !state.isBookingDetailsChange;
+    },
+
+
     setCheckBookingParamsToInitialState: (state) => {
       state.checkBookingParams = {
         checkIn: '',
@@ -110,6 +129,9 @@ const bookingSlice = createSlice({
         listingId: '',
         guests: '',
       };
+    },
+    setIsBooking: (state, action) => {
+      state.isBooking = action.payload;
     },
 
     toggleBookingNotAvailableAlertDialog: (state) => {
@@ -239,6 +261,9 @@ export const
     toggleTokenState,
     setCouponCode,
     toggleDateRangedPickedForBooking,
-    clearBookingDateSelection
+    clearBookingDateSelection,
+    setIsBooking,
+    setIsBookingDetailsChange,
+    setBookingInitialValues
   } = bookingSlice.actions;
 export default bookingSlice.reducer;

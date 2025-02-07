@@ -87,7 +87,7 @@ const ListingAvailability = () => {
               showDateDisplay={false}
               direction={direction}
               showMonthAndYearPickers={false}
-              disabledDates={getUnavailableDates()}
+              disabledDates={listingAvailableCalender}
             />
           )}
         </div>

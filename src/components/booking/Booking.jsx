@@ -1,46 +1,150 @@
 import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
-// import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
-import { useSelector } from "react-redux";
-import DatePicker from "react-datepicker";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
-// import { useEffect, useState } from "react";
-
+import { setCheckBookingParams, setIsBookingDetailsChange, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { useEffect, useRef, useState } from "react";
+import { DateRange } from "react-date-range";
+import { addDays, format } from "date-fns";
 const Booking = () => {
 
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
   const { bookingPrice,
-    // loading,
+    loading,
     totalDiscountPrice, isValidToken } = useSelector(state => state.booking);
 
-  // const [isValidToken, setIsTokenValid] = useState(false);
-  // const [totalDiscountPrice, setTotalDiscountPrice] = useState()
-
   const images = listingInfo?.images || [];
+  const { checkBookingParams } = useSelector(state => state.booking);
+  const { listingAvailableCalender } = useSelector(state => state.listing);
+
+  const [isDateRangedChange, setIsDateRangeChanged] = useState(false);
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
 
-  // const discountPrice = localStorage?.getItem('discountPrice');
-  // const isTokenValid = localStorage?.getItem('isTokenValid');
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 0),
+      key: 'selection'
+    }
+  ]);
 
-  // useEffect(() => {
-  //   if (isTokenValid == 'true') {
-  //     setIsTokenValid(true);
-  //   } else {
-  //     setIsTokenValid(false);
-  //   }
+  const checkOutRef = useRef(null);
+  const checkInRef = useRef(null);
+  const [openCheckIn, setOpenCheckIn] = useState(false);
+  const [openCheckOut, setOpenCheckOut] = useState(false);
 
-  //   if (discountPrice && discountPrice !== 0) {
-  //     setTotalDiscountPrice(Number(discountPrice).toFixed(2));
-  //   }
-  // }, [isTokenValid, discountPrice])
+
+
+  useEffect(() => {
+    if (openCheckIn && range[0].startDate) {
+      dispatch(setCheckBookingParams({ name: 'checkIn', value: range[0].startDate }));
+      dispatch(setCheckBookingParams({ name: 'checkOut', value: range[0].endDate }));
+    }
+  }, [range[0].startDate, range[0].endDate]);
+
+  const [direction, setDirection] = useState('horizontal');
+
+  useEffect(() => {
+    if (checkBookingParams.checkIn && checkBookingParams.checkOut) {
+      setRange([
+        {
+          startDate: checkBookingParams.checkIn ? new Date(checkBookingParams.checkIn) : new Date(),
+          endDate: checkBookingParams.checkOut ? new Date(checkBookingParams.checkOut) : new Date(),
+          key: 'selection',
+        },
+      ]);
+    }
+    const updateDirection = () => {
+      if (window.innerWidth <= 640) {
+        setDirection('vertical');
+      } else {
+        setDirection('horizontal');
+      }
+    };
+    updateDirection();
+    window.addEventListener('resize', updateDirection);
+    return () => {
+      window.removeEventListener('resize', updateDirection);
+    };
+  }, []);
+
+
+  const hideOnClickOutside = (e) => {
+    const isCheckInCalendar = checkInRef.current?.contains(e.target);
+    const isCheckOutCalendar = checkOutRef.current?.contains(e.target);
+    const isCheckInInput = e.target.id === 'bookingCheckIn';
+    const isCheckOutInput = e.target.id === 'bookingCheckOut';
+
+    if (!isCheckInCalendar && !isCheckOutCalendar && !isCheckInInput && !isCheckOutInput) {
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+  };
+
+  const hideOnEscape = (e) => {
+    if (e.key === "Escape") {
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+  };
+
+  const checkDateChange = (item) => {
+    if (item) {
+      setIsDateRangeChanged(true);
+    }
+  };
+
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+    return () => {
+      document.removeEventListener("keydown", hideOnEscape, true);
+      document.removeEventListener("click", hideOnClickOutside, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isDateRangedChange && !openCheckIn && !openCheckOut) {
+      dispatch(setIsBookingDetailsChange());
+      setIsDateRangeChanged(false);
+    }
+
+  }, [isDateRangedChange, openCheckIn, openCheckOut]);
+
+
+  const handleInputChange = (name, value) => {
+    setGuestInput(value);
+    dispatch(setCheckBookingParams({ name, value }));
+  };
+
+  const handleGuestChange = (e) => {
+    let value = Number(e.target.value);
+    if (value > 50) value = 50;
+    if (value < 0) value = 0;
+    setGuestInput(value); // Update state immediately but debounce API update
+  };
+
+  const [guestInput, setGuestInput] = useState(checkBookingParams.guests);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      handleInputChange("guests", guestInput);
+      dispatch(setIsBookingDetailsChange());
+    }, 1500);
+
+    return () => clearTimeout(handler);
+  }, [guestInput]);
+
 
 
   return (
@@ -69,10 +173,6 @@ const Booking = () => {
                 <LuBath size={14} /> {listingInfo.bathroomsNumber} {listingInfo.bathroomsNumber > 1 ? 'baths' : 'bath'}
               </div>
             </div>
-            {/* <div className="flex items-center h-7">
-              <p className="text-[#333333] font-bold text-xl">${listingInfo.price}</p>
-              <p className="text-[#8E8E80] text-sm tracking-tight">&nbsp;/ per night</p>
-            </div> */}
           </div>
         </div>
       </div>
@@ -86,31 +186,95 @@ const Booking = () => {
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check in</p>
               </p>
-              <p className="font-semibold pl-6">
-                <DatePicker
-                  selected={bookingCheckIn}
-                  readOnly
-                  dateFormat="MM/dd/YYYY"
-                  placeholderText="MM/DD/YYYY"
-                  className="outline-none max-w-[117px] bg-white"
-                />
+              <div
+                className="font-semibold pl-6 ">
+                <div
+                  className="relative max-w-[117px] ">
+                  <input
+                    id="bookingCheckIn"
+                    value={`${checkBookingParams.checkIn ? format(checkBookingParams.checkIn, "MM/dd/yyyy") : ""}`}
+                    readOnly
+                    onClickCapture={() => {
+                      setOpenCheckIn(openCheckIn => !openCheckIn);
+                      setOpenCheckOut(false);
+                    }}
+                    className="cursor-pointer outline-none max-w-[117px]  text-[1rem]"
+                    placeholder="MM/DD/YYYY"
+                  />
+                </div>
+                <div className="z-auto">
+                  {openCheckIn &&
+                    <div
+                      ref={checkInRef}
+                      className="calendarWrap ml-24 xxs:ml-32 lg:ml-0">
+                      <DateRange
+                        showClearButton={true}
+                        onChange={(item) => {
+                          dispatch(toggleDateRangedPickedForBooking('bookingDatePick'));
+                          setRange([item.selection]);
+                          checkDateChange([item.selection]);
+                        }}
+                        editableDateInputs={false}
+                        moveRangeOnFirstSelection={true}
+                        ranges={range}
+                        months={2}
+                        direction={direction}
+                        className="calendarElement"
+                        minDate={new Date()}
+                        showDateDisplay={false}
+                        showMonthAndYearPickers={false}
+                        rangeColors={["#B69F6F"]}
+                        disabledDates={listingAvailableCalender}
+                      />
+                    </div>
+                  }
+                  {openCheckOut &&
+                    <div
+                      ref={checkOutRef}
+                      className="calendarWrap ml-24 xxs:ml-32 lg:ml-0">
+                      <DateRange
+                        showClearButton={true}
+                        onChange={item => {
+                          dispatch(toggleDateRangedPickedForBooking('bookingDatePick'));
+                          setRange([item.selection]);
+                        }}
+                        editableDateInputs={false}
+                        moveRangeOnFirstSelection={true}
+                        ranges={range}
+                        months={2}
+                        direction={direction}
+                        className="calendarElement"
+                        minDate={new Date()}
+                        showDateDisplay={false}
+                        showMonthAndYearPickers={false}
+                        rangeColors={["#B69F6F"]}
+                        disabledDates={listingAvailableCalender}
+                      />
+                    </div>
 
+                  }
+                </div>
 
-              </p>
+              </div>
             </div>
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px]">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
                 <CiCalendar size={18} /> <p>Check out</p>
               </p>
-              <p className="font-semibold pl-6">
-                <DatePicker
-                  selected={bookingCheckOut}
-                  readOnly
-                  dateFormat="MM/dd/YYYY"
-                  placeholderText="MM/DD/YYYY"
-                  className="outline-none max-w-[117px] bg-white"
-                />
-              </p>
+              <div className="font-semibold pl-6 ">
+                <div className="relative max-w-[117px]">
+                  <input
+                    id="bookingCheckOut"
+                    value={`${checkBookingParams.checkOut ? format(checkBookingParams.checkOut, "MM/dd/yyyy") : ""}`}
+                    readOnly
+                    className="cursor-pointer  outline-none max-w-[117px]  text-[1rem]"
+                    onClick={() => {
+                      setOpenCheckOut(openCheckOut => !openCheckOut);
+                      setOpenCheckIn(false);
+                    }}
+                    placeholder="MM/DD/YYYY" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -118,7 +282,38 @@ const Booking = () => {
             <p className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} /> <p>Guests</p>
             </p>
-            <p className="font-semibold pl-6">{guestNumber}&nbsp;{guestNumber > 1 ? "Guests" : "Guest"}</p>
+            <div className={`flex  space-x-2 font-semibold ${checkBookingParams.guests >= 10 ? "pl-4" : "pl-0"} `}>
+              <input
+                id="guest-booking"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                max={50}
+                min={0}
+                step={1}
+                value={guestInput}
+                disabled={loading}
+                onChange={handleGuestChange}
+                //   (e) => {
+                //   if (e.target.value > 50) {
+                //     handleInputChange('guests', 50);
+                //   } else {
+                //     handleInputChange('guests', e.target.value);
+                //   }
+                // }
+                placeholder=""
+                className="bg-white outline-none min-w-[20px] max-w-[20px] text-right"
+              />
+              <p
+                onClick={() => {
+                  document.getElementById('guest-booking').focus();
+                }}
+                className="cursor-text select-none"
+              >
+                {checkBookingParams.guests > 1 ? "guests" : "guest"}
+              </p>
+            </div>
+            {/* <p className="font-semibold pl-6">{guestNumber}&nbsp;{guestNumber > 1 ? "Guests" : "Guest"}</p> */}
           </div>
 
         </div>
@@ -181,42 +376,16 @@ const Booking = () => {
         <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
-          {/* {!loading && ( */}
-            <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
-            {/* {isValidToken && totalDiscountPrice !== 0 && (
-                <span className="line-through text-sm justify-end text-left">
-                  ${formattedPrice(bookingPrice.totalPrice)}
-                </span>
-              )} */}
-            {/* {isValidToken && totalDiscountPrice ? (
-                <span>
-                  $ {formattedPrice((Number(bookingPrice.totalPrice) - Number(totalDiscountPrice)))}
-                </span>
-              ) : ( */}
-                <span>${formattedPrice(bookingPrice.totalPrice)}</span>
-            {/* )} */}
-            </p>
-          {/* )} */}
+          <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
+            <span>${formattedPrice(bookingPrice?.totalPrice)}</span>
+          </p>
 
-          {/* {!loading &&
-            <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
-              {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>}
-              {
-                isValidToken && totalDiscountPrice ? <span>
-                  $ {formattedPrice(`${Number(bookingPrice.totalPrice).toFixed(2) - Number(totalDiscountPrice).toFixed(2)}`)}
-                </span>
-                  : <span>${Number(formattedPrice(bookingPrice.totalPrice)).toFixed(2)}</span>
-              }
-          </p>} */}
-              {/* {isValidToken && totalDiscountPrice != 0 && <span className="line-through text-sm justify-end text-left">${bookingPrice.totalPrice}<br /></span>}
-              <span>${formattedPrice(Number(bookingPrice.totalPrice) - (isValidToken == 'true' && totalDiscountPrice !== 0 ? Number(totalDiscountPrice) : 0))}
-            </span> */}
         </div>
         {pathname.includes('payment') && <TokenDiscount
           listingId={listingInfo.id}
           checkInDate={formateDate(new Date(bookingCheckIn))}
           checkOutDate={formateDate(new Date(bookingCheckOut))}
-          totalPrice={bookingPrice.totalPrice}
+          totalPrice={bookingPrice?.totalPrice}
           guestNumber={guestNumber}
         />}
         <p className="text-[#666666] mt-10 mb-3">Any questions? Call us

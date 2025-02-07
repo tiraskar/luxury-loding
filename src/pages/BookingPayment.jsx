@@ -17,7 +17,7 @@ const BookingPayment = () => {
 
   const { isFetchingStripKey } = useSelector(state => state.payment);
   const { isFetchListingInfo } = useSelector(state => state.listing);
-  const { loading, bookingPrice } = useSelector(state => state.booking);
+  const { loading, bookingPrice, isBooking, isBookingDetailsChange } = useSelector(state => state.booking);
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
@@ -50,16 +50,20 @@ const BookingPayment = () => {
         }));
       }
     }
-  }, [id, dispatch, bookingPrice?.totalPrice]);
+  }, [id, dispatch, bookingPrice?.totalPrice, isBookingDetailsChange]);
+
 
   useEffect(() => {
+    !isBooking && navigate(`/listings/${id}`)
     listingId !== id && navigate(`/listings/${id}`);
+    if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
+      navigate(`/listings/${id}`);
+      return null;
+    }
   }, [listingId]);
 
-  if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
-    navigate(`/listings/${id}`);
-    return null;
-  }
+
+
 
   return (
     <div className=" relative">

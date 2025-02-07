@@ -3,7 +3,7 @@ import { FilterableSearchListing, OtherListing, Wrapper } from "../components";
 import { useDispatch } from "react-redux";
 import { lazy, Suspense, useEffect } from "react";
 import { fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
-import { setCheckBookingParamsToInitialState, toggleTokenState } from "../redux/slices/bookingSlice";
+import { setCheckBookingParamsToInitialState, setIsBooking, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 import ReviewLoading from "../components/ui/ReviewLoading";
 import AmenitiesSkeleton from "../components/ui/AmenitiesSkeleton";
@@ -31,6 +31,7 @@ const SingleListing = () => {
     dispatch(setSearchListingParamsToInitialState());
     dispatch(toggleTokenState())
     dispatch(toggleMapView(false))
+    dispatch(setIsBooking(false));
   }, [id])
 
   return (

@@ -623,7 +623,8 @@ const listingSlice = createSlice({
       })
       .addCase(fetchListingAvailabilityCalender.fulfilled, (state, action) => {
         state.isCalenderLoading = false;
-        state.listingAvailableCalender = action.payload;
+        state.listingAvailableCalender = action.payload.filter(item => item.isAvailable === 0)
+          .map(item => new Date(item.date));
       })
       .addCase(fetchListingAvailabilityCalender.rejected, (state, action) => {
         state.isCalenderLoading = false;

@@ -4,7 +4,7 @@ import { LuUser2 } from "react-icons/lu";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 //eslint-disable-next-line
-import { checkListingBookingAvailability, clearBookingDateSelection, setCheckBookingParams, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
+import { checkListingBookingAvailability, clearBookingDateSelection, setCheckBookingParams, setIsBooking, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
 //eslint-disable-next-line
 import LoadingSpinner from "../ui/LoadingSpinner";
 import AlertDialog from "../ui/AlertDialog";
@@ -18,7 +18,6 @@ import { IoClose } from "react-icons/io5";
 import BookApartmentMap from "./BookApartmentMap";
 
 const BookApartment = ({ listingInfo }) => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //eslint-disable-next-line
@@ -43,7 +42,7 @@ const BookApartment = ({ listingInfo }) => {
     if (checkBookingParams.checkIn > checkBookingParams.checkOut) return toast.info("Please provide valid date for checkout!!!")
 
     if (checkBookingParams.guests == "") return toast.info("Please provide guest count");
-
+    dispatch(setIsBooking(true))
     navigate(`/listing/${listingInfo.id}/booking?${query}`);
 
   };
@@ -221,7 +220,7 @@ const BookApartment = ({ listingInfo }) => {
                       showDateDisplay={false}
                       showMonthAndYearPickers={false}
                       rangeColors={["#B69F6F"]}
-                      disabledDates={getUnavailableDates()}
+                      disabledDates={listingAvailableCalender}
                     />
                     }
                   </div>
@@ -303,7 +302,6 @@ const BookApartment = ({ listingInfo }) => {
                 return setOpenCheckIn(openCheckIn => !openCheckIn);
               }
               handleSubmit(e);
-              // localStorage.setItem('listingId', listingInfo.id);
             }}
             className="flex flex-row items-center justify-center text-white bg-black text-sm  py-[14px] rounded-xl">
             Book Now
