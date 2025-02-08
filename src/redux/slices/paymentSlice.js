@@ -43,6 +43,36 @@ export const createPaymentIntent = createAsyncThunk(
   }
 );
 
+export const updatePaymentIntent = createAsyncThunk(
+  'payment/intent/update',
+  async (listing, { rejectWithValue, getState }) => {
+
+    const { paymentIntentId } = getState().payment;
+
+    try {
+      const paymentIndentData = {
+        listingId: listing.id,
+        checkIn: listing.checkIn,
+        checkOut: listing.checkOut,
+        guests: listing.guests,
+        amount: Math.round(Number(listing.amount) * 100),
+        currency: 'usd',
+        paymentIntentId
+      };
+      const response = await axios.put(`${baseUrl}/payment/updatepaymentintent`,
+        { ...paymentIndentData }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 
 export const createCustomer = createAsyncThunk(
 
@@ -197,6 +227,22 @@ const paymentSlice = createSlice({
         state.paymentIntentId = action.payload.paymentIntentId;
       })
       .addCase(createPaymentIntent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    //create payment intent
+    builder
+      .addCase(updatePaymentIntent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePaymentIntent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.clientSecret = action.payload.clientSecret;
+        state.paymentIntentId = action.payload.paymentIntentId;
+      })
+      .addCase(updatePaymentIntent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

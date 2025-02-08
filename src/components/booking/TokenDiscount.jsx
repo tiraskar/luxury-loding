@@ -6,6 +6,7 @@ import { calculateBookingPrice, setCouponCode, toggleTokenState } from "../../re
 import { useEffect } from "react";
 import { MdError } from "react-icons/md";
 import { formateDate } from "../../helper/date";
+import { updatePaymentIntent } from "../../redux/slices/paymentSlice";
 
 //eslint-disable-next-line
 const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guestNumber }) => {
@@ -33,24 +34,36 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
         checkIn: formateDate(new Date(checkInDate)),
         checkOut: formateDate(new Date(checkOutDate)),
         guests: Number(guestNumber),
-      }));
+      })).unwrap().then(response => {
+        if (response) {
+          dispatch(updatePaymentIntent({
+            id: Number(listingId),
+            amount: Number(response.totalPrice),
+            checkIn: formateDate(new Date(checkInDate)),
+            checkOut: formateDate(new Date(checkOutDate)),
+            guests: Number(guestNumber),
+          }));
+        }
+      });
 
     } else {
       dispatch(setCouponCode(value));
-      // localStorage.setItem('coupon', value.couponCode);
-      // dispatch(getDiscountedPrice({
-      //   couponCode: value.couponCode,
-      //   listingId,
-      //   checkInDate,
-      //   checkOutDate,
-      //   totalPrice
-      // }));
       dispatch(calculateBookingPrice({
         listingId: Number(listingId),
         checkIn: formateDate(new Date(checkInDate)),
         checkOut: formateDate(new Date(checkOutDate)),
         guests: Number(guestNumber),
-      }));
+      })).unwrap().then(response => {
+        if (response) {
+          dispatch(updatePaymentIntent({
+            id: Number(listingId),
+            amount: Number(response.totalPrice),
+            checkIn: formateDate(new Date(checkInDate)),
+            checkOut: formateDate(new Date(checkOutDate)),
+            guests: Number(guestNumber),
+          }));
+        }
+      });
     }
 
   };

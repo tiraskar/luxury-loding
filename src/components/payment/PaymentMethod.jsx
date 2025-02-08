@@ -172,6 +172,23 @@ const PaymentMethod = () => {
     <form onSubmit={handleSubmit(onSubmit)}
       className="space-y-[35px]">
       {isPaymentConfirmationLoading && <LoaderScreen />}
+     
+      <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
+      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      <div className="font-inter text-[#333333] space-y-[31px]">
+        <h1 className="font-medium tracking-tight text-lg h-[13px]">Payment method</h1>
+        <div className='flex flex-col space-y-[14px]'>
+          <PaymentElement onChange={handlePaymentElementChange} id="payment" />
+          {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
+            By providing your card information, you allow Luxury Lodging, Inc. to
+            charge your card for future payments in accordance with their terms.
+          </p>}
+        </div>
+      </div>
+
+      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+      <BillingAddress register={register} errors={errors} />
+
       <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
       {listingInfo?.houseRules && <div className="flex gap-3">
         <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
@@ -211,21 +228,6 @@ const PaymentMethod = () => {
           }
         </div>
       </div>}
-      <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
-      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <div className="font-inter text-[#333333] space-y-[31px]">
-        <h1 className="font-medium tracking-tight text-lg h-[13px]">Payment method</h1>
-        <div className='flex flex-col space-y-[14px]'>
-          <PaymentElement onChange={handlePaymentElementChange} id="payment" />
-          {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
-            By providing your card information, you allow Luxury Lodging, Inc. to
-            charge your card for future payments in accordance with their terms.
-          </p>}
-        </div>
-      </div>
-
-      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <BillingAddress register={register} errors={errors} />
       <div className="flex items-start space-x-2">
         <input
           type="checkbox"

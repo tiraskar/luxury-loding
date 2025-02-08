@@ -1,6 +1,6 @@
 import Booking from "../components/booking/Booking";
 import { Wrapper } from "../components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoaderScreen from "../components/ui/LoaderScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchListingInfo } from "../redux/slices/listingSlice";
@@ -19,6 +19,7 @@ const BookingPayment = () => {
   const { isFetchingStripKey } = useSelector(state => state.payment);
   const { isFetchListingInfo } = useSelector(state => state.listing);
   const { loading, bookingPrice, isBooking, isBookingDetailsChange } = useSelector(state => state.booking);
+  const { isPaymentIntentCreate, setIsPaymentIntentCreate } = useState(false)
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
@@ -27,29 +28,34 @@ const BookingPayment = () => {
 
   useEffect(() => {
     dispatch(fetchStripPromiseKey());
-  }, [dispatch]);
+  }, []);
 
-  useEffect(() => {
-    if (id && bookingPrice?.totalPrice) {
-      dispatch(createPaymentIntent({
-        id,
-        amount: bookingPrice.totalPrice,
-        guests: Number(guestNumber),
-        checkIn: formateDate(new Date(bookingCheckIn)),
-        checkOut: formateDate(new Date(bookingCheckOut)),
-      }));
-    } else if (id) {
+  // useEffect(() => {
+  //   if (id && bookingPrice?.totalPrice && !isPaymentIntentCreate) {
+  //     dispatch(createPaymentIntent({
+  //       id,
+  //       amount: bookingPrice.totalPrice,
+  //       guests: Number(guestNumber),
+  //       checkIn: formateDate(new Date(bookingCheckIn)),
+  //       checkOut: formateDate(new Date(bookingCheckOut)),
+  //     })).unwrap().then(response => {
+  //       if (response?.paymentIntentId) {
+  //         setIsPaymentIntentCreate(true);
+  //       }
 
-      if (bookingCheckIn && bookingCheckOut && guestNumber) {
-        dispatch(calculateBookingPrice({
-          listingId: Number(id),
-          checkIn: formateDate(new Date(bookingCheckIn)),
-          checkOut: formateDate(new Date(bookingCheckOut)),
-          guests: Number(guestNumber),
-        }));
-      }
-    }
-  }, [id, bookingPrice?.totalPrice, isBookingDetailsChange]);
+  //     });
+  //   }
+  // if (id) {
+  //   if (bookingCheckIn && bookingCheckOut && guestNumber) {
+  //     dispatch(calculateBookingPrice({
+  //       listingId: Number(id),
+  //       checkIn: formateDate(new Date(bookingCheckIn)),
+  //       checkOut: formateDate(new Date(bookingCheckOut)),
+  //       guests: Number(guestNumber),
+  //     }));
+  //   }
+  // }
+  // }, [bookingPrice?.totalPrice]);
 
 
   useEffect(() => {
@@ -59,8 +65,27 @@ const BookingPayment = () => {
     if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
       navigate(`/listings/${id}`);
       return null;
+    } else {
+      dispatch(calculateBookingPrice({
+        listingId: Number(id),
+        checkIn: formateDate(new Date(bookingCheckIn)),
+        checkOut: formateDate(new Date(bookingCheckOut)),
+        guests: Number(guestNumber),
+      })).unwrap().then((response) => {
+        if (response) {
+          dispatch(createPaymentIntent({
+            id,
+            amount: Number(response.totalPrice),
+            guests: Number(guestNumber),
+            checkIn: formateDate(new Date(bookingCheckIn)),
+            checkOut: formateDate(new Date(bookingCheckOut)),
+          }));
+        } else {
+          window.location.reload();
+        }
+      });
     }
-  }, [listingId]);
+  }, [id]);
 
 
 

@@ -2,16 +2,17 @@ import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { CiCalendar } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
-import { setCheckBookingParams, setIsBookingDetailsChange, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { calculateBookingPrice, setCheckBookingParams, setIsBookingDetailsChange, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-date-range";
 import { addDays, format } from "date-fns";
+import { createPaymentIntent, updatePaymentIntent } from "../../redux/slices/paymentSlice";
 const Booking = () => {
-
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
@@ -113,10 +114,30 @@ const Booking = () => {
     };
   }, []);
 
+  const updateBooking = () => {
+    dispatch(calculateBookingPrice({
+      listingId: Number(id),
+      checkIn: formateDate(new Date(range[0].startDate)),
+      checkOut: formateDate(new Date(range[0].endDate)),
+      guests: Number(guestNumber),
+    })).unwrap().then(response => {
+      if (response) {
+        dispatch(updatePaymentIntent({
+          id: id,
+          amount: Number(response.totalPrice),
+          guests: Number(checkBookingParams.guests),
+          checkIn: formateDate(new Date(range[0].startDate)),
+          checkOut: formateDate(new Date(range[0].endDate)),
+        }));
+      }
+    });
+    setIsDateRangeChanged(false);
+  }
+
   useEffect(() => {
     if (isDateRangedChange && !openCheckIn && !openCheckOut) {
-      dispatch(setIsBookingDetailsChange());
-      setIsDateRangeChanged(false);
+      // dispatch(setIsBookingDetailsChange());
+      updateBooking()
     }
 
   }, [isDateRangedChange, openCheckIn, openCheckOut]);
@@ -139,7 +160,7 @@ const Booking = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       handleInputChange("guests", guestInput);
-      dispatch(setIsBookingDetailsChange());
+      updateBooking()
     }, 1500);
 
     return () => clearTimeout(handler);
@@ -381,7 +402,7 @@ const Booking = () => {
           </p>
 
         </div>
-        {pathname.includes('payment') && <TokenDiscount
+        {pathname.includes('booking') && <TokenDiscount
           listingId={listingInfo.id}
           checkInDate={formateDate(new Date(bookingCheckIn))}
           checkOutDate={formateDate(new Date(bookingCheckOut))}
