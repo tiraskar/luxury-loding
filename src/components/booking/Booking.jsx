@@ -262,7 +262,7 @@ const Booking = () => {
                             >
                               {date.getDate()}
                               {isCheckOutAvailable && (
-                                <span className="tooltip-text overflow-visible z-50">Check-out Only</span>
+                                <span className="tooltip-text overflow-visible z-50">Check-in Unavailable</span>
                               )}
                             </span>
 
@@ -308,7 +308,7 @@ const Booking = () => {
                             >
                               {date.getDate()}
                               {isCheckOutAvailable && (
-                                <span className="tooltip-text overflow-visible z-50">Check-out Only</span>
+                                <span className="tooltip-text overflow-visible z-50">Check-in Unavailable</span>
                               )}
                             </span>
 

@@ -165,6 +165,11 @@ const PaymentMethod = () => {
       return toast.error("Please select a payment method.");
     }
 
+    if (!isAgreeTerms) {
+      document.getElementById("agreeTerms").focus();
+      return;
+    }
+
     dispatch(createCustomer());
   };
 
@@ -230,6 +235,8 @@ const PaymentMethod = () => {
       </div>}
       <div className="flex items-start space-x-2">
         <input
+          id="agreeTerms"
+          required
           type="checkbox"
           value={isAgreeTerms}
           onClick={() => setIsAgreeTerms(!isAgreeTerms)}
@@ -249,7 +256,6 @@ const PaymentMethod = () => {
       <div className=" relative pt-10 pb-10">
         <button
           type="submit"
-          disabled={!isAgreeTerms}
           className="flex  items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"
         >
           Confirm and pay
