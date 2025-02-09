@@ -161,6 +161,38 @@
   color: rgba(0, 0, 0, 0.4);
   background-color: transparent !important;
 }
+.checkout-tooltip {
+  position: relative;
+  display: inline-block;
+  opacity: 0.5; /* Parent has 50% opacity */
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: white !important;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 999; /* Ensure it's above everything */
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 1 !important; /* Force full opacity */
+  filter: none !important; /* Prevent opacity inheritance */
+  backdrop-filter: none !important;
+}
+
+/* Ensure full visibility on hover */
+.checkout-tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+
 /* 
 .react-calendar__navigation {
   color: black !important;

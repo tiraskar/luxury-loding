@@ -21,9 +21,9 @@ const BookApartment = ({ listingInfo }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //eslint-disable-next-line
-  const { checkBookingParams, isListingBookingAvailable, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
+  const { checkBookingParams, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
 
-  const { listingAvailableCalender } = useSelector(state => state.listing);
+  const { listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
 
   const handleInputChange = (name, value) => {
     dispatch(setCheckBookingParams({ name, value }));
@@ -220,7 +220,29 @@ const BookApartment = ({ listingInfo }) => {
                       showDateDisplay={false}
                       showMonthAndYearPickers={false}
                       rangeColors={["#B69F6F"]}
-                      disabledDates={listingAvailableCalender}
+                      disabledDates={listingUnavailableCalender}
+                      dayContentRenderer={(date) => {
+                        const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                          new Date(d).toDateString() === date.toDateString()
+                        );
+                        return (
+                          <span
+                            style={{
+                              opacity: isCheckOutAvailable ? 0.5 : 1,
+                              padding: "5px",
+                              position: "absolute",
+                              cursor: isCheckOutAvailable ? "pointer" : "default",
+                            }}
+                            className={isCheckOutAvailable ? "checkout-tooltip z-50 " : ""}
+                          >
+                            {date.getDate()}
+                            {isCheckOutAvailable && (
+                              <span className="tooltip-text overflow-visible z-50">Check-out Only</span>
+                            )}
+                          </span>
+
+                        );
+                      }}
                     />
                     }
                   </div>

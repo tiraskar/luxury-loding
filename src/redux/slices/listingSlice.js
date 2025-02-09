@@ -274,7 +274,8 @@ const listingSlice = createSlice({
     amenitiesList: [],
     listingAvailableCalender: [],
     listingLocationList: [],
-
+    listingUnavailableCalender: [],
+    listingCheckOutAvailableDate: [],
     //object
     listingInfo: {},
 
@@ -623,8 +624,29 @@ const listingSlice = createSlice({
       })
       .addCase(fetchListingAvailabilityCalender.fulfilled, (state, action) => {
         state.isCalenderLoading = false;
-        state.listingAvailableCalender = action.payload.filter(item => item.isAvailable === 0)
+        const availableDate = action.payload.filter(item => item.isAvailable === 1)
           .map(item => new Date(item.date));
+        const unAvailableDate = action.payload.filter(item => item.isAvailable === 0)
+          .map(item => new Date(item.date));
+
+        const availableCheckOutDate = unAvailableDate.filter(unavailDate =>
+          availableDate.some(availDate =>
+            availDate.getTime() === new Date(unavailDate.getTime() - 86400000).getTime()
+          ));
+
+        const unAvailableDateForBooking = action.payload
+          .filter(item => item.isAvailable === 0)
+          .map(item => new Date(item.date))
+          .filter(unavailDate =>
+            !availableDate.some(availDate =>
+              availDate.getTime() === new Date(unavailDate.getTime() - 86400000).getTime()
+            )
+          );
+
+        state.listingUnavailableCalender = unAvailableDateForBooking;
+        state.listingAvailableCalender = availableDate;
+        state.listingCheckOutAvailableDate = availableCheckOutDate;
+
       })
       .addCase(fetchListingAvailabilityCalender.rejected, (state, action) => {
         state.isCalenderLoading = false;

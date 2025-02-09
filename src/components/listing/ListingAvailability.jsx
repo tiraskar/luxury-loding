@@ -6,7 +6,7 @@ import { DateRange } from "react-date-range";
 import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 
 const ListingAvailability = () => {
-  const { listingAvailableCalender, isCalenderLoading } = useSelector(state => state.listing);
+  const { listingAvailableCalender, isCalenderLoading, listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
 
   const { checkBookingParams, isDateRangedPickedFromAvailability, isDateRangedPickedFromBooking } = useSelector(state => state.booking);
   const dispatch = useDispatch();
@@ -79,7 +79,7 @@ const ListingAvailability = () => {
               }}
               months={2}
               editableDateInputs={false}
-              moveRangeOnFirstSelection={true}
+              moveRangeOnFirstSelection={false}
               className="border-[1.5px] border-buttonPrimary rounded-2xl xs:w-full max-w-[650px] "
               minDate={new Date()}
               ranges={range}
@@ -87,7 +87,29 @@ const ListingAvailability = () => {
               showDateDisplay={false}
               direction={direction}
               showMonthAndYearPickers={false}
-              disabledDates={listingAvailableCalender}
+              disabledDates={listingUnavailableCalender}
+              dayContentRenderer={(date) => {
+                const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                  new Date(d).toDateString() === date.toDateString()
+                );
+                return (
+                  <span
+                    style={{
+                      opacity: isCheckOutAvailable ? 0.5 : 1,
+                      padding: "5px",
+                      position: "relative",
+                      cursor: isCheckOutAvailable ? "pointer" : "default",
+                    }}
+                    className={isCheckOutAvailable ? "checkout-tooltip z-50 " : ""}
+                  >
+                    {date.getDate()}
+                    {isCheckOutAvailable && (
+                      <span className="tooltip-text overflow-visible z-50">Check-out Only</span>
+                    )}
+                  </span>
+
+                );
+              }}
             />
           )}
         </div>
@@ -97,3 +119,6 @@ const ListingAvailability = () => {
 };
 
 export default ListingAvailability;
+
+
+// "react-date-range": "^2.0.1",
