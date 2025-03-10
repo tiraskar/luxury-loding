@@ -18,6 +18,9 @@ import { persistor, store } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from "redux-persist/integration/react";
+import TermsAndCondition from "./pages/TermsAndCondition";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
 
 // Routing
 const router = createBrowserRouter([
@@ -71,6 +74,18 @@ const router = createBrowserRouter([
           },
         ]
 
+      },
+      {
+        path: "/terms-and-conditions",
+        element: <TermsAndCondition />,
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/refund-policy",
+        element: <RefundPolicy />,
       },
       {
         path: "/success",
