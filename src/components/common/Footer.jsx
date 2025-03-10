@@ -75,8 +75,9 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row lg:gap-10 md:gap-0 md:justify-between text-textLight text-sm items-center pb-[40px] lg:pb-[60px] px-4 xl:px-0">
         <p className="order-2 md:order-1 my-4 md:my-0">@ 2024 Direct Booking Luxury Lodging</p>
         <div className="order-1 md:order-2 flex flex-wrap gap-[22px] md:gap-[30px] lg:gap-[38px]">
-          <p>Privacy and policy</p>
-          <p>Terms and conditions</p>
+          <Link to='/privacy-policy'>Privacy policy</Link>
+          <Link to='/terms-and-conditions'>Terms & conditions</Link>
+          <Link to='/refund-policy'>Refund policy</Link>
 
           <div className="hidden md:flex gap-4 md:gap-6 text-black text-2xl ">
             <FaLinkedin />
