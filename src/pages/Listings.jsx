@@ -31,7 +31,9 @@ const Listings = () => {
       <Suspense fallback={<Wrapper>
         <ListingLoading numbers={8} />
       </Wrapper>}>
-        <ListingList />
+        <div className="relative">
+          <ListingList />
+        </div>
       </Suspense>
       {/* <ListingList /> */}
     </div>
