@@ -50,7 +50,7 @@ export const fetchAvailableListing = createAsyncThunk(
       const { listingOrder, searchListingParams, isFilterApply } = getState().listing
 
       const searchData = {
-        location: searchListingParams.location,
+        location: searchListingParams.location.length > 0 ? searchListingParams.location : "",
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
@@ -116,7 +116,7 @@ export const searchListing = createAsyncThunk(
       const { searchListingParams } = getState().listing;
 
       const searchData = {
-        location: searchListingParams.location,
+        location: searchListingParams.location.length > 0 ? searchListingParams.location : '',
         checkIn: formateDate(searchListingParams.checkIn),
         checkOut: formateDate(searchListingParams.checkOut),
         guests: searchListingParams.guests || "",
@@ -288,7 +288,7 @@ const listingSlice = createSlice({
 
     //form
     searchListingParams: {
-      location: '',
+      location: [],
       checkIn: '',
       checkOut: '',
       guests: '',

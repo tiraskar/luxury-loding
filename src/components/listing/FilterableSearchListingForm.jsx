@@ -15,7 +15,7 @@ import {
 import LoadingSpinner from "../ui/LoadingSpinner";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
-import { CiLocationOn } from "react-icons/ci";
+// import { CiLocationOn } from "react-icons/ci";
 
 import { DateRange } from 'react-date-range';
 
@@ -49,34 +49,35 @@ const FilterableSearchListing = () => {
   const checkOutLargeScreenRef = useRef(null);
   const [openCheckIn, setOpenCheckIn] = useState(false);
   const [openCheckOut, setOpenCheckOut] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('')
 
   const [openCheckInLargeScreen, setOpenCheckInLargeScreen] = useState(false);
   const [openCheckOutLargeScreen, setOpenCheckOutLargeScreen] = useState(false);
   const [openCheckInSmallScreen, setOpenCheckInSmallScreen] = useState(false);
   const [openCheckOutSmallScreen, setOpenCheckOutSmallScreen] = useState(false);
-
+  const [selectedLocations, setSelectedLocations] = useState([]);
   const handleInputChange = (name, value) => {
     if (name === "location") {
-      const filterLocation = listingLocationList
-        .map((location) => {
-          const stateMatch = location.state
-            .toLowerCase()
-            .includes(value.toLowerCase());
+      // const filterLocation = listingLocationList
+      //   .map((location) => {
+      //     const stateMatch = location.state
+      //       .toLowerCase()
+      //       .includes(value.toLowerCase());
 
-          if (stateMatch) return location;
+      //     if (stateMatch) return location;
 
-          const filteredCities = location.cities.filter((cityObj) =>
-            cityObj.city.toLowerCase().includes(value.toLowerCase())
-          );
+      //     const filteredCities = location.cities.filter((cityObj) =>
+      //       cityObj.city.toLowerCase().includes(value.toLowerCase())
+      //     );
 
-          if (filteredCities.length > 0) {
-            return { ...location, cities: filteredCities };
-          }
-          return null;
-        })
-        .filter((location) => location !== null);
+      //     if (filteredCities.length > 0) {
+      //       return { ...location, cities: filteredCities };
+      //     }
+      //     return null;
+      //   })
+      //   .filter((location) => location !== null);
 
-      setSearchFilterLocation(filterLocation);
+      // setSearchFilterLocation(filterLocation);
     }
 
     dispatch(setSearchListingParams({ name, value }));
@@ -119,7 +120,6 @@ const FilterableSearchListing = () => {
 
   const filterRef = useRef(null);
   const filterRefLargeScreen = useRef(null);
-
 
   const hideOnEscape = (e) => {
     if (e.key === "Escape") {
@@ -255,14 +255,19 @@ const FilterableSearchListing = () => {
           className="md:gap-x-4 grid grid-cols-2 xs:flex md:space-x-0 xs:justify-between lg:grid lg:grid-cols-12 bg-[#F9F9F9] rounded-2xl font-onest tracking-[-1%] md:h-[77px] px-4 xs:px-2 md:px-4 "
         >
 
-          <div className="block lg:hidden max-w-[110px]  py-4 h-[45px]">
+          <div className="block lg:hidden min-w-[110px] max-w-[150px]  py-4 h-[45px]">
             <Location
               searchListingParams={searchListingParams}
-              handleInputChange={handleInputChange}
+              handleInputChange={handleInputChange} 
               setShowLocationFilter={setShowLocationFilter}
               filteredLocation={filteredLocation}
               showLocationFilter={showLocationFilter}
               filterRef={filterRef}
+              setSearchFilterLocation={setSearchFilterLocation}
+              selectedLocations={selectedLocations}
+              setSelectedLocations={setSelectedLocations}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
             />
           </div>
 
@@ -314,13 +319,18 @@ const FilterableSearchListing = () => {
           </div>
 
           <div className="hidden lg:flex lg:col-span-2">
-            <div className="max-w-[150px]   lg:py-4 h-[45px]">
+            <div className=" lg:w-full lg:max-w-full   lg:py-4 h-[45px]">
               <LocationLargeScreen
                 filterRef={filterRefLargeScreen}
                 handleInputChange={handleInputChange}
                 setShowLocationFilter={setShowLocationFilterLargeScreen}
                 filteredLocation={filteredLocation}
                 showLocationFilter={showLocationLargeFilterLargeScreen}
+                setSearchFilterLocation={setSearchFilterLocation}
+                selectedLocations={selectedLocations}
+                setSelectedLocations={setSelectedLocations}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
               />
             </div>
           </div>
@@ -486,49 +496,157 @@ SearchButton.propTypes = {
   isFetchListing: PropTypes.bool,
 };
 
-const Location = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+const Location = ({
+  handleInputChange,
+  setShowLocationFilter,
+  filteredLocation,
+  showLocationFilter,
+  filterRef,
+  setSearchFilterLocation,
+  //eslint-disable-next-line
+  selectedLocations, setSelectedLocations, searchQuery, setSearchQuery
+}) => {
+  const { searchListingParams, listingLocationList } = useSelector(state => state.listing);
 
-  const { searchListingParams } = useSelector(state => state.listing);
+
+  const handleCheckboxChange = (city) => {
+    setSelectedLocations((prev) => {
+      if (prev.includes(city)) {
+        const location = prev.filter((c) => c !== city);
+        handleInputChange('location', location);
+        return location;// remove
+      } else {
+        const location = [...prev, city];
+        handleInputChange('location', location);
+        return location; // add
+      }
+    });
+  };
+
+  const clearSelectedLocations = () => {
+    setSelectedLocations([]);
+    handleInputChange('location', []);
+  };
+
+  const handleRemoveLocation = (locationToRemove) => {
+    const updatedLocations = selectedLocations.filter(loc => loc !== locationToRemove);
+    handleInputChange('location', updatedLocations);
+    setSelectedLocations(updatedLocations);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    const filterLocation = listingLocationList?.map((location) => {
+      const stateMatch = location?.state?.toLowerCase()?.includes(value.toLowerCase());
+
+      if (stateMatch) return location;
+
+      const filteredCities = location.cities.filter((cityObj) =>
+        cityObj.city.toLowerCase().includes(value.toLowerCase())
+      );
+
+      if (filteredCities.length > 0) {
+        return { ...location, cities: filteredCities };
+      }
+
+      return null;
+    }).filter((location) => location !== null);
+
+    setSearchFilterLocation(filterLocation);
+  };
 
   return (
-    <div className="flex flex-col w-full text-sm gap-1.5 ">
+    <div className="relative flex flex-col w-full text-sm gap-1.5">
       <label className="text-sm font-semibold">Where to go?</label>
-      <input
-        type="text"
-        value={searchListingParams.location}
-        onChange={(e) => handleInputChange("location", e.target.value)}
-        placeholder="Anywhere"
-        className="search-input"
-        onFocus={() => setShowLocationFilter(true)}
-      />
-      {showLocationFilter &&
+
+      {selectedLocations.length === 0 ? (
+        <input
+          type="text"
+          value={searchListingParams.location}
+          onClick={() => document.getElementById('dropDownInputRef').focus()}
+          placeholder="Anywhere"
+          className="search-input"
+          onFocus={() => setShowLocationFilter(true)}
+        />
+      ) : (
+        <div
+          onClick={() => setShowLocationFilter(true)}
+          className="flex gap-2 overflow-x-scroll text-sm font-inter p-1 "
+        >
+          {selectedLocations?.slice()?.reverse().map((location, index) => (
+            <div key={index} className="relative flex flex-row w-fit items-center bg-buttonPrimary text-white rounded-full px-2 py-0.5 whitespace-nowrap">
+              {location}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveLocation(location);
+                }}
+                className="ml-1 text-white font-bold"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showLocationFilter && (
         <div
           ref={filterRef}
-          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg ">
-          <ul className=" text-sm">
+          className="bg-white absolute w-full min-w-[320px] max-w-[400px] max-h-80 overflow-y-scroll mt-16 rounded-md shadow-lg z-50"
+        >
+          <div className="flex items-center justify-between p-2 border-b">
+            <input
+              id="dropDownInputRef"
+              type="text"
+              placeholder="Search by city or state"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="w-3/5 border px-2 py-1 rounded-md outline-none text-sm"
+            />
+            <button
+              type="button"
+              onClick={clearSelectedLocations}
+              className="text-sm text-red-500 hover:underline"
+            >
+              Clear Filter{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
+            </button>
+          </div>
+
+          <ul className="p-2 space-y-3">
             {filteredLocation?.map((location, index) => (
-              <ul key={index} className=" space-y-1">
-                {location.cities.map((cityObj, cityIndex) => (
-                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
-                    onClick={() => {
-                      handleInputChange('location', cityObj.city);
-                      handleInputChange('lat', cityObj.lat);
-                      handleInputChange('lng', cityObj.lng);
-                      setShowLocationFilter(false);
-                    }}
-                  >
-                    <CiLocationOn className="text-buttonPrimary text-lg" />
-                    <span>{cityObj.city}, {location.state}</span>
-                  </li>
-                ))}
-              </ul>
+              <li key={index}>
+                <p className="font-semibold text-gray-700">{location.state}</p>
+                <ul className="pl-3 space-y-1 mt-1">
+                  {location?.cities?.map((cityObj, cityIndex) => {
+                    const isChecked = selectedLocations.includes(cityObj.city);
+                    return (
+                      <li key={cityIndex} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleCheckboxChange(cityObj.city)}
+                        />
+                        <label
+                          className="text-sm cursor-pointer"
+                          onClick={() => handleCheckboxChange(cityObj.city)}
+                        >
+                          {cityObj.city}
+                        </label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
             ))}
           </ul>
         </div>
-      }
+      )}
     </div>
   );
-}
+};
+
 
 Location.propTypes = {
   handleInputChange: PropTypes.func,
@@ -536,49 +654,159 @@ Location.propTypes = {
   filteredLocation: PropTypes.array,
   showLocationFilter: PropTypes.bool,
   filterRef: PropTypes.any,
+  setSearchFilterLocation: PropTypes.func,
+  selectedLocations: PropTypes.array,
+  setSelectedLocations: PropTypes.func
 };
 
+//eslint-disable-next-line
+const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef, setSearchFilterLocation, selectedLocations, setSelectedLocations, searchQuery, setSearchQuery }) => {
 
-const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef }) => {
+  const { searchListingParams, listingLocationList } = useSelector(state => state.listing);
 
-  const { searchListingParams } = useSelector(state => state.listing);
+
+
+  const handleCheckboxChange = (city) => {
+    setSelectedLocations((prev) => {
+      if (prev.includes(city)) {
+        const location = prev.filter((c) => c !== city);
+        handleInputChange('location', location);
+        return location;// remove
+      } else {
+        const location = [...prev, city];
+        handleInputChange('location', location);
+        return location; // add
+      }
+    });
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    const filterLocation = listingLocationList?.map((location) => {
+      const stateMatch = location?.state?.toLowerCase()?.includes(value.toLowerCase());
+
+      if (stateMatch) return location;
+
+      const filteredCities = location.cities.filter((cityObj) =>
+        cityObj.city.toLowerCase().includes(value.toLowerCase())
+      );
+
+      if (filteredCities.length > 0) {
+        return { ...location, cities: filteredCities };
+      }
+
+      return null;
+    }).filter((location) => location !== null);
+
+    setSearchFilterLocation(filterLocation);
+  };
+
+  const clearSelectedLocations = () => {
+    setSelectedLocations([]);
+    handleInputChange('location', []);
+  };
+
+  const handleRemoveLocation = (locationToRemove) => {
+    const updatedLocations = selectedLocations.filter(loc => loc !== locationToRemove);
+    handleInputChange('location', updatedLocations);
+    setSelectedLocations(updatedLocations);
+  };
+
 
   return (
-    <div className="flex flex-col w-full text-sm gap-1.5 ">
+    <div ref={filterRef} className="relative  flex flex-col w-full text-sm gap-1.5 ">
       <label className="text-sm font-semibold">Where to go?</label>
-      <input
+      {selectedLocations?.length == 0 ? <input
         type="text"
         value={searchListingParams.location}
-        onChange={(e) => handleInputChange("location", e.target.value)}
+        onClick={() => {
+          document.getElementById('dropDownInputRef').focus();
+
+        }}
         placeholder="Anywhere"
         className="search-input"
-        onFocus={() => setShowLocationFilter(true)}
+        onFocus={() => {
+          setShowLocationFilter(true);
+        }}
       />
-      {showLocationFilter &&
+        :
         <div
-          ref={filterRef}
-          className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg ">
-          <ul className=" text-sm">
-            {filteredLocation?.map((location, index) => (
-              <ul key={index} className=" space-y-1">
-                {location.cities.map((cityObj, cityIndex) => (
-                  <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
-                    onClick={() => {
-                      handleInputChange('location', cityObj.city);
-                      handleInputChange('lat', cityObj.lat);
-                      handleInputChange('lng', cityObj.lng);
-                      setShowLocationFilter(false);
-                    }}
-                  >
-                    <CiLocationOn className="text-buttonPrimary text-lg" />
-                    <span>{cityObj.city}, {location.state}</span>
-                  </li>
-                ))}
-              </ul>
-            ))}
-          </ul>
+          onClick={() => setShowLocationFilter(true)}
+          className="flex gap-2 overflow-x-scroll text-sm font-inter p-1 "
+        >
+          {selectedLocations?.slice()?.reverse().map((location, index) => (
+            <div key={index} className="relative flex flex-row w-fit items-center bg-buttonPrimary text-white rounded-full px-2 py-0.5 whitespace-nowrap">
+              {location}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveLocation(location);
+                }}
+                className="ml-1 text-white font-bold"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
         </div>
       }
+
+      {showLocationFilter && (
+        <div
+          className="bg-white absolute w-[500px]  mt-16 rounded-md shadow-lg max-h-80 overflow-y-scroll z-50"
+        >
+          {/* Search Input */}
+          <div className="flex flex-row items-center justify-between p-2 border-b">
+            <input
+              id="dropDownInputRef"
+              type="text"
+              placeholder="Search by city or state"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="w-3/4 border px-2 py-1 rounded-md outline-none text-sm"
+            />
+            {/* Clear Filter Button */}
+            <div className=" text-right">
+              <button
+                type="button"
+                onClick={() => clearSelectedLocations()}
+                className="text-sm text-red-500 hover:underline items-center"
+              >
+                Clear Filter{selectedLocations.length > 0 && `(${selectedLocations.length})`}
+              </button>
+            </div>
+          </div>
+
+          {/* Filtered Locations */}
+          <ul className="p-2 space-y-3">
+            {filteredLocation?.map((location, index) => (
+              <li key={index}>
+                <p className="font-semibold text-gray-700">{location.state}</p>
+                <ul className="pl-3 space-y-1 mt-1">
+                  {location?.cities?.map((cityObj, cityIndex) => {
+                    const isChecked = selectedLocations?.includes(cityObj.city);
+                    return (
+                      <li key={cityIndex} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleCheckboxChange(cityObj.city)}
+                        />
+                        <label className="text-sm cursor-pointer" onClick={() => handleCheckboxChange(cityObj.city)}>
+                          {cityObj.city}
+                        </label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            ))}
+          </ul>
+
+
+        </div>
+      )}
     </div>
   );
 };
@@ -589,6 +817,8 @@ LocationLargeScreen.propTypes = {
   filteredLocation: PropTypes.array,
   showLocationFilter: PropTypes.bool,
   filterRef: PropTypes.any,
+  selectedLocations: PropTypes.array,
+  setSelectedLocations: PropTypes.func
 };
 
 const Guests = ({ searchListingParams, handleInputChange }) => {
