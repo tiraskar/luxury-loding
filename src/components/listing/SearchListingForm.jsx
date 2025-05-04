@@ -323,16 +323,16 @@ const SearchListingForm = () => {
 
             {showLocationFilter && (
               <div
-                className="bg-white absolute w-full lg:w-1/2 mt-16 rounded-md shadow-lg max-h-80 overflow-y-scroll z-50"
+                className=" bg-cardBackgroundLight absolute w-full lg:w-1/2 mt-16 rounded-md shadow-lg max-h-[400px] overflow-y-scroll z-50"
               >
                 {/* Search Input */}
-                <div className="flex flex-row items-center justify-between p-2 border-b">
+                <div className="flex flex-row items-center justify-between p-2 border-b border-b-buttonPrimary">
                   <input
                     type="text"
                     placeholder="Search by city or state"
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
-                    className="w-3/4 border px-2 py-1 rounded-md outline-none text-sm"
+                    className="w-3/4 border px-2 py-1 rounded-md outline-none border-buttonPrimary bg-cardBackgroundLight"
                   />
                   {/* Clear Filter Button */}
                   <div className=" text-right">
@@ -347,21 +347,72 @@ const SearchListingForm = () => {
                 </div>
 
                 {/* Filtered Locations */}
-                <ul className="p-2 space-y-3">
+                <ul className="p-2 space-y-5 h-[350px] overflow-scroll">
                   {filteredLocation.map((location, index) => (
                     <li key={index}>
-                      <p className="font-semibold text-gray-700">{location.state}</p>
-                      <ul className="pl-3 space-y-1 mt-1">
-                        {location.cities.map((cityObj, cityIndex) => {
-                          const isChecked = selectedLocations.includes(cityObj.city);
+                      <p className="font-semibold text-lg">{location.state}</p>
+                      <ul className="pl-5 space-y-1 mt-1">
+                        {location?.cities?.slice() // copy to avoid mutating original
+                          .sort((a, b) => a.city.localeCompare(b.city)).map((cityObj, cityIndex) => {
+                            const isChecked = selectedLocations?.includes(cityObj.city);
                           return (
                             <li key={cityIndex} className="flex items-center gap-2">
-                              <input
+                              {/* <input
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => handleCheckboxChange(cityObj.city)}
-                              />
-                              <label className="text-sm cursor-pointer" onClick={() => handleCheckboxChange(cityObj.city)}>
+                                className="size-4 accent-buttonPrimary text-white"
+                                style={{
+                                  accentColor: '#B69F6F', // or your hex value for buttonPrimary
+                                  color: '#ffffff', // this makes the check mark white in supported browsers
+                                }}
+                              /> */}
+                              <label className="inline-flex items-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => handleCheckboxChange(cityObj.city)}
+                                  className="hidden"
+                                />
+                                <span
+                                  className={`w-6 h-6 flex items-center justify-center rounded`}
+                                >
+                                  <svg
+                                    width={30}
+                                    height={30}
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g clipPath="url(#clip0_15326_715)">
+                                      <path
+                                        d="M12 3C19.2 3 21 4.8 21 12C21 19.2 19.2 21 12 21C4.8 21 3 19.2 3 12C3 4.8 4.8 3 12 3Z"
+                                        stroke="#B69F6F"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      {isChecked && (
+                                        <path
+                                          d="M9 12l1 3 6-6"
+                                          stroke="#B69F6F"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          fill='white'
+                                        />
+                                      )}
+                                    </g>
+                                    <defs>
+                                      <clipPath id="clip0_15326_715">
+                                        <rect width="24" height="24" fill="white" />
+                                      </clipPath>
+                                    </defs>
+                                  </svg>
+                                </span>
+                              </label>
+
+                              <label className="cursor-pointer text-lg pl-1" onClick={() => handleCheckboxChange(cityObj.city)}>
                                 {cityObj.city}
                               </label>
                             </li>
