@@ -596,7 +596,7 @@ const Location = ({
           ref={filterRef}
           className="bg-cardBackgroundLight absolute w-full min-w-[320px] max-w-[400px] max-h-80 overflow-y-scroll mt-16 rounded-md shadow-lg z-50"
         >
-          <div className="flex items-center justify-between p-2 border-b">
+          <div className="flex items-center justify-between p-2 border-b border-b-buttonPrimary">
             <input
               id="dropDownInputRef"
               type="text"
