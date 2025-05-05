@@ -245,7 +245,7 @@ const listingSlice = createSlice({
     isFetchAvailableListing: false,
     isLoadMoreListing: false,
     isHomePageSearch: false,
-    isMapViewOpen: false,
+    isMapViewOpen: true,
     isSearchedListing: false,
     isListingAvailableForBooking: false,
     isReviewLoading: false, 
