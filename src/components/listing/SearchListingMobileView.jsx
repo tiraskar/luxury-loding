@@ -4,13 +4,14 @@ import { SearchInputLabel } from "./SearchListingForm";
 import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import { CiLocationOn } from "react-icons/ci";
+// import { CiLocationOn } from "react-icons/ci";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-date-range";
 import { IoClose } from "react-icons/io5";
+import PropTypes from "prop-types"
 
-
-const SearchListingMobileView = () => {
+//eslint-disable-next-line
+const SearchListingMobileView = ({ selectedLocations, setSelectedLocations, searchQuery, setSearchQuery }) => {
   const dispatch = useDispatch();
   const { searchListingParams, isHomePageLoading, listingLocationList } = useSelector(state => state.listing);
 
@@ -18,34 +19,34 @@ const SearchListingMobileView = () => {
   const [showLocationFilter, setShowLocationFilter] = useState(false)
 
   const handleInputChange = (name, value) => {
-    if (name === 'location') {
-      const filterLocation = listingLocationList.map((location) => {
+    // if (name === 'location') {
+    //   const filterLocation = listingLocationList.map((location) => {
 
-        const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
+    //     const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
 
 
-        if (stateMatch) {
-          return location;
-        }
+    //     if (stateMatch) {
+    //       return location;
+    //     }
 
-        // Filter the cities based on the value
-        const filteredCities = location.cities.filter((cityObj) =>
-          cityObj.city.toLowerCase().includes(value.toLowerCase())
-        );
+    //     // Filter the cities based on the value
+    //     const filteredCities = location.cities.filter((cityObj) =>
+    //       cityObj.city.toLowerCase().includes(value.toLowerCase())
+    //     );
 
-        // Return the location with only filtered cities if city matches
-        if (filteredCities.length > 0) {
-          return {
-            ...location,
-            cities: filteredCities, // Only the filtered cities
-          };
-        }
-        return null; // Exclude location if no match is found
-      }).filter(location => location !== null); // Remove null entries
+    //     // Return the location with only filtered cities if city matches
+    //     if (filteredCities.length > 0) {
+    //       return {
+    //         ...location,
+    //         cities: filteredCities, // Only the filtered cities
+    //       };
+    //     }
+    //     return null; // Exclude location if no match is found
+    //   }).filter(location => location !== null); // Remove null entries
 
-      // Update the filtered location list
-      setSearchFilterLocation(filterLocation);
-    }
+    //   // Update the filtered location list
+    //   setSearchFilterLocation(filterLocation);
+    // }
     dispatch(setSearchListingParams({ name, value }));
   };
 
@@ -142,6 +143,57 @@ const SearchListingMobileView = () => {
     ]);
   }
 
+
+  const handleCheckboxChange = (city) => {
+    setSelectedLocations((prev) => {
+      if (prev.includes(city)) {
+        const location = prev.filter((c) => c !== city);
+        handleInputChange('location', location);
+        return location;// remove
+      } else {
+        const location = [...prev, city];
+        handleInputChange('location', location);
+        return location; // add
+      }
+    });
+  };
+
+
+
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    const filterLocation = listingLocationList.map((location) => {
+      const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
+
+      if (stateMatch) return location;
+
+      const filteredCities = location.cities.filter((cityObj) =>
+        cityObj.city.toLowerCase().includes(value.toLowerCase())
+      );
+
+      if (filteredCities.length > 0) {
+        return { ...location, cities: filteredCities };
+      }
+
+      return null;
+    }).filter((location) => location !== null);
+
+    setSearchFilterLocation(filterLocation);
+  };
+
+  const clearSelectedLocations = () => {
+    setSelectedLocations([]);
+    handleInputChange('location', []);
+  };
+
+  const handleRemoveLocation = (locationToRemove) => {
+    const updatedLocations = selectedLocations.filter(loc => loc !== locationToRemove);
+    handleInputChange('location', updatedLocations);
+    setSelectedLocations(updatedLocations);
+  };
+
+
   return (
     <div className="xs:hidden fixed inset-0 bg-black bg-opacity-50 flex  justify-center  items-center  z-50 text-[#333333] transition-all delay-500 ease-in-out">
       <div className="relative w-full bg-white rounded-2xl shadow-lg z-10 py-2 mx-5 xss:mx-7 ">
@@ -159,7 +211,7 @@ const SearchListingMobileView = () => {
         <div className="space-y-[9px] px-5 font-inter tracking-[-1%] py-4">
           <form action="" className="grid grid-cols-2 items-center">
 
-            <div className=" flex-1 justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2   md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">
+            {/* <div className=" flex-1 justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col gap-y-2   md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3">
               <SearchInputLabel
                 text="Where to go?"
                 htmlFor="location"
@@ -194,8 +246,143 @@ const SearchListingMobileView = () => {
                   </ul>
                 </div>
               }
-            </div>
+            </div> */}
+            <div className="relative flex flex-col w-full text-sm gap-1.5 h-[69px] ">
+              <label className="text-sm font-semibold text-start">Where to go?</label>
 
+              {selectedLocations.length === 0 ? (
+                <input
+                  type="text"
+                  value={searchListingParams.location}
+                  onClick={() => document.getElementById('dropDownInputRef').focus()}
+                  placeholder="Anywhere"
+                  className="search-input bg-white"
+                  onFocus={() => setShowLocationFilter(true)}
+                />
+              ) : (
+                <div
+                  onClick={() => setShowLocationFilter(true)}
+                  className="flex gap-2 overflow-x-scroll text-sm font-inter p-1 "
+                >
+                  {selectedLocations?.slice()?.reverse().map((location, index) => (
+                    <div key={index} className="relative flex flex-row w-fit items-center bg-buttonPrimary text-white rounded-full px-2 py-0.5 whitespace-nowrap">
+                      {location}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveLocation(location);
+                        }}
+                        className="ml-1 text-white font-bold"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                  </div>
+              )}
+
+              {showLocationFilter && (
+                <div
+                  ref={filterRef}
+                  className="bg-cardBackgroundLight absolute w-full min-w-[320px] max-h-80 overflow-y-scroll mt-16 rounded-md shadow-lg z-50"
+                >
+                  <div className="flex items-center justify-between p-2 border-b border-b-buttonPrimary">
+                    <input
+                      id="dropDownInputRef"
+                      type="text"
+                      placeholder="Search by city or state"
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="w-3/5 border px-2 py-1 rounded-md outline-none text-lg bg-cardBackgroundLight border-buttonPrimary"
+                    />
+                    <button
+                      type="button"
+                      onClick={clearSelectedLocations}
+                      className="text-sm text-red-500 hover:underline"
+                    >
+                      Clear Filter{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
+                    </button>
+                  </div>
+
+                  <ul className="p-2 space-y-5 h-[350px] overflow-scroll">
+                    {filteredLocation.map((location, index) => (
+                      <li key={index}>
+                        <p className="font-semibold text-lg text-start">{location.state}</p>
+                        <ul className="pl-5 space-y-1 mt-1">
+                          {location?.cities?.slice() // copy to avoid mutating original
+                            .sort((a, b) => a.city.localeCompare(b.city)).map((cityObj, cityIndex) => {
+                              const isChecked = selectedLocations?.includes(cityObj.city);
+                              return (
+                                <li key={cityIndex} className="flex items-center gap-2">
+                                  {/* <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => handleCheckboxChange(cityObj.city)}
+                                className="size-4 accent-buttonPrimary text-white"
+                                style={{
+                                  accentColor: '#B69F6F', // or your hex value for buttonPrimary
+                                  color: '#ffffff', // this makes the check mark white in supported browsers
+                                }}
+                              /> */}
+                                  <label className="inline-flex items-center cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={() => handleCheckboxChange(cityObj.city)}
+                                      className="hidden"
+                                    />
+                                    <span
+                                      className={`w-6 h-6 flex items-center justify-center rounded`}
+                                    >
+                                      <svg
+                                        width={30}
+                                        height={30}
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <g clipPath="url(#clip0_15326_715)">
+                                          <path
+                                            d="M12 3C19.2 3 21 4.8 21 12C21 19.2 19.2 21 12 21C4.8 21 3 19.2 3 12C3 4.8 4.8 3 12 3Z"
+                                            stroke="#B69F6F"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
+                                          {isChecked && (
+                                            <path
+                                              d="M9 12l1 3 6-6"
+                                              stroke="#B69F6F"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              fill='white'
+                                            />
+                                          )}
+                                        </g>
+                                        <defs>
+                                          <clipPath id="clip0_15326_715">
+                                            <rect width="24" height="24" fill="white" />
+                                          </clipPath>
+                                        </defs>
+                                      </svg>
+                                    </span>
+                                  </label>
+
+                                  <label className="cursor-pointer text-lg pl-1" onClick={() => handleCheckboxChange(cityObj.city)}>
+                                    {cityObj.city}
+                                  </label>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <div className="justify-start text-start lg:w-[153.25px] h-[69px] flex flex-col md:px-5 sm:px-3 xs:px-2 lg:px-7 py-3 gap-y-[6px]">
               <SearchInputLabel
@@ -297,5 +484,13 @@ const SearchListingMobileView = () => {
     </div >
   );
 };
+
+SearchListingMobileView.propTypes = {
+  selectedLocations: PropTypes.array,
+  setSelectedLocations: PropTypes.func,
+  searchQuery: PropTypes.string,
+  setSearchQuery: PropTypes.func
+}
+
 
 export default SearchListingMobileView;

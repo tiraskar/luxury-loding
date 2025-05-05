@@ -14,7 +14,8 @@ export default {
       buttonPrimary: "#B69F6F",
       black: "#000000",
       white: "#FFFFFF",
-      textGray: "#E7E7E5"
+      textGray: "#E7E7E5",
+      red: '#FF0000'
       // Add more colors as needed, or use Tailwind's default colors
     },
     extend: {

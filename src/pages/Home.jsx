@@ -16,7 +16,7 @@ import {
 import RenderListings from "../components/listing/RenderListings";
 import { lazy, Suspense, useEffect } from "react";
 import { fetchListingLocationList, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
-import SearchListingMobileView from "../components/listing/SearchListingMobileView";
+// import SearchListingMobileView from "../components/listing/SearchListingMobileView";
 import { fetchUserReviews } from "../redux/slices/otherSlice";
 import { wait } from "../utils/helper";
 import FeaturedHomeSkeleton from "../components/ui/FeaturedHomeSkeleton";
@@ -26,7 +26,7 @@ const FeaturedHomes = lazy(() => wait(2000).then(() => import("../components/hom
 const Home = () => {
   const dispatch = useDispatch();
 
-  const { searchedListingList, isHomePageSearch, isHomePageLoading, isSearchHomePageOpen } =
+  const { searchedListingList, isHomePageSearch, isHomePageLoading } =
     useSelector((state) => state.listing);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Home = () => {
       <div className="space-y-[3rem] xxs:space-y-[4rem] xs:space-y-[5rem] sm:space-y-[6rem] lg:space-y-[10.5625rem]">
         <div className="">
           <HomeBanner />
-          {isSearchHomePageOpen && <SearchListingMobileView />}
+
           {isHomePageSearch && 
             <Wrapper>
               {searchedListingList.length == 0 &&
