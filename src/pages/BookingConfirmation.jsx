@@ -10,7 +10,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountryList } from "../redux/slices/listingSlice";
 import { appearance } from "../lib/stripe";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Booking } from "../components";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);

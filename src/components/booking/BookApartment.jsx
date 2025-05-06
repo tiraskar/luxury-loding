@@ -3,11 +3,7 @@ import { CiCalendar } from "react-icons/ci";
 import { LuUser2 } from "react-icons/lu";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-//eslint-disable-next-line
-import { checkListingBookingAvailability, clearBookingDateSelection, setCheckBookingParams, setIsBooking, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice";
-//eslint-disable-next-line
-import LoadingSpinner from "../ui/LoadingSpinner";
-import AlertDialog from "../ui/AlertDialog";
+import { clearBookingDateSelection, setCheckBookingParams, setIsBooking, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice"; import AlertDialog from "../ui/AlertDialog";
 import { formateDate } from "../../helper/date";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -16,6 +12,7 @@ import { DateRange } from "react-date-range";
 import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 import { IoClose } from "react-icons/io5";
 import BookApartmentMap from "./BookApartmentMap";
+import { toLocalDate } from "../../utils/dateUtils";
 
 const BookApartment = ({ listingInfo }) => {
   const dispatch = useDispatch();
@@ -62,13 +59,6 @@ const BookApartment = ({ listingInfo }) => {
     handleInputChange('guests', listingInfo.personCapacity);
     handleInputChange('listingId', listingInfo.id);
   }, [listingInfo]);
-
-
-  const getUnavailableDates = () => {
-    return listingAvailableCalender
-      .filter(item => item.isAvailable === 0)
-      .map(item => new Date(item.date));
-  };
 
 
   // date state
@@ -157,7 +147,7 @@ const BookApartment = ({ listingInfo }) => {
       },
     ]);
   }
-
+  
 
   return (
     <div className="font-inter tracking-[-1%]">
@@ -220,9 +210,9 @@ const BookApartment = ({ listingInfo }) => {
                       showDateDisplay={false}
                       showMonthAndYearPickers={false}
                       rangeColors={["#B69F6F"]}
-                      disabledDates={listingUnavailableCalender}
+                      disabledDates={listingUnavailableCalender.map(toLocalDate)}
                       dayContentRenderer={(date) => {
-                        const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                        const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
                           new Date(d).toDateString() === date.toDateString()
                         );
                         return (
@@ -328,21 +318,6 @@ const BookApartment = ({ listingInfo }) => {
             className="flex flex-row items-center justify-center text-white bg-black text-sm  py-[14px] rounded-xl">
             Book Now
           </button>
-          {/* } */}
-          {/* {!isListingBookingAvailable &&
-            <button
-              onClick={() => {
-                if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
-                  return setOpenCheckIn(openCheckIn => !openCheckIn);
-                }
-                handleSubmit();
-              }}
-              disabled={loading}
-              className={`flex flex-row items-center justify-center text-white bg-textDark text-sm  py-[14px] rounded-xl`}>
-              {!isListingBookingAvailable && !loading ? "Check availability" : `Checking`} &nbsp;&nbsp;
-              {loading && <LoadingSpinner />}
-            </button>
-          } */}
         </div>
 
       </div>

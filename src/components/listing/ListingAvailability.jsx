@@ -4,6 +4,7 @@ import { setCheckBookingParams } from "../../redux/slices/bookingSlice";
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { toLocalDate } from "../../utils/dateUtils";
 
 const ListingAvailability = () => {
   const { listingAvailableCalender, isCalenderLoading, listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
@@ -29,11 +30,6 @@ const ListingAvailability = () => {
     }
   }, [range[0].startDate, range[0].endDate]);
 
-  const getUnavailableDates = () => {
-    return listingAvailableCalender
-      .filter(item => item.isAvailable === 0)
-      .map(item => new Date(item.date));
-  };
 
   const [direction, setDirection] = useState('horizontal');
 
@@ -87,9 +83,9 @@ const ListingAvailability = () => {
               showDateDisplay={false}
               direction={direction}
               showMonthAndYearPickers={false}
-              disabledDates={listingUnavailableCalender}
+              disabledDates={listingUnavailableCalender.map(toLocalDate)}
               dayContentRenderer={(date) => {
-                const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
                   new Date(d).toDateString() === date.toDateString()
                 );
                 return (
@@ -120,5 +116,3 @@ const ListingAvailability = () => {
 
 export default ListingAvailability;
 
-
-// "react-date-range": "^2.0.1",
