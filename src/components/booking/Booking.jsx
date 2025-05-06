@@ -6,11 +6,12 @@ import { useLocation, useParams } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
-import { calculateBookingPrice, setCheckBookingParams, setIsBookingDetailsChange, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { calculateBookingPrice, setCheckBookingParams, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-date-range";
 import { addDays, format } from "date-fns";
-import { createPaymentIntent, updatePaymentIntent } from "../../redux/slices/paymentSlice";
+import { updatePaymentIntent } from "../../redux/slices/paymentSlice";
+import { toLocalDate } from "../../utils/dateUtils";
 const Booking = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Booking = () => {
 
   const images = listingInfo?.images || [];
   const { checkBookingParams } = useSelector(state => state.booking);
-  const { listingAvailableCalender, listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
+  const { listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
 
   const [isDateRangedChange, setIsDateRangeChanged] = useState(false);
 
@@ -245,9 +246,9 @@ const Booking = () => {
                         showDateDisplay={false}
                         showMonthAndYearPickers={false}
                         rangeColors={["#B69F6F"]}
-                        disabledDates={listingUnavailableCalender}
+                        disabledDates={listingUnavailableCalender.map(toLocalDate)}
                         dayContentRenderer={(date) => {
-                          const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                          const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
                             new Date(d).toDateString() === date.toDateString()
                           );
                           return (
@@ -291,9 +292,9 @@ const Booking = () => {
                         showDateDisplay={false}
                         showMonthAndYearPickers={false}
                         rangeColors={["#B69F6F"]}
-                        disabledDates={listingUnavailableCalender}
+                        disabledDates={listingUnavailableCalender.map(toLocalDate)}
                         dayContentRenderer={(date) => {
-                          const isCheckOutAvailable = listingCheckOutAvailableDate.some(d =>
+                          const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
                             new Date(d).toDateString() === date.toDateString()
                           );
                           return (
