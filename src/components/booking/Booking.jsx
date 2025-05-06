@@ -115,18 +115,18 @@ const Booking = () => {
     };
   }, []);
 
-  const updateBooking = () => {
+  const updateBooking = (guest) => {
     dispatch(calculateBookingPrice({
       listingId: Number(id),
       checkIn: formateDate(new Date(range[0].startDate)),
       checkOut: formateDate(new Date(range[0].endDate)),
-      guests: Number(guestNumber),
+      guests: guest ? guest : Number(guestNumber),
     })).unwrap().then(response => {
       if (response) {
         dispatch(updatePaymentIntent({
           id: id,
           amount: Number(response.totalPrice),
-          guests: Number(checkBookingParams.guests),
+          guests: guest ? guest : Number(guestNumber),
           checkIn: formateDate(new Date(range[0].startDate)),
           checkOut: formateDate(new Date(range[0].endDate)),
         }));
@@ -135,9 +135,9 @@ const Booking = () => {
     setIsDateRangeChanged(false);
   }
 
+
   useEffect(() => {
     if (isDateRangedChange && !openCheckIn && !openCheckOut) {
-      // dispatch(setIsBookingDetailsChange());
       updateBooking()
     }
 
@@ -148,23 +148,30 @@ const Booking = () => {
     setGuestInput(value);
     dispatch(setCheckBookingParams({ name, value }));
   };
+  const [isGuestChanged, setIsGuestChanged] = useState(false)
 
   const handleGuestChange = (e) => {
-    let value = Number(e.target.value);
-    if (value > 50) value = 50;
-    if (value < 0) value = 0;
-    setGuestInput(value); // Update state immediately but debounce API update
+    // let value = Number(e.target.value);
+    // if (value > 50) value = 50;
+    // if (value < 0) value = 0;
+    setIsGuestChanged(true);
+    // setGuestInput(value); 
+    if (e.target.value > 50) {
+      handleInputChange('guests', 50);
+    } else {
+      handleInputChange('guests', e.target.value);
+    }
   };
-
   const [guestInput, setGuestInput] = useState(checkBookingParams.guests);
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      handleInputChange("guests", guestInput);
-      updateBooking()
-    }, 1500);
+    if (isGuestChanged) {
+      const handler = setTimeout(() => {
+        guestInput > 0 && updateBooking(guestInput);
+      }, 1500);
 
-    return () => clearTimeout(handler);
+      return () => clearTimeout(handler);
+    }
   }, [guestInput]);
 
 
