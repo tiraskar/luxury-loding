@@ -144,6 +144,27 @@ const ListingMap = ({ listingList }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (mapRef.current && listingList.length > 0) {
+      const bounds = new window.google.maps.LatLngBounds();
+      listingList.forEach((listing) => {
+        bounds.extend({ lat: listing.lat, lng: listing.lng });
+      });
+      mapRef.current.fitBounds(bounds);
+
+      const lat = listingList[0]?.lat;
+      const lng = listingList[0]?.lng;
+
+      setTimeout(() => {
+        mapRef.current.setZoom(13);
+        mapRef.current.panTo({ lat, lng });
+        setOverlaysReady(true);
+      }, 200);
+    }
+  }, [listingList]);
+
+
+
   const renderMap = () => {
     return (
         <GoogleMap
