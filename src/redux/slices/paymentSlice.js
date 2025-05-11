@@ -95,41 +95,46 @@ export const createCustomer = createAsyncThunk(
 );
 
 export const savePaymentInfo = createAsyncThunk(
-  'payment/savePayment', async (listing, { getState, rejectWithValue }) => {
+  'payment/savePayment', async (paymentData, { getState, rejectWithValue }) => {
     try {
-      const { personalInfo, paymentType, paymentIntentId
-      } = getState().payment;
-      const { listingInfo } = getState().listing;
-      const { couponCode, isValidToken } = getState().booking
-      const { bookingPrice, totalDiscountPrice } = getState().booking;
+    const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, paymentData);
 
-      // const totalDiscountPrice = localStorage.getItem('discountPrice');
+    return response.data;
 
-      const totalPrice = totalDiscountPrice ? Number(Number(bookingPrice.totalPrice).toFixed(2) - Number(totalDiscountPrice !== 0 ? totalDiscountPrice : 0).toFixed(2)) : Number(bookingPrice.totalPrice).toFixed(2);
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
 
-      const response = await axios.post(`${baseUrl}/payment/savepaymentinfo`, {
-        customerId: listing.customerId,
-        guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
-        guestEmail: personalInfo.email,
-        guestPhone: `${personalInfo.countryDialCode} ${personalInfo.phone}`,
-        listingId: listingInfo.id,
-        checkInDate: listing.checkIn,
-        checkOutDate: listing.checkOut,
-        guests: listing.guests,
-        paymentIntentId: paymentIntentId,
-        paymentMethod: paymentType,
-        amount: (Number(totalPrice) * 100),
-        currency: "usd",
-        paymentStatus: "initiated",
-        couponName: isValidToken ? couponCode : null
-      });
+export const createOrder = createAsyncThunk(
+  'payment/create-order-chargeAutomation', async (listing, { getState, rejectWithValue }) => {
 
+    const { personalInfo } = getState().payment;
+    const { listingInfo } = getState().listing;
+    const { couponCode, isValidToken } = getState().booking;
+    const { bookingPrice, totalDiscountPrice } = getState().booking;
+
+    const totalPrice = totalDiscountPrice ? Number(Number(bookingPrice.totalPrice).toFixed(2) - Number(totalDiscountPrice !== 0 ? totalDiscountPrice : 0).toFixed(2)) : Number(bookingPrice.totalPrice).toFixed(2);
+    const data = {
+      guestName: `${personalInfo.firstName} ${personalInfo.lastName}`,
+      guestEmail: personalInfo.email,
+      guestPhone: `${personalInfo.countryDialCode} ${personalInfo.phone}`,
+      listingId: listingInfo.id,
+      checkInDate: listing.checkIn,
+      checkOutDate: listing.checkOut,
+      guests: listing.guests,
+      amount: totalPrice,
+      currency: "USD",
+      couponName: isValidToken ? couponCode : null
+    };
+    try {
+      const response = await axios.post(`${baseUrl}/payment/create-order`, data);
       return response.data;
-
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-});
+}
+)
 
 
 const paymentSlice = createSlice({
@@ -144,7 +149,7 @@ const paymentSlice = createSlice({
     confirmPayment: false,
     paymentType: 'card',
     customerId: '',
-
+    orderDetails: {},
     //personalInfo
     personalInfo: {
       firstName: '',
@@ -276,6 +281,22 @@ const paymentSlice = createSlice({
         state.confirmPayment = true;
       })
       .addCase(savePaymentInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    //create order
+    builder
+      .addCase(createOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.orderDetails = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

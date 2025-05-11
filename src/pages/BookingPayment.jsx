@@ -5,7 +5,6 @@ import LoaderScreen from "../components/ui/LoaderScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchListingAvailabilityCalender, fetchListingInfo } from "../redux/slices/listingSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { createPaymentIntent, fetchStripPromiseKey } from "../redux/slices/paymentSlice";
 import { calculateBookingPrice } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 import BookingConfirmation from "./BookingConfirmation";
@@ -25,9 +24,9 @@ const BookingPayment = () => {
   const bookingCheckOut = localStorage?.getItem('checkOut');
   const listingId = localStorage?.getItem('listingId');
 
-  useEffect(() => {
-    dispatch(fetchStripPromiseKey());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchStripPromiseKey());
+  // }, []);
   const startDate = getCurrentMonthStartDate()
 
   useEffect(() => {
@@ -47,19 +46,20 @@ const BookingPayment = () => {
         checkIn: formateDate(new Date(bookingCheckIn)),
         checkOut: formateDate(new Date(bookingCheckOut)),
         guests: Number(guestNumber),
-      })).unwrap().then((response) => {
-        if (response) {
-          dispatch(createPaymentIntent({
-            id,
-            amount: Number(response.totalPrice),
-            guests: Number(guestNumber),
-            checkIn: formateDate(new Date(bookingCheckIn)),
-            checkOut: formateDate(new Date(bookingCheckOut)),
-          }));
-        } else {
-          window.location.reload();
-        }
-      });
+      }));
+      // .unwrap().then((response) => {
+      //   if (response) {
+      //     dispatch(createPaymentIntent({
+      //       id,
+      //       amount: Number(response.totalPrice),
+      //       guests: Number(guestNumber),
+      //       checkIn: formateDate(new Date(bookingCheckIn)),
+      //       checkOut: formateDate(new Date(bookingCheckOut)),
+      //     }));
+      //   } else {
+      //     window.location.reload();
+      //   }
+      // });
     }
   }, [id]);
 

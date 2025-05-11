@@ -34,17 +34,18 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
         checkIn: formateDate(new Date(checkInDate)),
         checkOut: formateDate(new Date(checkOutDate)),
         guests: Number(guestNumber),
-      })).unwrap().then(response => {
-        if (response) {
-          dispatch(updatePaymentIntent({
-            id: Number(listingId),
-            amount: Number(response.totalPrice),
-            checkIn: formateDate(new Date(checkInDate)),
-            checkOut: formateDate(new Date(checkOutDate)),
-            guests: Number(guestNumber),
-          }));
-        }
-      });
+      }));
+      // .unwrap().then(response => {
+      //   if (response) {
+      //     dispatch(updatePaymentIntent({
+      //       id: Number(listingId),
+      //       amount: Number(response.totalPrice),
+      //       checkIn: formateDate(new Date(checkInDate)),
+      //       checkOut: formateDate(new Date(checkOutDate)),
+      //       guests: Number(guestNumber),
+      //     }));
+      //   }
+      // });
 
     } else {
       dispatch(setCouponCode(value));
@@ -53,17 +54,18 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
         checkIn: formateDate(new Date(checkInDate)),
         checkOut: formateDate(new Date(checkOutDate)),
         guests: Number(guestNumber),
-      })).unwrap().then(response => {
-        if (response) {
-          dispatch(updatePaymentIntent({
-            id: Number(listingId),
-            amount: Number(response.totalPrice),
-            checkIn: formateDate(new Date(checkInDate)),
-            checkOut: formateDate(new Date(checkOutDate)),
-            guests: Number(guestNumber),
-          }));
-        }
-      });
+      }));
+      // .unwrap().then(response => {
+      //   if (response) {
+      //     dispatch(updatePaymentIntent({
+      //       id: Number(listingId),
+      //       amount: Number(response.totalPrice),
+      //       checkIn: formateDate(new Date(checkInDate)),
+      //       checkOut: formateDate(new Date(checkOutDate)),
+      //       guests: Number(guestNumber),
+      //     }));
+      //   }
+      // });
     }
 
   };

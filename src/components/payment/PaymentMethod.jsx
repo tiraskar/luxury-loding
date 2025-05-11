@@ -1,22 +1,17 @@
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import BillingAddress from "./BillingAddress";
-import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { createCustomer, handlePaymentType, savePaymentInfo } from "../../redux/slices/paymentSlice";
+import { createOrder, savePaymentInfo } from "../../redux/slices/paymentSlice";
 import PersonalInfoForm from "./PersonalInfoForm";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoaderScreen from "../ui/LoaderScreen";
 import { formateDate } from "../../helper/date";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHouseChimneyWindow } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { toast } from "react-toastify";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -36,11 +31,12 @@ const schema = yup.object({
     postalCode: yup.string().required(),
     country: yup.string().required().default('US')
   })
-})
+});
 
 const PaymentMethod = () => {
   const [isAgreeTerms, setIsAgreeTerms] = useState(false);
-  const [isShowHouseRule, setIsShowHouseRule] = useState(false);
+  const [isShowHouseRule, setIsShowHouseRule] = useState(true);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
@@ -54,215 +50,194 @@ const PaymentMethod = () => {
     },
     resolver: yupResolver(schema)
   });
-  const [isPaymentConfirmationLoading, setIsPaymentConfirmationLoading] = useState(false)
-  const [isPaymentElementComplete, setIsPaymentElementComplete] = useState(false)
-  const stripe = useStripe();
-  const elements = useElements();
 
-
+  const navigate = useNavigate()
   const dispatch = useDispatch();
-
-  const { billingInfo, customerId, clientSecret, confirmPayment, paymentType } = useSelector(state => state.payment);
-
-
-  const handlePaymentElementChange = (event) => {
-    setIsPaymentElementComplete(event.complete);
-    dispatch(handlePaymentType(event.value.type));
-  };
-
-  useEffect(() => {
-    if (elements) {
-      const paymentElement = elements.getElement(PaymentElement);
-      if (paymentElement) {
-        paymentElement.on("change", handlePaymentElementChange);
-      }
-    }
-  }, [elements]);
-
-  const paymentConfirmation = async () => {
-    setIsPaymentConfirmationLoading(true)
-    if (!stripe || !elements || !clientSecret) {
-      return;
-    }
-
-    if (!elements.getElement(PaymentElement)) {
-      toast.error("Please select a payment method");
-      return;
-    }
-
-    const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
-    let result;
-    try {
-      result = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${baseUrl}success`,
-          shipping: {
-            name: `${billingInfo.firstName} ${billingInfo.lastName}`,
-            address: {
-              line1: billingInfo.line1,
-              line2: billingInfo.line2,
-              city: billingInfo.city,
-              state: billingInfo.state,
-              postal_code: billingInfo.postalCode,
-              country: billingInfo.country,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      toast.error("Payment failed!!!", { duration: 2000 });
-      return;
-    } finally {
-      setIsPaymentConfirmationLoading(false)
-    }
-
-    if (result.error) {
-      toast.error("Payment failed!!!", { duration: 2000 });
-      return;
-    }
-    toast.success("Payment successful!!!", { duration: 2000 });
-  };
-
+  const { personalInfo, loading } = useSelector(state => state.payment);
+  const { bookingPrice, totalDiscountPrice } = useSelector(state => state.booking);
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
   const { listingInfo } = useSelector(state => state.listing);
-  useEffect(() => {
-    if (confirmPayment) {
-      paymentConfirmation();
-    }
-  }, [confirmPayment]);
-
-  useEffect(() => {
-    if (customerId !== "") {
-      dispatch(savePaymentInfo({
-        customerId: customerId,
-        guests: Number(guestNumber),
-        checkIn: formateDate(new Date(bookingCheckIn)),
-        checkOut: formateDate(new Date(bookingCheckOut)),
-      }));
-    }
-  }, [customerId]);
-
-
+  const [paymentUrl, setPaymentUrl] = useState('');
   const onSubmit = async () => {
-
-    if (!isPaymentElementComplete) {
-      const paymentElement = document.getElementById('payment');
-      if (paymentElement) {
-        paymentElement.scrollIntoView({ behavior: 'smooth' });
-      }
-      return;
-    }
-
-    if (!stripe || !elements || !clientSecret) {
-      toast.error("Payment has not been loaded. Please refresh the page.", {
-        duration: 2000
-      });
-    }
-    if (!paymentType) {
-      return toast.error("Please select a payment method.");
-    }
-
     if (!isAgreeTerms) {
       document.getElementById("agreeTerms").focus();
       return;
     }
 
-    dispatch(createCustomer());
+    dispatch(createOrder({
+      guests: Number(guestNumber),
+      checkIn: formateDate(new Date(bookingCheckIn)),
+      checkOut: formateDate(new Date(bookingCheckOut)),
+    }))
+      .unwrap()
+      .then((response) => {
+        if (response.orderId && response.userAccountId && response.hash) {
+          const totalPrice = totalDiscountPrice
+            ? (
+              Number(bookingPrice.totalPrice) -
+              Number(totalDiscountPrice !== 0 ? totalDiscountPrice : 0)
+            ).toFixed(2)
+            : Number(bookingPrice.totalPrice).toFixed(2);
+          localStorage.setItem('orderId', response.orderId);
+          const queryParams = new URLSearchParams({
+            userAccountId: response.userAccountId,
+            orderId: response.orderId,
+            amount: totalPrice,
+            hash: response.hash,
+            payerEmail: personalInfo.email,
+            url: response.url
+          });
+
+          const url = `/charge-popup.html?${queryParams.toString()}`;
+          setPaymentUrl(url);
+          setShowPaymentPopup(true);
+        }
+      });
   };
 
+  useEffect(() => {
+    const handleMessage = (e) => {
+      if (e?.data?.status !== undefined && e.data.message === "paymentSuccess") {
+        const orderId = localStorage.getItem("orderId");
+
+        const paymentData = {
+          orderId,
+          paymentStatus: e.data.message,
+          chargeId: e.data.transaction_ref_no,
+        };
+
+        dispatch(savePaymentInfo(paymentData))
+          .unwrap()
+          .then(() => {
+            setShowPaymentPopup(false);
+            window.location.href = '/listings';
+          })
+          .catch(() => {
+            setShowPaymentPopup(false);
+            toast.error("Something went wrong, please try again!");
+            window.location.href = '/listings';
+          });
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}
-      className="space-y-[35px]">
-      {isPaymentConfirmationLoading && <LoaderScreen />}
-     
-      <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
-      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <div className="font-inter text-[#333333] space-y-[31px]">
-        <h1 className="font-medium tracking-tight text-lg h-[13px]">Payment method</h1>
-        <div className='flex flex-col space-y-[14px]'>
-          <PaymentElement onChange={handlePaymentElementChange} id="payment" />
-          {paymentType == 'card' && <p className="text-xs font-normal tracking-[-0.12px] leading-6 text-[#333]">
-            By providing your card information, you allow Luxury Lodging, Inc. to
-            charge your card for future payments in accordance with their terms.
-          </p>}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[35px]">
+        <PersonalInfoForm register={register} setValue={setValue} errors={errors} />
+        <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+        <BillingAddress register={register} errors={errors} />
+
+        {loading && <LoaderScreen />}
+
+        <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
+
+        {listingInfo?.houseRules && (
+          <div className="flex gap-3">
+            <div className="lg:max-w-[318px] flex rounded-2xl space-x-3 ">
+              <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
+                <FaHouseChimneyWindow
+                  onClick={() => setIsShowHouseRule(!isShowHouseRule)}
+                  size={22}
+                  color="black"
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
+            <div className="w-full space-y-[6px]">
+              <div
+                onClick={() => setIsShowHouseRule(!isShowHouseRule)}
+                className="flex justify-between items-center text-sm font-semibold tracking-[-1%] mt-3 cursor-pointer w-full"
+              >
+                <p className="flex-grow">House rule</p>
+                {isShowHouseRule ? (
+                  <IoIosArrowUp size={18} className="text-gray-600" />
+                ) : (
+                  <IoIosArrowDown size={18} className="text-gray-600" />
+                )}
+              </div>
+              {isShowHouseRule && (
+                <p className="text-xs leading-5 -ml-10">
+                  {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
+                    <span key={index} className="py-4">
+                      {index !== 0 && "✔️"} {rule}
+                      <br />
+                    </span>
+                  ))}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-start space-x-2">
+          <input
+            id="agreeTerms"
+            required
+            type="checkbox"
+            value={isAgreeTerms}
+            onClick={() => setIsAgreeTerms(!isAgreeTerms)}
+            className="mt-1.5"
+          />
+          <p className="lg:relative text-xs leading-6">
+            By clicking the button below, I agree to Luxury Lodging's terms & conditions, guest agreement and cancellation policy. I am aware that I must be at least 21 to book this stay. I agree to pay the total amount shown, which includes service fees.{" "}
+            <Link to="/contact" className="underline">Contact us&nbsp;</Link>
+            if you have any questions!
+          </p>
         </div>
-      </div>
 
-      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      <BillingAddress register={register} errors={errors} />
-
-      <div className="min-w-full h-px bg-[#E0E0E0] px-4"></div>
-      {listingInfo?.houseRules && <div className="flex gap-3">
-        <div className="lg:max-w-[318px] flex  rounded-2xl space-x-3 ">
-          <div className="flex flex-row items-center justify-center h-[42px] w-[42px] rounded-xl bg-[#F5F5EF]">
-            <FaHouseChimneyWindow
-              onClick={() => setIsShowHouseRule(!isShowHouseRule)}
-              size={22} color="black"
-              className="cursor-pointer"
+        <div className="relative pt-10 pb-10">
+          <button
+            type="submit"
+            className="flex cursor-pointer items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"
+          >
+            Confirm and pay
+          </button>
+        </div>
+      </form>
+      {showPaymentPopup && (
+        <Modal onClose={() => setShowPaymentPopup(false)}>
+          <div className="w-full h-[75vh] sm:h-[60vh]">
+            <iframe
+              src={paymentUrl}
+              title="Payment"
+              allow="payment"
+              className="w-full h-full rounded-b-xl border-none"
             />
           </div>
-        </div>
-        <div className="w-full space-y-[6px]">
-          <div
-            onClick={() => setIsShowHouseRule(!isShowHouseRule)}
-            className=" flex justify-between items-center text-sm font-semibold tracking-[-1%] mt-3 cursor-pointer w-full"
-          >
-            <p className="flex-grow">House rule</p>
-            {
-              isShowHouseRule ? (
-                <IoIosArrowUp size={18} className="text-gray-600" />
-              ) : (
-                <IoIosArrowDown size={18} className="text-gray-600" />
-              )}
-
-          </div>
-
-          {
-            isShowHouseRule &&
-            <p className="text-xs leading-5 -ml-10">
-              {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
-                <span key={index} className="py-4">
-                  {index !== 0 && "✔️"} {rule}
-                  <br />
-                </span>
-              ))}
-            </p>
-          }
-        </div>
-      </div>}
-      <div className="flex items-start space-x-2">
-        <input
-          id="agreeTerms"
-          required
-          type="checkbox"
-          value={isAgreeTerms}
-          onClick={() => setIsAgreeTerms(!isAgreeTerms)}
-          className="mt-1.5" />
-        <p className="  lg:relative text-xs leading-6 ">
-          By clicking the button below, I agree to Luxury {`Lodging's`}{" "}
-          terms & conditions, guest agreement and cancellation policy, I
-          am aware that I must be at least 21 to book this stay. I agree
-          to pay the total amount shown, which includes service fees.{" "}
-          <Link to="/contact" className="underline">
-            Contact us &nbsp;
-          </Link>
-          if you have any questions!
-        </p>
-      </div>
-
-      <div className=" relative pt-10 pb-10">
-        <button
-          type="submit"
-          className="flex  items-center py-3 px-7 bg-[#333333] text-white rounded-[14px] w-[161px] h-[40px] text-[13px] font-semibold"
-        >
-          Confirm and pay
-        </button>
-      </div>
-    </form>
+        </Modal>
+      )}
+    </>
   );
 };
 
 export default PaymentMethod;
+
+// eslint-disable-next-line
+const Modal = ({ children, onClose }) => {
+  return (
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center px-4">
+      <div className="relative w-full max-w-2xl bg-[#D9E2EC] rounded-xl overflow-hidden shadow-xl">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-0 right-3 text-2xl text-gray-500 hover:text-gray-800 z-10"
+        >
+          &times;
+        </button>
+
+        {/* Content */}
+        <div className="w-full h-full ">{children}</div>
+      </div>
+    </div>
+  );
+};
