@@ -13,7 +13,7 @@ import { appearance } from "../lib/stripe";
 import { useNavigate } from "react-router-dom";
 import { Booking } from "../components";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const BookingConfirmation = () => {
   // const { id } = useParams()
@@ -77,14 +77,14 @@ const BookingConfirmation = () => {
 
 
 
-            {clientSecret && (
+            {/* {clientSecret && (
               <Elements
                 stripe={stripePromise}
                 options={{ clientSecret, appearance }}
-              >
+              > */}
                 <PaymentMethod />
-              </Elements>
-            )}
+            {/* </Elements>
+            )} */}
           </div>
         </div>
       </>

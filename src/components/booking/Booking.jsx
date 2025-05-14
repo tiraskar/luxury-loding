@@ -121,17 +121,18 @@ const Booking = () => {
       checkIn: formateDate(new Date(range[0].startDate)),
       checkOut: formateDate(new Date(range[0].endDate)),
       guests: guest ? guest : Number(guestNumber),
-    })).unwrap().then(response => {
-      if (response) {
-        dispatch(updatePaymentIntent({
-          id: id,
-          amount: Number(response.totalPrice),
-          guests: guest ? guest : Number(guestNumber),
-          checkIn: formateDate(new Date(range[0].startDate)),
-          checkOut: formateDate(new Date(range[0].endDate)),
-        }));
-      }
-    });
+    }));
+    // .unwrap().then(response => {
+    //   if (response) {
+    //     dispatch(updatePaymentIntent({
+    //       id: id,
+    //       amount: Number(response.totalPrice),
+    //       guests: guest ? guest : Number(guestNumber),
+    //       checkIn: formateDate(new Date(range[0].startDate)),
+    //       checkOut: formateDate(new Date(range[0].endDate)),
+    //     }));
+    //   }
+    // });
     setIsDateRangeChanged(false);
   }
 

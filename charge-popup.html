@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment</title>
+  </head>
+  <body style="margin: 0; padding: 20px; font-family: sans-serif">
+    <div id="charge-automation" class="bg-buttonPrimary"></div>
+
+    <script>
+      // Parse query parameters
+      const queryParams = new URLSearchParams(window.location.search);
+      const script = document.createElement('script');
+      const url = queryParams.get('url');
+      script.id = 'ca-iFrame';
+      script.src = `${url}`;
+
+      script.setAttribute(
+        'data-userAccountId',
+        queryParams.get('userAccountId')
+      );
+      script.setAttribute('data-orderId', queryParams.get('orderId'));
+      script.setAttribute('data-amount', queryParams.get('amount'));
+      script.setAttribute('data-currency', 'USD');
+      script.setAttribute('data-chargebackProtection', 'Yes');
+      script.setAttribute('data-generateButton', 'No');
+      script.setAttribute('data-description', 'ChargeAutomation payment');
+      script.setAttribute(
+        'data-successMsg',
+        `We’ve received your payment. Thank you for choosing us!`
+      );
+      script.setAttribute('data-payerEmail', queryParams.get('payerEmail'));
+      script.setAttribute('data-hash', queryParams.get('hash'));
+
+      document.getElementById('charge-automation').appendChild(script);
+    </script>
+  </body>
+</html>
