@@ -22,7 +22,7 @@ import SingleImageOnSlide from "./SingleImageOnSlide";
 const tabs = [
   "Description",
   "Details",
-  "House Rule",
+  "House Rules",
   "Reviews",
   "Availability",
 ];
@@ -53,7 +53,7 @@ const Listing = () => {
   // const componentMapping = {
   //   "Description": <ListingDescription listingInfo={listingInfo} />,
   //   "Details": <ListingDetails listingAmenities={listingAmenities} />,
-  //   "House Rule": <ListingBookingTerms />,
+  //   "House Rules": <ListingBookingTerms />,
   //   "Reviews": <ListingReviews listingReviews={listingReviews} />,
   //   "Availability": <ListingAvailability />,
   // };
@@ -243,15 +243,15 @@ const Listing = () => {
                   </Wrapper> */}
                   <ListingDescription
                     listingInfo={listingInfo}
-                    className={`${["Details", "House Rule", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                    className={`${["Details", "House Rules", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
                   />
                   <div
-                    className={`min-w-full h-px bg-[#E0E0E0] ${["House Rule", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                    className={`min-w-full h-px bg-[#E0E0E0] ${["House Rules", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
                   // className="relative min-w-full h-px bg-[#E0E0E0]"
                   ></div>
                   <ListingDetails
                     listingAmenities={listingAmenities}
-                    className={`${["House Rule", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
+                    className={`${["House Rules", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
                   />
                   <div className={` min-w-full h-px bg-[#E0E0E0] ${["Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}
                   // className="relative min-w-full h-px bg-[#E0E0E0]"

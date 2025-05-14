@@ -4,7 +4,7 @@ const ListingBookingTerms = ({ className, listingHouseRule }) => {
 
   return (
     <div id="listing_booking_terms" className={`lg:max-w-[652px] font-inter text-[#333333] tracking-tight ${className}`}>
-      <h1 className="text-xl font-semibold">House Rule</h1>
+      <h1 className="text-xl font-semibold">House Rules</h1>
       <div className="lg:max-w-[318px] flex  p-3 rounded-2xl  ">
         <p className="text-xs leading-5 ">
           {listingHouseRule?.split("✔️").map((rule, index) => (

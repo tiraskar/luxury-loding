@@ -158,7 +158,7 @@ const PaymentMethod = () => {
                 onClick={() => setIsShowHouseRule(!isShowHouseRule)}
                 className="flex justify-between items-center text-sm font-semibold tracking-[-1%] mt-3 cursor-pointer w-full"
               >
-                <p className="flex-grow">House rule</p>
+                <p className="flex-grow">House rules</p>
                 {isShowHouseRule ? (
                   <IoIosArrowUp size={18} className="text-gray-600" />
                 ) : (

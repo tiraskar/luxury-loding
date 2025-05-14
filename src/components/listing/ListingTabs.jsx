@@ -30,7 +30,7 @@ const ListingTabs = ({ tabs, activeTab, setActiveTab }) => {
       <ul className="flex flex-wrap  relative sm:justify-between">
         {tabs?.map((tab, index) => (
           <a
-            href={`#${tab == "Reviews" ? "listing_reviews" : (tab == "House Rule" ? 'listing_booking_terms' : tab)}`}
+            href={`#${tab == "Reviews" ? "listing_reviews" : (tab == "House Rules" ? 'listing_booking_terms' : tab)}`}
             key={tab}
             className={`py-2 sm:py-[14px] px-[10px] cursor-pointer text-[#333333] ${activeTab === tab ? 'font-semibold opacity-100' : 'opacity-40'}`}
             onClick={() => {
