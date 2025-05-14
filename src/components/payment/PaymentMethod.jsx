@@ -12,6 +12,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaHouseChimneyWindow } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { toast } from "react-toastify";
+import CustomPopup from "../common/CustomPopUP";
+import TermsAndCondition from "../../pages/TermsAndCondition";
+import RefundPolicy from "../../pages/RefundPolicy";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -37,6 +40,8 @@ const PaymentMethod = () => {
   const [isAgreeTerms, setIsAgreeTerms] = useState(false);
   const [isShowHouseRule, setIsShowHouseRule] = useState(true);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [isTermsAndConditionOpen, setIsTermsConditionOpen] = useState(false);
+  const [isCancellationPolicyOpen, setIsCancellationPolicyOpen] = useState(false)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
@@ -190,8 +195,8 @@ const PaymentMethod = () => {
           />
           <p className="lg:relative text-xs leading-6">
             By clicking the button below, I agree to Luxury Lodging's {" "}
-            <Link to="/terms-and-conditions" className="underline">terms & conditions</Link>, guest agreement and {" "}
-            <Link to="/refund-policy" className="underline">cancellation policy</Link>
+            <span onClick={() => setIsTermsConditionOpen(true)} className="underline cursor-pointer">terms & conditions</span>, guest agreement and {" "}
+            <span onClick={() => setIsCancellationPolicyOpen(true)} className="underline cursor-pointer">cancellation policy</span>
             . I am aware that I must be at least 21 to book this stay. I agree to pay the total amount shown, which includes service fees.{" "}
             <Link to="/contact" className="underline">Contact us&nbsp;</Link>
             if you have any questions!
@@ -219,6 +224,16 @@ const PaymentMethod = () => {
           </div>
         </Modal>
       )}
+      {isTermsAndConditionOpen &&
+        <CustomPopup onClose={setIsTermsConditionOpen}>
+          <TermsAndCondition />
+        </CustomPopup>
+      }
+      {isCancellationPolicyOpen &&
+        <CustomPopup onClose={setIsCancellationPolicyOpen}>
+          <RefundPolicy />
+        </CustomPopup>
+      }
     </>
   );
 };
