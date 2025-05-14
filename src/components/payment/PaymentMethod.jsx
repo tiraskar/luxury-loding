@@ -55,7 +55,7 @@ const PaymentMethod = () => {
     },
     resolver: yupResolver(schema)
   });
-
+  const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const { personalInfo, loading } = useSelector(state => state.payment);
@@ -95,7 +95,7 @@ const PaymentMethod = () => {
             url: response.url
           });
 
-          const url = `/charge-popup.html?${queryParams.toString()}`;
+          const url = `${baseUrl}charge-popup.html?${queryParams.toString()}`;
           setPaymentUrl(url);
           setShowPaymentPopup(true);
         }
