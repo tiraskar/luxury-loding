@@ -189,7 +189,10 @@ const PaymentMethod = () => {
             className="mt-1.5"
           />
           <p className="lg:relative text-xs leading-6">
-            By clicking the button below, I agree to Luxury Lodging's terms & conditions, guest agreement and cancellation policy. I am aware that I must be at least 21 to book this stay. I agree to pay the total amount shown, which includes service fees.{" "}
+            By clicking the button below, I agree to Luxury Lodging's {" "}
+            <Link to="/terms-and-conditions" className="underline">terms & conditions</Link>, guest agreement and {" "}
+            <Link to="/refund-policy" className="underline">cancellation policy</Link>
+            . I am aware that I must be at least 21 to book this stay. I agree to pay the total amount shown, which includes service fees.{" "}
             <Link to="/contact" className="underline">Contact us&nbsp;</Link>
             if you have any questions!
           </p>
