@@ -22,3 +22,4 @@ export { default as Booking } from "./booking/Booking";
 export { default as ListingList } from "./listing/ListingList";
 export { default as ListingLoading } from "./ui/ListingLoading";
 // export { default as BookApartment } from "./BookApartment";
+export { default as PaymentSuccess } from "./payment/PaymentSuccess";

@@ -12,7 +12,6 @@ import {
   SingleListing,
   Success
 } from "./pages";
-import BookingListing from "./pages/BookingListing";
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { ToastContainer } from "react-toastify";
@@ -21,6 +20,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import TermsAndCondition from "./pages/TermsAndCondition";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
+import { PaymentSuccess } from "./components";
 
 // Routing
 const router = createBrowserRouter([
@@ -68,12 +68,11 @@ const router = createBrowserRouter([
             path: "payment",
             element: <BookingConfirmation />,
           },
-          {
-            path: "success",
-            element: <Success />
-          },
         ]
-
+      },
+      {
+        path: "/listing/:id/success",
+        element: <PaymentSuccess />
       },
       {
         path: "/terms-and-conditions",

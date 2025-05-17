@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoaderScreen from "../ui/LoaderScreen";
 import { formateDate } from "../../helper/date";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaHouseChimneyWindow } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -42,7 +42,7 @@ const PaymentMethod = () => {
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [isTermsAndConditionOpen, setIsTermsConditionOpen] = useState(false);
   const [isCancellationPolicyOpen, setIsCancellationPolicyOpen] = useState(false)
-
+  const navigate = useNavigate();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
       personalInfo: {
@@ -63,6 +63,7 @@ const PaymentMethod = () => {
   const bookingCheckOut = localStorage?.getItem('checkOut');
   const { listingInfo } = useSelector(state => state.listing);
   const [paymentUrl, setPaymentUrl] = useState('');
+  const { id } = useParams();
   const onSubmit = async () => {
     if (!isAgreeTerms) {
       document.getElementById("agreeTerms").focus();
@@ -83,6 +84,7 @@ const PaymentMethod = () => {
               Number(totalDiscountPrice !== 0 ? totalDiscountPrice : 0)
             ).toFixed(2)
             : Number(bookingPrice.totalPrice).toFixed(2);
+          localStorage.setItem('payerEmail', personalInfo.email)
           localStorage.setItem('orderId', response.orderId);
           const queryParams = new URLSearchParams({
             userAccountId: response.userAccountId,
@@ -92,7 +94,6 @@ const PaymentMethod = () => {
             payerEmail: personalInfo.email,
             url: response.url
           });
-
           const url = `/charge-popup.html?${queryParams.toString()}`;
           setPaymentUrl(url);
           setShowPaymentPopup(true);
@@ -114,13 +115,29 @@ const PaymentMethod = () => {
         dispatch(savePaymentInfo(paymentData))
           .unwrap()
           .then(() => {
+            const totalPrice = totalDiscountPrice
+              ? (
+                Number(bookingPrice.totalPrice) -
+                Number(totalDiscountPrice !== 0 ? totalDiscountPrice : 0)
+              ).toFixed(2)
+              : Number(bookingPrice.totalPrice).toFixed(2);
             setShowPaymentPopup(false);
-            window.location.href = '/listings';
+            const payerEmail = localStorage.getItem('payerEmail');
+            navigate(`/listing/${id}/success`, {
+              state: {
+                payerEmail: payerEmail,
+                amount: totalPrice,
+                guests: Number(guestNumber),
+                checkIn: formateDate(new Date(bookingCheckIn)),
+                checkOut: formateDate(new Date(bookingCheckOut)),
+              },
+              replace: true
+            });
           })
           .catch(() => {
             setShowPaymentPopup(false);
             toast.error("Something went wrong, please try again!");
-            window.location.href = '/listings';
+            navigate('/listings', { replace: true })
           });
       }
     };
