@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { emailSubscription, } from "../../redux/slices/contactSlice";
 import { useEffect } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { IoLogoInstagram } from "react-icons/io5";
+import { IoLogoInstagram, IoLogoLinkedin } from "react-icons/io5";
 
 const Footer = () => {
   const { pathname } = useLocation();
@@ -43,6 +43,11 @@ const Footer = () => {
               target="_blank"
               className="flex items-center gap-4"><IoLogoInstagram size={20} />
               @LuxuryLodgingSTR</a>
+            <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
+              target="_blank"
+              className="flex items-center gap-4"><IoLogoLinkedin size={20} />
+              Luxury Lodging
+            </a>
             <a href={`tel:${footerContent.contact}`} className="flex items-center gap-4"><LuPhone size={20} />
               {footerContent.contact}</a>
             <a href={`mailto:${footerContent.email}`} className="flex  items-center gap-4"><FiMail size={20} /> {
