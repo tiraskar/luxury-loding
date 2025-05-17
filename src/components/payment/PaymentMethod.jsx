@@ -57,13 +57,14 @@ const PaymentMethod = () => {
   });
   const dispatch = useDispatch();
   const { personalInfo, loading } = useSelector(state => state.payment);
-  const { bookingPrice, totalDiscountPrice } = useSelector(state => state.booking);
+  const { bookingPrice, totalDiscountPrice, isGuestChanged } = useSelector(state => state.booking);
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
   const { listingInfo } = useSelector(state => state.listing);
   const [paymentUrl, setPaymentUrl] = useState('');
   const { id } = useParams();
+
   const onSubmit = async () => {
     if (!isAgreeTerms) {
       document.getElementById("agreeTerms").focus();
@@ -147,6 +148,7 @@ const PaymentMethod = () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
 
 
 

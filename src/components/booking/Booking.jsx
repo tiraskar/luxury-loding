@@ -1,4 +1,4 @@
-import { LuBath, LuUser2, LuUsers } from "react-icons/lu";
+import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { CiCalendar } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,17 +10,17 @@ import { calculateBookingPrice, setCheckBookingParams, toggleDateRangedPickedFor
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-date-range";
 import { addDays, format } from "date-fns";
-import { updatePaymentIntent } from "../../redux/slices/paymentSlice";
 import { toLocalDate } from "../../utils/dateUtils";
+import GuestSelector from "../common/GuestSelector";
 const Booking = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { listingInfo } = useSelector(state => state.listing);
   const { bookingPrice,
-    loading,
-    totalDiscountPrice, isValidToken } = useSelector(state => state.booking);
-
+    totalDiscountPrice, isValidToken, bookingGuests } = useSelector(state => state.booking);
+  const [isGuestChanged, setIsGuestChanged] = useState(false);
+  const [openGuestDropdown, setOpenDropDown] = useState(false);
   const images = listingInfo?.images || [];
   const { checkBookingParams } = useSelector(state => state.booking);
   const { listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
@@ -115,24 +115,14 @@ const Booking = () => {
     };
   }, []);
 
-  const updateBooking = (guest) => {
+  const updateBooking = () => {
     dispatch(calculateBookingPrice({
       listingId: Number(id),
       checkIn: formateDate(new Date(range[0].startDate)),
       checkOut: formateDate(new Date(range[0].endDate)),
-      guests: guest ? guest : Number(guestNumber),
+      guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
     }));
-    // .unwrap().then(response => {
-    //   if (response) {
-    //     dispatch(updatePaymentIntent({
-    //       id: id,
-    //       amount: Number(response.totalPrice),
-    //       guests: guest ? guest : Number(guestNumber),
-    //       checkIn: formateDate(new Date(range[0].startDate)),
-    //       checkOut: formateDate(new Date(range[0].endDate)),
-    //     }));
-    //   }
-    // });
+    setIsGuestChanged(false)
     setIsDateRangeChanged(false);
   }
 
@@ -145,37 +135,15 @@ const Booking = () => {
   }, [isDateRangedChange, openCheckIn, openCheckOut]);
 
 
-  const handleInputChange = (name, value) => {
-    setGuestInput(value);
-    dispatch(setCheckBookingParams({ name, value }));
-  };
-  const [isGuestChanged, setIsGuestChanged] = useState(false)
-
-  const handleGuestChange = (e) => {
-    // let value = Number(e.target.value);
-    // if (value > 50) value = 50;
-    // if (value < 0) value = 0;
-    setIsGuestChanged(true);
-    // setGuestInput(value); 
-    if (e.target.value > 50) {
-      handleInputChange('guests', 50);
-    } else {
-      handleInputChange('guests', e.target.value);
-    }
-  };
-  const [guestInput, setGuestInput] = useState(checkBookingParams.guests);
-
   useEffect(() => {
-    if (isGuestChanged) {
+    if (isGuestChanged && !openGuestDropdown) {
       const handler = setTimeout(() => {
-        guestInput > 0 && updateBooking(guestInput);
-      }, 1500);
+        updateBooking();
+      }, 500);
 
       return () => clearTimeout(handler);
     }
-  }, [guestInput]);
-
-
+  }, [isGuestChanged, openGuestDropdown]);
 
   return (
     <div className=" space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
@@ -352,7 +320,7 @@ const Booking = () => {
             </div>
           </div>
 
-          <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
+          {/* <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
             <p className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} /> <p>Guests</p>
             </p>
@@ -387,8 +355,12 @@ const Booking = () => {
                 {checkBookingParams.guests > 1 ? "guests" : "guest"}
               </p>
             </div>
-            {/* <p className="font-semibold pl-6">{guestNumber}&nbsp;{guestNumber > 1 ? "Guests" : "Guest"}</p> */}
-          </div>
+          </div> */}
+          <GuestSelector
+            openGuestDropdown={openGuestDropdown}
+            setOpenDropDown={setOpenDropDown}
+            setIsGuestChanged={setIsGuestChanged}
+          />
 
         </div>
         <div className="flex flex-col space-y-4 md:space-y-6 my-10">

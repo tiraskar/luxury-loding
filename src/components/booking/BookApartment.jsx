@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { CiCalendar } from "react-icons/ci";
-import { LuUser2 } from "react-icons/lu";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { clearBookingDateSelection, setCheckBookingParams, setIsBooking, toggleBookingNotAvailableAlertDialog } from "../../redux/slices/bookingSlice"; import AlertDialog from "../ui/AlertDialog";
@@ -13,10 +12,13 @@ import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlic
 import { IoClose } from "react-icons/io5";
 import BookApartmentMap from "./BookApartmentMap";
 import { toLocalDate } from "../../utils/dateUtils";
+import GuestSelector from "../common/GuestSelector";
 
 const BookApartment = ({ listingInfo }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isGuestChanged, setIsGuestChanged] = useState(false);
+  const [openGuestDropdown, setOpenDropDown] = useState(false);
   //eslint-disable-next-line
   const { checkBookingParams, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
 
@@ -38,7 +40,7 @@ const BookApartment = ({ listingInfo }) => {
     }
     if (checkBookingParams.checkIn > checkBookingParams.checkOut) return toast.info("Please provide valid date for checkout!!!")
 
-    if (checkBookingParams.guests == "") return toast.info("Please provide guest count");
+    // if (checkBookingParams.guests == "") return toast.info("Please provide guest count");
     dispatch(setIsBooking(true))
     navigate(`/listing/${listingInfo.id}/booking?${query}`);
 
@@ -147,7 +149,7 @@ const BookApartment = ({ listingInfo }) => {
       },
     ]);
   }
-  
+
 
   return (
     <div className="font-inter tracking-[-1%]">
@@ -168,7 +170,6 @@ const BookApartment = ({ listingInfo }) => {
               <BookApartmentMap listingInfo={listingInfo} />
             </div>
           }
-
           <div className="grid xs:grid-cols-2 gap-[10px]">
             <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
               <p className="flex text-[#8A8A8A] space-x-2 items-center">
@@ -263,8 +264,11 @@ const BookApartment = ({ listingInfo }) => {
               </div>
             </div>
           </div>
-
-          <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
+          <GuestSelector
+            openGuestDropdown={openGuestDropdown}
+            setOpenDropDown={setOpenDropDown}
+            setIsGuestChanged={setIsGuestChanged} />
+          {/* <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
             <div className="flex text-[#8A8A8A] space-x-2 items-center">
               <LuUser2 size={18} className="mr-1" />Guests
             </div>
@@ -300,8 +304,8 @@ const BookApartment = ({ listingInfo }) => {
                 {checkBookingParams.guests > 1 ? "guests" : "guest"}
               </p>
             </div>
-          </div>
-        </div>
+          </div>*/}
+        </div> 
 
         <div className="min-w-full h-px bg-[#E0E0E0] my-[30px]"></div>
 
@@ -315,7 +319,7 @@ const BookApartment = ({ listingInfo }) => {
               }
               handleSubmit(e);
             }}
-            className="flex flex-row items-center justify-center text-white bg-black text-sm  py-[14px] rounded-xl">
+            className="flex flex-row items-center justify-center text-white bg-black text-sm  py-[14px] rounded-xl cursor-pointer">
             Book Now
           </button>
         </div>

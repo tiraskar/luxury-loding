@@ -17,16 +17,13 @@ const BookingPayment = () => {
 
   const { isFetchingStripKey } = useSelector(state => state.payment);
   const { isFetchListingInfo } = useSelector(state => state.listing);
-  const { loading, isBooking } = useSelector(state => state.booking);
+  const { loading, isBooking, checkBookingParams, bookingGuests } = useSelector(state => state.booking);
 
   const guestNumber = localStorage?.getItem('guests');
   const bookingCheckIn = localStorage?.getItem('checkIn');
   const bookingCheckOut = localStorage?.getItem('checkOut');
   const listingId = localStorage?.getItem('listingId');
 
-  // useEffect(() => {
-  //   dispatch(fetchStripPromiseKey());
-  // }, []);
   const startDate = getCurrentMonthStartDate()
 
   useEffect(() => {
@@ -43,9 +40,9 @@ const BookingPayment = () => {
       }));
       bookingCheckIn && bookingCheckOut && guestNumber && dispatch(calculateBookingPrice({
         listingId: Number(id),
-        checkIn: formateDate(new Date(bookingCheckIn)),
-        checkOut: formateDate(new Date(bookingCheckOut)),
-        guests: Number(guestNumber),
+        checkIn: formateDate(new Date(checkBookingParams.checkIn)),
+        checkOut: formateDate(new Date(checkBookingParams.checkOut)),
+        guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
       }));
       // .unwrap().then((response) => {
       //   if (response) {
@@ -62,7 +59,6 @@ const BookingPayment = () => {
       // });
     }
   }, [id]);
-
 
 
 

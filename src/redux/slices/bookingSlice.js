@@ -76,6 +76,13 @@ const bookingSlice = createSlice({
       listingId: '',
       guests: '',
     },
+    bookingGuests: {
+      adults: 1,
+      children: 0,
+      infants: 0,
+      pets: 0,
+    },
+    isGuestChanged: false,
     bookingInitialValues: {
       checkIn: '',
       checkOut: '',
@@ -108,14 +115,21 @@ const bookingSlice = createSlice({
         localStorage.setItem(name, value);
       }
     },
+    setIsGuestChange: (state, action) => {
+      state.isGuestChanged = action.payload;
+    },
+    setBookingGuests: (state, action) => {
+      const { name, value } = action.payload;
+      if (state.bookingGuests[name] + value >= 0) {
+        state.bookingGuests[name] += value;
+      }
+    },
 
     setBookingInitialValues: (state, action) => {
       state.bookingInitialValues.checkIn = action.payload.checkIn;
       state.bookingInitialValues.checkOut = action.payload.checkOut;
       state.bookingInitialValues.guests = action.payload.guests;
     },
-
-
 
     setIsBookingDetailsChange: (state) => {
       state.isBookingDetailsChange = !state.isBookingDetailsChange;
@@ -129,6 +143,12 @@ const bookingSlice = createSlice({
         listingId: '',
         guests: '',
       };
+      state.bookingGuests = {
+        adults: 1,
+        children: 0,
+        infants: 0,
+        pets: 0,
+      }
     },
     setIsBooking: (state, action) => {
       state.isBooking = action.payload;
@@ -264,6 +284,8 @@ export const
     clearBookingDateSelection,
     setIsBooking,
     setIsBookingDetailsChange,
-    setBookingInitialValues
+    setBookingInitialValues,
+    setBookingGuests,
+    setIsGuestChange
   } = bookingSlice.actions;
 export default bookingSlice.reducer;

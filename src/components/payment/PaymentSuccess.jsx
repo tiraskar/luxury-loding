@@ -11,6 +11,7 @@ const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { listingInfo } = useSelector((state) => state.listing);
+  const { bookingGuests } = useSelector((state) => state.booking)
   const images = listingInfo?.images || [];
   const navigate = useNavigate();
 
@@ -98,8 +99,8 @@ const PaymentSuccess = () => {
 
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <MdGroups3 className="text-lg" />
-                    {guests} Guests
-                    {/* , {bookingInfo.infants} Infants, {bookingInfo.pets} Pets */}
+                    {bookingGuests.adults + bookingGuests.children} Guests
+                    , {bookingGuests.infants} Infants
                   </div>
 
                   {listingInfo.address && (
