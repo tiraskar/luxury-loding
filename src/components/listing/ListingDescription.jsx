@@ -7,9 +7,9 @@ const ListingDescription = ({ listingInfo, className }) => {
   const [lineClamp, setIsLineClamp] = useState(5);
 
   const formatText = (content) => {
-    return content.split('\n\n').map((paragraph, pIndex) => (
+    return content?.split('\n\n')?.map((paragraph, pIndex) => (
       <div key={`para-${pIndex}`} style={{ marginBottom: '1.5rem' }}>
-        {paragraph.split('\n').map((line, lIndex, lines) => (
+        {paragraph?.split('\n')?.map((line, lIndex, lines) => (
           <React.Fragment key={`line-${pIndex}-${lIndex}`}>
             {line}
             {/* Add line break except after last line */}
