@@ -182,7 +182,7 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
             <div key={i} className="flex-1">
               <div className="grid grid-cols-7 text-buttonPrimary font-semibold gap-1 text-center text-sm mb-2">
                 {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-                  <div key={day}>{day}</div>
+                  <div key={day} className="w-8 h-8">{day}</div>
                 ))}
               </div>
 
