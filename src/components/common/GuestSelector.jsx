@@ -43,6 +43,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
             {bookingGuests.adults + bookingGuests.children}
             {(bookingGuests.adults > 1 || bookingGuests.children > 0) ? " guests" : " guest"}
             {bookingGuests.infants > 0 && `, ${bookingGuests.infants} infants`}
+            {bookingGuests.pets > 0 && `, ${bookingGuests.pets} ${(bookingGuests.pets > 1 || bookingGuests.pets > 0) ? " pets" : " pet"}`}
           </p>
           <span>
             {openGuestDropdown ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
@@ -84,7 +85,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
                   disabled={
                     (type === 'adults' || type === 'children')
                       ? (bookingGuests.adults + bookingGuests.children >= listingInfo.personCapacity)
-                      : type === 'infants' && bookingGuests.infants >= (listingInfo.infants || 2)
+                      : type === 'infants' && bookingGuests.infants >= (listingInfo.infants || 10)
                         ? true : false
                   }
                 >
