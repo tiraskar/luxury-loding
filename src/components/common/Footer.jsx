@@ -43,11 +43,6 @@ const Footer = () => {
               target="_blank"
               className="flex items-center gap-4"><IoLogoInstagram size={20} />
               @LuxuryLodgingSTR</a>
-            <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
-              target="_blank"
-              className="flex items-center gap-4"><IoLogoLinkedin size={20} />
-              Luxury Lodging
-            </a>
             <a href={`tel:${footerContent.contact}`} className="flex items-center gap-4"><LuPhone size={20} />
               {footerContent.contact}</a>
             <a href={`mailto:${footerContent.email}`} className="flex  items-center gap-4"><FiMail size={20} /> {
@@ -85,7 +80,11 @@ const Footer = () => {
           <Link to='/refund-policy'>Refund policy</Link>
 
           <div className="hidden md:flex gap-4 md:gap-6 text-black text-2xl ">
-            <FaLinkedin />
+            <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
+              target="_blank"
+              className="flex items-center gap-4">
+              <FaLinkedin className="cursor-pointer" />
+            </a>
             <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
               <FaSquareInstagram className="cursor-pointer" />
             </a>
@@ -93,7 +92,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex justify-center md:hidden gap-4  order-3 text-black text-2xl ">
-          <FaLinkedin />
+          <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
+            target="_blank"
+            className="flex items-center gap-4">
+            <FaLinkedin className="cursor-pointer" />
+          </a>
           <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
             <FaSquareInstagram className="cursor-pointer" />
           </a>
