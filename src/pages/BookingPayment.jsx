@@ -3,7 +3,7 @@ import { Wrapper } from "../components";
 import { useEffect, } from "react";
 import LoaderScreen from "../components/ui/LoaderScreen";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchListingAvailabilityCalender, fetchListingInfo } from "../redux/slices/listingSlice";
+import { fetchHolidayFutureCalender, fetchListingInfo } from "../redux/slices/listingSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { calculateBookingPrice } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
@@ -19,44 +19,30 @@ const BookingPayment = () => {
   const { isFetchListingInfo } = useSelector(state => state.listing);
   const { loading, isBooking, checkBookingParams, bookingGuests } = useSelector(state => state.booking);
 
-  const guestNumber = localStorage?.getItem('guests');
-  const bookingCheckIn = localStorage?.getItem('checkIn');
-  const bookingCheckOut = localStorage?.getItem('checkOut');
-  const listingId = localStorage?.getItem('listingId');
+
 
   const startDate = getCurrentMonthStartDate()
 
   useEffect(() => {
-    dispatch(fetchListingInfo(id || listingId));
+    !id && navigate(`/listings`);
+    dispatch(fetchListingInfo(id));
     !isBooking && navigate(`/listings/${id}`)
-    listingId !== id && navigate(`/listings/${id}`);
-    if (!bookingCheckIn || !bookingCheckOut || !guestNumber) {
+    if (!checkBookingParams.checkIn || !checkBookingParams.checkOut || !bookingGuests.adults) {
       navigate(`/listings/${id}`);
       return null;
     } else {
-      dispatch(fetchListingAvailabilityCalender({
+
+      dispatch(fetchHolidayFutureCalender({
         id,
         startDate: formateDate(startDate)
       }));
-      bookingCheckIn && bookingCheckOut && guestNumber && dispatch(calculateBookingPrice({
-        listingId: Number(id),
+      checkBookingParams.checkIn && checkBookingParams.checkOut && bookingGuests.adults && dispatch(calculateBookingPrice({
+        guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+        pet: bookingGuests?.pets || null,
         checkIn: formateDate(new Date(checkBookingParams.checkIn)),
         checkOut: formateDate(new Date(checkBookingParams.checkOut)),
-        guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+        listingId: Number(id)
       }));
-      // .unwrap().then((response) => {
-      //   if (response) {
-      //     dispatch(createPaymentIntent({
-      //       id,
-      //       amount: Number(response.totalPrice),
-      //       guests: Number(guestNumber),
-      //       checkIn: formateDate(new Date(bookingCheckIn)),
-      //       checkOut: formateDate(new Date(bookingCheckOut)),
-      //     }));
-      //   } else {
-      //     window.location.reload();
-      //   }
-      // });
     }
   }, [id]);
 

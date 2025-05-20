@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoaderScreen from "../ui/LoaderScreen";
-import { formateDate } from "../../helper/date";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaHouseChimneyWindow } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -15,6 +14,7 @@ import { toast } from "react-toastify";
 import CustomPopup from "../common/CustomPopUP";
 import TermsAndCondition from "../../pages/TermsAndCondition";
 import RefundPolicy from "../../pages/RefundPolicy";
+import { formateDate } from "../../helper/date";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -57,10 +57,8 @@ const PaymentMethod = () => {
   });
   const dispatch = useDispatch();
   const { personalInfo, loading } = useSelector(state => state.payment);
-  const { bookingPrice, totalDiscountPrice, isGuestChanged } = useSelector(state => state.booking);
-  const guestNumber = localStorage?.getItem('guests');
-  const bookingCheckIn = localStorage?.getItem('checkIn');
-  const bookingCheckOut = localStorage?.getItem('checkOut');
+  const { bookingPrice, totalDiscountPrice, checkBookingParams, bookingGuests } = useSelector(state => state.booking);
+
   const { listingInfo } = useSelector(state => state.listing);
   const [paymentUrl, setPaymentUrl] = useState('');
   const { id } = useParams();
@@ -71,10 +69,21 @@ const PaymentMethod = () => {
       return;
     }
 
+    if (!checkBookingParams.checkIn || !checkBookingParams.checkOut) {
+      toast.error("Please select check-in and check-out date!!!");
+      return;
+    }
+
+    console.log('booking guests', bookingGuests.adults);
+
     dispatch(createOrder({
-      guests: Number(guestNumber),
-      checkIn: formateDate(new Date(bookingCheckIn)),
-      checkOut: formateDate(new Date(bookingCheckOut)),
+      guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+      adults: Number(bookingGuests.adults),
+      children: bookingGuests.children || null,
+      infants: bookingGuests.infants || null,
+      pets: bookingGuests?.pets || null,
+      checkIn: formateDate(new Date(checkBookingParams.checkIn)),
+      checkOut: formateDate(new Date(checkBookingParams.checkOut)),
     }))
       .unwrap()
       .then((response) => {
@@ -99,6 +108,9 @@ const PaymentMethod = () => {
           setPaymentUrl(url);
           setShowPaymentPopup(true);
         }
+      }).catch((error) => {
+        toast.dismiss();
+        toast.error("Something went wrong try again!!!")
       });
   };
 
@@ -128,9 +140,12 @@ const PaymentMethod = () => {
               state: {
                 payerEmail: payerEmail,
                 amount: totalPrice,
-                guests: Number(guestNumber),
-                checkIn: formateDate(new Date(bookingCheckIn)),
-                checkOut: formateDate(new Date(bookingCheckOut)),
+                guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+                children: bookingGuests.children || null,
+                infants: bookingGuests.infants || null,
+                pets: bookingGuests?.pets || null,
+                checkIn: checkBookingParams.checkIn,
+                checkOut: checkBookingParams.checkOut,
               },
               replace: true
             });
@@ -211,6 +226,7 @@ const PaymentMethod = () => {
             className="mt-1.5"
           />
           <p className="lg:relative text-xs leading-6">
+            {/* eslint-disable-next-line */}
             By clicking the button below, I agree to Luxury Lodging's {" "}
             <span onClick={() => setIsTermsConditionOpen(true)} className="underline cursor-pointer">terms & conditions</span>, guest agreement and {" "}
             <span onClick={() => setIsCancellationPolicyOpen(true)} className="underline cursor-pointer">cancellation policy</span>

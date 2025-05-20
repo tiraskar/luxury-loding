@@ -2,82 +2,43 @@ import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { CiCalendar } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
-import { calculateBookingPrice, setCheckBookingParams, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { calculateBookingPrice, clearBookingDateSelection, setCheckBookingParams, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
 import { useEffect, useRef, useState } from "react";
-import { DateRange } from "react-date-range";
-import { addDays, format } from "date-fns";
-import { toLocalDate } from "../../utils/dateUtils";
+import { format } from "date-fns";
 import GuestSelector from "../common/GuestSelector";
+import CustomCalendar from "./CustomCalender";
+import { IoClose } from "react-icons/io5";
+import dayjs from "dayjs";
 const Booking = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { listingInfo } = useSelector(state => state.listing);
+  const { listingInfo, listingCalender } = useSelector(state => state.listing);
   const { bookingPrice,
     totalDiscountPrice, isValidToken, bookingGuests } = useSelector(state => state.booking);
   const [isGuestChanged, setIsGuestChanged] = useState(false);
   const [openGuestDropdown, setOpenDropDown] = useState(false);
   const images = listingInfo?.images || [];
   const { checkBookingParams } = useSelector(state => state.booking);
-  const { listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
+  const [dateRange, setDateRange] = useState({
+    start: dayjs(checkBookingParams.checkIn),
+    end: dayjs(checkBookingParams.checkOut),
+  });
+  const [isDateRangedChanged, setIsDateRangeChanged] = useState(false)
 
-  const [isDateRangedChange, setIsDateRangeChanged] = useState(false);
+  const [rangeStart, setRangeStart] = useState(dayjs(checkBookingParams.checkIn));
+  const [rangeEnd, setRangeEnd] = useState(dayjs(checkBookingParams.checkOut));
+  const [hoveredDate, setHoveredDate] = useState(null);
 
-  const guestNumber = localStorage?.getItem('guests');
-  const bookingCheckIn = localStorage?.getItem('checkIn');
-  const bookingCheckOut = localStorage?.getItem('checkOut');
-
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 0),
-      key: 'selection'
-    }
-  ]);
 
   const checkOutRef = useRef(null);
   const checkInRef = useRef(null);
   const [openCheckIn, setOpenCheckIn] = useState(false);
+  //eslint-disable-next-line
   const [openCheckOut, setOpenCheckOut] = useState(false);
-
-
-
-  useEffect(() => {
-    if (openCheckIn && range[0].startDate) {
-      dispatch(setCheckBookingParams({ name: 'checkIn', value: range[0].startDate }));
-      dispatch(setCheckBookingParams({ name: 'checkOut', value: range[0].endDate }));
-    }
-  }, [range[0].startDate, range[0].endDate]);
-
-  const [direction, setDirection] = useState('horizontal');
-
-  useEffect(() => {
-    if (checkBookingParams.checkIn && checkBookingParams.checkOut) {
-      setRange([
-        {
-          startDate: checkBookingParams.checkIn ? new Date(checkBookingParams.checkIn) : new Date(),
-          endDate: checkBookingParams.checkOut ? new Date(checkBookingParams.checkOut) : new Date(),
-          key: 'selection',
-        },
-      ]);
-    }
-    const updateDirection = () => {
-      if (window.innerWidth <= 640) {
-        setDirection('vertical');
-      } else {
-        setDirection('horizontal');
-      }
-    };
-    updateDirection();
-    window.addEventListener('resize', updateDirection);
-    return () => {
-      window.removeEventListener('resize', updateDirection);
-    };
-  }, []);
 
 
   const hideOnClickOutside = (e) => {
@@ -99,12 +60,6 @@ const Booking = () => {
     }
   };
 
-  const checkDateChange = (item) => {
-    if (item) {
-      setIsDateRangeChanged(true);
-    }
-  };
-
 
   useEffect(() => {
     document.addEventListener("keydown", hideOnEscape, true);
@@ -117,22 +72,22 @@ const Booking = () => {
 
   const updateBooking = () => {
     dispatch(calculateBookingPrice({
-      listingId: Number(id),
-      checkIn: formateDate(new Date(range[0].startDate)),
-      checkOut: formateDate(new Date(range[0].endDate)),
       guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+      pet: bookingGuests?.pets || null,
+      checkIn: formateDate(new Date(checkBookingParams.checkIn)),
+      checkOut: formateDate(new Date(checkBookingParams.checkOut)),
+      listingId: Number(listingInfo.id)
     }));
     setIsGuestChanged(false)
     setIsDateRangeChanged(false);
   }
 
-
   useEffect(() => {
-    if (isDateRangedChange && !openCheckIn && !openCheckOut) {
+    if (isDateRangedChanged && !openCheckIn && !openCheckOut) {
       updateBooking()
     }
 
-  }, [isDateRangedChange, openCheckIn, openCheckOut]);
+  }, [isDateRangedChanged, openCheckIn, openCheckOut]);
 
 
   useEffect(() => {
@@ -143,10 +98,47 @@ const Booking = () => {
 
       return () => clearTimeout(handler);
     }
-  }, [isGuestChanged, openGuestDropdown]);
+  }, [isGuestChanged, openGuestDropdown, isDateRangedChanged]);
+
+  const handleRangeSelection = (clickedDate) => {
+    if (!dateRange.start || (dateRange.start && dateRange.end)) {
+      // Start new range
+      setDateRange({ start: clickedDate, end: null });
+    } else if (!dateRange.end && clickedDate.isAfter(dateRange.start, "day")) {
+      // End selected
+      const newRange = { ...dateRange, end: clickedDate };
+      setDateRange(newRange);
+    } else {
+      // Reset or invalid range
+      setDateRange({ start: clickedDate, end: null });
+    }
+  };
+
+  const handleUpdateDate = (data) => {
+    dispatch(setCheckBookingParams({ name: 'checkIn', value: data.start }));
+    dispatch(setCheckBookingParams({ name: 'checkOut', value: data.end }));
+    setIsDateRangeChanged(true);
+  };
+
+  const handleDateClear = () => {
+    setRangeStart(null);
+    setRangeEnd(null);
+    setHoveredDate(null);
+    dispatch(clearBookingDateSelection());
+  };
+
+  useEffect(() => {
+    if (rangeStart && rangeEnd) {
+      dispatch(setCheckBookingParams({ name: 'checkIn', value: rangeStart }));
+      dispatch(setCheckBookingParams({ name: 'checkOut', value: rangeEnd }));
+      setOpenCheckIn(false);
+      setOpenCheckOut(false);
+    }
+
+  }, [dispatch, rangeEnd, rangeStart]);
 
   return (
-    <div className=" space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
+    <div className="relative space-y-6 md:space-y-8 px-1 xs:px-2 sm:px-0 pt-5">
       <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4">
         <div className="xl:max-h-[145px] sm:max-w-[350px] lg:max-w-full xl:max-w-[207px]">
           <img src={images[0]?.url} alt="" className="w-full h-full object-cover rounded-xl" />
@@ -192,109 +184,41 @@ const Booking = () => {
                     id="bookingCheckIn"
                     value={`${checkBookingParams.checkIn ? format(checkBookingParams.checkIn, "MM/dd/yyyy") : ""}`}
                     readOnly
-                    onClickCapture={() => {
-                      setOpenCheckIn(openCheckIn => !openCheckIn);
+                    className="outline-none max-w-[117px]  text-[1rem]"
+                    onClick={() => {
+                      setOpenCheckIn(true);
                       setOpenCheckOut(false);
                     }}
-                    className="cursor-pointer outline-none max-w-[117px]  text-[1rem]"
+
                     placeholder="MM/DD/YYYY"
                   />
+                  {checkBookingParams.checkIn && (
+                    <IoClose
+                      onClick={() => handleDateClear()}
+                      className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                    />
+                  )}
                 </div>
                 <div className="z-auto">
-                  {openCheckIn &&
-                    <div
-                      ref={checkInRef}
-                      className="calendarWrap ml-24 xxs:ml-32 lg:ml-0">
-                      <DateRange
-                        showClearButton={true}
-                        onChange={(item) => {
-                          dispatch(toggleDateRangedPickedForBooking('bookingDatePick'));
-                          setRange([item.selection]);
-                          checkDateChange([item.selection]);
-                        }}
-                        editableDateInputs={false}
-                        moveRangeOnFirstSelection={true}
-                        ranges={range}
-                        months={2}
-                        direction={direction}
-                        className="calendarElement"
-                        minDate={new Date()}
-                        showDateDisplay={false}
-                        showMonthAndYearPickers={false}
-                        rangeColors={["#B69F6F"]}
-                        disabledDates={listingUnavailableCalender.map(toLocalDate)}
-                        dayContentRenderer={(date) => {
-                          const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
-                            new Date(d).toDateString() === date.toDateString()
-                          );
-                          return (
-                            <span
-                              style={{
-                                opacity: isCheckOutAvailable ? 0.5 : 1,
-                                padding: "5px",
-                                position: "absolute",
-                                cursor: isCheckOutAvailable ? "pointer" : "default",
-                              }}
-                              className={isCheckOutAvailable ? "checkout-tooltip z-50 " : ""}
-                            >
-                              {date.getDate()}
-                              {isCheckOutAvailable && (
-                                <span className="tooltip-text overflow-visible z-50">Check-in Unavailable</span>
-                              )}
-                            </span>
-
-                          );
-                        }}
+                  <div ref={checkInRef}>
+                    {openCheckIn &&
+                      <CustomCalendar
+                        listingCalendar={listingCalender}
+                        onSelectRange={handleRangeSelection}
+                        updateDate={handleUpdateDate}
+                        selectedRange={dateRange}
+                        showFooter={true}
+                        clearDates={handleDateClear}
+                        rangeStart={rangeStart}
+                        setRangeStart={setRangeStart}
+                        rangeEnd={rangeEnd}
+                        setRangeEnd={setRangeEnd}
+                        hoveredDate={hoveredDate}
+                        setHoveredDate={setHoveredDate}
+                        dateClear={handleDateClear}
                       />
-                    </div>
-                  }
-                  {openCheckOut &&
-                    <div
-                      ref={checkOutRef}
-                      className="calendarWrap ml-24 xxs:ml-32 lg:ml-0">
-                      <DateRange
-                        showClearButton={true}
-                        onChange={item => {
-                          dispatch(toggleDateRangedPickedForBooking('bookingDatePick'));
-                          setRange([item.selection]);
-                        }}
-                        editableDateInputs={false}
-                        moveRangeOnFirstSelection={true}
-                        ranges={range}
-                        months={2}
-                        direction={direction}
-                        className="calendarElement"
-                        minDate={new Date()}
-                        showDateDisplay={false}
-                        showMonthAndYearPickers={false}
-                        rangeColors={["#B69F6F"]}
-                        disabledDates={listingUnavailableCalender.map(toLocalDate)}
-                        dayContentRenderer={(date) => {
-                          const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
-                            new Date(d).toDateString() === date.toDateString()
-                          );
-                          return (
-                            <span
-                              style={{
-                                opacity: isCheckOutAvailable ? 0.5 : 1,
-                                padding: "5px",
-                                position: "absolute",
-                                cursor: isCheckOutAvailable ? "pointer" : "default",
-                              }}
-                              className={isCheckOutAvailable ? "checkout-tooltip z-50 " : ""}
-                            >
-                              {date.getDate()}
-                              {isCheckOutAvailable && (
-                                <span className="tooltip-text overflow-visible z-50">Check-in Unavailable</span>
-                              )}
-                            </span>
-
-                          );
-                        }}
-                      />
-                    </div>
-
-                  }
+                    }
+                  </div>
                 </div>
 
               </div>
@@ -306,56 +230,26 @@ const Booking = () => {
               <div className="font-semibold pl-6 ">
                 <div className="relative max-w-[117px]">
                   <input
-                    id="bookingCheckOut"
                     value={`${checkBookingParams.checkOut ? format(checkBookingParams.checkOut, "MM/dd/yyyy") : ""}`}
                     readOnly
-                    className="cursor-pointer  outline-none max-w-[117px]  text-[1rem]"
+                    className="outline-none max-w-[117px]  text-[1rem]"
                     onClick={() => {
-                      setOpenCheckOut(openCheckOut => !openCheckOut);
-                      setOpenCheckIn(false);
+                      setOpenCheckIn(true);
+                      setOpenCheckOut(false);
                     }}
+
                     placeholder="MM/DD/YYYY" />
+                  {checkBookingParams.checkOut && (
+                    <IoClose
+                      onClick={() => handleDateClear()}
+                      className="absolute  size-3  right-0 top-1.5 cursor-pointer text-gray-400 text-white bg-buttonPrimary rounded-full"
+                    />
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* <div className="bg-white flex flex-col rounded-2xl place-items-baseline px-3.5 py-5 space-y-[6px] ">
-            <p className="flex text-[#8A8A8A] space-x-2 items-center">
-              <LuUser2 size={18} /> <p>Guests</p>
-            </p>
-            <div className={`flex  space-x-2 font-semibold ${checkBookingParams.guests >= 10 ? "pl-4" : "pl-0"} `}>
-              <input
-                id="guest-booking"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                max={50}
-                min={0}
-                step={1}
-                value={guestInput}
-                disabled={loading}
-                onChange={handleGuestChange}
-                //   (e) => {
-                //   if (e.target.value > 50) {
-                //     handleInputChange('guests', 50);
-                //   } else {
-                //     handleInputChange('guests', e.target.value);
-                //   }
-                // }
-                placeholder=""
-                className="bg-white outline-none min-w-[20px] max-w-[20px] text-right"
-              />
-              <p
-                onClick={() => {
-                  document.getElementById('guest-booking').focus();
-                }}
-                className="cursor-text select-none"
-              >
-                {checkBookingParams.guests > 1 ? "guests" : "guest"}
-              </p>
-            </div>
-          </div> */}
           <GuestSelector
             openGuestDropdown={openGuestDropdown}
             setOpenDropDown={setOpenDropDown}
@@ -429,10 +323,10 @@ const Booking = () => {
         </div>
         {pathname.includes('booking') && <TokenDiscount
           listingId={listingInfo.id}
-          checkInDate={formateDate(new Date(bookingCheckIn))}
-          checkOutDate={formateDate(new Date(bookingCheckOut))}
+          checkInDate={dayjs(checkBookingParams.checkIn)}
+          checkOutDate={dayjs(checkBookingParams.checkOut)}
           totalPrice={bookingPrice?.totalPrice}
-          guestNumber={guestNumber}
+          guestNumber={bookingGuests.adults + bookingGuests.children}
         />}
         <p className="text-[#666666] mt-10 mb-3">Any questions? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
