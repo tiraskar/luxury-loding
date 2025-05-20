@@ -307,20 +307,20 @@ const Booking = () => {
           }
         </div>}
 
-        {isValidToken && totalDiscountPrice !== 0 &&
+        {checkBookingParams.checkIn && checkBookingParams.checkOut && isValidToken && totalDiscountPrice !== 0 &&
           <div className="flex justify-between">
             <p className="text-sm font-[#8E8E80]">Discount</p>
             <p className=" text-sm sm:text-lg font-bold text-[#333333]">- $ {formattedPrice(totalDiscountPrice)}</p>
           </div>
         }
-        <div className="flex justify-between items-center mt-2">
+        {checkBookingParams.checkIn && checkBookingParams.checkOut && <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
           <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
             <span>${formattedPrice(bookingPrice?.totalPrice)}</span>
           </p>
 
-        </div>
+        </div>}
         {pathname.includes('booking') && <TokenDiscount
           listingId={listingInfo.id}
           checkInDate={dayjs(checkBookingParams.checkIn)}
