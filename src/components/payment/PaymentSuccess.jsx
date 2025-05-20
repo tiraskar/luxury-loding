@@ -6,23 +6,27 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SiTicktick } from "react-icons/si";
 import { CiLocationOn, CiCalendarDate, CiDollar } from "react-icons/ci";
 import { MdGroups3 } from "react-icons/md";
+import dayjs from "dayjs";
+import { formateDate } from "../../helper/date";
 
 const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { listingInfo } = useSelector((state) => state.listing);
-  const { bookingGuests } = useSelector((state) => state.booking)
+  const { bookingGuests, checkBookingParams } = useSelector((state) => state.booking)
   const images = listingInfo?.images || [];
   const navigate = useNavigate();
 
   const location = useLocation();
-
-  const { payerEmail, amount, guests, checkIn, checkOut } = location.state || {};
+  //eslint-disable-next-line
+  const { payerEmail, amount, guests, children, infants, pets, checkIn, checkOut } = location.state || {};
   const email = localStorage.getItem('payerEmail');
 
   useEffect(() => {
     if (id) {
       dispatch(fetchListingInfo(id));
+    } else {
+      navigate("/", { replace: true });
     }
   }, [id]);
 
@@ -93,14 +97,16 @@ const PaymentSuccess = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <CiCalendarDate className="text-lg" />
                     <span>
-                      {checkIn} to {checkOut}
+                      {formateDate(new Date(checkBookingParams.checkIn))} to {formateDate(new Date(checkBookingParams.checkOut))}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <MdGroups3 className="text-lg" />
-                    {bookingGuests.adults + bookingGuests.children} Guests
-                    , {bookingGuests.infants} Infants
+                    {bookingGuests.adults + bookingGuests.children} Guest{bookingGuests.adults + bookingGuests.children !== 1 ? 's' : ''},
+                    {bookingGuests.infants} Infant{bookingGuests.infants !== 1 ? 's' : ''},
+                    {bookingGuests.pets} Pet{bookingGuests.pets !== 1 ? 's' : ''}
+
                   </div>
 
                   {listingInfo.address && (
