@@ -6,14 +6,11 @@ import { calculateBookingPrice, setCouponCode, toggleTokenState } from "../../re
 import { useEffect } from "react";
 import { MdError } from "react-icons/md";
 import { formateDate } from "../../helper/date";
-import { updatePaymentIntent } from "../../redux/slices/paymentSlice";
 
 //eslint-disable-next-line
 const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guestNumber }) => {
-  // const isTokenValid = localStorage.getItem('isTokenValid');
-  // const coupon = localStorage.getItem('coupon');
-  const { tokenError, tokenLoading, isValidToken, totalDiscountPrice, couponCode } = useSelector(state => state.booking);
-  // const [validToken, setValidToken] = useState(false)
+  const { tokenError, bookingGuests, checkBookingParams, tokenLoading, isValidToken, totalDiscountPrice, couponCode } = useSelector(state => state.booking);
+
 
   const dispatch = useDispatch();
 
@@ -31,41 +28,22 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
       dispatch(toggleTokenState());
       dispatch(calculateBookingPrice({
         listingId: Number(listingId),
-        checkIn: formateDate(new Date(checkInDate)),
-        checkOut: formateDate(new Date(checkOutDate)),
-        guests: Number(guestNumber),
+        guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+        pet: bookingGuests?.pets || null,
+        checkIn: formateDate(new Date(checkBookingParams.checkIn)),
+        checkOut: formateDate(new Date(checkBookingParams.checkOut)),
       }));
-      // .unwrap().then(response => {
-      //   if (response) {
-      //     dispatch(updatePaymentIntent({
-      //       id: Number(listingId),
-      //       amount: Number(response.totalPrice),
-      //       checkIn: formateDate(new Date(checkInDate)),
-      //       checkOut: formateDate(new Date(checkOutDate)),
-      //       guests: Number(guestNumber),
-      //     }));
-      //   }
-      // });
+
 
     } else {
       dispatch(setCouponCode(value));
       dispatch(calculateBookingPrice({
         listingId: Number(listingId),
-        checkIn: formateDate(new Date(checkInDate)),
-        checkOut: formateDate(new Date(checkOutDate)),
-        guests: Number(guestNumber),
+        guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
+        pet: bookingGuests?.pets || null,
+        checkIn: formateDate(new Date(checkBookingParams.checkIn)),
+        checkOut: formateDate(new Date(checkBookingParams.checkOut)),
       }));
-      // .unwrap().then(response => {
-      //   if (response) {
-      //     dispatch(updatePaymentIntent({
-      //       id: Number(listingId),
-      //       amount: Number(response.totalPrice),
-      //       checkIn: formateDate(new Date(checkInDate)),
-      //       checkOut: formateDate(new Date(checkOutDate)),
-      //       guests: Number(guestNumber),
-      //     }));
-      //   }
-      // });
     }
 
   };
