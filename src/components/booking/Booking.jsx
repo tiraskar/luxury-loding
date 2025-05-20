@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import TokenDiscount from "./TokenDiscount";
 import { formateDate } from "../../helper/date";
 import { formattedPrice } from "../../helper/formatter";
-import { calculateBookingPrice, clearBookingDateSelection, setCheckBookingParams, toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
+import { calculateBookingPrice, clearBookingDateSelection, setCheckBookingParams } from "../../redux/slices/bookingSlice";
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import GuestSelector from "../common/GuestSelector";
