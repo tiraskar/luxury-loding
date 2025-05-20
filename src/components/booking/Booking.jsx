@@ -257,7 +257,7 @@ const Booking = () => {
           />
 
         </div>
-        <div className="flex flex-col space-y-4 md:space-y-6 my-10">
+        {checkBookingParams.checkIn && checkBookingParams.checkOut && <div className="flex flex-col space-y-4 md:space-y-6 my-10">
           {bookingPrice?.components?.price?.map(({ title, total }, index) => {
             return (
               <div key={index} className="flex items-center">
@@ -305,7 +305,7 @@ const Booking = () => {
             );
           })
           }
-        </div>
+        </div>}
 
         {isValidToken && totalDiscountPrice !== 0 &&
           <div className="flex justify-between">
