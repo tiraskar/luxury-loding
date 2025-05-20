@@ -9,7 +9,7 @@ import { toLocalDate } from "../../utils/dateUtils";
 const ListingAvailability = () => {
   const { listingAvailableCalender, isCalenderLoading, listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
 
-  const { checkBookingParams, isDateRangedPickedFromAvailability, isDateRangedPickedFromBooking } = useSelector(state => state.booking);
+  const { checkBookingParams, isDateRangedPickedFromBooking } = useSelector(state => state.booking);
   const dispatch = useDispatch();
 
   const [range, setRange] = useState([
@@ -20,15 +20,15 @@ const ListingAvailability = () => {
     }
   ]);
 
-  useEffect(() => {
-    const { startDate, endDate } = range[0];
-    if (isDateRangedPickedFromAvailability && startDate) {
-      dispatch(setCheckBookingParams({ name: 'checkIn', value: startDate }));
-    }
-    if (isDateRangedPickedFromAvailability && endDate) {
-      dispatch(setCheckBookingParams({ name: 'checkOut', value: endDate }));
-    }
-  }, [range[0].startDate, range[0].endDate]);
+  // useEffect(() => {
+  //   const { startDate, endDate } = range[0];
+  //   if (isDateRangedPickedFromAvailability && startDate) {
+  //     dispatch(setCheckBookingParams({ name: 'checkIn', value: startDate }));
+  //   }
+  //   if (isDateRangedPickedFromAvailability && endDate) {
+  //     dispatch(setCheckBookingParams({ name: 'checkOut', value: endDate }));
+  //   }
+  // }, [range[0].startDate, range[0].endDate]);
 
 
   const [direction, setDirection] = useState('horizontal');
@@ -60,6 +60,8 @@ const ListingAvailability = () => {
     // }
   }, [isDateRangedPickedFromBooking, checkBookingParams.checkIn, checkBookingParams.checkOut]);
 
+  const isReadOnly = true;
+
   return (
     <div id="Availability" className="lg:max-w-[652px] mx-auto space-y-8 font-inter text-[#333333] tracking-tight">
       <h1 className="text-xl font-semibold">Availability</h1>
@@ -69,10 +71,11 @@ const ListingAvailability = () => {
         <div className="relative flex justify-center sm:justify-start mt-4 w-full mx-auto">
           {listingAvailableCalender.length > 0 && (  
             <DateRange
-              onChange={item => {
+              onChange={isReadOnly ? () => { } : item => {
                 dispatch(toggleDateRangedPickedForBooking('availabilityDatePick'));
                 setRange([item.selection]);
               }}
+              displayMode="true"
               months={2}
               editableDateInputs={false}
               moveRangeOnFirstSelection={false}
