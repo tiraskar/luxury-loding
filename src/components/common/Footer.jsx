@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { emailSubscription, } from "../../redux/slices/contactSlice";
 import { useEffect } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { IoLogoInstagram } from "react-icons/io5";
+import { IoLogoInstagram, IoLogoLinkedin } from "react-icons/io5";
 
 const Footer = () => {
   const { pathname } = useLocation();
@@ -80,7 +80,11 @@ const Footer = () => {
           <Link to='/refund-policy'>Refund policy</Link>
 
           <div className="hidden md:flex gap-4 md:gap-6 text-black text-2xl ">
-            <FaLinkedin />
+            <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
+              target="_blank"
+              className="flex items-center gap-4">
+              <FaLinkedin className="cursor-pointer" />
+            </a>
             <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
               <FaSquareInstagram className="cursor-pointer" />
             </a>
@@ -88,7 +92,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex justify-center md:hidden gap-4  order-3 text-black text-2xl ">
-          <FaLinkedin />
+          <a href="https://www.linkedin.com/company/luxury-lodging-pm/"
+            target="_blank"
+            className="flex items-center gap-4">
+            <FaLinkedin className="cursor-pointer" />
+          </a>
           <a href="https://www.instagram.com/luxurylodgingstr/" target="_blank">
             <FaSquareInstagram className="cursor-pointer" />
           </a>

@@ -3,35 +3,23 @@ import { GoDotFill } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
 // import { Wrapper } from "../components";
 import PaymentMethod from "../components/payment/PaymentMethod";
-import { Elements } from "@stripe/react-stripe-js";
 import { useEffect } from "react";
 import LoaderScreen from "../components/ui/LoaderScreen";
-import { loadStripe } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountryList } from "../redux/slices/listingSlice";
-import { appearance } from "../lib/stripe";
 import { useNavigate } from "react-router-dom";
 import { Booking } from "../components";
 
-// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const BookingConfirmation = () => {
-  // const { id } = useParams()
   const dispatch = useDispatch();
-  const { clientSecret, loading } = useSelector((state) => state.payment);
+  const { loading } = useSelector((state) => state.payment);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchCountryList());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const agreeTerms = localStorage?.getItem('agreeTerms');
-
-  //   if (agreeTerms == 'false' || "") {
-  //     navigate(`/listings/${id}`);
-  //   }
-  // }, [])
 
   return (
     <div className="lg:col-span-5 font-inter tracking-[-1%] bg-white">

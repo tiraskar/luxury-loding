@@ -34,14 +34,15 @@ const Listing = () => {
     listingReviews,
     isSearchOnSingleListing,
     isFetchListingInfo,
-    isAllAmenitiesOpen
+    isAllAmenitiesOpen,
+    isCalenderLoading
   } = useSelector((state) => state.listing);
   const [activeTab, setActiveTab] = useState("");
 
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
   const [isViewSingleImageOnSlide, setIsviewSingleImageOnSlide] = useState(false);
   const [imageViewIndex, setImageViewIndex] = useState(0)
-  if (loading) {
+  if (loading || isCalenderLoading) {
     return <div className="text-center">Loading...</div>;
   }
 

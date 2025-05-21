@@ -123,6 +123,10 @@ export const createOrder = createAsyncThunk(
       checkInDate: listing.checkIn,
       checkOutDate: listing.checkOut,
       guests: listing.guests,
+      children: listing.children,
+      infants: listing.infants,
+      pets: listing.pets,
+      adults: listing.adults,
       amount: totalPrice,
       currency: "USD",
       couponName: isValidToken ? couponCode : null

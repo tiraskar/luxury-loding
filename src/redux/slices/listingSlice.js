@@ -218,6 +218,17 @@ export const fetchListingAvailabilityCalender = createAsyncThunk(
   }
 )
 
+export const fetchHolidayFutureCalender = createAsyncThunk(
+  'listing/holiday-futureCalender', async (listing, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`https://booking-engine.hostaway.com/bookingEngines/luxurylodging/listings/${listing.id}/calendar?startingDate=${listing.startDate}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 export const fetchListingLocationList = createAsyncThunk(
   'listing/location', async (_, { rejectWithValue }) => {
     try {
@@ -276,6 +287,7 @@ const listingSlice = createSlice({
     listingLocationList: [],
     listingUnavailableCalender: [],
     listingCheckOutAvailableDate: [],
+    listingCalender: null,
     //object
     listingInfo: {},
 
@@ -653,8 +665,21 @@ const listingSlice = createSlice({
         state.error = action.payload;
       });
 
+    //fetch calender
+    builder
+      .addCase(fetchHolidayFutureCalender.pending, (state) => {
+        state.isCalenderLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchHolidayFutureCalender.fulfilled, (state, action) => {
+        state.isCalenderLoading = false;
+        state.listingCalender = action.payload.result;
+      })
+      .addCase(fetchHolidayFutureCalender.rejected, (state, action) => {
+        state.isCalenderLoading = false;
+        state.error = action.payload;
+      })
     //fetch listing location list 
-
     builder
       .addCase(fetchListingLocationList.pending, (state) => {
         state.isLocationLoading = true;
