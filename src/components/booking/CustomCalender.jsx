@@ -106,8 +106,8 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
       const minimumStay = listingCalendar[rangeStart.format("YYYY-MM-DD")]?.minimumStay || 0;
       const diffDays = d.diff(rangeStart, "day");
 
-      if (diffDays < minimumStay + 1) {
-        console.warn(`Minimum stay is ${minimumStay + 1} nights.`);
+      if (diffDays < minimumStay) {
+        console.warn(`Minimum stay is ${minimumStay} nights.`);
         return;
       }
 
@@ -203,7 +203,7 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
                       data-tooltip-id={hoverTooltipId}
                       data-tooltip-content={
                         showTooltip
-                          ? `Minimum stay is ${(listingCalendar[rangeStart?.format("YYYY-MM-DD")]?.minimumStay || 0) + 1
+                          ? `Minimum stay is ${(listingCalendar[rangeStart?.format("YYYY-MM-DD")]?.minimumStay || 0)
                           } nights`
                           : isCheckoutOnlyDate(d) && !rangeStart
                             ? "Check-in unavailable"
@@ -214,8 +214,8 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
 
                       className={`relative w-8 h-8 flex items-center justify-center text-center text-xs select-none
 
-                        ${disabled && !(isCheckoutOnlyDate(d) && !rangeStart) ? "opacity-50 line-through cursor-not-allowed text-black" : "cursor-pointer"}
-                        ${isCheckoutOnlyDate(d) && !rangeStart ? "opacity-50" : ""}
+                        ${disabled && !(isCheckoutOnlyDate(d) && !rangeStart) ? "opacity-30 line-through cursor-not-allowed text-black" : "cursor-pointer"}
+                        ${isCheckoutOnlyDate(d) && !rangeStart ? "opacity-60" : ""}
 
                         ${getSelectedClass(d)} ${getHoveredRangeClass(d)}
                         hover:brightness-90 transition

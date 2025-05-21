@@ -139,7 +139,7 @@ const PaymentMethod = () => {
             navigate(`/listing/${id}/success`, {
               state: {
                 payerEmail: payerEmail,
-                amount: totalPrice,
+                amount: Number(totalPrice),
                 guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
                 children: bookingGuests.children || null,
                 infants: bookingGuests.infants || null,

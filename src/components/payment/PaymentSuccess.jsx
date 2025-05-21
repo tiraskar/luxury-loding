@@ -8,6 +8,7 @@ import { CiLocationOn, CiCalendarDate, CiDollar } from "react-icons/ci";
 import { MdGroups3 } from "react-icons/md";
 import dayjs from "dayjs";
 import { formateDate } from "../../helper/date";
+import {format} from "date-fns"
 
 const PaymentSuccess = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const PaymentSuccess = () => {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
               {/* House Rules */}
               <div className="md:col-span-7 space-y-4">
-                <h3 className="text-xl lg:text-2xl font-inter font-semibold">House Rules</h3>
+                <h3 className="text-xl lg:text-xl font-inter font-semibold">Review House Rules</h3>
                 <div className="text-sm leading-6 font-onest text-gray-700 ml-4">
                   {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
                     <div key={index}>
@@ -87,24 +88,24 @@ const PaymentSuccess = () => {
                 <div className="p-4 space-y-3 text-start font-inter text-gray-700">
                   <h2 className="text-lg font-semibold">{listingInfo.name}</h2>
 
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  {/* <div className="flex items-center gap-2 text-sm text-gray-500">
                     <CiDollar className="text-lg" />
                     <span>
                       {amount}
                     </span>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <CiCalendarDate className="text-lg" />
                     <span>
-                      {formateDate(new Date(checkBookingParams.checkIn))} to {formateDate(new Date(checkBookingParams.checkOut))}
-                    </span>
+                      {format(new Date(checkBookingParams.checkIn), 'MMM d')} - {format(new Date(checkBookingParams.checkOut), 'd, yyyy')}
+                    </span> 
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <MdGroups3 className="text-lg" />
-                    {bookingGuests.adults + bookingGuests.children} Guest{bookingGuests.adults + bookingGuests.children !== 1 ? 's' : ''},
-                    {bookingGuests.infants} Infant{bookingGuests.infants !== 1 ? 's' : ''},
+                    {bookingGuests.adults + bookingGuests.children} Guest{bookingGuests.adults + bookingGuests.children !== 1 ? 's' : ''}, &nbsp;
+                    {bookingGuests.infants} Infant{bookingGuests.infants !== 1 ? 's' : ''},&nbsp;
                     {bookingGuests.pets} Pet{bookingGuests.pets !== 1 ? 's' : ''}
 
                   </div>
