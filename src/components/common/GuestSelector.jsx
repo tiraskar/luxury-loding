@@ -62,7 +62,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
                   {type === 'adults' && 'Age 13+'}
                   {type === 'children' && 'Ages 2–12'}
                   {type === 'infants' && 'Under 2'}
-                  {type === 'pets' && 'Bringing a pet?'}
+                  {type === 'pets'}
                 </p>
               </div>
               <div className="flex items-center space-x-2">
@@ -86,7 +86,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
                     (type === 'adults' || type === 'children')
                       ? (bookingGuests.adults + bookingGuests.children >= listingInfo.personCapacity)
                       : type === 'infants' && bookingGuests.infants >= (listingInfo.infants || 10)
-                        ? true : false
+                        ? true : (type === "pets") ? listingInfo && listingInfo?.amenities.filter((d) => d.amenityId == 37).length == 0 : false
                   }
                 >
                   +
@@ -96,7 +96,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
           ))}
           <p className="text-xs text-gray-500 mt-2">
 
-            This place has a maximum of {listingInfo.personCapacity} guests, not including infants. Pets {`aren't`} allowed.
+            This place has a maximum of {listingInfo.personCapacity} guests, not including infants. {(listingInfo && listingInfo?.amenities.filter((d) => d.amenityId == 37).length > 0) ? ` If you're bringing more than 2 pets, please let your host know.` : `Pets aren't allowed.`}
           </p>
           <div className="text-right mt-3">
             <button
