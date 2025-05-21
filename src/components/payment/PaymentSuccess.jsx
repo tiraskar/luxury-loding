@@ -98,7 +98,7 @@ const PaymentSuccess = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <CiCalendarDate className="text-lg" />
                     <span>
-                      {format(new Date(checkBookingParams.checkIn), 'MMM d')} - {format(new Date(checkBookingParams.checkOut), 'd, yyyy')}
+                      {format(new Date(checkBookingParams.checkIn), 'MMM d')} - {format(new Date(checkBookingParams.checkOut), 'MMM d, yyyy')}
                     </span> 
                   </div>
 
