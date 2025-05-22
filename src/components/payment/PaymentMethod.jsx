@@ -15,6 +15,7 @@ import CustomPopup from "../common/CustomPopUP";
 import TermsAndCondition from "../../pages/TermsAndCondition";
 import RefundPolicy from "../../pages/RefundPolicy";
 import { formateDate } from "../../helper/date";
+import ListingHouseRule from "../common/ListingHouseRule";
 
 const schema = yup.object({
   personalInfo: yup.object({
@@ -38,7 +39,7 @@ const schema = yup.object({
 
 const PaymentMethod = () => {
   const [isAgreeTerms, setIsAgreeTerms] = useState(false);
-  const [isShowHouseRule, setIsShowHouseRule] = useState(true);
+  const [isShowHouseRule, setIsShowHouseRule] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [isTermsAndConditionOpen, setIsTermsConditionOpen] = useState(false);
   const [isCancellationPolicyOpen, setIsCancellationPolicyOpen] = useState(false)
@@ -204,12 +205,9 @@ const PaymentMethod = () => {
               </div>
               {isShowHouseRule && (
                 <p className="text-xs leading-5 -ml-10">
-                  {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
-                    <span key={index} className="py-4">
-                      {index !== 0 && "✔️"} {rule}
-                      <br />
-                    </span>
-                  ))}
+                  <ListingHouseRule
+                    listingHouseRule={listingInfo?.houseRules}
+                  />
                 </p>
               )}
             </div>

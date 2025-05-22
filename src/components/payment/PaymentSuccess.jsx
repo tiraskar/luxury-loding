@@ -7,6 +7,7 @@ import { SiTicktick } from "react-icons/si";
 import { CiLocationOn, CiCalendarDate } from "react-icons/ci";
 import { MdGroups3 } from "react-icons/md";
 import {format} from "date-fns"
+import ListingHouseRule from "../common/ListingHouseRule";
 
 const PaymentSuccess = () => {
   const dispatch = useDispatch();
@@ -124,30 +125,3 @@ const PaymentSuccess = () => {
 };
 
 export default PaymentSuccess;
-
-//eslint-disable-next-line
-const ListingHouseRule = ({ listingHouseRule }) => {
-  if (!listingHouseRule) return null;
-
-  // Remove everything before the first ✔ or 1.
-  const firstRelevantIndex = listingHouseRule.search(/(?:\d{1,2}\.\s|✔️?|✔)/);
-  const cleanedRules = firstRelevantIndex !== -1
-    ? listingHouseRule.slice(firstRelevantIndex)
-    : listingHouseRule;
-
-  // Add line breaks before section numbers like 1.
-  const formattedRules = cleanedRules.replace(/(?:\r?\n)?(?=(?:^|\n)\d{1,2}\.\s)/g, '<br />');
-
-  // Add line break before ✔ and color it
-  const htmlWithCheckmarks = formattedRules.replace(
-    /✔️?|✔/g,
-    '<br /><span style="color: green;">✔️</span>'
-  );
-
-  return (
-    <p
-      className="text-xs leading-5"
-      dangerouslySetInnerHTML={{ __html: htmlWithCheckmarks }}
-    />
-  );
-};
