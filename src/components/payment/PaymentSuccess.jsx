@@ -4,10 +4,8 @@ import { useEffect } from "react";
 import { fetchListingInfo } from "../../redux/slices/listingSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SiTicktick } from "react-icons/si";
-import { CiLocationOn, CiCalendarDate, CiDollar } from "react-icons/ci";
+import { CiLocationOn, CiCalendarDate } from "react-icons/ci";
 import { MdGroups3 } from "react-icons/md";
-import dayjs from "dayjs";
-import { formateDate } from "../../helper/date";
 import {format} from "date-fns"
 
 const PaymentSuccess = () => {
@@ -61,13 +59,7 @@ const PaymentSuccess = () => {
               <div className="md:col-span-7 space-y-4">
                 <h3 className="text-xl lg:text-xl font-inter font-semibold">Review House Rules</h3>
                 <div className="text-sm leading-6 font-onest text-gray-700 ml-4">
-                  {listingInfo?.houseRules?.split("✔️").map((rule, index) => (
-                    <div key={index}>
-                      {index !== 0 && (
-                        <span className="flex items-start gap-2">✔️ <span>{rule.trim()}</span></span>
-                      )}
-                    </div>
-                  ))}
+                  <ListingHouseRule listingHouseRule={listingInfo.houseRules} />
                 </div>
               </div>
 
@@ -132,3 +124,30 @@ const PaymentSuccess = () => {
 };
 
 export default PaymentSuccess;
+
+//eslint-disable-next-line
+const ListingHouseRule = ({ listingHouseRule }) => {
+  if (!listingHouseRule) return null;
+
+  // Remove everything before the first ✔ or 1.
+  const firstRelevantIndex = listingHouseRule.search(/(?:\d{1,2}\.\s|✔️?|✔)/);
+  const cleanedRules = firstRelevantIndex !== -1
+    ? listingHouseRule.slice(firstRelevantIndex)
+    : listingHouseRule;
+
+  // Add line breaks before section numbers like 1.
+  const formattedRules = cleanedRules.replace(/(?:\r?\n)?(?=(?:^|\n)\d{1,2}\.\s)/g, '<br />');
+
+  // Add line break before ✔ and color it
+  const htmlWithCheckmarks = formattedRules.replace(
+    /✔️?|✔/g,
+    '<br /><span style="color: green;">✔️</span>'
+  );
+
+  return (
+    <p
+      className="text-xs leading-5"
+      dangerouslySetInnerHTML={{ __html: htmlWithCheckmarks }}
+    />
+  );
+};
