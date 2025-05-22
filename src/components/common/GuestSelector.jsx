@@ -85,8 +85,13 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
                   disabled={
                     (type === 'adults' || type === 'children')
                       ? (bookingGuests.adults + bookingGuests.children >= listingInfo.personCapacity)
-                      : type === 'infants' && bookingGuests.infants >= (listingInfo.infants || 10)
-                        ? true : (type === "pets") ? listingInfo && listingInfo?.amenities.filter((d) => d.amenityId == 37).length == 0 : false
+                      : (type === 'infants')
+                        ? (bookingGuests.infants >= (listingInfo.infants || 5))
+                        : (type === 'pets')
+                          ? listingInfo?.amenities.some((d) => d.amenityId == 37)
+                            ? (bookingGuests.pets >= 2)
+                            : true
+                          : false
                   }
                 >
                   +
