@@ -21,6 +21,7 @@ import TermsAndCondition from "./pages/TermsAndCondition";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import { PaymentSuccess } from "./components";
+import NotFoundPage from "./pages/PageNotFound";
 
 // Routing
 const router = createBrowserRouter([
@@ -92,7 +93,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 Not Found</h1>
+        element: <NotFoundPage />
       },
       // add routes under / routing
     ],
