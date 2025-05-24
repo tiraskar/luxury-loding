@@ -1,114 +1,97 @@
 import { useDispatch, useSelector } from "react-redux";
+import CustomCalendar from "../booking/CustomCalender";
 import { useEffect, useState } from "react";
-import { setCheckBookingParams } from "../../redux/slices/bookingSlice";
-import { addDays } from "date-fns";
-import { DateRange } from "react-date-range";
-import { toggleDateRangedPickedForBooking } from "../../redux/slices/bookingSlice";
-import { toLocalDate } from "../../utils/dateUtils";
+import dayjs from "dayjs";
+import { clearBookingDateSelection, setCheckBookingParams } from "../../redux/slices/bookingSlice";
 
 const ListingAvailability = () => {
-  const { listingAvailableCalender, isCalenderLoading, listingUnavailableCalender, listingCheckOutAvailableDate } = useSelector(state => state.listing);
+  const { isCalenderLoading, listingCalender } = useSelector(state => state.listing);
 
-  const { checkBookingParams, isDateRangedPickedFromBooking } = useSelector(state => state.booking);
   const dispatch = useDispatch();
 
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 0),
-      key: 'selection'
+  //eslint-disable-next-line
+  const { checkBookingParams } = useSelector(state => state.booking);
+  const [dateRange, setDateRange] = useState({
+    start: dayjs(checkBookingParams.checkIn),
+    end: dayjs(checkBookingParams.checkOut),
     }
-  ]);
-
-  // useEffect(() => {
-  //   const { startDate, endDate } = range[0];
-  //   if (isDateRangedPickedFromAvailability && startDate) {
-  //     dispatch(setCheckBookingParams({ name: 'checkIn', value: startDate }));
-  //   }
-  //   if (isDateRangedPickedFromAvailability && endDate) {
-  //     dispatch(setCheckBookingParams({ name: 'checkOut', value: endDate }));
-  //   }
-  // }, [range[0].startDate, range[0].endDate]);
+  );
+  const [rangeStart, setRangeStart] = useState(checkBookingParams.checkIn ? dayjs(checkBookingParams.checkIn) : checkBookingParams.checkIn);
+  const [rangeEnd, setRangeEnd] = useState(checkBookingParams.checkOut ? dayjs(checkBookingParams.checkOut) : checkBookingParams.checkOut);
+  const [hoveredDate, setHoveredDate] = useState(null);
 
 
-  const [direction, setDirection] = useState('horizontal');
+  const handleRangeSelection = (clickedDate) => {
+    if (!dateRange.start || (dateRange.start && dateRange.end)) {
+      // Start new range
+      setDateRange({ start: clickedDate, end: null });
+    } else if (!dateRange.end && clickedDate.isAfter(dateRange.start, "day")) {
+      // End selected
+      const newRange = { ...dateRange, end: clickedDate };
+      setDateRange(newRange);
+    } else {
+      // Reset or invalid range
+      setDateRange({ start: clickedDate, end: null });
+    }
+  };
+
+  const handleUpdateDate = (data) => {
+    dispatch(setCheckBookingParams({ name: 'checkIn', value: data.start }));
+    dispatch(setCheckBookingParams({ name: 'checkOut', value: data.end }));
+  };
+
+  const handleDateClear = () => {
+    setRangeStart(null);
+    setRangeEnd(null);
+    setHoveredDate(null);
+    dispatch(clearBookingDateSelection());
+  };
 
   useEffect(() => {
-    const updateDirection = () => {
-      if (window.innerWidth <= 450) {
-        setDirection('vertical');
-      } else {
-        setDirection('horizontal');
-      }
-    };
-    updateDirection();
-    window.addEventListener('resize', updateDirection);
-    return () => {
-      window.removeEventListener('resize', updateDirection);
-    };
-  }, []);
+    if (rangeStart && rangeEnd) {
+      dispatch(setCheckBookingParams({ name: 'checkIn', value: rangeStart }));
+      dispatch(setCheckBookingParams({ name: 'checkOut', value: rangeEnd }));
+    }
+
+  }, [dispatch, rangeEnd, rangeStart]);
 
   useEffect(() => {
-    // if (isDateRangedPickedFromBooking) {
-    setRange([
-      {
-        startDate: checkBookingParams.checkIn ? new Date(checkBookingParams.checkIn) : new Date(),
-        endDate: checkBookingParams.checkOut ? new Date(checkBookingParams.checkOut) : new Date(),
-        key: 'selection',
-      },
-    ]);
-    // }
-  }, [isDateRangedPickedFromBooking, checkBookingParams.checkIn, checkBookingParams.checkOut]);
+    setDateRange({
+      start: checkBookingParams.checkIn ? dayjs(checkBookingParams.checkIn) : null,
+      end: checkBookingParams.checkOut ? dayjs(checkBookingParams.checkOut) : null,
+    });
 
-  const isReadOnly = true;
+    setRangeStart(checkBookingParams.checkIn ? dayjs(checkBookingParams.checkIn) : null);
+    setRangeEnd(checkBookingParams.checkOut ? dayjs(checkBookingParams.checkOut) : null);
+
+  }, [checkBookingParams.checkIn, checkBookingParams.checkOut]);
+
+
 
   return (
     <div id="Availability" className="lg:max-w-[652px] mx-auto space-y-8 font-inter text-[#333333] tracking-tight">
       <h1 className="text-xl font-semibold">Availability</h1>
       {isCalenderLoading && <p className="py-10">Loading <span className=" animate-bounce">...</span></p>}
 
-      <div className="flex justify-center md:max-w-full ">
-        <div className="relative flex justify-center sm:justify-start mt-4 w-full mx-auto">
-          {listingAvailableCalender.length > 0 && (  
-            <DateRange
-              onChange={isReadOnly ? () => { } : item => {
-                dispatch(toggleDateRangedPickedForBooking('availabilityDatePick'));
-                setRange([item.selection]);
-              }}
-              displayMode="true"
-              months={2}
-              editableDateInputs={false}
-              moveRangeOnFirstSelection={false}
-              className="border-[1.5px] border-buttonPrimary rounded-2xl xs:w-full max-w-[650px] "
-              minDate={new Date()}
-              ranges={range}
-              rangeColors={["#B69F6F"]}
-              showDateDisplay={false}
-              direction={direction}
-              showMonthAndYearPickers={false}
-              disabledDates={listingUnavailableCalender.map(toLocalDate)}
-              dayContentRenderer={(date) => {
-                const isCheckOutAvailable = listingCheckOutAvailableDate.map(toLocalDate).some(d =>
-                  new Date(d).toDateString() === date.toDateString()
-                );
-                return (
-                  <span
-                    style={{
-                      opacity: isCheckOutAvailable ? 0.5 : 1,
-                      padding: "5px",
-                      position: "relative",
-                      cursor: isCheckOutAvailable ? "pointer" : "default",
-                    }}
-                    className={isCheckOutAvailable ? "checkout-tooltip z-50 " : ""}
-                  >
-                    {date.getDate()}
-                    {isCheckOutAvailable && (
-                      <span className="tooltip-text overflow-visible z-50">Check-in Unavailable</span>
-                    )}
-                  </span>
-
-                );
-              }}
+      <div className="flex justify-center md:max-w-full min-h-[400px]">
+        <div className="relative flex justify-center sm:justify-start mt-4 w-full h-full mx-auto">
+          {listingCalender && (
+            <CustomCalendar
+              calendarId='availabilityCalendar'
+              listingCalendar={listingCalender}
+              onSelectRange={handleRangeSelection}
+              updateDate={handleUpdateDate}
+              selectedRange={dateRange}
+              showFooter={false}
+              clearDates={handleDateClear}
+              rangeStart={rangeStart}
+              setRangeStart={setRangeStart}
+              rangeEnd={rangeEnd}
+              setRangeEnd={setRangeEnd}
+              hoveredDate={hoveredDate}
+              setHoveredDate={setHoveredDate}
+              dateClear={handleDateClear}
+              disableDateSelection={true}
             />
           )}
         </div>
