@@ -75,8 +75,6 @@ const PaymentMethod = () => {
       return;
     }
 
-    console.log('booking guests', bookingGuests.adults);
-
     dispatch(createOrder({
       guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
       adults: Number(bookingGuests.adults),
