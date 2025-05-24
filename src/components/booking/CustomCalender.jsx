@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import PropTypes from "prop-types";
 import { Tooltip } from "react-tooltip";
 
-const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter, rangeStart, setRangeStart, rangeEnd, setRangeEnd, hoveredDate, setHoveredDate, dateClear }) => {
+const CustomCalendar = ({ calendarId, listingCalendar, onSelectRange, updateDate, showFooter, rangeStart, setRangeStart, rangeEnd, setRangeEnd, hoveredDate, setHoveredDate, dateClear, disableDateSelection = false, }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
   const today = dayjs().startOf("day");
@@ -154,7 +154,9 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
 
 
   return (
-    <div className="absolute left-0 z-20 w-full max-w-xl p-6 border border-buttonPrimary bg-white rounded-3xl shadow">
+    <div
+      onMouseLeave={() => setHoveredDate(null)}
+      className="absolute left-0 z-20 w-full max-w-xl p-6 border border-buttonPrimary bg-white rounded-3xl shadow">
       {/* Navigation */}
       <div className="flex items-center justify-between mb-4 ">
         <button
@@ -195,7 +197,7 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
 
                   const isHovering = !rangeEnd && rangeStart && d.isAfter(rangeStart, "day");
                   const showTooltip = isHovering;
-                  const hoverTooltipId = `hover-tooltip-${dateStr}`;
+                  const hoverTooltipId = `${calendarId}-hover-tooltip-${dateStr}`;
 
                   return (
                     <div
@@ -220,7 +222,7 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
                         ${getSelectedClass(d)} ${getHoveredRangeClass(d)}
                         hover:brightness-90 transition
                       `}
-                      onClick={() => handleDateClick(d)}
+                      onClick={() => !disableDateSelection && handleDateClick(d)}
                       onMouseEnter={() => {
                         if (rangeStart && !rangeEnd) setHoveredDate(d);
                       }}
@@ -248,6 +250,8 @@ const CustomCalendar = ({ listingCalendar, onSelectRange, updateDate, showFooter
         <button
           className="px-3 py-1.5 text-sm font-medium font-inter text-buttonPrimary border-buttonPrimary border rounded-full hover:bg-buttonPrimary hover:text-white transition"
           onClick={dateClear}
+          disabled={disableDateSelection}
+
         >
           Clear Dates
         </button>
@@ -267,7 +271,9 @@ CustomCalendar.propTypes = {
   rangeEnd: PropTypes.any,
   setRangeEnd: PropTypes.any,
   hoveredDate: PropTypes.any,
-  setHoveredDate: PropTypes.any
+  setHoveredDate: PropTypes.any,
+  disableDateSelection: PropTypes.bool,
+  calendarId: PropTypes.string
 };
 
 export default CustomCalendar;

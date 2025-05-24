@@ -20,7 +20,7 @@ const BookApartment = ({ listingInfo }) => {
   const [isGuestChanged, setIsGuestChanged] = useState(false);
   const [openGuestDropdown, setOpenDropDown] = useState(false);
   //eslint-disable-next-line
-  const { checkBookingParams, loading, bookingNotAvailableAlertDialog, isDateRangedPickedFromAvailability } = useSelector(state => state.booking);
+  const { checkBookingParams, bookingNotAvailableAlertDialog } = useSelector(state => state.booking);
   const [dateRange, setDateRange] = useState({
     start: dayjs(checkBookingParams.checkIn),
     end: dayjs(checkBookingParams.checkOut),
@@ -181,6 +181,7 @@ const BookApartment = ({ listingInfo }) => {
                   <div ref={checkInRef}>
                     {openCheckIn &&
                       <CustomCalendar
+                        calendarId='bookApartmentCalender'
                         listingCalendar={listingCalender}
                         onSelectRange={handleRangeSelection}
                         updateDate={handleUpdateDate}

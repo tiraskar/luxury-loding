@@ -203,6 +203,7 @@ const Booking = () => {
                   <div ref={checkInRef}>
                     {openCheckIn &&
                       <CustomCalendar
+                      calendarId='bookingCalendar'
                         listingCalendar={listingCalender}
                         onSelectRange={handleRangeSelection}
                         updateDate={handleUpdateDate}
