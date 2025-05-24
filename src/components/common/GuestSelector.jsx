@@ -101,7 +101,7 @@ export default function GuestSelector({ setIsGuestChanged, openGuestDropdown, se
           ))}
           <p className="text-xs text-gray-500 mt-2">
 
-            This place has a maximum of {listingInfo.personCapacity} guests, not including infants. {(listingInfo && listingInfo?.amenities.filter((d) => d.amenityId == 37).length > 0) ? ` If you're bringing more than 2 pets, please let your host know.` : `Pets aren't allowed.`}
+            This place has a maximum of {listingInfo.personCapacity} guests, not including infants. {(listingInfo && listingInfo?.amenities.filter((d) => d.amenityId == 37).length > 0) ? ` If you're bringing more than 1 pet, please let your host know.` : `Pets aren't allowed.`}
           </p>
           <div className="text-right mt-3">
             <button
