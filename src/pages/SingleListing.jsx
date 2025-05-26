@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FilterableSearchListing, OtherListing, Wrapper } from "../components";
 import { useDispatch } from "react-redux";
 import { lazy, Suspense, useEffect } from "react";
-import { fetchHolidayFutureCalender, fetchListingAvailabilityCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
+import { fetchHolidayFutureCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import { setCheckBookingParamsToInitialState, setIsBooking, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
 import ReviewLoading from "../components/ui/ReviewLoading";

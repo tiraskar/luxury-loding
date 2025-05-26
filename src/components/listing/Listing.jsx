@@ -135,7 +135,7 @@ const Listing = () => {
               </div>
 
               <div className="relative grid md:grid-cols-2 gap-x-1 md:gap-x-3">
-                <div className="min-h-full rounded-md hidden md:block sm:rounded-xl">
+                <div className="min-h-full max-h-[492px] rounded-md hidden md:block sm:rounded-xl">
                   {images[0] && (
                     <img
                       onClick={() => {
