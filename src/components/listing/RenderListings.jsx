@@ -5,7 +5,7 @@ import { GoDotFill } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
-import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
+import { toggleHoverListing, toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -49,6 +49,7 @@ const RenderListings = ({ listingList }) => {
           <div
             key={listingIndex}
             className={`relative ${isMapViewOpen ? " lg:grid lg:grid-cols-5 gap-4 lg:space-y-0 space-y-4" : "flex flex-col xl:max-w-[318px] gap-y-4"}`}
+            onMouseEnter={() => isMapViewOpen && dispatch(toggleHoverListing(listing.id))}
           >
             <div className="relative flex overflow-hidden md:col-span-2">
               {listing?.images?.map((data, index) => {

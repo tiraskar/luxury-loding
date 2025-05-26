@@ -273,6 +273,7 @@ const listingSlice = createSlice({
     isSearchHomePageOpen: false,
     //error
     error: null,
+    hoveredListing: null,
 
     //array
     listingList: [],
@@ -332,6 +333,10 @@ const listingSlice = createSlice({
 
     toggleIsSearchHomePageOpen: (state) => {
       state.isSearchHomePageOpen = !state.isSearchHomePageOpen;
+    },
+
+    toggleHoverListing: (state, action) => {
+      state.hoveredListing = action.payload;
     },
 
     setSearchListingParamsToInitialState: (state) => {
@@ -697,6 +702,13 @@ const listingSlice = createSlice({
   }
 });
 
-export const { setListingOrder, setSearchListingParams, setSearchListingParamsToInitialState, toggleApplyFilter, toggleFilterOpen, setAmenitiesListingParams, toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage, toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen, clearSearchCheckInCheckOutDate, toggleMapView } = listingSlice.actions;
+export const { setListingOrder, setSearchListingParams,
+  setSearchListingParamsToInitialState, toggleApplyFilter,
+  toggleFilterOpen, setAmenitiesListingParams,
+  toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage,
+  toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen,
+  clearSearchCheckInCheckOutDate, toggleMapView,
+  toggleHoverListing
+} = listingSlice.actions;
 
 export default listingSlice.reducer;

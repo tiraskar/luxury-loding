@@ -14,7 +14,7 @@ const ListingMap = ({ listingList }) => {
   const [overlaysReady, setOverlaysReady] = useState(false);
   const [hoveredListingId, setHoveredListingId] = useState(null);
   const [clickedListingId, setClickedListingId] = useState(null);
-  const { searchListingParams } = useSelector(state => state.listing)
+  const { searchListingParams, hoveredListing } = useSelector(state => state.listing)
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(
     Array(listingList?.length).fill(0)
@@ -163,6 +163,48 @@ const ListingMap = ({ listingList }) => {
     }
   }, [listingList]);
 
+  // useEffect(() => {
+  //   if (!hoveredListing || !mapRef.current || !Array.isArray(listingList)) return;
+
+  //   const selectedListing = listingList.find(listing => listing.id === hoveredListing);
+
+  //   if (selectedListing) {
+  //     mapRef.current.panTo({ lat: selectedListing.lat, lng: selectedListing.lng });
+  //     mapRef.current.setZoom(13);
+  //   }
+  // }, [hoveredListing, listingList]);
+
+  useEffect(() => {
+    if (!hoveredListing || !mapRef.current || !Array.isArray(listingList)) return;
+
+    const selectedListing = listingList.find(listing => listing.id === hoveredListing);
+
+    if (selectedListing) {
+      const map = mapRef.current;
+      const currentCenter = map.getCenter();
+
+      const newCenter = {
+        lat: selectedListing.lat,
+        lng: selectedListing.lng,
+      };
+
+      // Optional: Only pan if center actually changed
+      if (
+        currentCenter?.lat() !== newCenter.lat ||
+        currentCenter?.lng() !== newCenter.lng
+      ) {
+        // Smoothly pan to new location
+        map.panTo(newCenter);
+
+        // Delay zoom until after panning finishes (500ms is a safe estimate)
+        setTimeout(() => {
+          map.setZoom(13);
+        }, 500);
+      }
+    }
+  }, [hoveredListing, listingList]);
+
+
 
 
   const renderMap = () => {
@@ -183,7 +225,7 @@ const ListingMap = ({ listingList }) => {
           }}
         >
           {overlaysReady &&
-            listingList.map((listing, listingIndex) => (
+          listingList?.map((listing, listingIndex) => (
               <OverlayView
                 key={listing.id}
                 position={{ lat: listing.lat, lng: listing.lng }}
