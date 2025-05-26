@@ -22,10 +22,10 @@ const SingleListing = () => {
   useEffect(() => {
     dispatch(fetchListingInfo(id));
     dispatch(fetchListingReviews(id));
-    dispatch(fetchListingAvailabilityCalender({
-      id,
-      startDate: formateDate(startDate)
-    }));
+    // dispatch(fetchListingAvailabilityCalender({
+    //   id,
+    //   startDate: formateDate(startDate)
+    // }));
     dispatch(fetchHolidayFutureCalender({
       id,
       startDate: formateDate(startDate)

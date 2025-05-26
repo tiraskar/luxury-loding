@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FilterableSearchListing, ListingLoading, Wrapper } from "../components";
 import { lazy, Suspense, useEffect } from "react";
-import { fetchAmenitiesList, fetchListingList, fetchListingTotalCount, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
+import { fetchListingList, fetchListingTotalCount, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 import { wait } from "../utils/helper";
 
 const ListingList = lazy(() => wait(1000).then(() => import("../components/listing/ListingList")));
@@ -16,7 +16,7 @@ const Listings = () => {
     listingTotalCount == 0 && dispatch(fetchListingTotalCount());
     listingList.length == 0 && dispatch(fetchListingList());
     dispatch(setSearchListingParamsToInitialState());
-    dispatch(fetchAmenitiesList());
+    // dispatch(fetchAmenitiesList());
     localStorage.clear();
   }, []);
 

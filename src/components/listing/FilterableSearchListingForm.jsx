@@ -115,7 +115,7 @@ const FilterableSearchListing = () => {
   }, [listingLocationList]);
 
   useEffect(() => {
-    dispatch(fetchListingLocationList());
+    listingLocationList.length == 0 && dispatch(fetchListingLocationList());
   }, []);
 
   const filterRef = useRef(null);
