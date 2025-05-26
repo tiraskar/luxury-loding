@@ -39,7 +39,7 @@ const ListingMap = ({ listingList }) => {
         const lng = listingList[0]?.lng;
         setTimeout(() => {
           setOverlaysReady(true);
-          mapRef.current.setZoom(13);
+          mapRef.current.setZoom(5);
           mapRef.current.panTo({ lat, lng });
         }, 200);
       } else {
@@ -49,7 +49,7 @@ const ListingMap = ({ listingList }) => {
         const lng = -81.7602544;
         setTimeout(() => {
           setOverlaysReady(true);
-          mapRef.current.setZoom(13);
+          mapRef.current.setZoom(5);
           mapRef.current.panTo({ lat, lng });
         }, 200);
       }
@@ -57,6 +57,7 @@ const ListingMap = ({ listingList }) => {
     },
     [listingList]
   );
+
 
 
   const handleMouseEnter = (id) => {
@@ -144,35 +145,25 @@ const ListingMap = ({ listingList }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (mapRef.current && listingList.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      listingList.forEach((listing) => {
-        bounds.extend({ lat: listing.lat, lng: listing.lng });
-      });
-      mapRef.current.fitBounds(bounds);
-
-      const lat = listingList[0]?.lat;
-      const lng = listingList[0]?.lng;
-
-      setTimeout(() => {
-        mapRef.current.setZoom(13);
-        mapRef.current.panTo({ lat, lng });
-        setOverlaysReady(true);
-      }, 200);
-    }
-  }, [listingList]);
-
   // useEffect(() => {
-  //   if (!hoveredListing || !mapRef.current || !Array.isArray(listingList)) return;
+  //   if (mapRef.current && listingList.length > 0) {
+  //     const bounds = new window.google.maps.LatLngBounds();
+  //     listingList.forEach((listing) => {
+  //       bounds.extend({ lat: listing.lat, lng: listing.lng });
+  //     });
+  //     mapRef.current.fitBounds(bounds);
 
-  //   const selectedListing = listingList.find(listing => listing.id === hoveredListing);
+  //     const lat = listingList[0]?.lat;
+  //     const lng = listingList[0]?.lng;
 
-  //   if (selectedListing) {
-  //     mapRef.current.panTo({ lat: selectedListing.lat, lng: selectedListing.lng });
-  //     mapRef.current.setZoom(13);
+  //     setTimeout(() => {
+  //       mapRef.current.setZoom(5);
+  //       mapRef.current.panTo({ lat, lng });
+  //       setOverlaysReady(true);
+  //     }, 200);
   //   }
-  // }, [hoveredListing, listingList]);
+  // }, [listingList]);
+
 
   useEffect(() => {
     if (!hoveredListing || !mapRef.current || !Array.isArray(listingList)) return;
@@ -193,16 +184,23 @@ const ListingMap = ({ listingList }) => {
         currentCenter?.lat() !== newCenter.lat ||
         currentCenter?.lng() !== newCenter.lng
       ) {
-        // Smoothly pan to new location
         map.panTo(newCenter);
+        map.setZoom(5);
 
-        // Delay zoom until after panning finishes (500ms is a safe estimate)
+        setTimeout(() => {
+          map.setZoom(7);
+        }, 500);
+
+        setTimeout(() => {
+          map.setZoom(10);
+        }, 1000);
+
         setTimeout(() => {
           map.setZoom(13);
-        }, 500);
+        }, 1500);
       }
     }
-  }, [hoveredListing, listingList]);
+  }, [hoveredListing]);
 
 
 
@@ -251,13 +249,13 @@ const ListingMap = ({ listingList }) => {
                         {listing?.images?.map((data, index) => (
                           <div
                             key={index}
-                            className={`snap-start flex-shrink-0 w-full transition-transform duration-300 ${index === currentIndex[listingIndex]
+                            className={`snap-start max-h-[220px] flex-shrink-0 w-full transition-transform duration-300 ${index === currentIndex[listingIndex]
                               ? "block"
                               : "hidden"
                               }`}
                           >
                             <img
-                              className="object-cover w-full rounded-xl"
+                              className="object-contain w-full rounded-xl"
                               src={data.url}
                               alt=""
                             />
@@ -266,19 +264,19 @@ const ListingMap = ({ listingList }) => {
 
                         {listing?.images?.length > 1 && (
                           <div className="absolute inset-0 flex justify-between items-center">
-                            <div
+                          <div
                               className="absolute left-3 top-[50%] transform -translate-y-1/2 text-black h-6 w-6 bg-white bg-opacity-60 items-center flex justify-center rounded-full cursor-pointer"
                               onClick={() => handleSlide(listingIndex, -1)}
                             >
                               <IoIosArrowBack size={14} />
                             </div>
-                            <div
+                          <div
                               className="absolute right-3 top-[50%] transform -translate-y-1/2 text-black h-6 w-6 bg-white bg-opacity-60 items-center flex justify-center rounded-full cursor-pointer"
                               onClick={() => handleSlide(listingIndex, 1)}
                             >
                               <IoIosArrowForward size={14} />
                             </div>
-                            <div className="absolute bottom-2 flex justify-center w-full">
+                          <div className="absolute bottom-2 flex justify-center w-full">
                               {listing?.images?.map((_, index) => (
                                 <GoDotFill
                                   key={index}

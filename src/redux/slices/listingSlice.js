@@ -289,6 +289,7 @@ const listingSlice = createSlice({
     listingUnavailableCalender: [],
     listingCheckOutAvailableDate: [],
     listingCalender: null,
+    loadMore: false,
     //object
     listingInfo: {},
 
@@ -487,11 +488,10 @@ const listingSlice = createSlice({
     //load more listing
     builder
       .addCase(loadMoreListing.pending, (state) => {
-        state.isLoadMoreListing = true;
         state.error = null;
       })
       .addCase(loadMoreListing.fulfilled, (state, action) => {
-        state.isLoadMoreListing = false;
+        state.loadMore = true;
         if (state.isSearchedListing) {
           state.listingList = [...state.searchedListingList, ...action.payload];
         } else {
@@ -499,6 +499,8 @@ const listingSlice = createSlice({
         }
 
         state.listingPage++;
+        state.isLoadMoreListing = true;
+        state.isLoadMoreListing = false;
       })
       .addCase(loadMoreListing.rejected, (state, action) => {
         state.isLoadMoreListing = false;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 const RenderListings = ({ listingList }) => {
 
   const { isMapViewOpen } = useSelector(state => state.listing)
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef(null);
 
   const dispatch = useDispatch()
   const [currentIndex, setCurrentIndex] = useState(
@@ -42,14 +44,47 @@ const RenderListings = ({ listingList }) => {
     }
   }, [listingList]);
 
+  useEffect(() => {
+    const container = document.getElementById('listings-container');
+    if (!container) return;
+
+    function onScroll() {
+      setIsScrolling(true);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // After 200ms of no scroll, consider scrolling stopped
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 200);
+    }
+
+    container.addEventListener('scroll', onScroll);
+
+    return () => {
+      container.removeEventListener('scroll', onScroll);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
+
   return (
-    <div className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4 gap-y-[56px] lg:gap-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-[56px]"} gap-x-4 `}>
+    <div id="listings-container" className={`${isMapViewOpen ? " grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-col lg:space-y-4 gap-y-[56px] lg:gap-y-4" : "grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-[56px]"} gap-x-4 `}>
       {listingList?.map((listing, listingIndex) => {
         return (
           <div
             key={listingIndex}
             className={`relative ${isMapViewOpen ? " lg:grid lg:grid-cols-5 gap-4 lg:space-y-0 space-y-4" : "flex flex-col xl:max-w-[318px] gap-y-4"}`}
-            onMouseEnter={() => isMapViewOpen && dispatch(toggleHoverListing(listing.id))}
+            // onMouseEnter={() => isMapViewOpen && dispatch(toggleHoverListing(listing.id))}
+            onMouseEnter={() => {
+              if (isMapViewOpen && !isScrolling) {
+                dispatch(toggleHoverListing(listing.id));
+              } else if (isScrolling) {
+                // Optionally: clear hover while scrolling
+                dispatch(toggleHoverListing(null));
+              }
+            }}
           >
             <div className="relative flex overflow-hidden md:col-span-2">
               {listing?.images?.map((data, index) => {
