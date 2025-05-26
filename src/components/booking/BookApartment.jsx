@@ -179,7 +179,7 @@ const BookApartment = ({ listingInfo }) => {
 
                 <div className="">
                   <div ref={checkInRef}>
-                    {openCheckIn &&
+                    {openCheckIn && listingCalender &&
                       <CustomCalendar
                         calendarId='bookApartmentCalender'
                         listingCalendar={listingCalender}

@@ -89,7 +89,7 @@ const Listing = () => {
         />
       )}
       {
-        isFetchListingInfo ?
+        isFetchListingInfo || isCalenderLoading ?
           <ListingInfoSkeleton />
           :
           <Wrapper>
