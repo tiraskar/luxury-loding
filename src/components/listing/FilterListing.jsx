@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  // fetchAmenitiesList,
   fetchAvailableListing,
   fetchListingList,
   fetchListingTotalCount,
@@ -48,6 +49,9 @@ const Popup = () => {
 
   const amenities = [
     { id: 11, name: 'Hot tub' },
+    {
+      id: 37, name: "Pets allowed"
+    },
     { id: 41, name: 'Suitable for events' },
     { id: 110, name: 'Game room' },
     { id: 316, name: 'Pool' }
