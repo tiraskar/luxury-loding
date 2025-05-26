@@ -201,7 +201,7 @@ const Booking = () => {
                 </div>
                 <div className="z-auto">
                   <div ref={checkInRef}>
-                    {openCheckIn &&
+                    {openCheckIn && listingCalender &&
                       <CustomCalendar
                       calendarId='bookingCalendar'
                         listingCalendar={listingCalender}
