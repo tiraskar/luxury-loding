@@ -64,7 +64,7 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
           <input
             {...register('couponCode', { required: 'Coupon Code is required' })}
             type="text"
-            // disabled={tokenLoading || isTokenValid == 'true'}
+            disabled={tokenLoading || isValidToken}
             className={`default-input w-full font-onest`}
             onChange={() => dispatch(toggleTokenState())}
             placeholder="Enter coupon code"
