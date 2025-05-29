@@ -18,7 +18,7 @@ const Booking = () => {
   const { pathname } = useLocation();
   const { listingInfo, listingCalender } = useSelector(state => state.listing);
   const { bookingPrice,
-    totalDiscountPrice, isValidToken, bookingGuests } = useSelector(state => state.booking);
+    totalDiscountPrice, isValidToken, bookingGuests, loading } = useSelector(state => state.booking);
   const [isGuestChanged, setIsGuestChanged] = useState(false);
   const [openGuestDropdown, setOpenDropDown] = useState(false);
   const images = listingInfo?.images || [];
@@ -83,7 +83,7 @@ const Booking = () => {
   }
 
   useEffect(() => {
-    if (isDateRangedChanged && !openCheckIn && !openCheckOut) {
+    if (isDateRangedChanged && checkBookingParams.checkIn && checkBookingParams.checkOut && !openCheckIn && !openCheckOut) {
       updateBooking()
     }
 
@@ -124,6 +124,7 @@ const Booking = () => {
     setRangeStart(null);
     setRangeEnd(null);
     setHoveredDate(null);
+    setIsDateRangeChanged(true)
     dispatch(clearBookingDateSelection());
   };
 
@@ -258,7 +259,8 @@ const Booking = () => {
           />
 
         </div>
-        {checkBookingParams.checkIn && checkBookingParams.checkOut && <div className="flex flex-col space-y-4 md:space-y-6 my-10">
+        {checkBookingParams.checkIn && checkBookingParams.checkOut && !loading
+          && <div className="flex flex-col space-y-4 md:space-y-6 my-10">
           {bookingPrice?.components?.price?.map(({ title, total }, index) => {
             return (
               <div key={index} className="flex items-center">
@@ -314,7 +316,7 @@ const Booking = () => {
             <p className=" text-sm sm:text-lg font-bold text-[#333333]">- $ {formattedPrice(totalDiscountPrice)}</p>
           </div>
         }
-        {checkBookingParams.checkIn && checkBookingParams.checkOut && <div className="flex justify-between items-center mt-2">
+        {checkBookingParams.checkIn && checkBookingParams.checkOut && !loading && <div className="flex justify-between items-center mt-2">
           <p className="text sm font-[#8E8E80]">
             Total</p>
           <p className="font-bold text-[#333333] text-xl sm:text-2xl flex items-baseline space-x-2">
