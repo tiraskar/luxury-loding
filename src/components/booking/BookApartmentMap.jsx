@@ -1,10 +1,20 @@
-import { GoogleMap, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, OverlayView, useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useRef, useState } from "react";
 import PropTypes from "prop-types";
+
+const containerStyle = {
+  height: "150px",
+  borderRadius: "12px",
+  width: "100%",
+};
 
 const BookApartmentMap = ({ listingInfo }) => {
   const mapRef = useRef(null);
   const [overlaysReady, setOverlaysReady] = useState(false);
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_MAP_KEY,
+  });
 
   const onLoad = useCallback(
     (map) => {
@@ -35,6 +45,18 @@ const BookApartmentMap = ({ listingInfo }) => {
     },
     [listingInfo]
   );
+
+  if (!isLoaded) {
+    return (
+      <div
+        style={containerStyle}
+        className="flex items-center justify-center bg-gray-100 rounded-md"
+      >
+        <span className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-indigo-500"></span>
+      </div>
+    );
+  }
+
 
   const renderMap = () => {
     return (

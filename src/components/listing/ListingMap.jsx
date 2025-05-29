@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { GoogleMap, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, OverlayView, useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleIsSearchedOnSingleListing } from "../../redux/slices/listingSlice";
@@ -8,6 +8,12 @@ import { LuBath, LuUsers } from "react-icons/lu";
 import { TbBed } from "react-icons/tb";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { GoDotFill } from "react-icons/go";
+
+const containerStyle = {
+  height: "150px",
+  borderRadius: "12px",
+  width: "100%",
+};
 
 const ListingMap = ({ listingList }) => {
   const mapRef = useRef(null);
@@ -23,6 +29,10 @@ const ListingMap = ({ listingList }) => {
     height: "80vh",
     width: "58.5vw",
     marginTop: "-47px",
+  });
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_MAP_KEY,
   });
 
   const onLoad = useCallback(
@@ -145,25 +155,6 @@ const ListingMap = ({ listingList }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   if (mapRef.current && listingList.length > 0) {
-  //     const bounds = new window.google.maps.LatLngBounds();
-  //     listingList.forEach((listing) => {
-  //       bounds.extend({ lat: listing.lat, lng: listing.lng });
-  //     });
-  //     mapRef.current.fitBounds(bounds);
-
-  //     const lat = listingList[0]?.lat;
-  //     const lng = listingList[0]?.lng;
-
-  //     setTimeout(() => {
-  //       mapRef.current.setZoom(5);
-  //       mapRef.current.panTo({ lat, lng });
-  //       setOverlaysReady(true);
-  //     }, 200);
-  //   }
-  // }, [listingList]);
-
 
   useEffect(() => {
     if (!hoveredListing || !mapRef.current || !Array.isArray(listingList)) return;
@@ -203,6 +194,16 @@ const ListingMap = ({ listingList }) => {
   }, [hoveredListing]);
 
 
+  if (!isLoaded) {
+    return (
+      <div
+        style={containerStyle}
+        className="flex items-center justify-center bg-gray-100 rounded-md"
+      >
+        <span className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-indigo-500"></span>
+      </div>
+    );
+  }
 
 
   const renderMap = () => {

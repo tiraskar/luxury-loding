@@ -47,7 +47,7 @@ const ListingList = () => {
 
           {/* Mobile Map (visible only on small screens) */}
           <div className="block lg:hidden pb-10">
-            {isMapViewOpen && (
+            {isMapViewOpen && listingsToShow && (
               <ListingMap listingList={listingsToShow} />
             )}
           </div>
