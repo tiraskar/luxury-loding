@@ -61,16 +61,8 @@ const Booking = () => {
   };
 
 
-  useEffect(() => {
-    document.addEventListener("keydown", hideOnEscape, true);
-    document.addEventListener("click", hideOnClickOutside, true);
-    return () => {
-      document.removeEventListener("keydown", hideOnEscape, true);
-      document.removeEventListener("click", hideOnClickOutside, true);
-    };
-  }, []);
-
   const updateBooking = () => {
+    setIsDateRangeChanged(false)
     dispatch(calculateBookingPrice({
       guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
       pet: bookingGuests?.pets || null,
@@ -78,29 +70,14 @@ const Booking = () => {
       checkOut: formateDate(new Date(checkBookingParams.checkOut)),
       listingId: Number(listingInfo.id)
     }));
-    setIsGuestChanged(false)
     setIsDateRangeChanged(false);
+    setIsGuestChanged(false);
   }
 
-  useEffect(() => {
-    if (isDateRangedChanged && checkBookingParams.checkIn && checkBookingParams.checkOut && !openCheckIn && !openCheckOut) {
-      updateBooking()
-    }
 
-  }, [isDateRangedChanged, openCheckIn, openCheckOut]);
-
-
-  useEffect(() => {
-    if (isGuestChanged && !openGuestDropdown) {
-      const handler = setTimeout(() => {
-        updateBooking();
-      }, 500);
-
-      return () => clearTimeout(handler);
-    }
-  }, [isGuestChanged, openGuestDropdown, isDateRangedChanged]);
 
   const handleRangeSelection = (clickedDate) => {
+    setIsDateRangeChanged(true);
     if (!dateRange.start || (dateRange.start && dateRange.end)) {
       // Start new range
       setDateRange({ start: clickedDate, end: null });
@@ -112,12 +89,12 @@ const Booking = () => {
       // Reset or invalid range
       setDateRange({ start: clickedDate, end: null });
     }
+
   };
 
   const handleUpdateDate = (data) => {
     dispatch(setCheckBookingParams({ name: 'checkIn', value: data.start }));
     dispatch(setCheckBookingParams({ name: 'checkOut', value: data.end }));
-    setIsDateRangeChanged(true);
   };
 
   const handleDateClear = () => {
@@ -129,9 +106,38 @@ const Booking = () => {
   };
 
   useEffect(() => {
-    if (rangeStart && rangeEnd) {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+    return () => {
+      document.removeEventListener("keydown", hideOnEscape, true);
+      document.removeEventListener("click", hideOnClickOutside, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isDateRangedChanged && checkBookingParams.checkIn && checkBookingParams.checkOut) {
+      updateBooking();
+    }
+
+  }, [isDateRangedChanged, openCheckIn, openCheckOut]);
+
+
+  useEffect(() => {
+    if (isGuestChanged && !openGuestDropdown) {
+      const handler = setTimeout(() => {
+        updateBooking();
+      }, 200);
+
+      return () => clearTimeout(handler);
+    }
+  }, [isGuestChanged, openGuestDropdown]);
+
+  useEffect(() => {
+    if (rangeStart || rangeEnd) {
       dispatch(setCheckBookingParams({ name: 'checkIn', value: rangeStart }));
       dispatch(setCheckBookingParams({ name: 'checkOut', value: rangeEnd }));
+    }
+    if (rangeStart && rangeEnd) {
       setOpenCheckIn(false);
       setOpenCheckOut(false);
     }
@@ -324,8 +330,8 @@ const Booking = () => {
           </p>
 
         </div>}
-        {pathname.includes('booking') && <TokenDiscount
-          listingId={listingInfo.id}
+        {pathname.includes('booking') && listingInfo && <TokenDiscount
+          listingId={listingInfo?.id}
           checkInDate={dayjs(checkBookingParams.checkIn)}
           checkOutDate={dayjs(checkBookingParams.checkOut)}
           totalPrice={bookingPrice?.totalPrice}
