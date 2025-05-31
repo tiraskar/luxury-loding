@@ -69,7 +69,7 @@ const ListingAvailability = () => {
 
 
   return (
-    <div id="Availability" className="lg:max-w-[652px] mx-auto space-y-8 font-inter text-[#333333] tracking-tight">
+    <div id="Availability" className="min-h-[700px] md:min-h-full  lg:max-w-[652px] mx-auto space-y-8 font-inter text-[#333333] tracking-tight">
       <h1 className="text-xl font-semibold">Availability</h1>
       {isCalenderLoading && <p className="py-10">Loading <span className=" animate-bounce">...</span></p>}
 
