@@ -8,7 +8,7 @@ import { MdError } from "react-icons/md";
 import { formateDate } from "../../helper/date";
 
 //eslint-disable-next-line
-const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guestNumber }) => {
+const TokenDiscount = ({ listingId, isDateRangedChanged }) => {
   const { tokenError, bookingGuests, checkBookingParams, tokenLoading, isValidToken, totalDiscountPrice, couponCode } = useSelector(state => state.booking);
 
 
@@ -53,8 +53,12 @@ const TokenDiscount = ({ listingId, checkInDate, checkOutDate, totalPrice, guest
   useEffect(() => {
     if (couponCode) {
       setValue('couponCode', couponCode);
+    } if (isDateRangedChanged) {
+      setValue('couponCode', '');
+      dispatch(setCouponCode(''));
+      dispatch(toggleTokenState());
     }
-  }, [couponCode, setValue]);
+  }, [couponCode, setValue, isDateRangedChanged]);
 
   return (
     <div className="flex flex-col space-y-1 mt-4">

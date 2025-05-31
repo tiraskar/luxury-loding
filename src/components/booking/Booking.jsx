@@ -62,7 +62,6 @@ const Booking = () => {
 
 
   const updateBooking = () => {
-    setIsDateRangeChanged(false)
     dispatch(calculateBookingPrice({
       guests: Number(Number(bookingGuests.adults) + Number(bookingGuests.children)),
       pet: bookingGuests?.pets || null,
@@ -78,6 +77,7 @@ const Booking = () => {
 
   const handleRangeSelection = (clickedDate) => {
     setIsDateRangeChanged(true);
+    // dispatch(setCouponCode(''));
     if (!dateRange.start || (dateRange.start && dateRange.end)) {
       // Start new range
       setDateRange({ start: clickedDate, end: null });
@@ -330,13 +330,16 @@ const Booking = () => {
           </p>
 
         </div>}
-        {pathname.includes('booking') && listingInfo && <TokenDiscount
-          listingId={listingInfo?.id}
-          checkInDate={dayjs(checkBookingParams.checkIn)}
-          checkOutDate={dayjs(checkBookingParams.checkOut)}
-          totalPrice={bookingPrice?.totalPrice}
-          guestNumber={bookingGuests.adults + bookingGuests.children}
-        />}
+        {pathname.includes('booking') && listingInfo &&
+          <TokenDiscount
+            listingId={listingInfo?.id}
+            checkInDate={dayjs(checkBookingParams.checkIn)}
+            checkOutDate={dayjs(checkBookingParams.checkOut)}
+            totalPrice={bookingPrice?.totalPrice}
+            guestNumber={bookingGuests.adults + bookingGuests.children}
+            isDateRangedChanged={isDateRangedChanged}
+          />
+        }
         <p className="text-[#666666] mt-10 mb-3">Any questions? Call us
           <a href="tel:(813) 531-8988" className="text-black cursor-pointer"> (813) 531-8988</a></p>
       </div>
