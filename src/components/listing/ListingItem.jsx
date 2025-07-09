@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Icons
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -17,11 +17,11 @@ import useInView from "../../hooks/userInView";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const ListingItem = ({ listing, isMapViewOpen, isScrolling }) => {
+    const { hoveredListing } = useSelector(state => state.listing)
     const [currentIndex, setCurrentIndex] = useState(0);
     const dispatch = useDispatch();
 
     const [itemRef, isInView] = useInView();
-
     const handleSlide = (direction) => {
         const count = listing.images.length;
         const newIndex = (currentIndex + direction + count) % count;
@@ -33,18 +33,17 @@ const ListingItem = ({ listing, isMapViewOpen, isScrolling }) => {
     };
 
     const handleMouseEnter = () => {
-        if (isMapViewOpen && !isScrolling) {
-            // dispatch(toggleHoverListing(listing.id));
+        if (isMapViewOpen && !isScrolling && listing.id && listing.id !== hoveredListing) {
             itemRef.current = setTimeout(() => {
                 dispatch(toggleHoverListing(listing.id));
-            }, 1000);
+            }, 750);
         }
     };
 
     const handleMouseLeave = () => {
         if (isMapViewOpen) {
             clearTimeout(itemRef.current);
-            dispatch(toggleHoverListing(null));
+            // dispatch(toggleHoverListing(null));
         }
     };
 
