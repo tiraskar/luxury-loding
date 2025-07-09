@@ -37,7 +37,7 @@ const ListingItem = ({ listing, isMapViewOpen, isScrolling }) => {
             // dispatch(toggleHoverListing(listing.id));
             itemRef.current = setTimeout(() => {
                 dispatch(toggleHoverListing(listing.id));
-            }, 2000);
+            }, 1000);
         }
     };
 
