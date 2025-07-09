@@ -8,7 +8,7 @@ import { lazy, Suspense } from "react";
 import { wait } from "../../utils/helper";
 
 const ListingMap = lazy(() =>
-  wait(1000).then(() => import("../../components/listing/ListingMap"))
+  wait(50).then(() => import("../../components/listing/ListingMap"))
 );
 
 const ListingList = () => {
