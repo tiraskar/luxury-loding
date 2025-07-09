@@ -3,6 +3,7 @@ import { FilterableSearchListing, ListingLoading, Wrapper } from "../components"
 import { lazy, Suspense, useEffect } from "react";
 import { fetchListingList, fetchListingTotalCount, setSearchListingParamsToInitialState } from "../redux/slices/listingSlice";
 import { wait } from "../utils/helper";
+import { clearBookingDateSelection } from "../redux/slices/bookingSlice";
 
 const ListingList = lazy(() => wait(10).then(() => import("../components/listing/ListingList")));
 
@@ -12,14 +13,16 @@ const Listings = () => {
   const { listingList, listingTotalCount } = useSelector(state => state.listing);
 
   useEffect(() => {
+    localStorage.clear();
+    dispatch(setSearchListingParamsToInitialState());
+    dispatch(clearBookingDateSelection())
     const shouldFetchCount = listingTotalCount === 0;
     const shouldFetchList = listingList.length === 0;
-
     const promises = [];
-    promises.push(dispatch(setSearchListingParamsToInitialState()));
     if (shouldFetchCount) promises.push(dispatch(fetchListingTotalCount()));
     if (shouldFetchList) promises.push(dispatch(fetchListingList()));
     Promise.all(promises);
+
   }, [dispatch]);
 
 

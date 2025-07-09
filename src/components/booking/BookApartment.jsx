@@ -48,7 +48,7 @@ const BookApartment = ({ listingInfo }) => {
 
     // if (checkBookingParams.guests == "") return toast.info("Please provide guest count");
     dispatch(setIsBooking(true))
-    navigate(`/listing/${listingInfo.id}/booking?${query}`);
+    navigate(`/listing/${listingInfo.id}/booking?${query}`, { replace: true });
 
   };
 

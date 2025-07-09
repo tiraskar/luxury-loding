@@ -5,12 +5,12 @@ import { lazy, Suspense, useEffect } from "react";
 import { fetchHolidayFutureCalender, fetchListingInfo, fetchListingReviews, fetchOtherListings, setSearchListingParamsToInitialState, toggleMapView } from "../redux/slices/listingSlice";
 import { setCheckBookingParamsToInitialState, setIsBooking, toggleTokenState } from "../redux/slices/bookingSlice";
 import { formateDate, getCurrentMonthStartDate } from "../helper/date";
-import ReviewLoading from "../components/ui/ReviewLoading";
-import AmenitiesSkeleton from "../components/ui/AmenitiesSkeleton";
-import ListingInfoSkeleton from "../components/ui/ListingInfoSkeleton";
 import { wait } from "../utils/helper";
+import ListingInfoSkeleton from "../components/ui/ListingInfoSkeleton";
+import AmenitiesSkeleton from "../components/ui/AmenitiesSkeleton";
+import ReviewLoading from "../components/ui/ReviewLoading";
 
-const Listing = lazy(() => wait(1000).then(() => import("../components/listing/Listing")))
+const Listing = lazy(() => wait(10).then(() => import("../components/listing/Listing")))
 
 const SingleListing = () => {
 
@@ -20,23 +20,22 @@ const SingleListing = () => {
   const startDate = getCurrentMonthStartDate()
 
   useEffect(() => {
-    dispatch(fetchListingInfo(id));
-    dispatch(fetchListingReviews(id));
-    // dispatch(fetchListingAvailabilityCalender({
-    //   id,
-    //   startDate: formateDate(startDate)
-    // }));
-    dispatch(fetchHolidayFutureCalender({
-      id,
-      startDate: formateDate(startDate)
-    }))
-    dispatch(fetchOtherListings({ limit: 4 }));
     dispatch(setCheckBookingParamsToInitialState());
     dispatch(setSearchListingParamsToInitialState());
-    dispatch(toggleTokenState())
-    dispatch(toggleMapView(false))
+    dispatch(toggleTokenState());
+    dispatch(toggleMapView(false));
     dispatch(setIsBooking(false));
-  }, [id])
+    Promise.all([
+      dispatch(fetchListingInfo(id)),
+      dispatch(fetchListingReviews(id)),
+      dispatch(fetchHolidayFutureCalender({
+        id,
+        startDate: formateDate(startDate)
+      })),
+      dispatch(fetchOtherListings({ limit: 4 }))
+    ]);
+  }, [id]);
+
 
   return (
     <div className="space-y-[56px]">

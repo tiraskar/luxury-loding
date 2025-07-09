@@ -8,6 +8,7 @@ import { fetchFeaturedListing, toggleIsSearchedOnSingleListing } from "../../red
 import { Link } from "react-router-dom";
 import ListingImages from "../listing/ListingImages";
 import FeaturedHomeSkeleton from "../ui/FeaturedHomeSkeleton";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 
 const Heading = () => {
@@ -26,7 +27,6 @@ const Heading = () => {
 
 const FeaturedHomes = () => {
 
-  const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
 
   const dispatch = useDispatch();
   const { featuredListings, isFeaturedSearched } = useSelector(state => state.listing)
@@ -39,20 +39,22 @@ const FeaturedHomes = () => {
     setActiveIndex(index);
     itemRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   };
+  const [viewAllImageId, setViewAllImageId] = useState(null);
 
 
 
-  const renderFeaturedHomes = featuredListings.map(({ images, name, personCapacity, bathroomsNumber, bedroomsNumber, id }, index) => (
+  const renderFeaturedHomes = featuredListings?.map(({ images, name, personCapacity, bathroomsNumber, bedroomsNumber, id }, index) => (
     <div
-      key={name}
+      key={index}
       className="relative flex-shrink-0 grid lg:flex snap-center w-[90%] sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] 2xl:w-[80%] bg-cardBackgroundLight rounded-2xl p-2 sm:p-4 md:p-5 gap-4"
       ref={(el) => (itemRefs.current[index] = el)}
     >
-      {isViewAllImageOpen &&
+      {viewAllImageId === id && (
         <ListingImages
           images={images}
-          setIsviewAllImageOpen={setIsviewAllImageOpen}
-        />}
+          setIsviewAllImageOpen={() => setViewAllImageId(null)}
+        />
+      )}
       <div className="flex flex-col justify-end space-y-4 xs:space-y-6 sm:space-y-8 lg:space-y-10 sm:min-w-[400px]">
         <Link onClick={() => dispatch(toggleIsSearchedOnSingleListing(false))} to={`/listings/${id}`} className="text-lg xs:text-xl md:text-2xl md:text-[28px] font-medium tracking-[-1%] lg:max-w-[365px]">{name}</Link>
         <div className="flex flex-wrap gap-2 text-[#7B6944]">
@@ -68,11 +70,17 @@ const FeaturedHomes = () => {
         </div>
       </div>
       <div className="  xl:w-[813px] 2xl:w-full md:h-[450px] lg:h-[500px] xl:h-[598px]">
-        <img src={images[0].url} className="w-full h-full  rounded-xl object-cover" loading="lazy" />
-
+        <LazyLoadImage
+          className={`w-full h-full  rounded-xl object-cover"}`}
+          src={images[0].url}
+          alt={name}
+          effect="blur"
+          width="100%"
+          height="100%"
+        />
       </div>
       <div
-        onClick={() => setIsviewAllImageOpen(true)}
+        onClick={() => setViewAllImageId(id)}
         className="absolute flex bg-black rounded-full text-white items-center px-2 gap-2 bg-opacity-60 bottom-5 right-5 sm:bottom-10 sm:right-10 py-1 text-xs cursor-pointer">
         <IoImageOutline size={16} /> View all photos
       </div>
@@ -81,7 +89,7 @@ const FeaturedHomes = () => {
 
   useEffect(() => {
     dispatch(fetchFeaturedListing());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="tracking-tight items-center max-w-[1720px] mx-auto space-y-6 sm:space-y-9 lg:space-y-[56px]">
@@ -94,7 +102,6 @@ const FeaturedHomes = () => {
             ref={containerRef}
           >
             {renderFeaturedHomes}
-
           </div>
 
           <div className="hidden sm:flex justify-center space-x-2 ">
