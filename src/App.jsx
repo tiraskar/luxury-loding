@@ -15,7 +15,6 @@ import {
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from "redux-persist/integration/react";
 import TermsAndCondition from "./pages/TermsAndCondition";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
