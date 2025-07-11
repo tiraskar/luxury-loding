@@ -29,7 +29,7 @@ const FeaturedHomes = () => {
 
 
   const dispatch = useDispatch();
-  const { featuredListings, isFeaturedSearched } = useSelector(state => state.listing)
+  const { featuredListings, isFeaturedSearched } = useSelector(state => state.listing);
 
   const [activeIndex, setActiveIndex] = useState(featuredListings.length > 1 ? (featuredListings?.length % 2) : 0);
   const containerRef = useRef(null);
@@ -72,18 +72,18 @@ const FeaturedHomes = () => {
       <div className="  xl:w-[813px] 2xl:w-full md:h-[450px] lg:h-[500px] xl:h-[598px]">
         <LazyLoadImage
           className={`w-full h-full  rounded-xl object-cover"}`}
-          src={images[0].url}
+          src={images[0]?.url || images[2]?.url || images[3]?.url}
           alt={name}
           effect="blur"
           width="100%"
           height="100%"
         />
       </div>
-      <div
+      {images?.length > 0 && <button
         onClick={() => setViewAllImageId(id)}
         className="absolute flex bg-black rounded-full text-white items-center px-2 gap-2 bg-opacity-60 bottom-5 right-5 sm:bottom-10 sm:right-10 py-1 text-xs cursor-pointer">
         <IoImageOutline size={16} /> View all photos
-      </div>
+      </button>}
     </div>
   ));
 
