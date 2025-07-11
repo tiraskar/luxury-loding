@@ -231,7 +231,7 @@ const ListingMap = ({ listingList }) => {
                 mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
               >
                 <div
-                  className="text-lg items-center bg-white w-[70px] p-2 rounded-lg shadow-lg font-bold relative"
+                className="text-lg items-center bg-white w-fit p-2 rounded-lg shadow-lg font-bold relative"
                   onMouseEnter={() => handleMouseEnter(listing.id)}
                   onMouseLeave={handleMouseLeave}
                   onClick={() => {
@@ -239,8 +239,7 @@ const ListingMap = ({ listingList }) => {
                     mapRef.current.setZoom(13);
                   }}
                 >
-                  ${listing.price}
-
+                ${listing?.price}
                   {hoveredListingId === listing.id && (
                     <div
                       key={listingIndex}
