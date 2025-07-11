@@ -530,7 +530,7 @@ const listingSlice = createSlice({
       })
       .addCase(fetchListingTotalCount.fulfilled, (state, action) => {
         state.isFetchListingTotalCount = false;
-        state.listingCount = action.payload;
+        state.listingCount = action.payload.count;
       })
       .addCase(fetchListingTotalCount.rejected, (state, action) => {
         state.isFetchListingTotalCount = false;
