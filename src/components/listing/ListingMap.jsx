@@ -193,6 +193,20 @@ const ListingMap = ({ listingList }) => {
     }
   }, [hoveredListing]);
 
+  useEffect(() => {
+    if (!mapRef.current || listingList.length === 0) return;
+
+    const { lat, lng } = listingList[0];
+    const currentCenter = mapRef.current.getCenter();
+    if (
+      currentCenter?.lat() !== lat ||
+      currentCenter?.lng() !== lng
+    ) {
+      mapRef.current.panTo({ lat, lng });
+      mapRef.current.setZoom(5);
+    }
+  }, [listingList]);
+
 
   if (!isLoaded) {
     return (
@@ -204,6 +218,8 @@ const ListingMap = ({ listingList }) => {
       </div>
     );
   }
+
+
 
 
   const renderMap = () => {
