@@ -22,6 +22,7 @@ export const fetchListingList = createAsyncThunk(
   async (listing, { getState, rejectWithValue }) => {
     try {
       const { listingLimit, listingPage, listingOrder } = getState().listing;
+
       const response = await axios.get(`${baseUrl}/listing?limit=${listingLimit}&page=${listingPage}&priceOrder=${listingOrder}`);
       return response.data;
     } catch (error) {
@@ -47,7 +48,7 @@ export const fetchAvailableListing = createAsyncThunk(
   'listing/searchAvailable',
   async (listing, { getState }) => {
     try {
-      const { listingOrder, searchListingParams, isFilterApply } = getState().listing
+      const { listingOrder, searchListingParams, isFilterApply, searchedLocation, selectedSearchedLocation } = getState().listing
 
       const searchData = {
         location: searchListingParams.location.length > 0 ? searchListingParams.location : "",
@@ -59,7 +60,9 @@ export const fetchAvailableListing = createAsyncThunk(
         roomType: isFilterApply ? (searchListingParams.roomType) : "",
         minPrice: isFilterApply ? (searchListingParams.minPrice) : "",
         maxPrice: isFilterApply ? searchListingParams.maxPrice : "",
-        amenities: isFilterApply ? (searchListingParams.amenities.length > 1 ? searchListingParams.amenities : "") : ""
+        amenities: isFilterApply ? (searchListingParams.amenities.length > 1 ? searchListingParams.amenities : "") : "",
+        customLocation: searchedLocation && selectedSearchedLocation ? selectedSearchedLocation : "",
+        // search: searchedLocation && !selectedSearchedLocation ? searchedLocation : ""
       };
       const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
         ...searchData
@@ -113,7 +116,7 @@ export const searchListing = createAsyncThunk(
   'listing/search',
   async (listing, { getState }) => {
     try {
-      const { searchListingParams } = getState().listing;
+      const { searchListingParams, searchedLocation, selectedSearchedLocation } = getState().listing;
 
       const searchData = {
         location: searchListingParams.location.length > 0 ? searchListingParams.location : '',
@@ -125,7 +128,9 @@ export const searchListing = createAsyncThunk(
         roomType: "",
         minPrice: "",
         maxPrice: "",
-        amenities: ""
+        amenities: "",
+        customLocation: searchedLocation && selectedSearchedLocation ? selectedSearchedLocation : "",
+        // search: searchedLocation && !selectedSearchedLocation ? searchedLocation : ""
       };
       const { data } = await axios.post(`${baseUrl}/listing/searchlistings`, {
         ...searchData
@@ -240,6 +245,17 @@ export const fetchListingLocationList = createAsyncThunk(
   }
 )
 
+export const getLocationOnSearch = createAsyncThunk(
+  'listing/locationSearch', async (value, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${baseUrl}/listing/getlocation?search=${value}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
 
 // Slice
 const listingSlice = createSlice({
@@ -315,6 +331,10 @@ const listingSlice = createSlice({
       lat: 0,
       lng: 0
     },
+    searchedLocationList: [],
+    searchedLocation: '',
+    isSearchedLocation: false,
+    selectedSearchedLocation: null,
 
   },
 
@@ -404,6 +424,15 @@ const listingSlice = createSlice({
 
     toggleAllAmenitiesOpen: (state) => {
       state.isAllAmenitiesOpen = !state.isAllAmenitiesOpen;
+    },
+    updateSearchedLocation: (state, action) => {
+      state.searchedLocation = action.payload;
+    },
+    resetSearchedLocation: (state) => {
+      state.searchedLocationList = [];
+    },
+    toggleSelectedSearchLocation: (state, action) => {
+      state.selectedSearchedLocation = action.payload;
     }
   },
 
@@ -701,6 +730,22 @@ const listingSlice = createSlice({
         state.error = action.payload;
       });
 
+    builder
+      .addCase(getLocationOnSearch.pending, (state) => {
+        state.isSearchedLocation = true;
+        state.searchedLocationList = [];
+        state.error = null;
+      })
+      .addCase(getLocationOnSearch.fulfilled, (state, action) => {
+        state.isSearchedLocation = false;
+        state.searchedLocationList = action.payload;
+      })
+      .addCase(getLocationOnSearch.rejected, (state, action) => {
+        state.isSearchedLocation = false;
+        state.searchedLocationList = [];
+        state.error = action.payload;
+      });
+
   }
 });
 
@@ -710,7 +755,7 @@ export const { setListingOrder, setSearchListingParams,
   toggleIsSearchedOnSingleListing, setArraysToInitialStateInPageChnage,
   toggleAllAmenitiesOpen, toggleIsSearchHomePageOpen,
   clearSearchCheckInCheckOutDate, toggleMapView,
-  toggleHoverListing
+  toggleHoverListing, updateSearchedLocation, resetSearchedLocation, toggleSelectedSearchLocation
 } = listingSlice.actions;
 
 export default listingSlice.reducer;
