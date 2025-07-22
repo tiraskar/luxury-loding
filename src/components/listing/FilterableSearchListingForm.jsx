@@ -1,16 +1,21 @@
 import { GoDotFill } from "react-icons/go";
 import { Wrapper } from "..";
 import { RiFilter2Line } from "react-icons/ri";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FilterListing from "./FilterListing";
+import { debounce } from 'lodash';
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearSearchCheckInCheckOutDate,
   fetchAvailableListing,
   fetchListingList,
   fetchListingLocationList,
+  getLocationOnSearch,
+  resetSearchedLocation,
   setSearchListingParams,
   toggleFilterOpen,
+  toggleSelectedSearchLocation,
+  updateSearchedLocation,
 } from "../../redux/slices/listingSlice";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import PropTypes from 'prop-types';
@@ -22,6 +27,7 @@ import { DateRange } from 'react-date-range';
 import format from 'date-fns/format';
 import { addDays } from 'date-fns';
 import { IoClose } from "react-icons/io5";
+import { MapPin } from "lucide-react";
 
 
 const FilterableSearchListing = () => {
@@ -34,7 +40,7 @@ const FilterableSearchListing = () => {
     searchFilter,
     isFilterOpen,
     isFetchListing,
-    listingLocationList
+    listingLocationList,
   } = useSelector((state) => state.listing);
 
   const [filteredLocation, setSearchFilterLocation] = useState([]);
@@ -220,6 +226,25 @@ const FilterableSearchListing = () => {
   };
 
 
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      value && dispatch(getLocationOnSearch(value)).unwrap().then((res) => {
+        res.length > 0 && setShowLocationFilter(true);
+      });
+      if (value === '') dispatch(resetSearchedLocation());
+    }, 500),
+    [] // DO NOT include `searchedLocation` here
+  );
+
+  // Call this on input change
+  const handleSearchLocation = (value) => {
+    dispatch(updateSearchedLocation(value));
+    debouncedSearch(value); // Debounced call
+    dispatch(toggleSelectedSearchLocation(null));
+  };
+
+
+
   return (
     <Wrapper>
       <div className=" space-y-4 sm:space-y-6">
@@ -245,6 +270,7 @@ const FilterableSearchListing = () => {
               setSelectedLocations={setSelectedLocations}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              handleSearchLocation={handleSearchLocation}
             />
           </div>
 
@@ -308,6 +334,7 @@ const FilterableSearchListing = () => {
                 setSelectedLocations={setSelectedLocations}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
+                handleSearchLocation={handleSearchLocation}
               />
             </div>
           </div>
@@ -481,11 +508,11 @@ const Location = ({
   filterRef,
   setSearchFilterLocation,
   //eslint-disable-next-line
-  selectedLocations, setSelectedLocations, searchQuery, setSearchQuery
+  selectedLocations, setSelectedLocations, searchQuery, setSearchQuery, handleSearchLocation
 }) => {
-  const { searchListingParams, listingLocationList } = useSelector(state => state.listing);
+  const { listingLocationList, searchedLocation, searchedLocationList } = useSelector(state => state.listing);
 
-
+  const dispatch = useDispatch();
   const handleCheckboxChange = (city) => {
     setSelectedLocations((prev) => {
       if (prev.includes(city)) {
@@ -503,12 +530,14 @@ const Location = ({
   const clearSelectedLocations = () => {
     setSelectedLocations([]);
     handleInputChange('location', []);
+    handleSearchLocation('');
   };
 
   const handleRemoveLocation = (locationToRemove) => {
     const updatedLocations = selectedLocations.filter(loc => loc !== locationToRemove);
     handleInputChange('location', updatedLocations);
     setSelectedLocations(updatedLocations);
+    handleSearchLocation('');
   };
 
   const handleSearchChange = (value) => {
@@ -539,7 +568,8 @@ const Location = ({
       {selectedLocations.length === 0 ? (
         <input
           type="text"
-          value={searchListingParams.location}
+          value={searchedLocation}
+          onChange={(e) => handleSearchLocation(e.target.value)}
           onClick={() => document.getElementById('dropDownInputRef').focus()}
           placeholder="Anywhere"
           className="search-input"
@@ -568,7 +598,7 @@ const Location = ({
         </div>
       )}
 
-      {showLocationFilter && (
+      {showLocationFilter && 
         <div
           ref={filterRef}
           className="
@@ -580,90 +610,133 @@ const Location = ({
                     transition-all duration-300 ease-in-out
                   "
         >
-          {/* Sticky Search Header */}
-          <div className="sticky top-0 z-10 bg-white border-b border-buttonPrimary px-4 py-3 flex items-center gap-2">
-            <div className="relative flex-1">
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
-                />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search by city or state..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="
-                        w-full pl-10 pr-4 py-2
-                        rounded-full
-                        border border-buttonPrimary
-                        focus:outline-none 
-                        text-sm
-                        placeholder-gray-400
-                        transition
-                      "
-              />
-            </div>
-            <button
-              type="button"
-              onClick={clearSelectedLocations}
-              className="text-sm text-red-500 hover:underline whitespace-nowrap ml-2"
-            >
-              Clear{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
-            </button>
-          </div>
 
-          {/* Scrollable Locations */}
-          <div className="overflow-y-auto flex-1">
-            <ul className="divide-y divide-buttonPrimary/50">
-              {filteredLocation.map((location, index) => (
-                <li key={index} className="bg-white px-4 py-4">
-                  <p className="text-base font-semibold text-textDark mb-3 border-l-4 border-textDark pl-2">
-                    {location.state}
-                  </p>
-                  <ul className="flex flex-wrap gap-3">
-                    {location?.cities
-                      ?.slice()
-                      .sort((a, b) => a.city.localeCompare(b.city))
-                      .map((cityObj, cityIndex) => {
-                        const isSelected = selectedLocations?.includes(cityObj.city);
-                        return (
-                          <li
-                            key={cityIndex}
-                            onClick={() => handleCheckboxChange(cityObj.city)}
-                            className={`
-                                    cursor-pointer
-                                    text-center
-                                    px-3 py-2
-                                    rounded-full
-                                    text-sm
-                                    font-medium
-                                    border border-buttonPrimary
-                                    transition
-                                    ${isSelected
-                                ? 'bg-buttonPrimary text-white '
-                                : 'text-textDark border-buttonPrimary hover:bg-buttonPrimary hover:text-white'}
-                                  `}
-                          >
-                            {cityObj.city}
-                          </li>
-                        );
-                      })}
-                  </ul>
+          {searchedLocation ?
+            <ul className="space-y-3 p-4 overflow-scroll max-h-96">
+              {searchedLocationList?.map((location, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    dispatch(toggleSelectedSearchLocation(location));
+                    dispatch(updateSearchedLocation(location.location));
+                    setShowLocationFilter(false);
+                    document.getElementById('dropDownInputRef').blur();
+                  }}
+                  className={`
+                  group
+                  cursor-pointer
+                  bg-cardBackgroundLight/50
+                  hover:bg-buttonPrimary/20
+                  active:bg-buttonPrimary/20
+                  rounded-2xl
+                  px-5 py-3
+                  flex items-center
+                  gap-4
+                  transition-all duration-200 ease-out
+                  hover:scale-[1.01]
+                `}
+                >
+                  <div className="flex-shrink-0 w-12 h-12 bg-buttonPrimary/10 rounded-full  flex items-center justify-center shadow-sm">
+                    <div className="w-8 h-8  flex items-center justify-center">
+                      <MapPin className="w-full h-full text-buttonPrimary" />
+                    </div>
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <span className="block text-gray-900 font-medium text-base leading-tight">
+                      {location.location}, {location.type}
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>
-          </div>
+            :
+            <>
+              <div className="sticky top-0 z-10 bg-white border-b border-buttonPrimary px-4 py-3 flex items-center gap-2">
+                <div className="relative flex-1">
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search by city or state..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="
+                          w-full pl-10 pr-4 py-2
+                          rounded-full
+                          border border-buttonPrimary
+                          focus:outline-none 
+                          text-sm
+                          placeholder-gray-400
+                          transition
+                        "
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={clearSelectedLocations}
+                  className="text-sm text-red-500 hover:underline whitespace-nowrap ml-2"
+                >
+                  Clear{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
+                </button>
+              </div>
+
+              {/* Scrollable Locations */}
+              <div className="overflow-y-auto flex-1">
+                <ul className="divide-y divide-buttonPrimary/50">
+                  {filteredLocation.map((location, index) => (
+                    <li key={index} className="bg-white px-4 py-4">
+                      <p className="text-base font-semibold text-textDark mb-3 border-l-4 border-textDark pl-2">
+                        {location.state}
+                      </p>
+                      <ul className="flex flex-wrap gap-3">
+                        {location?.cities
+                          ?.slice()
+                          .sort((a, b) => a.city.localeCompare(b.city))
+                          .map((cityObj, cityIndex) => {
+                            const isSelected = selectedLocations?.includes(cityObj.city);
+                            return (
+                              <li
+                                key={cityIndex}
+                                onClick={() => handleCheckboxChange(cityObj.city)}
+                                className={`
+                                      cursor-pointer
+                                      text-center
+                                      px-3 py-2
+                                      rounded-full
+                                      text-sm
+                                      font-medium
+                                      border border-buttonPrimary
+                                      transition
+                                      ${isSelected
+                                    ? 'bg-buttonPrimary text-white '
+                                    : 'text-textDark border-buttonPrimary hover:bg-buttonPrimary hover:text-white'}
+                                    `}
+                              >
+                                {cityObj.city}
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          }
         </div>
-      )}
+      }
     </div>
   );
 };
@@ -681,21 +754,22 @@ Location.propTypes = {
 };
 
 //eslint-disable-next-line
-const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef, setSearchFilterLocation, selectedLocations, setSelectedLocations, searchQuery, setSearchQuery }) => {
+const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filteredLocation, showLocationFilter, filterRef, setSearchFilterLocation, selectedLocations, setSelectedLocations, searchQuery, setSearchQuery, handleSearchLocation }) => {
 
-  const { searchListingParams, listingLocationList } = useSelector(state => state.listing);
+  const { listingLocationList, searchedLocation, searchedLocationList } = useSelector(state => state.listing);
 
-
-
+  const dispatch = useDispatch();
   const handleCheckboxChange = (city) => {
     setSelectedLocations((prev) => {
       if (prev.includes(city)) {
         const location = prev.filter((c) => c !== city);
         handleInputChange('location', location);
+        handleSearchLocation('')
         return location;// remove
       } else {
         const location = [...prev, city];
         handleInputChange('location', location);
+        handleSearchChange('')
         return location; // add
       }
     });
@@ -725,12 +799,14 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
   const clearSelectedLocations = () => {
     setSelectedLocations([]);
     handleInputChange('location', []);
+    handleSearchLocation('')
   };
 
   const handleRemoveLocation = (locationToRemove) => {
     const updatedLocations = selectedLocations.filter(loc => loc !== locationToRemove);
     handleInputChange('location', updatedLocations);
     setSelectedLocations(updatedLocations);
+    handleSearchLocation('')
   };
 
 
@@ -739,7 +815,8 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
       <label className="text-sm font-semibold">Where to go?</label>
       {selectedLocations?.length == 0 ? <input
         type="text"
-        value={searchListingParams.location}
+        value={searchedLocation}
+        onChange={(e) => handleSearchLocation(e.target.value)}
         onClick={() => {
           document.getElementById('dropDownInputRef').focus();
 
@@ -784,88 +861,130 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
                     transition-all duration-300 ease-in-out
                   "
         >
-          {/* Sticky Search Header */}
-          <div className="sticky top-0 z-10 bg-white border-b border-buttonPrimary px-4 py-3 flex items-center gap-2">
-            <div className="relative flex-1">
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
-                />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search by city or state..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="
-                        w-full pl-10 pr-4 py-2
-                        rounded-full
-                        border border-buttonPrimary
-                        focus:outline-none 
-                        text-sm
-                        placeholder-gray-400
-                        transition
-                      "
-              />
-            </div>
-            <button
-              type="button"
-              onClick={clearSelectedLocations}
-              className="text-sm text-red-500 hover:underline whitespace-nowrap ml-2"
-            >
-              Clear{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
-            </button>
-          </div>
+          {searchedLocation ?
+            <ul className="space-y-3 p-4 overflow-scroll max-h-96">
+              {searchedLocationList?.map((location, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    dispatch(toggleSelectedSearchLocation(location));
+                    dispatch(updateSearchedLocation(location.location));
+                    setShowLocationFilter(false);
+                    document.getElementById('dropDownInputRef').blur();
+                  }}
+                  className={`
+                  group
+                  cursor-pointer
+                  bg-cardBackgroundLight/50
+                  hover:bg-buttonPrimary/20
+                  active:bg-buttonPrimary/20
+                  rounded-2xl
+                  px-5 py-3
+                  flex items-center
+                  gap-4
+                  transition-all duration-200 ease-out
+                  hover:scale-[1.01]
+                `}
+                >
+                  <div className="flex-shrink-0 w-12 h-12 bg-buttonPrimary/10 rounded-full  flex items-center justify-center shadow-sm">
+                    <div className="w-8 h-8  flex items-center justify-center">
+                      <MapPin className="w-full h-full text-buttonPrimary" />
+                    </div>
+                  </div>
 
-          {/* Scrollable Locations */}
-          <div className="overflow-y-auto flex-1">
-            <ul className="divide-y divide-buttonPrimary/50">
-              {filteredLocation.map((location, index) => (
-                <li key={index} className="bg-white px-4 py-4">
-                  <p className="text-base font-semibold text-textDark mb-3 border-l-4 border-textDark pl-2">
-                    {location.state}
-                  </p>
-                  <ul className="flex flex-wrap gap-3">
-                    {location?.cities
-                      ?.slice()
-                      .sort((a, b) => a.city.localeCompare(b.city))
-                      .map((cityObj, cityIndex) => {
-                        const isSelected = selectedLocations?.includes(cityObj.city);
-                        return (
-                          <li
-                            key={cityIndex}
-                            onClick={() => handleCheckboxChange(cityObj.city)}
-                            className={`
-                                    cursor-pointer
-                                    text-center
-                                    px-3 py-2
-                                    rounded-full
-                                    text-sm
-                                    font-medium
-                                    border border-buttonPrimary
-                                    transition
-                                    ${isSelected
-                                ? 'bg-buttonPrimary text-white '
-                                : 'text-textDark border-buttonPrimary hover:bg-buttonPrimary hover:text-white'}
-                                  `}
-                          >
-                            {cityObj.city}
-                          </li>
-                        );
-                      })}
-                  </ul>
+                  <div className="flex-1 min-w-0">
+                    <span className="block text-gray-900 font-medium text-base leading-tight">
+                      {location.location}, {location.type}
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>
-          </div>
+            :
+            <>
+              {/* Sticky Search Header */}
+              <div className="sticky top-0 z-10 bg-white border-b border-buttonPrimary px-4 py-3 flex items-center gap-2">
+                <div className="relative flex-1">
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search by city or state..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="
+                          w-full pl-10 pr-4 py-2
+                          rounded-full
+                          border border-buttonPrimary
+                          focus:outline-none 
+                          text-sm
+                          placeholder-gray-400
+                          transition
+                        "
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={clearSelectedLocations}
+                  className="text-sm text-red-500 hover:underline whitespace-nowrap ml-2"
+                >
+                  Clear{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
+                </button>
+              </div>
+
+              {/* Scrollable Locations */}
+              <div className="overflow-y-auto flex-1">
+                <ul className="divide-y divide-buttonPrimary/50">
+                  {filteredLocation.map((location, index) => (
+                    <li key={index} className="bg-white px-4 py-4">
+                      <p className="text-base font-semibold text-textDark mb-3 border-l-4 border-textDark pl-2">
+                        {location.state}
+                      </p>
+                      <ul className="flex flex-wrap gap-3">
+                        {location?.cities
+                          ?.slice()
+                          .sort((a, b) => a.city.localeCompare(b.city))
+                          .map((cityObj, cityIndex) => {
+                            const isSelected = selectedLocations?.includes(cityObj.city);
+                            return (
+                              <li
+                                key={cityIndex}
+                                onClick={() => handleCheckboxChange(cityObj.city)}
+                                className={`
+                                      cursor-pointer
+                                      text-center
+                                      px-3 py-2
+                                      rounded-full
+                                      text-sm
+                                      font-medium
+                                      border border-buttonPrimary
+                                      transition
+                                      ${isSelected
+                                    ? 'bg-buttonPrimary text-white '
+                                    : 'text-textDark border-buttonPrimary hover:bg-buttonPrimary hover:text-white'}
+                                    `}
+                              >
+                                {cityObj.city}
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>}
         </div>
       )}
     </div>
