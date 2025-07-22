@@ -4,8 +4,10 @@ const ListingBookingTerms = ({ className, listingHouseRule }) => {
   if (!listingHouseRule) return null;
 
   // Remove everything before the first ✔ or 1.
+  //eslint-disable-next-line
   const firstRelevantIndex = listingHouseRule.search(/(?:\d{1,2}\.\s|✔️?|✔)/);
   const cleanedRules = firstRelevantIndex !== -1
+    //eslint-disable-next-line
     ? listingHouseRule.slice(firstRelevantIndex)
     : listingHouseRule;
 

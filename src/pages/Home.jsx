@@ -21,7 +21,7 @@ import { fetchUserReviews } from "../redux/slices/otherSlice";
 import { wait } from "../utils/helper";
 import FeaturedHomeSkeleton from "../components/ui/FeaturedHomeSkeleton";
 
-const FeaturedHomes = lazy(() => wait(2000).then(() => import("../components/home/FeaturedHomes")))
+const FeaturedHomes = lazy(() => wait(10).then(() => import("../components/home/FeaturedHomes")))
 
 const Home = () => {
   const dispatch = useDispatch();

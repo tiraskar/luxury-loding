@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { RxCross2, RxChevronLeft, RxChevronRight } from "react-icons/rx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const SingleImageOnSlide = ({ images, setIsviewSingleImageOnSlide, imageIndex, setImageViewIndex }) => {
 
@@ -29,11 +30,13 @@ const SingleImageOnSlide = ({ images, setIsviewSingleImageOnSlide, imageIndex, s
         <RxCross2 />
       </button>
       <div className="relative w-full h-full p-4">
-        <img
+        <LazyLoadImage
+          className={`w-full h-full object-cover rounded-md`}
           src={images[currentIndex]?.url}
-          alt="Full-screen image"
-          className="w-full h-full object-cover rounded-md" // object-cover will cover the screen, no distortion
-          loading="lazy"
+          alt={'listing-image'}
+          effect="blur"
+          width="100%"
+          height="100%"
         />
         {/* Previous button */}
         <button

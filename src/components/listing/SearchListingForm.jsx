@@ -43,40 +43,6 @@ const SearchListingForm = () => {
 
 
   const handleInputChange = (name, value) => {
-    // if (name == 'checkIn') {
-    //   const checkInDate = new Date(value);
-    //   setMinDateCheckOut(new Date(checkInDate.setDate(checkInDate.getDate() + 1)));
-    // }
-
-    // if (name === 'location') {
-    //   const filterLocation = listingLocationList.map((location) => {
-
-    //     const stateMatch = location.state.toLowerCase().includes(value.toLowerCase());
-
-
-    //     if (stateMatch) {
-    //       return location;
-    //     }
-
-    //     // Filter the cities based on the value
-    //     const filteredCities = location.cities.filter((cityObj) =>
-    //       cityObj.city.toLowerCase().includes(value.toLowerCase())
-    //     );
-
-    //     // Return the location with only filtered cities if city matches
-    //     if (filteredCities.length > 0) {
-    //       return {
-    //         ...location,
-    //         cities: filteredCities, // Only the filtered cities
-    //       };
-    //     }
-    //     return null; // Exclude location if no match is found
-    //   }).filter(location => location !== null); // Remove null entries
-
-    //   // Update the filtered location list
-    //   setSearchFilterLocation(filterLocation);
-    // }
-
     dispatch(setSearchListingParams({ name, value }));
   };
 
@@ -259,40 +225,7 @@ const SearchListingForm = () => {
           <SearchInputLabel
             text="Where to go?"
             htmlFor="location"
-          />
-            {/* <input type="text"
-            value={searchListingParams.location}
-            placeholder="Anywhere"
-            onChange={(e) => handleInputChange('location', e.target.value)}
-            className="outline-none w-[101px]  lg:w-full text-[1rem] tracking-[-0.16px] font-inter lg:pl-1 h-[19px] "
-            onFocus={() => setShowLocationFilter(true)}
-          /> */}
-
-
-            {/* {showLocationFilter &&
-            <div
-              ref={filterRef}
-              className="bg-white text-textDark z-40 absolute min-w-[350px] sm:max-w-[400px] max-h-80 overflow-hidden overflow-y-scroll mt-16 py-2 rounded-lg shadow-lg ">
-              <ul className=" text-sm">
-                {filteredLocation?.map((location, index) => (
-                  <ul key={index} className=" space-y-1">
-                    {location.cities.map((cityObj, cityIndex) => (
-                      <li key={cityIndex} className="flex items-center space-x-1 cursor-pointer hover:bg-cardBackgroundLight py-2 rounded-md px-2"
-                        onClick={() => {
-                          handleInputChange('location', cityObj.city);
-                          setShowLocationFilter(false);
-                        }}
-                      >
-                        <CiLocationOn className="text-buttonPrimary text-lg" />
-                        <span>{cityObj.city}, {location.state}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ))}
-              </ul>
-            </div>
-          } */}
-
+            />
             {selectedLocations.length == 0 ? <input type="text"
               value={searchListingParams.location}
               placeholder="Anywhere"
@@ -321,11 +254,10 @@ const SearchListingForm = () => {
                 ))}
               </div>}
 
-            {showLocationFilter && (
+            {/* {showLocationFilter && (
               <div
                 className=" bg-cardBackgroundLight absolute w-full lg:w-1/2 mt-16 rounded-md shadow-lg max-h-[400px] overflow-y-scroll z-50"
               >
-                {/* Search Input */}
                 <div className="flex flex-row items-center justify-between p-2 border-b border-b-buttonPrimary">
                   <input
                     type="text"
@@ -334,7 +266,6 @@ const SearchListingForm = () => {
                     onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-3/4 border px-2 py-1 rounded-md outline-none border-buttonPrimary bg-cardBackgroundLight"
                   />
-                  {/* Clear Filter Button */}
                   <div className=" text-right">
                     <button
                       type="button"
@@ -346,27 +277,16 @@ const SearchListingForm = () => {
                   </div>
                 </div>
 
-                {/* Filtered Locations */}
                 <ul className="p-2 space-y-5 h-[350px] overflow-scroll">
                   {filteredLocation.map((location, index) => (
                     <li key={index}>
                       <p className="font-semibold text-lg">{location.state}</p>
                       <ul className="pl-5 space-y-1 mt-1">
-                        {location?.cities?.slice() // copy to avoid mutating original
+                        {location?.cities?.slice()
                           .sort((a, b) => a.city.localeCompare(b.city)).map((cityObj, cityIndex) => {
                             const isChecked = selectedLocations?.includes(cityObj.city);
                           return (
                             <li key={cityIndex} className="flex items-center gap-2">
-                              {/* <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => handleCheckboxChange(cityObj.city)}
-                                className="size-4 accent-buttonPrimary text-white"
-                                style={{
-                                  accentColor: '#B69F6F', // or your hex value for buttonPrimary
-                                  color: '#ffffff', // this makes the check mark white in supported browsers
-                                }}
-                              /> */}
                               <label className="inline-flex items-center cursor-pointer">
                                 <input
                                   type="checkbox"
@@ -421,11 +341,110 @@ const SearchListingForm = () => {
                       </ul>
                     </li>
                   ))}
+
                 </ul>
 
 
               </div>
+            )} */}
+
+            {showLocationFilter && (
+              <div
+                className="
+                    absolute w-full lg:w-1/2 mt-16 z-50
+                    max-h-[500px]
+                    bg-white
+                    rounded-xl shadow-2xl
+                    overflow-hidden flex flex-col
+                    transition-all duration-300 ease-in-out
+                  "
+              >
+                {/* Sticky Search Header */}
+                <div className="sticky top-0 z-10 bg-white border-b border-buttonPrimary px-4 py-3 flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <svg
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
+                      />
+                    </svg>
+                    <input
+                      type="text"
+                      placeholder="Search by city or state..."
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="
+                        w-full pl-10 pr-4 py-2
+                        rounded-full
+                        border border-buttonPrimary
+                        focus:outline-none 
+                        text-sm
+                        placeholder-gray-400
+                        transition
+                      "
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={clearSelectedLocations}
+                    className="text-sm text-red-500 hover:underline whitespace-nowrap ml-2"
+                  >
+                    Clear{selectedLocations.length > 0 && ` (${selectedLocations.length})`}
+                  </button>
+                </div>
+
+                {/* Scrollable Locations */}
+                <div className="overflow-y-auto flex-1">
+                  <ul className="divide-y divide-buttonPrimary/50">
+                    {filteredLocation.map((location, index) => (
+                      <li key={index} className="bg-white px-4 py-4">
+                        <p className="text-base font-semibold text-textDark mb-3 border-l-4 border-textDark pl-2">
+                          {location.state}
+                        </p>
+                        <ul className="flex flex-wrap gap-3">
+                          {location?.cities
+                            ?.slice()
+                            .sort((a, b) => a.city.localeCompare(b.city))
+                            .map((cityObj, cityIndex) => {
+                              const isSelected = selectedLocations?.includes(cityObj.city);
+                              return (
+                                <li
+                                  key={cityIndex}
+                                  onClick={() => handleCheckboxChange(cityObj.city)}
+                                  className={`
+                                    cursor-pointer
+                                    text-center
+                                    px-3 py-2
+                                    rounded-full
+                                    text-sm
+                                    font-medium
+                                    border border-buttonPrimary
+                                    transition
+                                    ${isSelected
+                                      ? 'bg-buttonPrimary text-white '
+                                      : 'text-textDark border-buttonPrimary hover:bg-buttonPrimary hover:text-white'}
+                                  `}
+                                >
+                                  {cityObj.city}
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             )}
+
+
         </div>
 
         <div className="h-10 w-px  bg-textDark bg-opacity-10 hidden sm:block "></div>

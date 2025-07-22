@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import ListingInfoSkeleton from "../ui/ListingInfoSkeleton";
 import AmenitiesPopup from "./AmenitiesPopup";
 import SingleImageOnSlide from "./SingleImageOnSlide";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const tabs = [
   "Description",
@@ -30,7 +31,6 @@ const tabs = [
 const Listing = () => {
   const {
     listingInfo = {},
-    loading,
     listingReviews,
     isSearchOnSingleListing,
     isFetchListingInfo,
@@ -42,22 +42,10 @@ const Listing = () => {
   const [isViewAllImageOpen, setIsviewAllImageOpen] = useState(false);
   const [isViewSingleImageOnSlide, setIsviewSingleImageOnSlide] = useState(false);
   const [imageViewIndex, setImageViewIndex] = useState(0)
-  if (loading || isCalenderLoading) {
-    return <div className="text-center">Loading...</div>;
-  }
+
 
   const images = listingInfo?.images || [];
   const listingAmenities = listingInfo?.amenities || [];
-  // const bookingTerms = listingInfo?.terms || {};
-  // const listingReviews = listingInfo?.reviews || [];
-
-  // const componentMapping = {
-  //   "Description": <ListingDescription listingInfo={listingInfo} />,
-  //   "Details": <ListingDetails listingAmenities={listingAmenities} />,
-  //   "House Rules": <ListingBookingTerms />,
-  //   "Reviews": <ListingReviews listingReviews={listingReviews} />,
-  //   "Availability": <ListingAvailability />,
-  // };
 
   const baseUrl = `${window.location.origin}${import.meta.env?.BASE_URL}`;
   const handleCopyUrl = () => {
@@ -137,54 +125,62 @@ const Listing = () => {
               <div className="relative grid md:grid-cols-2 gap-x-1 md:gap-x-3">
                 <div className="min-h-full max-h-[492px] rounded-md hidden md:block sm:rounded-xl">
                   {images[0] && (
-                    <img
+                    <LazyLoadImage
                       onClick={() => {
                         setImageViewIndex(0);
                         setIsviewSingleImageOnSlide(true);
                       }}
+                      className={`rounded-md sm:rounded-xl h-full w-full object-cover`}
                       src={images[0]?.url}
-                      alt="Listing Image"
-                      className="rounded-md sm:rounded-xl h-full w-full object-cover"
-                      loading="lazy"
+                      alt={'listing-image'}
+                      effect="blur"
+                      width="100%"
+                      height="100%"
                     />
                   )}
                 </div>
                 <div className="flex flex-col gap-y-1.5 md:gap-y-3">
                   {images[1] && (
-                    <img
+                    <LazyLoadImage
                       onClick={() => {
                         setImageViewIndex(1);
                         setIsviewSingleImageOnSlide(true);
                       }}
+                      className={`rounded-md sm:rounded-xl md:max-h-[310px] object-cover`}
                       src={images[1]?.url}
-                      alt="Listing Image"
-                      className="rounded-md sm:rounded-xl md:max-h-[310px] object-cover"
-                      loading="lazy"
+                      alt={'listing-image'}
+                      effect="blur"
+                      width="100%"
+                      height="100%"
                     />
                   )}
                   <div className="grid grid-cols-2 gap-x-1.5 md:gap-x-3">
                     {images[2] && (
-                      <img
-                        src={images[2]?.url}
+                      <LazyLoadImage
                         onClick={() => {
                           setImageViewIndex(2);
                           setIsviewSingleImageOnSlide(true);
                         }}
-                        alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full h-full object-cover max-h-[217px] lg:w-[321px] md:h-[170px]"
-                        loading="lazy"
+                        src={images[2]?.url}
+                        alt={'listing-image'}
+                        effect="blur"
+                        width="100%"
+                        height="100%"
                       />
                     )}
                     {images[3] && (
-                      <img
+                      <LazyLoadImage
                         onClick={() => {
                           setImageViewIndex(3);
                           setIsviewSingleImageOnSlide(true);
                         }}
-                        src={images[3]?.url}
-                        alt="Listing Image"
                         className="rounded-md sm:rounded-xl w-full h-full object-cover md:h-[170px]  max-h-[217px]"
-                        loading="lazy"
+                        src={images[3]?.url}
+                        alt={'listing-image'}
+                        effect="blur"
+                        width="100%"
+                        height="100%"
                       />
                     )}
                   </div>
@@ -224,24 +220,7 @@ const Listing = () => {
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                   />
-                  {/* <Wrapper>
-                    {activeTab === "" ? (
-                      <div className="space-y-8">
-                        {Object.values(componentMapping)?.map(
-                          (Component, index, arr) => (
-                            <div key={index} className="space-y-10">
-                              {Component}
-                              {index !== arr.length - 1 && (
-                                <div className="relative min-w-full h-px bg-[#E0E0E0]"></div>
-                              )}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    ) : (
-                      componentMapping[activeTab]
-                    )}
-                  </Wrapper> */}
+
                   <ListingDescription
                     listingInfo={listingInfo}
                     className={`${["Details", "House Rules", "Reviews", "Availability"].includes(activeTab) ? "hidden" : "block"}`}

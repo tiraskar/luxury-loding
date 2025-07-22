@@ -5,12 +5,14 @@ const CustomImage = ({ src, width, height, alt, title, className, style }) => {
     <img
       width={width}
       height={height}
+      srcSet=""
       src={`${import.meta.env?.BASE_URL}${src}`}
       alt={alt || 'image'}
       title={title || ''}
       className={` ${className}`}
       style={{ style }}
       loading="lazy"
+      decoding="async"
     />
   );
 };
