@@ -32,7 +32,7 @@ const ListingList = () => {
         className={`${!isMapViewOpen
           ? "flex flex-col justify-center"
           : "lg:grid lg:grid-cols-5 gap-4"
-          } font-onest tracking-[-2%] text-[#333333] relative min-h-screen`}
+          } font-onest tracking-[-2%] text-[#333333] relative `}
       >
         {/* Left Listing Section */}
         <div className="flex flex-col lg:col-span-2 overflow-y-auto">
