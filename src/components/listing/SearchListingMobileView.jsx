@@ -172,7 +172,10 @@ const SearchListingMobileView = ({ selectedLocations, setSelectedLocations, sear
   const debouncedSearch = useCallback(
     debounce((value) => {
       value && dispatch(getLocationOnSearch(value)).unwrap().then((res) => {
-        res.length > 0 && setShowLocationFilter(true);
+        if (res.length > 0) {
+          setShowLocationFilter(true);
+          dispatch(toggleSelectedSearchLocation(res[0]));
+        }
       });
       if (value === '') dispatch(resetSearchedLocation());
     }, 500),
@@ -245,7 +248,7 @@ const SearchListingMobileView = ({ selectedLocations, setSelectedLocations, sear
                   ref={filterRef}
                   className="
                     absolute top-20 w-full  min-w-[85vw]  z-50
-                    max-h-[500px]
+                    max-h-[500px] -ml-4
                     bg-white
                     rounded-xl shadow-2xl
                     overflow-hidden flex flex-col
@@ -285,7 +288,7 @@ const SearchListingMobileView = ({ selectedLocations, setSelectedLocations, sear
 
                           <div className="flex-1 min-w-0">
                             <span className="block text-gray-900 font-medium text-base leading-tight">
-                              {location.location}, {location.type}
+                              {location.location}
                             </span>
                           </div>
                         </li>

@@ -40,7 +40,7 @@ const FilterableSearchListing = () => {
     searchFilter,
     isFilterOpen,
     isFetchListing,
-    listingLocationList,
+    listingLocationList
   } = useSelector((state) => state.listing);
 
   const [filteredLocation, setSearchFilterLocation] = useState([]);
@@ -229,7 +229,10 @@ const FilterableSearchListing = () => {
   const debouncedSearch = useCallback(
     debounce((value) => {
       value && dispatch(getLocationOnSearch(value)).unwrap().then((res) => {
-        res.length > 0 && setShowLocationFilter(true);
+        if (res.length > 0) {
+          setShowLocationFilter(true);
+          dispatch(toggleSelectedSearchLocation(res[0]));
+        }
       });
       if (value === '') dispatch(resetSearchedLocation());
     }, 500),
@@ -238,12 +241,10 @@ const FilterableSearchListing = () => {
 
   // Call this on input change
   const handleSearchLocation = (value) => {
+    dispatch(toggleSelectedSearchLocation(null));
     dispatch(updateSearchedLocation(value));
     debouncedSearch(value); // Debounced call
-    dispatch(toggleSelectedSearchLocation(null));
   };
-
-
 
   return (
     <Wrapper>
@@ -578,7 +579,7 @@ const Location = ({
       ) : (
         <div
           onClick={() => setShowLocationFilter(true)}
-          className="flex gap-2 overflow-x-scroll text-sm font-inter p-1 "
+            className="flex gap-2 overflow-x-scroll text-sm font-inter p-1 "
         >
           {selectedLocations?.slice()?.reverse().map((location, index) => (
             <div key={index} className="relative flex flex-row w-fit items-center bg-buttonPrimary text-white rounded-full px-2 py-0.5 whitespace-nowrap">
@@ -603,7 +604,7 @@ const Location = ({
           ref={filterRef}
           className="
                     absolute w-full min-w-[90vw] sm:min-w-[60vw] mt-16 z-50
-                    max-h-[500px]
+                    max-h-[500px] -ml-3
                     bg-white
                     rounded-xl shadow-2xl
                     overflow-hidden flex flex-col
@@ -644,7 +645,7 @@ const Location = ({
 
                   <div className="flex-1 min-w-0">
                     <span className="block text-gray-900 font-medium text-base leading-tight">
-                      {location.location}, {location.type}
+                      {location.location}
                     </span>
                   </div>
                 </li>
@@ -854,7 +855,7 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
         <div
           className="
                     absolute w-full min-w-[35vw] mt-16 z-50
-                    max-h-[500px]
+                    max-h-[500px] -ml-3
                     bg-white
                     rounded-xl shadow-2xl
                     overflow-hidden flex flex-col
@@ -894,7 +895,7 @@ const LocationLargeScreen = ({ handleInputChange, setShowLocationFilter, filtere
 
                   <div className="flex-1 min-w-0">
                     <span className="block text-gray-900 font-medium text-base leading-tight">
-                      {location.location}, {location.type}
+                      {location.location}
                     </span>
                   </div>
                 </li>

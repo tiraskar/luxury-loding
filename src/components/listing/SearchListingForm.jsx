@@ -159,7 +159,10 @@ const SearchListingForm = () => {
   const debouncedSearch = useCallback(
     debounce((value) => {
       value && dispatch(getLocationOnSearch(value)).unwrap().then((res) => {
-        res.length > 0 && setShowLocationFilter(true);
+        if (res.length > 0) {
+          setShowLocationFilter(true);
+          dispatch(toggleSelectedSearchLocation(res[0]));
+        }
       });
       if (value === '') dispatch(resetSearchedLocation());
     }, 500),
@@ -278,7 +281,7 @@ const SearchListingForm = () => {
               <div
                 className="
                     absolute w-full lg:w-1/2 mt-16 z-50
-                    max-h-[500px]
+                    max-h-[500px] -ml-3
                     bg-white
                     rounded-xl shadow-2xl
                     overflow-hidden flex flex-col
@@ -318,7 +321,7 @@ const SearchListingForm = () => {
 
                         <div className="flex-1 min-w-0">
                           <span className="block text-gray-900 font-medium text-base leading-tight">
-                            {location.location}, {location.type}
+                            {location.location}
                           </span>
                         </div>
                       </li>
