@@ -314,7 +314,7 @@ const listingSlice = createSlice({
     listingPage: 1,
     listingTotalCount: 0,
     // minDate: new Date(),
-    listingOrder: 'high-to-low',
+    listingOrder: '',
 
     //form
     searchListingParams: {
@@ -366,7 +366,7 @@ const listingSlice = createSlice({
       state.searchListingParams.guests = '';
       state.searchListingParams.location = '';
       state.listingPage = 1;
-      state.listingOrder = 'high-to-low';
+      state.listingOrder = '';
       state.searchListingParams.minPrice = 50;
       state.searchListingParams.maxPrice = 550;
       state.searchListingParams.amenities = [];

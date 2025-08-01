@@ -28,9 +28,9 @@ const ListingViewOptions = () => {
           onChange={(e) => handleSortChange(e, e.target.value)}
           className="bg-white outline-none">
 
-          <option value="high-to-low" className="font-semibold text-[13px]">Default</option>
+          <option value="" className="font-semibold text-[13px]">Default</option>
           <option value="low-to-high" className="font-semibold text-[13px]">Price Low</option>
-          {/* <option value="high-to-low" className="font-semibold text-[13px]">Price High</option> */}
+          <option value="high-to-low" className="font-semibold text-[13px]">Price High</option>
         </select>
       </div>
       <div className="bg-[#F9F9F9] p-0.5 w-[64] h-[34px] rounded-[10px] flex items-center space-x-[7px] cursor-pointer">
