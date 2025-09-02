@@ -121,7 +121,7 @@ const PaymentMethod = () => {
         const paymentData = {
           orderId,
           paymentStatus: e.data.message,
-          chargeId: e.data.transaction_ref_no,
+          chargeId: `${e.data.transaction_ref_no}`,
         };
 
         dispatch(savePaymentInfo(paymentData))
