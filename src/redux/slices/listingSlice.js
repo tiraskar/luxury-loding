@@ -226,7 +226,7 @@ export const fetchListingAvailabilityCalender = createAsyncThunk(
 export const fetchHolidayFutureCalender = createAsyncThunk(
   'listing/holiday-futureCalender', async (listing, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://booking-engine.hostaway.com/bookingEngines/luxurylodging/listings/${listing.id}/calendar?startingDate=${listing.startDate}`);
+      const response = await axios.get(`https://booking-engine.hostaway.com/bookingEngines/escapestays/listings/${listing.id}/calendar?startingDate=${listing.startDate}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
